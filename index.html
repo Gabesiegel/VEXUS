@@ -24,64 +24,64 @@
     </style>
 </head>
 <body>
-    <img id="logo" src="/mnt/data/Screenshot%202025-02-05%20at%209.03.29%E2%80%AFPM.png" alt="VEXUS AI Logo">
+    <!-- Assume logo is in an 'images' folder -->
+    <img id="logo" src="images/vexus-ai-logo.png" alt="VEXUS AI Logo">
     <h1>VEXUS AI - Image Recognition</h1>
     <p>Upload an image to get predictions:</p>
     <input type="file" id="imageUpload" accept="image/*">
     <img id="imagePreview" alt="Image Preview">
     <p id="result">Prediction will appear here...</p>
-    
+
     <script>
         let model;
-        
+
         async function loadModel() {
             try {
                 console.log("Loading model...");
-                const modelUrl = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json";
+                // Assume model files are in a 'models' folder
+                const modelUrl = "models/model.json";
                 model = await tf.loadLayersModel(modelUrl);
                 console.log("Model loaded successfully.");
             } catch (error) {
                 console.error("Error loading model:", error);
-                document.getElementById('result').innerText = "Error loading model! Check model path.";
+                document.getElementById('result').innerText = "Error loading model! Check model path and network connection.";
             }
         }
-        
+
         document.getElementById('imageUpload').addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const img = document.getElementById('imagePreview');
             img.src = URL.createObjectURL(file);
-            
+
             img.onload = async function() {
                 console.log("Image loaded, making prediction...");
-                setTimeout(async () => {
-                    try {
-                        if (!model) {
-                            document.getElementById('result').innerText = "Model not loaded!";
-                            return;
-                        }
-                        
-                        const tensor = tf.browser.fromPixels(img)
-                            .resizeNearestNeighbor([224, 224])
-                            .toFloat()
-                            .expandDims();
-                        
-                        const predictions = await model.predict(tensor).data();
-                        console.log("Predictions:", predictions);
-                        
-                        const labels = ["HV NORMAL", "HV: SEVERE"];
-                        const maxIndex = predictions.indexOf(Math.max(...predictions));
-                        
-                        document.getElementById('result').innerText = `Prediction: ${labels[maxIndex]} (${(predictions[maxIndex] * 100).toFixed(2)}%)`;
-                    } catch (error) {
-                        console.error("Error during prediction:", error);
-                        document.getElementById('result').innerText = "Error making prediction!";
+                try {
+                    if (!model) {
+                        document.getElementById('result').innerText = "Model not loaded!";
+                        return;
                     }
-                }, 500);
+
+                    const tensor = tf.browser.fromPixels(img)
+                        .resizeNearestNeighbor([224, 224])
+                        .toFloat()
+                        .expandDims();
+
+                    const predictions = await model.predict(tensor).data();
+                    console.log("Predictions:", predictions);
+
+                    const labels = ["HV NORMAL", "HV: SEVERE"];
+                    const maxIndex = predictions.indexOf(Math.max(...predictions));
+
+                    document.getElementById('result').innerText = `Prediction: ${labels[maxIndex]} (${(predictions[maxIndex] * 100).toFixed(2)}%)`;
+                } catch (error) {
+                    console.error("Error during prediction:", error);
+                    document.getElementById('result').innerText = "Error making prediction!";
+                }
             };
         });
-        
+
         loadModel();
     </script>
 </body>
