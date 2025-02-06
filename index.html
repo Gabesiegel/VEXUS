@@ -37,7 +37,7 @@
         async function loadModel() {
             try {
                 console.log("Loading model...");
-                const modelUrl = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json";
+                const modelUrl = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/model.json";
                 model = await tf.loadLayersModel(modelUrl);
                 console.log("Model loaded successfully.");
             } catch (error) {
