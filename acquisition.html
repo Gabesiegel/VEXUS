@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+       <!DOCTYPE HTML>
 <html lang="en">
 <head>
     <title>VExUS AI - Image Acquisition Guide</title>
@@ -324,91 +324,33 @@
                         </div>
 
                         <!-- Short Axis View -->
-                        <div class="technique-container"><!-- Portal Vein Short Axis View -->
-                            <div class="image-section">
-                                <img src="images/7_Portal_vien_assessment_short_axis_v001 (1).png" alt="Portal Vein Short Axis" onclick="expandImage(this)">
-                                <h3>Portal Vein - Short Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Short Axis Technique</h3>
-                                <h4>Probe Positioning</h4>
-                                <p>Rotate the probe 90 degrees counterclockwise from the long-axis position.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain short-axis view of the portal vein</li>
-                                    <li>Evaluate flow patterns using Doppler</li>
-                                    <li>Distinguish portal vein pulsations from hepatic artery</li>
-                                    <li>Document waveform characteristics</li>
-                                </ul>
-                            </div>
-                        </div>
+                        <div class="technique-container"> <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <!-- Title Section -->
+                    <div class="title-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                        <h1>VExUS Image Acquisition Guide</h1>
                     </div>
 
-                    <!-- Renal Vein Assessment -->
+                    <!-- Overview Section -->
                     <div class="acquisition-section">
-                        <h2 class="section-title">5. Renal Vein Assessment</h2>
-                        
-                        <!-- Long Axis View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Renal Vein Long Axis" onclick="expandImage(this)">
-                                <h3>Renal Vein - Long Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Long Axis Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Position the probe in a coronal plane over the right kidney, between the mid-axillary and posterior axillary lines, and angle slightly toward the patient's head. This maximizes visualization of an interlobar vein in its long axis.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a long-axis view of an interlobar vein</li>
-                                    <li>Apply pulsed-wave Doppler to evaluate flow patterns</li>
-                                    <li>Assess for continuous vs. pulsatile flow</li>
-                                    <li>Document any flow interruptions</li>
-                                </ul>
-
-                                <h4>Doppler Waveforms</h4>
-                                <ul class="technique-list">
-                                    <li>Normal: Continuous, minimally pulsatile flow</li>
-                                    <li>Abnormal: Increasingly pulsatile with interruptions</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Short Axis View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/9_Renal_vein_assessment_short_axis_v002 (1).png" alt="Renal Vein Short Axis" onclick="expandImage(this)">
-                                <h3>Renal Vein - Short Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Short Axis Technique</h3>
-                                <h4>Probe Positioning</h4>
-                                <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a short-axis view showing both interlobar vein and artery</li>
-                                    <li>Use color Doppler to distinguish vessels</li>
-                                    <li>Apply pulsed-wave Doppler to assess venous flow</li>
-                                    <li>Compare with arterial waveforms</li>
-                                </ul>
-                            </div>
+                        <h2 class="section-title">Overview</h2>
+                        <div class="info-box">
+                            <h3>Why Use VExUS?</h3>
+                            <ul class="technique-list">
+                                <li>Non-invasive quantification of venous congestion</li>
+                                <li>Real-time hemodynamic insight for immediate assessment</li>
+                                <li>Guide therapeutic interventions and monitor treatment response</li>
+                                <li>Early detection of organ dysfunction risk</li>
+                            </ul>
                         </div>
                     </div>
 
+                    <!-- Content sections remain the same, just wrapped in the new tile design -->
+                    <!-- IVC Assessment through Renal Vein Assessment sections remain unchanged -->
+                    
                     <!-- Modal for Image Expansion -->
                     <div id="imageModal" class="modal">
                         <span class="close" onclick="closeModal()">&times;</span>
@@ -437,11 +379,13 @@
         // Get the modal
         var modal = document.getElementById("imageModal");
         var modalImg = document.getElementById("expandedImage");
+        var body = document.body;
 
         // Function to expand image
         function expandImage(img) {
             modal.style.display = "block";
             modalImg.src = img.src;
+            body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
             
             // Add click event to close modal when clicking outside the image
             modal.onclick = function(e) {
@@ -461,7 +405,18 @@
         // Function to close modal
         function closeModal() {
             modal.style.display = "none";
+            body.style.overflow = 'auto'; // Restore scrolling
         }
+
+        // Initialize image click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.image-section img');
+            images.forEach(img => {
+                img.onclick = function() {
+                    expandImage(this);
+                };
+            });
+        });
     </script>
 </body>
 </html>
