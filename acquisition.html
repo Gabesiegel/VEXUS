@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -6,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="author" content="Gabesiegel" />
-    <meta name="last-modified" content="2025-02-11T08:15:24Z" />
+    <meta name="last-modified" content="2025-02-11T08:40:36Z" />
     
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
@@ -14,15 +13,29 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <style>
+        :root {
+            --primary-grey: #424242;
+            --light-grey: #f5f5f5;
+            --medium-grey: #9e9e9e;
+            --dark-grey: #212121;
+            --pure-white: #ffffff;
+            --off-white: #fafafa;
+            --border-grey: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --hover-grey: #eeeeee;
+            --accent-blue: #2196f3;
+            --warning-red: #f44336;
+        }
+
         /* Base Container Styles */
         .container {
             width: 100%;
             max-width: 1400px;
-            background: white;
+            background: var(--pure-white);
             padding: 40px;
             margin: 20px auto;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--shadow-color);
         }
 
         .title-container {
@@ -45,8 +58,8 @@
         .section-title {
             text-align: center;
             margin-bottom: 1.5em;
-            color: #2c3e50;
-            border-bottom: 2px solid #f0f0f0;
+            color: var(--primary-grey);
+            border-bottom: 2px solid var(--border-grey);
             padding-bottom: 0.8em;
             font-size: 2em;
             font-weight: 600;
@@ -55,14 +68,14 @@
         .acquisition-section {
             margin: 50px 0;
             padding: 35px;
-            background: #ffffff;
+            background: var(--pure-white);
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px var(--shadow-color);
         }
 
         /* Image Section Styling */
         .image-section {
-            background: #fafafa;
+            background: var(--off-white);
             padding: 25px;
             border-radius: 12px;
             margin-bottom: 30px;
@@ -82,7 +95,7 @@
             margin-bottom: 20px;
             cursor: pointer;
             transition: transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px var(--shadow-color);
         }
 
         .image-section img:hover {
@@ -90,7 +103,7 @@
         }
 
         .image-section h3 {
-            color: #2c3e50;
+            color: var(--primary-grey);
             margin-top: 15px;
             font-size: 1.4em;
             text-align: center;
@@ -98,35 +111,35 @@
 
         /* Text Section Styling */
         .text-section {
-            background: white;
+            background: var(--pure-white);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px var(--shadow-color);
         }
 
         .text-section h3 {
-            color: #2c3e50;
+            color: var(--primary-grey);
             margin-bottom: 20px;
             font-size: 1.3em;
         }
 
         /* Info and Warning Boxes */
         .info-box {
-            background: #f8f9fa;
+            background: var(--off-white);
             padding: 25px;
             border-radius: 12px;
-            border-left: 5px solid #007bff;
+            border-left: 5px solid var(--accent-blue);
             margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px var(--shadow-color);
         }
 
         .warning-box {
-            background: #fff5f5;
+            background: var(--light-grey);
             padding: 25px;
             border-radius: 12px;
-            border-left: 5px solid #dc3545;
+            border-left: 5px solid var(--warning-red);
             margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px var(--shadow-color);
         }
 
         /* List Styling */
@@ -138,12 +151,47 @@
 
         .technique-list li {
             padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            color: #555;
+            border-bottom: 1px solid var(--border-grey);
+            color: var(--primary-grey);
             font-size: 1.1em;
         }
 
         .technique-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Grading Table Styles */
+        .grading-table {
+            width: 100%;
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .grading-table th {
+            background: var(--dark-grey);
+            color: var(--pure-white);
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .grading-table td {
+            padding: 15px 20px;
+            background: var(--pure-white);
+            border-bottom: 1px solid var(--border-grey);
+            color: var(--primary-grey);
+            font-size: 1.05em;
+        }
+
+        .grading-table tr:hover td {
+            background: var(--off-white);
+        }
+
+        .grading-table tr:last-child td {
             border-bottom: none;
         }
 
@@ -156,7 +204,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0, 0, 0, 0.9);
             overflow: auto;
         }
 
@@ -172,7 +220,7 @@
             position: absolute;
             right: 35px;
             top: 15px;
-            color: #f1f1f1;
+            color: var(--pure-white);
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
@@ -180,59 +228,14 @@
         }
 
         .close:hover {
-            color: #fff;
-        }
-
-        /* Grading Table Styles */
-        .grading-table {
-            width: 100%;
-            margin: 30px 0;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .grading-table th {
-            background: #007bff;
-            color: white;
-            padding: 18px 20px;
-            font-weight: 600;
-            font-size: 1.1em;
-        }
-
-        .grading-table td {
-            padding: 15px 20px;
-            background: white;
-            border-bottom: 1px solid #eee;
-            color: #444;
-            font-size: 1.05em;
-        }
-
-        .grading-table tr:hover td {
-            background: #f8f9fa;
-        }
-
-        .grading-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Timestamp and Author Info */
-        .metadata {
-            text-align: right;
-            color: #666;
-            font-size: 0.9em;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+            color: var(--light-grey);
         }
 
         /* Navigation */
         nav#menu {
-            background: #f8f9fa;
+            background: var(--off-white);
             padding: 25px;
-            box-shadow: inset -1px 0 3px rgba(0,0,0,0.05);
+            box-shadow: inset -1px 0 3px var(--shadow-color);
         }
 
         .sidebar-logo {
@@ -243,6 +246,16 @@
 
         .sidebar-logo:hover {
             transform: scale(1.1);
+        }
+
+        /* Metadata */
+        .metadata {
+            text-align: right;
+            color: var(--medium-grey);
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-grey);
         }
 
         /* Responsive Design */
@@ -291,165 +304,136 @@
     </style>
 </head>
 <body class="is-preload">
-    <!-- [Previous navigation and header sections remain the same] -->
-
-    <div id="main">
-        <div class="inner">
-            <div class="container">
-                <!-- [Previous content sections remain the same] -->
-
-                <!-- IVC Assessment with both views -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">1. IVC Assessment</h2>
-                    
-                    <!-- IVC Diameter View -->
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/1_IVC_assessment_v002.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
-                            <h3>IVC Diameter Measurement</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Technique</h3>
-                            <ul class="technique-list">
-                                <li>Patient Position: Supine or semi-recumbent</li>
-                                <li>Probe Position: Subxiphoid, angle toward right shoulder</li>
-                                <li>Measure 1cm proximal to hepatic vein confluence</li>
-                                <li>Record both maximum and minimum diameters</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- IVC Collapsibility View -->
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/1b_IVC_collapsibility_v001.png" alt="IVC Collapsibility Assessment" onclick="expandImage(this)">
-                            <h3>IVC Collapsibility Index</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Assessment</h3>
-                            <ul class="technique-list">
-                                <li>Calculate: (Max-Min)/Max × 100%</li>
-                                <li>Normal: >50% collapse with respiration</li>
-                                <li>Record during normal respiration</li>
-                                <li>Assess for respiratory variation</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- [Remaining assessment sections stay the same] -->
-
-                <!-- Updated VExUS Grading System -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">VExUS Grading System</h2>
-                    <table class="grading-table">
-                        <thead>
-                            <tr>
-                                <th>Grade</th>
-                                <th>IVC Diameter</th>
-                                <th>Hepatic Vein</th>
-                                <th>Portal Vein</th>
-                                <th>Renal Vein</th>
-                                <th>Clinical Significance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Grade 0</td>
-                                <td>≤ 2 cm</td>
-                                <td>Normal triphasic</td>
-                                <td>Normal flow</td>
-                                <td>Continuous flow</td>
-                                <td>No congestion</td>
-                            </tr>
-                            <tr>
-                                <td>Grade 1</td>
-                                <td>> 2 cm</td>
-                                <td>Loss of S wave</td>
-                                <td>Mild pulsatility</td>
-                                <td>Mild pulsatility</td>
-                                <td>Mild congestion</td>
-                            </tr>
-                            <tr>
-                                <td>Grade 2</td>
-                                <td>> 2 cm</td>
-                                <td>Biphasic</td>
-                                <td>Severe pulsatility</td>
-                                <td>Severe pulsatility</td>
-                                <td>Moderate congestion</td>
-                            </tr>
-                            <tr>
-                                <td>Grade 3</td>
-                                <td>> 2 cm</td>
-                                <td>Monophasic</td>
-                                <td>Severe pulsatility</td>
-                                <td>Monophasic/Discontinued</td>
-                                <td>Severe congestion</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="info-box">
-                        <h3>Waveform Patterns</h3>
-                        <ul class="technique-list">
-                            <li><strong>Normal:</strong> Triphasic with dominant systolic wave (S > D > A)</li>
-                            <li><strong>Mild Abnormality:</strong> Loss of triphasic pattern, reduced S wave</li>
-                            <li><strong>Moderate Abnormality:</strong> Biphasic pattern, minimal S wave</li>
-                            <li><strong>Severe Abnormality:</strong> Monophasic or reversed flow pattern</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Metadata -->
-                <div class="metadata">
-                    <p>Last Updated: 2025-02-11 08:15:24 UTC</p>
-                    <p>Author: Gabesiegel</p>
-                </div>
+    <!-- Navigation -->
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
             </div>
-        </div>
-    </div>
+        </header>
 
-    <!-- Image Modal -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="expandedImage">
-    </div>
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="acquisition.html">Image Acquisition</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
+                <li><a href="literature.html">Literature</a></li>
+                <li><a href="#about">About VExUS AI</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
 
-    <!-- JavaScript for Image Modal -->
-    <script>
-        // Modal functionality
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("expandedImage");
-        const closeButton = document.getElementsByClassName("close")[0];
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <div class="title-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                        <h1>VExUS Image Acquisition Guide</h1>
+                    </div>
 
-        function expandImage(img) {
-            modal.style.display = "block";
-            modalImg.src = img.src;
-        }
+                    <!-- Overview Section -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">Overview</h2>
+                        <div class="info-box">
+                            <h3>Why Use VExUS?</h3>
+                            <ul class="technique-list">
+                                <li>Non-invasive quantification of venous congestion</li>
+                                <li>Real-time hemodynamic insight for immediate assessment</li>
+                                <li>Guide therapeutic interventions and monitor treatment response</li>
+                                <li>Early detection of organ dysfunction risk</li>
+                            </ul>
+                        </div>
+                    </div>
 
-        closeButton.onclick = function() {
-            modal.style.display = "none";
-        }
+                    <!-- IVC Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">1. IVC Assessment</h2>
+                        
+                        <!-- IVC Diameter View -->
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/1_IVC_assessment_v002.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
+                                <h3>IVC Diameter Measurement</h3>
+                            </div>
+                            <div class="text-section">
+                                <h3>Technique</h3>
+                                <ul class="technique-list">
+                                    <li>Patient Position: Supine or semi-recumbent</li>
+                                    <li>Probe Position: Subxiphoid, angle toward right shoulder</li>
+                                    <li>Measure 1cm proximal to hepatic vein confluence</li>
+                                    <li>Record both maximum and minimum diameters</li>
+                                    <li>Assess respiratory variation</li>
+                                </ul>
+                            </div>
+                        </div>
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+                        <!-- IVC Collapsibility View -->
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/1b_IVC_collapsibility_v001.png" alt="IVC Collapsibility Assessment" onclick="expandImage(this)">
+                                <h3>IVC Collapsibility Index</h3>
+                            </div>
+                            <div class="text-section">
+                                <h3>Assessment</h3>
+                                <ul class="technique-list">
+                                    <li>Calculate: (Max-Min)/Max × 100%</li>
+                                    <li>Normal: >50% collapse with respiration</li>
+                                    <li>Record during normal respiration</li>
+                                    <li>Document both inspiratory and expiratory measurements</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-        // Handle keyboard events
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
-                modal.style.display = "none";
-            }
-        });
-    </script>
+                    <!-- Portal Vein Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">2. Portal Vein Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/2_portal_vein_assessment_v002.png" alt="Portal Vein Assessment" onclick="expandImage(this)">
+                                <h3>Portal Vein Flow Pattern</h3>
+                            </div>
+                            <div class="text-section">
+                                <h3>Technique</h3>
+                                <ul class="technique-list">
+                                    <li>Identify main portal vein</li>
+                                    <li>Optimize color Doppler angle</li>
+                                    <li>Place sample volume in main trunk</li>
+                                    <li>Record spectral Doppler waveform</li>
+                                    <li>Assess for pulsatility</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- Standard Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-    <script src="html5up-phantom/assets/js/browser.min.js"></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-    <script src="html5up-phantom/assets/js/util.js"></script>
-    <script src="html5up-phantom/assets/js/main.js"></script>
-</body>
-</html>
+                    <!-- Hepatic Vein Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">3. Hepatic Vein Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/3_hepatic_vein_assessment_v002.png" alt="Hepatic Vein Assessment" onclick="expandImage(this)">
+                                <h3>Hepatic Vein Flow Pattern</h3>
+                            </div>
+                            <div class="text-section">
+                                <h3>Technique</h3>
+                                <ul class="technique-list">
+                                    <li>Identify right hepatic vein</li>
+                                    <li>Use color Doppler to optimize angle</li>
+                                    <li>Place sample volume 2-3cm from IVC junction</li>
+                                    <li>Record spectral Doppler waveform</li>
+                                    <li>Document flow pattern classification</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Renal Vein Assessment -->
+                    
