@@ -1,11 +1,11 @@
-       <!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <title>VExUS AI - Image Acquisition Guide</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="author" content="Gabesiegel" />
-    <meta name="last-modified" content="2025-02-11T09:12:53Z" />
+    <meta name="last-modified" content="2025-02-11T09:41:43Z" />
     
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
@@ -13,48 +13,87 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <style>
-        /* [Previous styles remain the same until the technique container] */
-        
-        /* Updated Technique Container for vertical layout */
+        /* Root Variables for Consistent Styling */
+        :root {
+            --primary-color: #007bff;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --text-color: #333333;
+        }
+
+        /* Updated Logo Styling */
+        .main-logo {
+            width: 150px;
+            height: auto;
+            display: block;
+            margin: 0 auto 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Modern Card Design */
         .technique-container {
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            margin-bottom: 40px;
-            width: 100%;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--shadow-color);
         }
 
-        /* Updated Image Section for larger images */
+        /* Enhanced Image Section */
         .image-section {
-            background: var(--off-white);
-            padding: 25px;
+            background: var(--card-bg);
+            padding: 1.5rem;
             border-radius: 12px;
-            margin-bottom: 30px;
-            width: 100%;
+            box-shadow: 0 4px 15px var(--shadow-color);
             transition: transform 0.3s ease;
+        }
+
+        .image-section:hover {
+            transform: translateY(-5px);
         }
 
         .image-section img {
             width: 100%;
-            max-height: 800px; /* Increased from 600px */
+            max-height: 800px;
             object-fit: contain;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
             cursor: pointer;
             transition: transform 0.3s ease;
-            box-shadow: 0 4px 15px var(--shadow-color);
         }
 
-        /* Updated Text Section for full width */
+        /* Text Section Modernization */
         .text-section {
-            background: var(--pure-white);
-            padding: 30px;
+            background: var(--card-bg);
+            padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 2px 10px var(--shadow-color);
-            width: 100%;
         }
 
-        /* Enhanced Modal for better image viewing */
+        /* Title Container Update */
+        .title-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        /* Info Box Modernization */
+        .info-box {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            margin-top: 1.5rem;
+        }
+
+        /* Enhanced Modal */
         .modal {
             display: none;
             position: fixed;
@@ -64,7 +103,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.95);
-            overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
@@ -75,296 +114,217 @@
             max-width: 95%;
             max-height: 95vh;
             object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* [Previous styles remain the same] */
+        /* Sidebar Logo */
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        /* Menu Navigation */
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        nav#menu ul li a:hover {
+            color: #007bff !important;
+        }
+
+        /* User Info Panel */
+        .user-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 980px) {
+            .user-info {
+                position: static;
+                margin: 20px auto;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
-    <!-- Navigation -->
-    <div id="wrapper">
-        <header id="header">
-            <div class="inner">
-                <nav>
-                    <ul>
-                        <li><a href="#menu">Menu</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+    <!-- Header and Menu -->
+    <header id="header">
+        <div class="inner">
+            <nav>
+                <ul>
+                    <li><a href="#menu">Menu</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-        <!-- Menu -->
-        <nav id="menu">
-            <div class="logo-container">
-                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
-            </div>
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="acquisition.html">Image Acquisition</a></li>
-                <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="literature.html">Literature</a></li>
-                <li><a href="#about">About VExUS AI</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+    <!-- Sidebar Navigation -->
+    <nav id="menu">
+        <div class="logo-container">
+            <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
+        </div>
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+            <li><a href="#score-calculator">Score Calculator</a></li>
+            <li><a href="#about">About VExUS AI</a></li>
+            <li><a href="literature.html">Literature</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-        <!-- Main Content -->
-        <div id="main">
-            <div class="inner">
-                <div class="container">
-                    <!-- Title Section -->
-                    <div class="title-container">
-                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                        <h1>VExUS Image Acquisition Guide</h1>
+    <!-- Main Content -->
+    <div id="main">
+        <div class="inner">
+            <div class="container">
+                <!-- Title Section -->
+                <div class="title-container">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                    <h1>VExUS Image Acquisition Guide</h1>
+                </div>
+
+                <!-- Overview Section -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="info-box">
+                        <h3>Why Use VExUS?</h3>
+                        <ul class="technique-list">
+                            <li>Non-invasive quantification of venous congestion</li>
+                            <li>Real-time hemodynamic insight for immediate assessment</li>
+                            <li>Guide therapeutic interventions and monitor treatment response</li>
+                            <li>Early detection of organ dysfunction risk</li>
+                        </ul>
                     </div>
+                </div>
 
-                    <!-- Overview Section -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">Overview</h2>
-                        <div class="info-box">
-                            <h3>Why Use VExUS?</h3>
+                <!-- IVC Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">1. IVC Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/1_IVC_assessment_v002.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
+                            <h3>IVC Diameter Measurement</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place a phased array or curvilinear ultrasound probe in the subxiphoid position, just below the xiphoid process. Angle the probe slightly toward the patient's right shoulder to optimize the view of the IVC entering the right atrium.</p>
+                            <h4>Measurement Instructions</h4>
                             <ul class="technique-list">
-                                <li>Non-invasive quantification of venous congestion</li>
-                                <li>Real-time hemodynamic insight for immediate assessment</li>
-                                <li>Guide therapeutic interventions and monitor treatment response</li>
-                                <li>Early detection of organ dysfunction risk</li>
+                                <li>Obtain a clear longitudinal view of the IVC</li>
+                                <li>Measure the IVC diameter 1cm proximal to hepatic vein confluence</li>
+                                <li>Assess the IVC's collapsibility index with respiration</li>
+                                <li>Record both maximum and minimum diameters</li>
                             </ul>
                         </div>
                     </div>
+                </div>
 
-                    <!-- IVC Assessment -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">1. IVC Assessment</h2>
-                        
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/1_IVC_assessment_v002.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
-                                <h3>IVC Diameter Measurement</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Place a phased array or curvilinear ultrasound probe in the subxiphoid position, just below the xiphoid process. Angle the probe slightly toward the patient's right shoulder to optimize the view of the IVC entering the right atrium.</p>
-                                
-                                <h4>Measurement Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a clear longitudinal view of the IVC</li>
-                                    <li>Measure the IVC diameter 1cm proximal to hepatic vein confluence</li>
-                                    <li>Assess the IVC's collapsibility index with respiration</li>
-                                    <li>Record both maximum and minimum diameters</li>
-                                </ul>
-                            </div>
+                <!-- Hepatic Vein Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">2. Hepatic Vein Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/2_Hepatic_vein_assessment_long_axis_v002.png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
+                            <h3>Hepatic Vein - Long Axis View</h3>
                         </div>
-                    </div>
-
-                    <!-- Hepatic Vein Assessment -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">2. Hepatic Vein Assessment</h2>
-                        
-                        <!-- Long Axis View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
-                                <h3>Hepatic Vein - Long Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Long Axis Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Place the curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a clear long-axis view of the hepatic veins</li>
-                                    <li>Apply pulsed-wave Doppler to assess flow patterns</li>
-                                    <li>Measure velocities of systolic and diastolic waves</li>
-                                    <li>Evaluate waveform morphology (triphasic, biphasic, or monophasic)</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Short Axis View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/3_Hepatic_vein_assessment_short_axis_v002 (1).png" alt="Hepatic Vein Short Axis" onclick="expandImage(this)">
-                                <h3>Hepatic Vein - Short Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Short Axis Technique</h3>
-                                <h4>Probe Positioning</h4>
-                                <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain clear visualization of hepatic veins in short axis</li>
-                                    <li>Apply color Doppler to identify flow direction</li>
-                                    <li>Use pulsed-wave Doppler to assess flow patterns</li>
-                                    <li>Confirm findings from long-axis view</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hepatic Vein Subxiphoid View -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">3. Hepatic Vein - Subxiphoid View</h2>
-                        
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/4_Hepatic_vein_subxiphoid_view_v001 (1).png" alt="Hepatic Vein Subxiphoid View" onclick="expandImage(this)">
-                                <h3>Hepatic Vein - Subxiphoid Approach</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Subxiphoid Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Place the curvilinear probe in the subxiphoid position, angling superiorly and slightly to the patient's right to visualize the hepatic veins draining into the IVC.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a subxiphoid view of the hepatic veins entering the IVC</li>
-                                    <li>Identify middle and left hepatic veins</li>
-                                    <li>Apply pulsed-wave Doppler to assess flow patterns</li>
-                                    <li>Document waveform characteristics</li>
-                                </ul>
-                                
-                                <h4>Doppler Waveforms</h4>
-                                <ul class="technique-list">
-                                    <li>Normal (Triphasic): Dominant S wave</li>
-                                    <li>Abnormal (Biphasic): Diminished or absent S wave</li>
-                                    <li>Abnormal (Monophasic/Flat): Continuous flow pattern</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Portal Vein Assessment -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">4. Portal Vein Assessment</h2>
-                        
-                        <!-- Subxiphoid View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Subxiphoid View" onclick="expandImage(this)">
-                                <h3>Portal Vein - Subxiphoid View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Subxiphoid Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Place the probe in the subxiphoid region, angling slightly to the patient's right and superiorly. The portal vein is typically visualized as it courses anteriorly and to the right within the liver.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a subxiphoid view of the portal vein</li>
-                                    <li>Apply color Doppler to identify flow direction</li>
-                                    <li>Use pulsed-wave Doppler to assess flow patterns</li>
-                                    <li>Measure portal vein pulsatility</li>
-                                </ul>
-                                
-                                <h4>Doppler Waveforms</h4>
-                                <ul class="technique-list">
-                                    <li>Normal: Minimally pulsatile (continuous) waveform</li>
-                                    <li>Abnormal: Moderately pulsatile waveform</li>
-                                    <li>Severe: Highly pulsatile/biphasic waveform</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Long Axis View -->
-                        <div class="technique-container">
-                            <!-- Large Image Above -->
-                            <div class="image-section">
-                                <img src="images/6_Portal_vien_assessment_long_axis_v001 (1).png" alt="Portal Vein Long Axis" onclick="expandImage(this)">
-                                <h3>Portal Vein - Long Axis View</h3>
-                            </div>
-                            
-                            <!-- Text Content Below -->
-                            <div class="text-section">
-                                <h3>Long Axis Technique</h3>
-                                <h4>Patient Positioning</h4>
-                                <p>Supine or semi-recumbent.</p>
-                                
-                                <h4>Probe Positioning</h4>
-                                <p>Place the probe in either the right mid-axillary line or the epigastric region, just below the xiphoid process. Angle the probe slightly toward the patient's right shoulder.</p>
-                                
-                                <h4>Instructions</h4>
-                                <ul class="technique-list">
-                                    <li>Obtain a clear long-axis view of the portal vein</li>
-                                    <li>Apply color Doppler to confirm flow direction</li>
-                                    <li>Use pulsed-wave Doppler to assess flow patterns</li>
-                                    <li>Calculate portal vein pulsatility fraction</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Short Axis View -->
-                        <div class="technique-container"> <!-- Main Content -->
-        <div id="main">
-            <div class="inner">
-                <div class="container">
-                    <!-- Title Section -->
-                    <div class="title-container">
-                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                        <h1>VExUS Image Acquisition Guide</h1>
-                    </div>
-
-                    <!-- Overview Section -->
-                    <div class="acquisition-section">
-                        <h2 class="section-title">Overview</h2>
-                        <div class="info-box">
-                            <h3>Why Use VExUS?</h3>
+                        <div class="text-section">
+                            <h3>Long Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head.</p>
+                            <h4>Instructions</h4>
                             <ul class="technique-list">
-                                <li>Non-invasive quantification of venous congestion</li>
-                                <li>Real-time hemodynamic insight for immediate assessment</li>
-                                <li>Guide therapeutic interventions and monitor treatment response</li>
-                                <li>Early detection of organ dysfunction risk</li>
+                                <li>Obtain a clear long-axis view of the hepatic veins</li>
+                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Measure velocities of systolic and diastolic waves</li>
+                                <li>Evaluate waveform morphology (triphasic, biphasic, or monophasic)</li>
                             </ul>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Content sections remain the same, just wrapped in the new tile design -->
-                    <!-- IVC Assessment through Renal Vein Assessment sections remain unchanged -->
-                    
-                    <!-- Modal for Image Expansion -->
-                    <div id="imageModal" class="modal">
-                        <span class="close" onclick="closeModal()">&times;</span>
-                        <img class="modal-content" id="expandedImage">
-                    </div>
-
-                    <!-- Metadata -->
-                    <div class="metadata">
-                        <p>Last updated: 2025-02-11 09:15:36 UTC</p>
-                        <p>Author: Gabesiegel</p>
+                <!-- Portal Vein Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3. Portal Vein Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/5_Portal_vein_subxiphoid_view_v001.png" alt="Portal Vein Assessment" onclick="expandImage(this)">
+                            <h3>Portal Vein Measurement</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the probe in the subxiphoid region, angling slightly to the patient's right and superiorly.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear view of the portal vein</li>
+                                <li>Apply color Doppler to assess flow direction</li>
+                                <li>Use pulsed-wave Doppler to measure flow patterns</li>
+                                <li>Calculate portal vein pulsatility index</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- User Info Panel -->
+    <div class="user-info">
+        <p>User: Gabesiegel</p>
+        <p>Date: 2025-02-11 09:41:43 UTC</p>
+    </div>
+
+    <!-- Modal for Image Expansion -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="expandedImage">
     </div>
 
     <!-- Scripts -->
@@ -385,7 +345,7 @@
         function expandImage(img) {
             modal.style.display = "block";
             modalImg.src = img.src;
-            body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            body.style.overflow = 'hidden';
             
             // Add click event to close modal when clicking outside the image
             modal.onclick = function(e) {
@@ -405,7 +365,7 @@
         // Function to close modal
         function closeModal() {
             modal.style.display = "none";
-            body.style.overflow = 'auto'; // Restore scrolling
+            body.style.overflow = 'auto';
         }
 
         // Initialize image click handlers
