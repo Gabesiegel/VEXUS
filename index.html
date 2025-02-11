@@ -1,1 +1,246 @@
-Site under construction
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS AI - Image Recognition & Scoring</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Phantom Template CSS -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    
+    <!-- VExUS Custom Styles -->
+    <style>
+        /* ... existing styles ... */
+        .tiles article {
+            width: calc(33.33333% - 2.5em);
+            margin: 2.5em 1.25em 0 1.25em;
+        }
+        .tiles article > .image {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="html5up-phantom/images/logo.svg" alt="VExUS AI Logo" /></span>
+                    <span class="title">VExUS AI</span>
+                </a>
+
+                <!-- Nav -->
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#score-calculator">Score Calculator</a></li>
+                <li><a href="#about">About VExUS AI</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <header>
+                    <h1>VExUS AI - Image Recognition & Scoring</h1>
+                    <p>Advanced ultrasound image analysis and VExUS score calculation powered by artificial intelligence.</p>
+                </header>
+
+                <!-- Example Cases Section using Phantom template images -->
+                <section class="tiles">
+                    <article class="style1">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic01.jpg" alt="Example Case 1" />
+                        </span>
+                        <a href="#score-calculator">
+                            <h2>Normal Case</h2>
+                            <div class="content">
+                                <p>Example of a normal ultrasound scan</p>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="style2">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic02.jpg" alt="Example Case 2" />
+                        </span>
+                        <a href="#score-calculator">
+                            <h2>Mild Case</h2>
+                            <div class="content">
+                                <p>Example of mild congestion</p>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="style3">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic03.jpg" alt="Example Case 3" />
+                        </span>
+                        <a href="#score-calculator">
+                            <h2>Severe Case</h2>
+                            <div class="content">
+                                <p>Example of severe congestion</p>
+                            </div>
+                        </a>
+                    </article>
+                </section>
+
+                <!-- VExUS AI Content -->
+                <section class="vexus-container">
+                    <div class="input-group">
+                        <h2>Image Recognition</h2>
+                        <p>Upload an ultrasound image for automatic analysis:</p>
+                        <input type="file" id="imageUpload" accept="image/*" class="button primary">
+                        <img id="imagePreview" alt="Image Preview">
+                        <p id="result">Image recognition result will appear here...</p>
+                        <p id="top-results"></p>
+                    </div>
+                    
+                    <div id="model-status" class="status-box status-error">Model not loaded</div>
+                    
+                    <div class="score-section">
+                        <h2>VExUS Score Calculation</h2>
+                        
+                        <!-- ... existing score calculation form ... -->
+                    </div>
+                </section>
+
+                <!-- Additional Resources Section -->
+                <section class="tiles">
+                    <article class="style4">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic04.jpg" alt="" />
+                        </span>
+                        <a href="#resources">
+                            <h2>Training Resources</h2>
+                            <div class="content">
+                                <p>Access training materials and guides</p>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="style5">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic05.jpg" alt="" />
+                        </span>
+                        <a href="#research">
+                            <h2>Research Papers</h2>
+                            <div class="content">
+                                <p>Latest research and publications</p>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="style6">
+                        <span class="image">
+                            <img src="html5up-phantom/images/pic06.jpg" alt="" />
+                        </span>
+                        <a href="#contact">
+                            <h2>Contact Support</h2>
+                            <div class="content">
+                                <p>Get help with VExUS AI</p>
+                            </div>
+                        </a>
+                    </article>
+                </section>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <!-- ... existing footer content ... -->
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts from Phantom template -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+
+    <!-- VExUS AI Scripts -->
+    <script>
+      <script>
+        function calculateVexusScore() {
+    const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
+    const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
+    const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
+    const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
+
+    if (isNaN(ivcDiameter)) {
+        document.getElementById('total-score').innerText = "Incomplete Data";
+        return;
+    }
+
+    let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
+    let vexusGrade = ivcDiameter < 2 ? "Grade 0: No Congestion" : severityCount === 0 ? "Grade 1: Mild Congestion" : severityCount === 1 ? "Grade 2: Moderate Congestion" : "Grade 3: Severe Congestion";
+    document.getElementById('total-score').innerText = vexusGrade;
+}
+
+        function resetScores() {
+    document.getElementById('ivc-diameter').value = "";
+    document.getElementById('hv-score').value = "";
+    document.getElementById('pv-score').value = "";
+    document.getElementById('rv-score').value = "";
+    document.getElementById('total-score').innerText = '--';
+}
+
+        async function loadModel() {
+            try {
+                console.log("Loading model...");
+                model = await tf.loadLayersModel("https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json");
+                document.getElementById('model-status').className = "status-box status-ready";
+                document.getElementById('model-status').innerText = "Model loaded and ready";
+            } catch (error) {
+                console.error("Error loading model:", error);
+                document.getElementById('model-status').className = "status-box status-error";
+                document.getElementById('model-status').innerText = "Error loading model";
+            }
+        }
+
+        loadModel();
+
+        document.getElementById('imageUpload').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const img = document.getElementById('imagePreview');
+            img.src = URL.createObjectURL(file);
+            img.onload = async function() {
+                if (!model) {
+                    document.getElementById('result').innerText = "Model not loaded!";
+                    return;
+                }
+                const tensor = tf.browser.fromPixels(img).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
+                const predictions = await model.predict(tensor).data();
+                const labels = ["HV Normal", "HV Mild", "HV Severe", "PV Normal", "PV Mild", "PV Severe", "RV Normal", "RV Mild", "RV Severe"];
+                let sortedIndices = [...predictions.keys()].sort((a, b) => predictions[b] - predictions[a]);
+                let topResults = sortedIndices.slice(0, 3).map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(2)}%`).join('<br>');
+                document.getElementById('top-results').innerHTML = topResults;
+                
+                const highestIndex = sortedIndices[0];
+                if (highestIndex < 3) document.getElementById("hv-score").value = highestIndex;
+                else if (highestIndex < 6) document.getElementById("pv-score").value = highestIndex - 3;
+                else document.getElementById("rv-score").value = highestIndex - 6;
+            };
+        });
+    </script>
+</body>
+</html>
