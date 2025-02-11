@@ -1,26 +1,14 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - About</title>
+    <title>About VExUS AI</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    
-    <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-    
-    <style>
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            background: white;
-            padding: 60px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
 
+    <style>
         .logo-container {
             display: flex;
             justify-content: center;
@@ -75,76 +63,64 @@
             color: #007bff;
         }
 
-        .title-container {
-            text-align: center;
-            margin: 2em 0;
-        }
-
-        .title-container h1 {
-            font-size: 3.5em;
-            margin-bottom: 0.2em;
-        }
-
-        .section {
-            margin: 40px 0;
-            padding: 30px;
-            background: #fafafa;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
-
-        .why-vexus {
-            text-align: left;
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin: 40px 0;
-        }
-
-        .profile-card {
+        .container {
+            width: 100%;
+            max-width: 1400px;
             background: white;
-            padding: 30px;
+            padding: 60px;
+            margin: 20px auto;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .profile-image {
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin: 40px auto;
+        }
+
+        .team-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-member-image {
             width: 200px;
             height: 200px;
             border-radius: 50%;
             margin: 0 auto 20px;
+            display: block;
             object-fit: cover;
         }
 
-        .profile-name {
+        .team-card h3 {
             font-size: 1.8em;
-            margin-bottom: 15px;
             color: #333;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        .profile-bio {
-            text-align: left;
-            font-size: 1em;
+        .team-card p {
+            font-size: 1.2em;
             line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
         }
 
-        .profile-links {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .profile-links a {
+        .team-card .role {
+            font-size: 1.4em;
             color: #007bff;
-            text-decoration: none;
-            margin: 0 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
         }
 
         @media screen and (max-width: 980px) {
@@ -153,14 +129,14 @@
                 max-width: 95%;
             }
 
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
             .logo {
                 width: 400px;
                 height: 200px;
-            }
-
-            .profile-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
             }
         }
     </style>
@@ -186,8 +162,8 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="#about">About VExUS AI</a></li>
-                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="about.html">About VExUS AI</a></li>
+                <li><a href="literature.html">Literature</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -200,51 +176,28 @@
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
 
-                    <div class="title-container">
-                        <h1>About VExUS AI</h1>
-                    </div>
+                    <h1>About Our Team</h1>
 
-                    <div class="section">
-                        <div class="why-vexus">
-                            <h2>Why VExUS?</h2>
-                            <p>We are working to advance VExUS use in critical care, internal medicine, and emergency medicine by leveraging artificial intelligence. Our goal is to make venous congestion assessment more accessible and accurate through the integration of cutting-edge technology with established clinical practices.</p>
+                    <div class="team-grid">
+                        <div class="team-card">
+                            <img src="images/gabe siegel.jpg" alt="Gabriel Siegel" class="team-member-image">
+                            <h3>Gabriel Siegel</h3>
+                            <div class="role">Lead Developer</div>
+                            <p>Gabriel Siegel specializes in machine learning and artificial intelligence applications in healthcare. His work focuses on developing innovative solutions for medical imaging analysis and clinical decision support systems.</p>
                         </div>
 
-                        <div class="profile-grid">
-                            <div class="profile-card">
-                                <img src="images/Gabe.jpg" alt="Dr. Gabriel Siegel" class="profile-image">
-                                <h3 class="profile-name">Dr. Gabriel Siegel, MD</h3>
-                                <div class="profile-bio">
-                                    <p>Dr. Siegel is an Instructor and Fellow in Emergency Medicine at the University of Colorado's School of Medicine. His research focuses on the application of point-of-care ultrasound in emergency settings. He co-authored a study titled "Correlation between the VExUS score and right atrial pressure: a pilot prospective observational study," which found a strong association between VExUS grades and right atrial pressure, suggesting the utility of VExUS in evaluating venous congestion.</p>
-                                    <div class="profile-links">
-                                        <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank">PUBMED</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="team-card">
+                            <img src="images/August Longino.jpg" alt="August Longino" class="team-member-image">
+                            <h3>August Longino</h3>
+                            <div class="role">Clinical Lead</div>
+                            <p>August Longino is an expert in critical care medicine and point-of-care ultrasound. His research focuses on venous congestion assessment and its clinical applications in critical care settings.</p>
+                        </div>
 
-                            <div class="profile-card">
-                                <img src="images/August.jpg" alt="Dr. August Longino" class="profile-image">
-                                <h3 class="profile-name">Dr. August Longino, MD, MPH</h3>
-                                <div class="profile-bio">
-                                    <p>Dr. Longino is affiliated with the University of Colorado and has extensively researched venous congestion assessment. He led a study titled "Prospective Evaluation of Venous Excess Ultrasound for Estimation of Venous Congestion," which concluded that VExUS could enhance diagnostic and therapeutic capabilities at the bedside. Additionally, he co-authored research on the reliability and reproducibility of the VExUS score, indicating that ECG-augmented VExUS is a dependable measure interpretable by clinicians from various specialties.</p>
-                                    <div class="profile-links">
-                                        <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank">PUBMED</a>
-                                        <a href="https://pmc.ncbi.nlm.nih.gov" target="_blank">PMC</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="profile-card">
-                                <img src="images/Matt.jpg" alt="Dr. Matthew Riscinti" class="profile-image">
-                                <h3 class="profile-name">Dr. Matthew Riscinti, MD</h3>
-                                <div class="profile-bio">
-                                    <p>Dr. Riscinti is associated with Denver Health and has collaborated with Dr. Longino on VExUS-related research. He co-authored the study "Prospective Evaluation of Venous Excess Ultrasound for Estimation of Venous Congestion," which supports the use of VExUS in clinical practice. Dr. Riscinti has also shared his expertise on the VExUS exam in educational platforms, contributing to the dissemination of knowledge on this diagnostic tool.</p>
-                                    <div class="profile-links">
-                                        <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank">PUBMED</a>
-                                        <a href="https://coreultrasound.com" target="_blank">CORE Ultrasound</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="team-card">
+                            <img src="images/Riscinti Matthew D.jpg" alt="Matthew Riscinti" class="team-member-image">
+                            <h3>Matthew Riscinti</h3>
+                            <div class="role">Research Lead</div>
+                            <p>Matthew Riscinti is a cardiovascular medicine specialist with expertise in venous thromboembolism and critical care cardiology. His research focuses on cardiovascular care and outcomes in critical illness.</p>
                         </div>
                     </div>
                 </div>
