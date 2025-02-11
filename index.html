@@ -1,110 +1,371 @@
-<!-- Add these updates to the style section -->
-<style>
-    /* Updated container for larger white background */
-    .container {
-        width: 100%;
-        max-width: 1200px;  /* Increased from 1000px */
-        background: white;
-        padding: 40px;      /* Increased padding */
-        margin: 20px auto;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS AI - Image Recognition & Scoring</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Phantom Template CSS -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    
+    <style>
+        /* Container and main layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-    /* Center alignment improvements */
-    .inner {
-        max-width: 1400px;  /* Increased max-width */
-        margin: 0 auto;
-        padding: 0 2em;
-    }
+        .inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2em;
+        }
 
-    /* Lighter grey for score section */
-    .score-section {
-        background: #f5f7fa;  /* Lighter grey */
-        padding: 25px;
-        border-radius: 5px;
-        margin-top: 20px;
-        width: 90%;         /* Added width control */
-        margin-left: auto;  /* Center alignment */
-        margin-right: auto;
-    }
+        /* Input and score sections */
+        .input-group {
+            margin: 15px auto;
+            text-align: left;
+            width: 90%;
+            max-width: 600px;
+        }
 
-    /* Sidebar text color fix */
-    #menu {
-        background: #f5f5f5;
-        padding: 20px;
-    }
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-    #menu h2 {
-        color: #585858;  /* Darker grey for visibility */
-    }
+        .score-section {
+            background: #f5f7fa;
+            padding: 25px;
+            border-radius: 5px;
+            margin-top: 20px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    #menu ul li a {
-        color: #585858;  /* Darker grey for visibility */
-        text-decoration: none;
-        border-bottom: none;
-    }
+        .score-section h2 {
+            color: #007bff;
+        }
 
-    #menu ul li a:hover {
-        color: #007bff;  /* Blue hover state */
-    }
+        /* Status indicators */
+        .status-box {
+            margin: 20px auto;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: block;
+            width: 90%;
+            max-width: 600px;
+        }
 
-    /* Improved input group alignment */
-    .input-group {
-        margin: 15px auto;  /* Center alignment */
-        text-align: left;
-        width: 90%;       /* Width control */
-        max-width: 600px; /* Maximum width */
-    }
+        .status-ready {
+            background-color: #28a745;
+            color: white;
+            border: 2px solid #218838;
+        }
 
-    /* Center logo and title */
-    .main-logo {
-        width: 200px;
-        margin: 0 auto 2em auto;
-        display: block;
-    }
+        .status-error {
+            background-color: #dc3545;
+            color: white;
+            border: 2px solid #c82333;
+        }
 
-    /* Center all headings */
-    h1, h2, h3 {
-        text-align: center;
-        margin-bottom: 1em;
-    }
+        /* Logo styling */
+        .main-logo {
+            width: 200px;
+            margin: 0 auto 2em auto;
+            display: block;
+        }
 
-    /* Improved button group alignment */
-    .button-group {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        margin: 25px auto;  /* Increased margin */
-        width: 90%;        /* Width control */
-        max-width: 600px;  /* Maximum width */
-    }
+        .sidebar-logo {
+            width: 60px;
+            margin-bottom: 0;
+        }
 
-    /* Status box improvements */
-    .status-box {
-        margin: 20px auto;  /* Center alignment */
-        padding: 12px;
-        border-radius: 5px;
-        font-weight: bold;
-        display: block;     /* Changed to block for better centering */
-        width: 90%;
-        max-width: 600px;
-    }
+        /* Button and control styling */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 25px auto;
+            width: 90%;
+            max-width: 600px;
+        }
 
-    /* File upload button alignment */
-    input[type="file"].button.primary {
-        margin: 0 auto;
-        display: block;
-        width: 90%;
-        max-width: 600px;
-    }
+        .button-group button {
+            flex: 1;
+            max-width: 250px;
+            white-space: normal;
+            height: auto;
+            padding: 10px 20px;
+            line-height: 1.2;
+        }
 
-    /* Results text alignment */
-    #result, #top-results {
-        text-align: center;
-        margin: 15px auto;
-        width: 90%;
-        max-width: 600px;
-    }
-</style>
+        /* Sidebar styling */
+        #menu {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        #menu h2 {
+            color: #585858;
+        }
+
+        #menu ul li a {
+            color: #585858;
+            text-decoration: none;
+            border-bottom: none;
+        }
+
+        #menu ul li a:hover {
+            color: #007bff;
+        }
+
+        #menu .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Results and text display */
+        #result, #top-results {
+            text-align: center;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* User info styling */
+        .user-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #585858;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- User Info -->
+    <div class="user-info">
+        <div>Login: Gabesiegel</div>
+        <div>Date: 2025-02-11 03:26:37 UTC</div>
+    </div>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#score-calculator">Score Calculator</a></li>
+                <li><a href="#about">About VExUS AI</a></li>
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                    <h1>VExUS AI - Image Recognition & Scoring</h1>
+                    
+                    <div class="input-group">
+                        <p>Upload an image for image recognition:</p>
+                        <input type="file" id="imageUpload" accept="image/*" class="button primary">
+                        <p id="result">Image recognition result will appear here...</p>
+                        <p id="top-results"></p>
+                    </div>
+                    
+                    <div id="model-status" class="status-box status-error">Model not loaded</div>
+                    
+                    <div class="score-section">
+                        <h2>VExUS Score Calculation</h2>
+                        
+                        <div class="input-group"> 
+                            <label for="ivc-diameter">IVC Diameter (cm):</label>
+                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="hv-score">Hepatic Vein Score:</label>
+                            <select id="hv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="pv-score">Portal Vein Score:</label>
+                            <select id="pv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="rv-score">Renal Vein Score:</label>
+                            <select id="rv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
+                            <button onclick="resetScores()" class="button">Reset Scores</button>
+                        </div>
+                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+
+    <!-- Original VExUS AI Scripts -->
+    <script>
+        // Auto-calculate on any input change
+        document.querySelectorAll('#ivc-diameter, #hv-score, #pv-score, #rv-score').forEach(el => {
+            el.addEventListener('change', () => {
+                if (document.getElementById('ivc-diameter').value &&
+                    document.getElementById('hv-score').value !== "" &&
+                    document.getElementById('pv-score').value !== "" &&
+                    document.getElementById('rv-score').value !== "") {
+                    calculateVexusScore();
+                }
+            });
+        });
+
+        function calculateVexusScore() {
+            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
+            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
+            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
+            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
+
+            if (isNaN(ivcDiameter)) {
+                document.getElementById('total-score').innerText = "Incomplete Data";
+                return;
+            }
+
+            let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
+            let vexusGrade = ivcDiameter < 2 
+                ? "Grade 0: No Congestion" 
+                : severityCount === 0 
+                    ? "Grade 1: Mild Congestion" 
+                    : severityCount === 1 
+                        ? "Grade 2: Moderate Congestion" 
+                        : "Grade 3: Severe Congestion";
+            document.getElementById('total-score').innerText = vexusGrade;
+        }
+
+        function resetScores() {
+            document.getElementById('ivc-diameter').value = "";
+            document.getElementById('hv-score').value = "";
+            document.getElementById('pv-score').value = "";
+            document.getElementById('rv-score').value = "";
+            document.getElementById('total-score').innerText = '--';
+        }
+
+        async function loadModel() {
+            try {
+                console.log("Loading model...");
+                model = await tf.loadLayersModel("https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json");
+                document.getElementById('model-status').className = "status-box status-ready";
+                document.getElementById('model-status').innerText = "Model loaded and ready";
+            } catch (error) {
+                console.error("Error loading model:", error);
+                document.getElementById('model-status').className = "status-box status-error";
+                document.getElementById('model-status').innerText = "Error loading model";
+            }
+        }
+
+        loadModel();
+
+        document.getElementById('imageUpload').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!model) {
+                document.getElementById('result').innerText = "Model not loaded!";
+                return;
+            }
+            
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = async function() {
+                const tensor = tf.browser.fromPixels(img)
+                    .resizeNearestNeighbor([224, 224])
+                    .toFloat()
+                    .expandDims();
+                const predictions = await model.predict(tensor).data();
+                const labels = ["HV Normal", "HV Mild", "HV Severe", 
+                              "PV Normal", "PV Mild", "PV Severe", 
+                              "RV Normal", "RV Mild", "RV Severe"];
+                let sortedIndices = [...predictions.keys()]
+                    .sort((a, b) => predictions[b] - predictions[a]);
+                let topResults = sortedIndices.slice(0, 3)
+                    .map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(2)}%`)
+                    .join('<br>');
+                document.getElementById('top-results').innerHTML = topResults;
+                
+                const highestIndex = sortedIndices[0];
+                if (highestIndex < 3) {
+                    document.getElementById("hv-score").value = highestIndex;
+                } else if (highestIndex < 6) {
+                    document.getElementById("pv-score").value = highestIndex - 3;
+                } else {
+                    document.getElementById("rv-score").value = highestIndex - 6;
+                }
+            };
+        });
+    </script>
+</body>
+</html>
