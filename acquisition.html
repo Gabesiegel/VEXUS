@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -49,31 +50,26 @@
         }
 
         .technique-container {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin: 20px 0;
         }
 
         .image-section {
-            width: 100%;
             background: #fafafa;
             padding: 20px;
             border-radius: 8px;
-            text-align: center;
         }
 
         .image-section img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
             border-radius: 8px;
             margin-bottom: 15px;
-            display: block;
-            margin: 0 auto;
         }
 
         .text-section {
-            width: 100%;
             padding: 20px;
         }
 
@@ -136,25 +132,13 @@
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: auto;
+            width: 60px;
             margin-bottom: 0;
-        }
-
-        nav#menu .logo-container {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
         }
 
         @media screen and (max-width: 980px) {
             .technique-container {
-                flex-direction: column;
-            }
-
-            .image-section,
-            .text-section {
-                width: 100%;
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -178,7 +162,7 @@
             <h2>Menu</h2>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="acquisition.html">Image Acquisition</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="#about">About VExUS AI</a></li>
                 <li><a href="#documentation">Documentation</a></li>
@@ -393,3 +377,4 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
 </body>
+</html>
