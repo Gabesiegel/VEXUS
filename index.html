@@ -19,6 +19,7 @@
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      
         }
 
         .logo-container {
@@ -31,8 +32,9 @@
         }
 
         .logo {
-            max-width: 300px;
-            height: auto;
+            width: 300px;
+            height: 120px;
+            object-fit: contain;
         }
 
         .section {
@@ -56,12 +58,19 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-align: center;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .feature-card i {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: #585858;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .sidebar-logo {
@@ -79,6 +88,10 @@
 
         .button-group .button {
             min-width: 200px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -111,7 +124,7 @@
 
         <div id="main">
             <div class="inner">
-                <div class="container">
+               
                     <div class="logo-container">
                         <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
@@ -128,16 +141,16 @@
                     </div>
 
                     <div class="feature-grid">
-                        <div class="feature-card">
+                        <a href="acquisition.html" class="feature-card">
                             <i class="fas fa-camera"></i>
                             <h3>Image Acquisition</h3>
                             <p>Step-by-step guide for acquiring standardized VExUS images</p>
-                        </div>
-                        <div class="feature-card">
+                        </a>
+                        <a href="calculator.html" class="feature-card">
                             <i class="fas fa-calculator"></i>
                             <h3>AI-Powered Analysis</h3>
                             <p>Automated VExUS scoring with machine learning</p>
-                        </div>
+                        </a>
                         <div class="feature-card">
                             <i class="fas fa-chart-line"></i>
                             <h3>Clinical Assessment</h3>
