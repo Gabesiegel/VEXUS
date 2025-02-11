@@ -21,14 +21,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .timestamp {
-            text-align: right;
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            font-family: monospace;
-        }
-
         .acquisition-section {
             margin: 30px 0;
             padding: 20px;
@@ -43,7 +35,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 30px;
-            text-align: center;
+            text-align: left;
         }
 
         .image-card img {
@@ -99,7 +91,7 @@
         }
 
         .main-logo {
-            width: 200px;
+            width: 300px;
             margin: 0 auto 2em auto;
             display: block;
         }
@@ -107,6 +99,18 @@
         .sidebar-logo {
             width: 60px;
             margin-bottom: 0;
+        }
+
+        .pitfalls {
+            background: #fff5f5;
+            padding: 15px;
+            border-left: 3px solid #dc3545;
+            margin-top: 15px;
+        }
+
+        .pitfalls h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -140,25 +144,28 @@
         <div id="main">
             <div class="inner">
                 <div class="container">
-                    <div class="timestamp">
-                        2025-02-11 04:24:30 UTC
-                        <br>
-                        Login: Gabesiegel
-                    </div>
-                    
                     <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
                     <h1>VExUS Image Acquisition Guide</h1>
 
                     <div class="acquisition-section">
-                        <h2>1. IVC Assessment</h2>
+                        <h2>1. Inferior Vena Cava (IVC) Assessment</h2>
                         <div class="image-card">
                             <img src="images/1_IVC_assessment_v002.png" alt="IVC Assessment">
                             <h3>IVC Assessment Technique</h3>
                             <ul class="technique-list">
-                                <li>Place transducer 1-2 cm below xiphoid process</li>
-                                <li>Measure maximal diameter 2 cm below RA-IVC junction</li>
-                                <li>Use B-mode for accuracy</li>
+                                <li><strong>Short Axis:</strong> Place transducer 1-2 cm below xiphoid process, orientation marker at 3 o'clock</li>
+                                <li><strong>Long Axis:</strong> Rotate transducer 90° counterclockwise (marker to 12 o'clock)</li>
+                                <li><strong>Measurement:</strong> 2 cm below RA-IVC junction or 1 cm below HV-IVC junction</li>
                             </ul>
+                            <div class="pitfalls">
+                                <h4>Pitfalls:</h4>
+                                <ul class="technique-list">
+                                    <li>Distinguishing IVC from aorta</li>
+                                    <li>Dilated IVC in athletes</li>
+                                    <li>Collapsed IVC despite elevated RAP</li>
+                                    <li>"Cylinder effect" with long-axis measurements</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
@@ -166,18 +173,24 @@
                         <h2>2. Hepatic Vein Assessment</h2>
                         <div class="image-card">
                             <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Long Axis">
-                            <h3>Long Axis View</h3>
-                            <p>Assess for proper waveform patterns including S and D waves</p>
+                            <h3>Long Axis View - Wave Pattern Analysis</h3>
+                            <p>Normal waveform components:</p>
+                            <ul class="technique-list">
+                                <li><strong>A Wave:</strong> Atrial contraction</li>
+                                <li><strong>S Wave:</strong> Ventricular systole</li>
+                                <li><strong>V Wave:</strong> Tricuspid annulus return</li>
+                                <li><strong>D Wave:</strong> Ventricular diastole</li>
+                            </ul>
                         </div>
                         <div class="image-card">
                             <img src="images/3_Hepatic_vein_assessment_short_axis_v002 (1).png" alt="Hepatic Vein Short Axis">
-                            <h3>Short Axis View</h3>
-                            <p>Confirm positioning and flow patterns</p>
+                            <h3>Short Axis View - Positioning</h3>
+                            <p>Place pulsed-wave Doppler sample volume 1-2 cm from IVC-HV junction</p>
                         </div>
                         <div class="image-card">
                             <img src="images/4_Hepatic_vein_subxiphoid_view_v001 (1).png" alt="Hepatic Vein Subxiphoid">
                             <h3>Subxiphoid View</h3>
-                            <p>Alternative approach for optimal visualization</p>
+                            <p>Transducer 1-2 cm below xiphoid, marker at 12 o'clock, tilt right</p>
                         </div>
                     </div>
 
@@ -185,18 +198,23 @@
                         <h2>3. Portal Vein Assessment</h2>
                         <div class="image-card">
                             <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Subxiphoid">
-                            <h3>Subxiphoid Approach</h3>
-                            <p>Primary approach for PV assessment</p>
+                            <h3>Portal Vein Flow Analysis</h3>
+                            <p>PVPF = [(Vmax - Vmin) / Vmax] x 100%</p>
+                            <ul class="technique-list">
+                                <li>Normal: PVPF < 30%</li>
+                                <li>Mild congestion: PVPF 30-50%</li>
+                                <li>Severe congestion: PVPF > 50%</li>
+                            </ul>
                         </div>
                         <div class="image-card">
                             <img src="images/6_Portal_vien_assessment_long_axis_v001 (1).png" alt="Portal Vein Long Axis">
-                            <h3>Long Axis View</h3>
-                            <p>Evaluate flow patterns and pulsatility</p>
+                            <h3>Long Axis Technique</h3>
+                            <p>Use color Doppler to locate main portal vein, position sample volume distally</p>
                         </div>
                         <div class="image-card">
                             <img src="images/7_Portal_vien_assessment_short_axis_v001 (1).png" alt="Portal Vein Short Axis">
-                            <h3>Short Axis View</h3>
-                            <p>Confirm findings and assess flow characteristics</p>
+                            <h3>Short Axis Assessment</h3>
+                            <p>Decrease Doppler scale to amplify waveform, avoid hepatic artery interference</p>
                         </div>
                     </div>
 
@@ -204,13 +222,21 @@
                         <h2>4. Intrarenal Vein Assessment</h2>
                         <div class="image-card">
                             <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Renal Vein Long Axis">
-                            <h3>Long Axis Approach</h3>
-                            <p>Primary view for renal vein assessment</p>
+                            <h3>Long Axis Optimization</h3>
+                            <ul class="technique-list">
+                                <li>Slide transducer caudally to visualize kidney</li>
+                                <li>Use zoom function for renal parenchyma</li>
+                                <li>Place color box over parenchyma</li>
+                            </ul>
                         </div>
                         <div class="image-card">
                             <img src="images/9_Renal_vein_assessment_short_axis_v002 (1).png" alt="Renal Vein Short Axis">
-                            <h3>Short Axis View</h3>
-                            <p>Confirmatory view for complete assessment</p>
+                            <h3>Short Axis Flow Patterns</h3>
+                            <ul class="technique-list">
+                                <li>Normal: Continuous flow</li>
+                                <li>Mild-Moderate: Pulsatile with S and D waves</li>
+                                <li>Severe: Monophasic (D-only)</li>
+                            </ul>
                         </div>
                     </div>
 
@@ -227,11 +253,11 @@
                             </tr>
                             <tr>
                                 <td>Grade 1</td>
-                                <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms</td>
+                                <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms (HV S < D, PV pulsatility 30-50%, IRV pulsatile with S and D)</td>
                             </tr>
                             <tr>
                                 <td>Grade 2</td>
-                                <td>IVC > 2 cm, one severely abnormal waveform</td>
+                                <td>IVC > 2 cm, one severely abnormal waveform (HV S reversal, PV pulsatility > 50%, IRV monophasic)</td>
                             </tr>
                             <tr>
                                 <td>Grade 3</td>
