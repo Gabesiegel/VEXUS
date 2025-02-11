@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -141,45 +142,9 @@
         }
 
         .sidebar-logo {
-            width: 100px;
+            width: 40px;
             height: auto;
             margin-bottom: 0;
-            padding: 5px;
-        }
-
-        nav#menu {
-            background: #ffffff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        nav#menu .logo-container {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav#menu h2 {
-            color: #888888;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.1);
-            padding: 0.5em 0;
-        }
-
-        nav#menu ul li a {
-            color: #888888 !important;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-            transition: color 0.2s ease;
-        }
-
-        nav#menu ul li a:hover {
-            color: #007bff !important;
         }
 
         #imagePreview {
@@ -213,28 +178,10 @@
             max-width: 600px;
         }
 
-        .user-info {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.8em;
-            color: #888888;
-        }
-
         @media screen and (max-width: 980px) {
             .main-logo {
                 width: 400px;
                 height: 200px;
-            }
-
-            .user-info {
-                position: static;
-                margin: 20px auto;
-                text-align: center;
             }
         }
     </style>
@@ -270,7 +217,7 @@
             <div class="inner">
                 <div class="container">
                     <div class="timestamp">
-                        Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-02-11 09:32:06<br>
+                        Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-02-11 08:24:55<br>
                         Current User's Login: Gabesiegel
                     </div>
 
@@ -338,12 +285,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- User Info -->
-        <div class="user-info">
-            <p>User: Gabesiegel</p>
-            <p>Date: 2025-02-11 09:32:06 UTC</p>
-        </div>
     </div>
 
     <!-- Scripts -->
@@ -354,7 +295,107 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
-        // [JavaScript code remains exactly the same]
+        let model;
+
+        async function loadModel() {
+            try {
+                console.log("Loading model...");
+                // Updated model path with both model.json and weights.bin paths
+                const modelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json";
+                const weightsPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/weights.bin";
+                
+                model = await tf.loadLayersModel(modelPath);
+                console.log("Model loaded successfully");
+                document.getElementById('model-status').className = "status-box status-ready";
+                document.getElementById('model-status').textContent = "Model loaded and ready";
+            } catch (error) {
+                console.error("Error loading model:", error);
+                document.getElementById('model-status').className = "status-box status-error";
+                document.getElementById('model-status').textContent = "Error loading model: " + error.message;
+            }
+        }
+
+        document.getElementById('imageUpload').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!model) {
+                document.getElementById('result').textContent = "Model not loaded!";
+                return;
+            }
+            
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            
+            // Show preview
+            const preview = document.getElementById('imagePreview');
+            preview.src = img.src;
+            preview.style.display = 'block';
+            
+            img.onload = async function() {
+                try {
+                    const tensor = tf.browser.fromPixels(img)
+                        .resizeNearestNeighbor([224, 224])
+                        .toFloat()
+                        .expandDims();
+                    const predictions = await model.predict(tensor).data();
+                    const labels = ["HV Normal", "HV Mild", "HV Severe", 
+                                  "PV Normal", "PV Mild", "PV Severe", 
+                                  "RV Normal", "RV Mild", "RV Severe"];
+                    
+                    let sortedIndices = [...predictions.keys()]
+                        .sort((a, b) => predictions[b] - predictions[a]);
+                    
+                    let topResults = sortedIndices.slice(0, 3)
+                        .map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(1)}%`);
+                    
+                    document.getElementById('result').textContent = `Top prediction: ${topResults[0]}`;
+                    document.getElementById('top-results').innerHTML = '<h3>Top 3 Predictions:</h3>' + 
+                        topResults.join('<br>');
+
+                    tensor.dispose();
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    document.getElementById('result').textContent = 'Error processing image: ' + error.message;
+                }
+            };
+        });
+
+        function calculateVexusScore() {
+            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
+            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
+            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
+            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
+
+            if (isNaN(ivcDiameter)) {
+                document.getElementById('total-score').textContent = "Incomplete Data";
+                return;
+            }
+
+            let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
+            let vexusGrade = ivcDiameter < 2 
+                ? "Grade 0: No Congestion" 
+                : severityCount === 0 
+                    ? "Grade 1: Mild Congestion" 
+                    : severityCount === 1 
+                        ? "Grade 2: Moderate Congestion" 
+                        : "Grade 3: Severe Congestion";
+
+            document.getElementById('total-score').textContent = vexusGrade;
+        }
+
+        function resetScores() {
+            document.getElementById('ivc-diameter').value = "";
+            document.getElementById('hv-score').value = "";
+            document.getElementById('pv-score').value = "";
+            document.getElementById('rv-score').value = "";
+            document.getElementById('total-score').textContent = '--';
+            document.getElementById('result').textContent = 'Image recognition result will appear here...';
+            document.getElementById('top-results').textContent = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        // Initialize model loading when page loads
+        document.addEventListener('DOMContentLoaded', loadModel);
     </script>
 </body>
 </html>
