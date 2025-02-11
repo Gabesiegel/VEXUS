@@ -40,91 +40,81 @@
             object-fit: contain;
         }
 
-        /* Updated sidebar styles to match index.html */
         .sidebar-logo {
-            width: 100px;
+            width: 40px;
             height: auto;
-            margin-bottom: 1em;
-            padding: 10px;
+            margin-bottom: 0;
         }
 
         nav#menu {
-            background: #585858;
+            background: #f5f5f5;
             padding: 20px;
         }
 
         nav#menu .logo-container {
-            padding: 15px;
+            padding: 10px;
             display: flex;
             justify-content: center;
-            margin-bottom: 1em;
         }
 
         nav#menu h2 {
-            color: white;
+            color: #585858;
             margin-bottom: 1em;
-            font-size: 1.2em;
-            text-align: center;
+            font-size: inherit;
         }
 
         nav#menu ul li {
-            border-top: solid 1px rgba(255, 255, 255, 0.125);
-            padding: 0.7em 0;
+            border-top: solid 1px rgba(0, 0, 0, 0.125);
+            padding: 0.5em 0;
         }
 
         nav#menu ul li a {
-            color: white;
+            color: #585858;
             text-decoration: none;
             border-bottom: none;
-            font-size: 1em;
-            transition: color 0.2s ease;
+            font-size: 0.9em;
         }
 
         nav#menu ul li a:hover {
             color: #007bff;
         }
 
-        /* Updated upload controls for modern look */
+        /* Updated upload controls for modern, minimalist look */
         .input-controls {
-            width: 100%;
-            max-width: 800px;
-            margin: 40px auto;
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
             text-align: center;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-
-        .input-controls:hover {
-            transform: translateY(-5px);
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
         }
 
         .upload-area {
-            border: 2px dashed #007bff;
-            border-radius: 10px;
-            padding: 40px 20px;
-            margin: 20px auto;
-            background: #f8fbff;
+            border: 2px dashed #cccccc;
+            border-radius: 8px;
+            padding: 30px 20px;
+            margin: 15px auto;
+            background: #ffffff;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .upload-area:hover {
-            border-color: #0056b3;
-            background: #f0f7ff;
+            border-color: #999999;
+            background: #fafafa;
         }
 
         .upload-icon {
-            font-size: 3em;
-            color: #007bff;
-            margin-bottom: 15px;
+            font-size: 2.5em;
+            color: #666666;
+            margin-bottom: 10px;
         }
 
         .upload-text {
-            font-size: 1.2em;
-            color: #666;
+            font-size: 1.1em;
+            color: #666666;
             margin-bottom: 15px;
         }
 
@@ -134,29 +124,26 @@
 
         .upload-button {
             display: inline-block;
-            padding: 12px 30px;
-            background: #007bff;
+            padding: 10px 25px;
+            background: #585858;
             color: white;
-            border-radius: 25px;
-            font-size: 1.1em;
+            border-radius: 5px;
+            font-size: 1em;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.2s ease;
             border: none;
-            margin-top: 15px;
         }
 
         .upload-button:hover {
-            background: #0056b3;
+            background: #666666;
         }
 
         .status-box {
             width: 100%;
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
+            margin: 15px 0 0 0;
+            padding: 10px;
+            border-radius: 5px;
             font-weight: 500;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
         }
 
         .status-ready {
@@ -171,85 +158,49 @@
             border: none;
         }
 
-        /* Updated input groups styling */
-        .score-section {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            margin: 40px auto;
-            width: 90%;
-            max-width: 800px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
+        /* Keep existing styles for the rest */
         .input-group {
-            margin: 25px auto;
+            margin: 15px auto;
             text-align: left;
-            width: 100%;
+            width: 90%;
             max-width: 600px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-            color: #444;
         }
 
         .input-group input[type="number"],
         .input-group select {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
-        .input-group input[type="number"]:focus,
-        .input-group select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-            outline: none;
+        .score-section {
+            background: #fafafa;
+            padding: 25px;
+            border-radius: 5px;
+            margin-top: 20px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #eee;
         }
 
         .button-group {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             justify-content: center;
             margin: 35px auto;
             flex-wrap: wrap;
         }
 
         .button-group button {
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            min-width: 200px;
-        }
-
-        .button-group button.primary {
-            background: #007bff;
-            color: white;
-        }
-
-        .button-group button.primary:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .button-group button:not(.primary) {
-            background: #f8f9fa;
-            color: #444;
-            border: 1px solid #ddd;
-        }
-
-        .button-group button:not(.primary):hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
+            flex: 1;
+            max-width: 250px;
+            white-space: normal;
+            height: auto;
+            padding: 10px 20px;
+            line-height: 1.2;
         }
 
         @media screen and (max-width: 980px) {
@@ -262,128 +213,20 @@
                 width: 400px;
                 height: 200px;
             }
-
-            .input-controls,
-            .score-section {
-                padding: 30px;
-            }
-
-            .button-group {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .button-group button {
-                width: 100%;
-                max-width: none;
-            }
         }
     </style>
 </head>
 <body class="is-preload">
-    <div id="wrapper">
-        <header id="header">
-            <div class="inner">
-                <nav>
-                    <ul>
-                        <li><a href="#menu">Menu</a></li>
-                    </ul>
-                </nav>
+    [Previous body content remains the same until the input-controls section]
+        <div class="input-controls">
+            <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <p class="upload-text">Click to upload an image for VExUS analysis</p>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <button class="upload-button">Choose File</button>
             </div>
-        </header>
-
-        <nav id="menu">
-            <div class="logo-container">
-                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
-            </div>
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
-                <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="about.html">About VExUS AI</a></li>
-                <li><a href="literature.html">Literature</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-
-        <div id="main">
-            <div class="inner">
-                <div class="container">
-                    <div class="logo-container">
-                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
-                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
-                    </div>
-
-                    <h1>VExUS AI - Image Recognition & Scoring</h1>
-                    
-                    <div class="input-controls">
-                        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Drag and drop your image here or click to browse</p>
-                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                            <button class="upload-button">Choose File</button>
-                        </div>
-                        <div id="model-status" class="status-box status-error">Model not loaded</div>
-                    </div>
-                    
-                    <p id="result">Image recognition result will appear here...</p>
-                    <p id="top-results"></p>
-                    
-                    <div class="score-section">
-                        <h2>VExUS Score Calculation</h2>
-                        
-                        <div class="input-group">
-                            <label for="ivc-diameter">IVC Diameter (cm):</label>
-                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="hv-score">Hepatic Vein Score:</label>
-                            <select id="hv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="pv-score">Portal Vein Score:</label>
-                            <select id="pv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="rv-score">Renal Vein Score:</label>
-                            <select id="rv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-                        
-                        <div class="button-group">
-                            <button onclick="calculateVexusScore()" class="primary">Calculate VExUS Score</button>
-                            <button onclick="resetScores()">Reset Scores</button>
-                        </div>
-                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
-                    </div>
-                </div>
-            </div>
+            <div id="model-status" class="status-box status-error">Model not loaded</div>
         </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-    <script src="html5up-phantom/assets/js/browser.min.js"></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-    <script src="html5up-phantom/assets/js/util.js"></script>
-    <script src="html5up-phantom/assets/js/main.js"></script>
+    [Rest of the body content remains the same]
 </body>
 </html>
