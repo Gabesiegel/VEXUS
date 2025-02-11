@@ -1,7 +1,8 @@
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Calculator</title>
+    <title>VExUS AI - Home</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -9,9 +10,6 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-    
-    <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     
     <style>
         .container {
@@ -22,7 +20,6 @@
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
         .logo-container {
@@ -46,133 +43,59 @@
             margin-bottom: 0;
         }
 
-        nav#menu {
-            background: #f5f5f5;
-            padding: 20px;
-        }
-
         nav#menu .logo-container {
             padding: 10px;
             display: flex;
             justify-content: center;
         }
 
-        nav#menu h2 {
-            color: #585858;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.125);
-            padding: 0.5em 0;
-        }
-
-        nav#menu ul li a {
-            color: #585858;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-        }
-
-        nav#menu ul li a:hover {
-            color: #007bff;
-        }
-
-        .input-controls {
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
+        .title-container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin: 2em 0;
         }
 
-        .input-controls input[type="file"] {
-            background: white;
-            border: 2px dashed #ccc;
-            padding: 15px;
-            border-radius: 8px;
-            width: 100%;
-            cursor: pointer;
-            margin: 10px 0;
-            transition: border-color 0.3s ease;
+        .title-container h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.2em;
         }
 
-        .input-controls input[type="file"]:hover {
-            border-color: #007bff;
+        .built-by {
+            font-size: 1.5em;
+            color: #666;
+            margin-top: 0.5em;
         }
 
-        .input-group {
-            margin: 15px auto;
-            text-align: left;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .input-group input[type="number"],
-        .input-group select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .status-box {
-            width: 100%;
-            margin: 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .status-ready {
-            background-color: #28a745;
-            color: white;
-            border: 2px solid #218838;
-        }
-
-        .status-error {
-            background-color: #dc3545;
-            color: white;
-            border: 2px solid #c82333;
-        }
-
-        .score-section {
+        .section {
+            margin: 40px 0;
+            padding: 30px;
             background: #fafafa;
-            padding: 25px;
-            border-radius: 5px;
-            margin-top: 20px;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
+            border-radius: 10px;
             border: 1px solid #eee;
+            text-align: center;
         }
 
         .button-group {
             display: flex;
-            gap: 30px;
+            gap: 40px;
             justify-content: center;
             margin: 35px auto;
             flex-wrap: wrap;
+            max-width: 1300px;
         }
 
-        .button-group button {
-            flex: 1;
-            max-width: 250px;
-            white-space: normal;
-            height: auto;
-            padding: 10px 20px;
-            line-height: 1.2;
+        .button-group .button {
+            min-width: 300px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            padding: 0 30px;
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin: 30px auto;
             width: 100%;
@@ -181,11 +104,11 @@
 
         .feature-card {
             background: white;
-            padding: 30px 20px;
+            padding: 35px 25px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-align: center;
-            height: 300px;
+            height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -204,21 +127,21 @@
         }
 
         .feature-card i {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+            font-size: 3em;
+            margin-bottom: 20px;
             color: #585858;
         }
 
         .feature-card h3 {
-            font-size: 1.4em;
-            margin-bottom: 10px;
+            font-size: 1.6em;
+            margin-bottom: 15px;
             width: 100%;
         }
 
         .feature-card p {
-            font-size: 1em;
-            line-height: 1.3;
-            padding: 0 10px;
+            font-size: 1.1em;
+            line-height: 1.4;
+            padding: 0 15px;
             width: 100%;
             margin: 0;
         }
@@ -234,13 +157,18 @@
                 height: 200px;
             }
 
+            .button-group .button {
+                min-width: 250px;
+                height: 70px;
+            }
+
             .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
 
             .feature-card {
-                height: 250px;
+                height: 300px;
                 padding: 25px;
             }
         }
@@ -267,8 +195,8 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="about.html">About VExUS AI</a></li>
-                <li><a href="literature.html">Literature</a></li>
+                <li><a href="#about">About VExUS AI</a></li>
+                <li><a href="#documentation">Documentation</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -281,60 +209,18 @@
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
 
-                    <h1>VExUS AI - Image Recognition & Scoring</h1>
-                    
-                    <div class="input-controls">
-                        <p>Upload an image for VExUS analysis:</p>
-                        <input type="file" id="imageUpload" accept="image/*" class="button primary">
-                        <div id="model-status" class="status-box status-error">Model not loaded</div>
+                    <div class="title-container">
+                        <h1>VExUS AI</h1>
+                        <div class="built-by">Built by The POCUS Atlas</div>
                     </div>
-                    
-                    <p id="result">Image recognition result will appear here...</p>
-                    <p id="top-results"></p>
-                    
-                    <div class="score-section">
-                        <h2>VExUS Score Calculation</h2>
-                        
-                        <div class="input-group">
-                            <label for="ivc-diameter">IVC Diameter (cm):</label>
-                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
-                        </div>
 
-                        <div class="input-group">
-                            <label for="hv-score">Hepatic Vein Score:</label>
-                            <select id="hv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="pv-score">Portal Vein Score:</label>
-                            <select id="pv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="rv-score">Renal Vein Score:</label>
-                            <select id="rv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
+                    <div class="section">
+                        <p>Advanced venous congestion assessment through artificial intelligence and point-of-care ultrasound.</p>
                         
                         <div class="button-group">
-                            <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                            <button onclick="resetScores()" class="button">Reset Scores</button>
+                            <a href="acquisition.html" class="button primary">Image Acquisition Guide</a>
+                            <a href="calculator.html" class="button">VExUS Calculator</a>
                         </div>
-                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                     </div>
 
                     <div class="feature-grid">
@@ -343,11 +229,21 @@
                             <h3>Image Acquisition</h3>
                             <p>Step-by-step guide for acquiring standardized VExUS images</p>
                         </a>
-                        <a href="index.html" class="feature-card">
-                            <i class="fas fa-home"></i>
-                            <h3>Return Home</h3>
-                            <p>Back to VExUS AI main page</p>
+                        <a href="calculator.html" class="feature-card">
+                            <i class="fas fa-calculator"></i>
+                            <h3>AI-Powered Analysis</h3>
+                            <p>Automated VExUS scoring with machine learning</p>
                         </a>
+                        <a href="#" class="feature-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Clinical Assessment</h3>
+                            <p>Comprehensive venous congestion evaluation</p>
+                        </a>
+                    </div>
+
+                    <div class="section">
+                        <h2>About VExUS</h2>
+                        <p>The Venous Excess UltraSound (VExUS) grading system is a point-of-care ultrasound technique for assessing systemic venous congestion. It combines measurements of inferior vena cava diameter with Doppler patterns of hepatic, portal, and intrarenal veins to provide a comprehensive evaluation of venous congestion.</p>
                     </div>
                 </div>
             </div>
@@ -360,90 +256,5 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-
-    <!-- Model Loading and Processing Script -->
-    <script>
-        // Model loading and initialization
-        let model;
-        async function loadModel() {
-            try {
-                const statusDiv = document.getElementById('model-status');
-                statusDiv.className = 'status-box';
-                statusDiv.textContent = 'Loading model...';
-                
-                // Load the model from your repository's model directory
-                model = await tf.loadLayersModel('model/model.json');
-                
-                statusDiv.className = 'status-box status-ready';
-                statusDiv.textContent = 'Model loaded successfully';
-            } catch (error) {
-                const statusDiv = document.getElementById('model-status');
-                statusDiv.className = 'status-box status-error';
-                statusDiv.textContent = 'Error loading model: ' + error.message;
-            }
-        }
-
-        // Image processing function
-        async function processImage(file) {
-            if (!model) {
-                alert('Please wait for the model to load');
-                return;
-            }
-
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            
-            img.onload = async () => {
-                // Convert image to tensor and preprocess
-                const tensor = tf.browser.fromPixels(img)
-                    .resizeNearestNeighbor([224, 224])
-                    .toFloat()
-                    .expandDims();
-                
-                // Make prediction
-                const prediction = await model.predict(tensor).data();
-                
-                // Display results
-                document.getElementById('result').textContent = 'Processing complete!';
-                document.getElementById('top-results').textContent = `Predictions: ${prediction.toString()}`;
-                
-                // Clean up
-                tensor.dispose();
-            };
-        }
-
-        // Calculate VExUS score function
-        function calculateVexusScore() {
-            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value) || 0;
-            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
-            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
-            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
-            
-            const totalScore = hvScore + pvScore + rvScore;
-            document.getElementById('total-score').textContent = totalScore;
-        }
-
-        // Reset scores function
-        function resetScores() {
-            document.getElementById('ivc-diameter').value = '';
-            document.getElementById('hv-score').value = '';
-            document.getElementById('pv-score').value = '';
-            document.getElementById('rv-score').value = '';
-            document.getElementById('total-score').textContent = '--';
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            loadModel(); // Load model when page loads
-            
-            // Set up file input listener
-            const imageUpload = document.getElementById('imageUpload');
-            imageUpload.addEventListener('change', (e) => {
-                if (e.target.files[0]) {
-                    processImage(e.target.files[0]);
-                }
-            });
-        });
-    </script>
 </body>
 </html>
