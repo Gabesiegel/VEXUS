@@ -11,7 +11,7 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
     
     <style>
         .container {
@@ -117,6 +117,18 @@
             margin-bottom: 15px;
         }
 
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px auto;
+            display: none;
+        }
+
+        .preview-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
         #imageUpload {
             display: none;
         }
@@ -148,13 +160,11 @@
         .status-ready {
             background-color: #28a745;
             color: white;
-            border: none;
         }
 
         .status-error {
             background-color: #dc3545;
             color: white;
-            border: none;
         }
 
         .score-section {
@@ -201,6 +211,17 @@
             line-height: 1.2;
         }
 
+        .user-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            z-index: 1000;
+        }
+
         @media screen and (max-width: 980px) {
             .container {
                 padding: 30px;
@@ -215,6 +236,11 @@
     </style>
 </head>
 <body class="is-preload">
+    <div class="user-info">
+        <div id="currentDateTime"></div>
+        <div id="userLogin"></div>
+    </div>
+
     <div id="wrapper">
         <header id="header">
             <div class="inner">
@@ -255,8 +281,11 @@
                         <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <p class="upload-text">Click to upload an image for VExUS analysis</p>
-                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                            <input type="file" id="imageUpload" accept="image/*">
                             <button class="upload-button">Choose File</button>
+                        </div>
+                        <div class="preview-container">
+                            <img id="imagePreview" alt="Preview">
                         </div>
                         <div id="model-status" class="status-box status-error">Model not loaded</div>
                     </div>
@@ -319,5 +348,98 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-</body>
-</html>
+
+    <script>
+        // Set user info
+        document.getElementById('currentDateTime').textContent = '2025-02-11 08:07:05 UTC';
+        document.getElementById('userLogin').textContent = 'User: Gabesiegel';
+
+        let model;
+
+        // Load the model
+        async function loadModel() {
+            try {
+                model = await tf.loadLayersModel('models/model.json');
+                document.getElementById('model-status').className = 'status-box status-ready';
+                document.getElementById('model-status').textContent = 'Model loaded successfully';
+            } catch (error) {
+                console.error('Error loading model:', error);
+                document.getElementById('model-status').className = 'status-box status-error';
+                document.getElementById('model-status').textContent = 'Error loading model: ' + error.message;
+            }
+        }
+
+        // Process the image
+        async function processImage(file) {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            
+            // Show preview
+            const preview = document.getElementById('imagePreview');
+            preview.src = img.src;
+            preview.style.display = 'block';
+            
+            img.onload = async function() {
+                try {
+                    // Preprocess the image
+                    let tensor = tf.browser.fromPixels(img)
+                        .resizeNearestNeighbor([224, 224]) // Resize to model's expected input size
+                        .toFloat()
+                        .expandDims();
+                    
+                    // Normalize the image data
+                    tensor = tensor.div(255.0);
+
+                    // Make prediction
+                    const prediction = await model.predict(tensor).data();
+                    
+                    // Process and display results
+                    displayResults(prediction);
+
+                    // Clean up
+                    tensor.dispose();
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    document.getElementById('result').textContent = 'Error processing image: ' + error.message;
+                }
+            };
+        }
+
+        // Display the results
+        function displayResults(predictions) {
+            const classes = ['Hepatic Vein', 'IVC', 'Portal Vein', 'Renal Vein']; // Update with your model's classes
+            const resultDiv = document.getElementById('result');
+            const topResultsDiv = document.getElementById('top-results');
+            
+            // Find the highest probability
+            const maxProbability = Math.max(...predictions);
+            const predictedClass = classes[predictions.indexOf(maxProbability)];
+            
+            resultDiv.textContent = `Predicted class: ${predictedClass} (${(maxProbability * 100).toFixed(2)}% confidence)`;
+            
+            // Show top 3 predictions
+            let topResults = predictions
+                .map((prob, i) => ({probability: prob, class: classes[i]}))
+                .sort((a, b) => b.probability - a.probability)
+                .slice(0, 3);
+            
+            topResultsDiv.innerHTML = '<h3>Top Predictions:</h3>' +
+                topResults.map(result => 
+                    `${result.class}: ${(result.probability * 100).toFixed(2)}%`
+                ).join('<br>');
+        }
+
+        // Calculate VExUS Score
+        function calculateVexusScore() {
+            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
+            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
+            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
+            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value) || 0;
+
+            let totalScore = hvScore + pvScore + rvScore;
+            
+            if (ivcDiameter > 2.0) {
+                totalScore += 1;
+            }
+
+            document.getElementById('total-score').textContent = totalScore;
