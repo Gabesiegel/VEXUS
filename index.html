@@ -73,14 +73,6 @@
             text-align: center;
         }
 
-        .timestamp {
-            text-align: right;
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            font-family: monospace;
-        }
-
         .button-group {
             display: flex;
             gap: 40px;
@@ -103,22 +95,22 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin: 40px auto;
+            gap: 30px;
+            margin: 30px auto;
             width: 100%;
             max-width: 1300px;
         }
 
         .feature-card {
             background: white;
-            padding: 40px;
+            padding: 35px 25px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-align: center;
-            height: 400px;
+            height: 350px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
@@ -134,21 +126,21 @@
         }
 
         .feature-card i {
-            font-size: 4em;
-            margin-bottom: 30px;
+            font-size: 3em;
+            margin-bottom: 20px;
             color: #585858;
         }
 
         .feature-card h3 {
-            font-size: 2em;
-            margin-bottom: 25px;
+            font-size: 1.6em;
+            margin-bottom: 15px;
             width: 100%;
         }
 
         .feature-card p {
-            font-size: 1.3em;
-            line-height: 1.6;
-            padding: 0 20px;
+            font-size: 1.1em;
+            line-height: 1.4;
+            padding: 0 15px;
             width: 100%;
             margin: 0;
         }
@@ -175,8 +167,8 @@
             }
 
             .feature-card {
-                height: 350px;
-                padding: 30px;
+                height: 300px;
+                padding: 25px;
             }
         }
     </style>
@@ -211,11 +203,6 @@
         <div id="main">
             <div class="inner">
                 <div class="container">
-                    <div class="timestamp">
-                        Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-02-11 05:44:06<br>
-                        Current User's Login: Gabesiegel
-                    </div>
-
                     <div class="logo-container">
                         <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
