@@ -50,15 +50,61 @@
             color: #585858;
         }
 
-        .image-card p {
-            color: #666;
-            margin-top: 10px;
+        .collapsible {
+            background-color: #f8f8f8;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #f0f0f0;
+        }
+
+        .content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: white;
+        }
+
+        .main-logo {
+            width: 300px;
+            margin: 0 auto 2em auto;
+            display: block;
+        }
+
+        .sidebar-logo {
+            width: 60px;
+            margin-bottom: 0;
+        }
+
+        .important-box {
+            background: #fff5f5;
+            padding: 15px;
+            border-left: 3px solid #dc3545;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #0066cc;
+            margin: 15px 0;
+            border-radius: 5px;
         }
 
         .technique-list {
             list-style-type: none;
             padding-left: 0;
-            text-align: left;
         }
 
         .technique-list li {
@@ -89,32 +135,10 @@
         .grading-table th {
             background: #f5f5f5;
         }
-
-        .main-logo {
-            width: 300px;
-            margin: 0 auto 2em auto;
-            display: block;
-        }
-
-        .sidebar-logo {
-            width: 60px;
-            margin-bottom: 0;
-        }
-
-        .pitfalls {
-            background: #fff5f5;
-            padding: 15px;
-            border-left: 3px solid #dc3545;
-            margin-top: 15px;
-        }
-
-        .pitfalls h4 {
-            color: #dc3545;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body class="is-preload">
+    <!-- Header Section -->
     <div id="wrapper">
         <header id="header">
             <div class="inner">
@@ -126,6 +150,7 @@
             </div>
         </header>
 
+        <!-- Navigation Menu -->
         <nav id="menu">
             <div class="logo-container">
                 <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
@@ -134,112 +159,174 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition</a></li>
-                <li><a href="#score-calculator">Score Calculator</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="#about">About VExUS AI</a></li>
                 <li><a href="#documentation">Documentation</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
 
+        <!-- Main Content -->
         <div id="main">
             <div class="inner">
                 <div class="container">
                     <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
                     <h1>VExUS Image Acquisition Guide</h1>
 
+                    <!-- Overview Section -->
+                    <div class="acquisition-section">
+                        <h2>Overview</h2>
+                        <div class="info-box">
+                            <h3>Why Use VExUS?</h3>
+                            <ul class="technique-list">
+                                <li><strong>Non-invasive Quantification:</strong> Quantify venous congestion without invasive procedures</li>
+                                <li><strong>Real-Time Hemodynamic Insight:</strong> Immediate information about patient's hemodynamic status</li>
+                                <li><strong>Guiding Therapy:</strong> Assess response to treatments like diuretics</li>
+                                <li><strong>Organ Dysfunction Link:</strong> Higher scores correlate with organ dysfunction</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>Indications for VExUS</h3>
+                            <ul class="technique-list">
+                                <li>Suspected volume overload</li>
+                                <li>Heart Failure</li>
+                                <li>Hemodynamic AKI</li>
+                                <li>Shock states</li>
+                                <li>Unexplained hypotension</li>
+                            </ul>
+                        </div>
+
+                        <div class="important-box">
+                            <h3>Equipment and Preparation</h3>
+                            <ul class="technique-list">
+                                <li><strong>Ultrasound Machine:</strong> 2D imaging, color Doppler, and pulsed-wave Doppler capabilities</li>
+                                <li><strong>Transducer:</strong> Phased array or curvilinear</li>
+                                <li><strong>ECG Module:</strong> Highly recommended</li>
+                                <li><strong>Supplies:</strong> Ultrasound gel and gloves</li>
+                                <li><strong>Patient Position:</strong> Supine, examination table at operator's waist level</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- IVC Assessment Section -->
                     <div class="acquisition-section">
                         <h2>1. Inferior Vena Cava (IVC) Assessment</h2>
                         <div class="image-card">
                             <img src="images/1_IVC_assessment_v002.png" alt="IVC Assessment">
                             <h3>IVC Assessment Technique</h3>
-                            <ul class="technique-list">
-                                <li><strong>Short Axis:</strong> Place transducer 1-2 cm below xiphoid process, orientation marker at 3 o'clock</li>
-                                <li><strong>Long Axis:</strong> Rotate transducer 90° counterclockwise (marker to 12 o'clock)</li>
-                                <li><strong>Measurement:</strong> 2 cm below RA-IVC junction or 1 cm below HV-IVC junction</li>
-                            </ul>
-                            <div class="pitfalls">
-                                <h4>Pitfalls:</h4>
+                            <button class="collapsible">Technique Details ▼</button>
+                            <div class="content">
                                 <ul class="technique-list">
-                                    <li>Distinguishing IVC from aorta</li>
-                                    <li>Dilated IVC in athletes</li>
-                                    <li>Collapsed IVC despite elevated RAP</li>
-                                    <li>"Cylinder effect" with long-axis measurements</li>
+                                    <li><strong>Short Axis:</strong> Place transducer 1-2 cm below xiphoid process, orientation marker at 3 o'clock</li>
+                                    <li><strong>Long Axis:</strong> Rotate transducer 90° counterclockwise (marker to 12 o'clock)</li>
+                                    <li><strong>Measurement:</strong> 2 cm below RA-IVC junction or 1 cm below HV-IVC junction</li>
                                 </ul>
+                                
+                                <div class="important-box">
+                                    <h4>Pitfalls:</h4>
+                                    <ul class="technique-list">
+                                        <li>Distinguishing IVC from aorta</li>
+                                        <li>Dilated IVC in athletes</li>
+                                        <li>Collapsed IVC despite elevated RAP</li>
+                                        <li>"Cylinder effect" with long-axis measurements</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Hepatic Vein Assessment Section -->
                     <div class="acquisition-section">
                         <h2>2. Hepatic Vein Assessment</h2>
                         <div class="image-card">
-                            <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Long Axis">
-                            <h3>Long Axis View - Wave Pattern Analysis</h3>
-                            <p>Normal waveform components:</p>
-                            <ul class="technique-list">
-                                <li><strong>A Wave:</strong> Atrial contraction</li>
-                                <li><strong>S Wave:</strong> Ventricular systole</li>
-                                <li><strong>V Wave:</strong> Tricuspid annulus return</li>
-                                <li><strong>D Wave:</strong> Ventricular diastole</li>
-                            </ul>
-                        </div>
-                        <div class="image-card">
-                            <img src="images/3_Hepatic_vein_assessment_short_axis_v002 (1).png" alt="Hepatic Vein Short Axis">
-                            <h3>Short Axis View - Positioning</h3>
-                            <p>Place pulsed-wave Doppler sample volume 1-2 cm from IVC-HV junction</p>
-                        </div>
-                        <div class="image-card">
-                            <img src="images/4_Hepatic_vein_subxiphoid_view_v001 (1).png" alt="Hepatic Vein Subxiphoid">
-                            <h3>Subxiphoid View</h3>
-                            <p>Transducer 1-2 cm below xiphoid, marker at 12 o'clock, tilt right</p>
+                            <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Assessment">
+                            <h3>Hepatic Vein Doppler Assessment</h3>
+                            <button class="collapsible">Technique and Waveform Details ▼</button>
+                            <div class="content">
+                                <h4>Normal Waveform Components:</h4>
+                                <ul class="technique-list">
+                                    <li><strong>A Wave:</strong> Atrial contraction</li>
+                                    <li><strong>S Wave:</strong> Ventricular systole</li>
+                                    <li><strong>V Wave:</strong> Tricuspid annulus return</li>
+                                    <li><strong>D Wave:</strong> Ventricular diastole</li>
+                                </ul>
+                                
+                                <div class="important-box">
+                                    <h4>Pitfalls:</h4>
+                                    <ul class="technique-list">
+                                        <li>Atrial fibrillation (absent A wave)</li>
+                                        <li>Rhythm abnormalities without ECG</li>
+                                        <li>Liver cirrhosis effects</li>
+                                        <li>Significant tricuspid regurgitation</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Portal Vein Assessment Section -->
                     <div class="acquisition-section">
                         <h2>3. Portal Vein Assessment</h2>
                         <div class="image-card">
-                            <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Subxiphoid">
+                            <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Assessment">
                             <h3>Portal Vein Flow Analysis</h3>
-                            <p>PVPF = [(Vmax - Vmin) / Vmax] x 100%</p>
-                            <ul class="technique-list">
-                                <li>Normal: PVPF < 30%</li>
-                                <li>Mild congestion: PVPF 30-50%</li>
-                                <li>Severe congestion: PVPF > 50%</li>
-                            </ul>
-                        </div>
-                        <div class="image-card">
-                            <img src="images/6_Portal_vien_assessment_long_axis_v001 (1).png" alt="Portal Vein Long Axis">
-                            <h3>Long Axis Technique</h3>
-                            <p>Use color Doppler to locate main portal vein, position sample volume distally</p>
-                        </div>
-                        <div class="image-card">
-                            <img src="images/7_Portal_vien_assessment_short_axis_v001 (1).png" alt="Portal Vein Short Axis">
-                            <h3>Short Axis Assessment</h3>
-                            <p>Decrease Doppler scale to amplify waveform, avoid hepatic artery interference</p>
+                            <button class="collapsible">PVPF Calculation and Details ▼</button>
+                            <div class="content">
+                                <p><strong>PVPF = [(Vmax - Vmin) / Vmax] x 100%</strong></p>
+                                <ul class="technique-list">
+                                    <li>Normal: PVPF < 30%</li>
+                                    <li>Mild congestion: PVPF 30-50%</li>
+                                    <li>Severe congestion: PVPF > 50%</li>
+                                </ul>
+                                
+                                <div class="important-box">
+                                    <h4>Pitfalls:</h4>
+                                    <ul class="technique-list">
+                                        <li>Increased pulsatility in athletes</li>
+                                        <li>Cirrhosis effects</li>
+                                        <li>Respiratory variations confusion</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Intrarenal Vein Assessment Section -->
                     <div class="acquisition-section">
                         <h2>4. Intrarenal Vein Assessment</h2>
                         <div class="image-card">
-                            <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Renal Vein Long Axis">
-                            <h3>Long Axis Optimization</h3>
-                            <ul class="technique-list">
-                                <li>Slide transducer caudally to visualize kidney</li>
-                                <li>Use zoom function for renal parenchyma</li>
-                                <li>Place color box over parenchyma</li>
-                            </ul>
-                        </div>
-                        <div class="image-card">
-                            <img src="images/9_Renal_vein_assessment_short_axis_v002 (1).png" alt="Renal Vein Short Axis">
-                            <h3>Short Axis Flow Patterns</h3>
-                            <ul class="technique-list">
-                                <li>Normal: Continuous flow</li>
-                                <li>Mild-Moderate: Pulsatile with S and D waves</li>
-                                <li>Severe: Monophasic (D-only)</li>
-                            </ul>
+                            <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Intrarenal Vein Assessment">
+                            <h3>Intrarenal Vein Doppler Assessment</h3>
+                            <button class="collapsible">Technique and Optimization ▼</button>
+                            <div class="content">
+                                <h4>Pre-Doppler Optimization:</h4>
+                                <ul class="technique-list">
+                                    <li>Slide transducer caudally for kidney visualization</li>
+                                    <li>Use zoom function for renal parenchyma</li>
+                                    <li>Place color box over parenchyma</li>
+                                </ul>
+                                
+                                <h4>Interpretation:</h4>
+                                <ul class="technique-list">
+                                    <li>Normal: Continuous flow</li>
+                                    <li>Mild-Moderate: Pulsatile with S and D waves</li>
+                                    <li>Severe: Monophasic (D-only)</li>
+                                </ul>
+                                
+                                <div class="important-box">
+                                    <h4>Pitfalls:</h4>
+                                    <ul class="technique-list">
+                                        <li>Technical challenges with breath-holding</li>
+                                        <li>Limited studies in chronic kidney disease</li>
+                                        <li>Transplant recipient considerations</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- VExUS Grading System -->
                     <div class="acquisition-section">
                         <h2>VExUS Grading System</h2>
                         <table class="grading-table">
@@ -253,28 +340,25 @@
                             </tr>
                             <tr>
                                 <td>Grade 1</td>
-                                <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms (HV S < D, PV pulsatility 30-50%, IRV pulsatile with S and D)</td>
+                                <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms</td>
                             </tr>
                             <tr>
                                 <td>Grade 2</td>
-                                <td>IVC > 2 cm, one severely abnormal waveform (HV S reversal, PV pulsatility > 50%, IRV monophasic)</td>
+                                <td>IVC > 2 cm, one severely abnormal waveform</td>
                             </tr>
                             <tr>
                                 <td>Grade 3</td>
                                 <td>IVC > 2 cm, two or more severely abnormal waveforms</td>
                             </tr>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-    <script src="html5up-phantom/assets/js/browser.min.js"></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-    <script src="html5up-phantom/assets/js/util.js"></script>
-    <script src="html5up-phantom/assets/js/main.js"></script>
-</body>
-</html>
+                        <div class="important-box">
+                            <h3>Important Caveats and Limitations</h3>
+                            <ul class="technique-list">
+                                <li>Does not differentiate between volume and pressure overload</li>
+                                <li>Must be integrated with clinical context</li>
+                                <li>Not a volume responsiveness tool</li>
+                                <li>Limited study populations</li>
+                                <li>Assesses only part of hemodynamic circuit</li>
+                                <li>Should not be performed in isolation</li>
+                            
