@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Image Recognition & Scoring</title>
+    <title>VExUS AI - Calculator</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -25,78 +25,6 @@
             text-align: center;
         }
 
-        .input-controls {
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
-            background: #fafafa;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #eee;
-        }
-
-        .input-group {
-            margin: 15px auto;
-            text-align: left;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .input-group input[type="number"],
-        .input-group select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        input[type="file"].button.primary {
-            width: 100%;
-            margin-bottom: 10px;
-            background: white;
-        }
-
-        .status-box {
-            width: 100%;
-            margin: 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .status-ready {
-            background-color: #28a745;
-            color: white;
-            border: 2px solid #218838;
-        }
-
-        .status-error {
-            background-color: #dc3545;
-            color: white;
-            border: 2px solid #c82333;
-        }
-
-        .score-section {
-            background: #fafafa;
-            padding: 25px;
-            border-radius: 5px;
-            margin-top: 20px;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid #eee;
-        }
-
-        .main-logo {
-            width: 500px;
-            height: 250px;
-            margin: 0 auto 2em auto;
-            display: block;
-            object-fit: contain;
-        }
-
         .logo-container {
             display: flex;
             justify-content: center;
@@ -106,13 +34,18 @@
             flex-wrap: wrap;
         }
 
+        .logo {
+            width: 500px;
+            height: 250px;
+            object-fit: contain;
+        }
+
         .sidebar-logo {
             width: 40px;
             height: auto;
             margin-bottom: 0;
         }
 
-        /* Exact match to index.html sidebar */
         nav#menu {
             background: #f5f5f5;
             padding: 20px;
@@ -146,6 +79,64 @@
             color: #007bff;
         }
 
+        .input-controls {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .input-group {
+            margin: 15px auto;
+            text-align: left;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .status-box {
+            width: 100%;
+            margin: 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .status-ready {
+            background-color: #28a745;
+            color: white;
+            border: 2px solid #218838;
+        }
+
+        .status-error {
+            background-color: #dc3545;
+            color: white;
+            border: 2px solid #c82333;
+        }
+
+        .score-section {
+            background: #fafafa;
+            padding: 25px;
+            border-radius: 5px;
+            margin-top: 20px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #eee;
+        }
+
         .button-group {
             display: flex;
             gap: 30px;
@@ -163,7 +154,6 @@
             line-height: 1.2;
         }
 
-        /* Updated feature card styling with smaller text */
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -217,20 +207,13 @@
             margin: 0;
         }
 
-        #result, #top-results {
-            text-align: center;
-            margin: 15px auto;
-            width: 90%;
-            max-width: 600px;
-        }
-
         @media screen and (max-width: 980px) {
             .container {
                 padding: 30px;
                 max-width: 95%;
             }
 
-            .main-logo {
+            .logo {
                 width: 400px;
                 height: 200px;
             }
@@ -267,9 +250,9 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
-                <li><a href="#score-calculator">Score Calculator</a></li>
-                <li><a href="#about">About VExUS AI</a></li>
-                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
+                <li><a href="about.html">About VExUS AI</a></li>
+                <li><a href="literature.html">Literature</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -277,11 +260,15 @@
         <div id="main">
             <div class="inner">
                 <div class="container">
-                    <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    </div>
+
                     <h1>VExUS AI - Image Recognition & Scoring</h1>
                     
                     <div class="input-controls">
-                        <p>Upload an image for image recognition:</p>
+                        <p>Upload an image for VExUS analysis:</p>
                         <input type="file" id="imageUpload" accept="image/*" class="button primary">
                         <div id="model-status" class="status-box status-error">Model not loaded</div>
                     </div>
@@ -334,7 +321,6 @@
                         <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                     </div>
 
-                    <!-- Feature Grid with smaller text -->
                     <div class="feature-grid">
                         <a href="acquisition.html" class="feature-card">
                             <i class="fas fa-camera"></i>
@@ -359,80 +345,4 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
 
-    <script>
-        // Original JavaScript remains unchanged
-        document.querySelectorAll('#ivc-diameter, #hv-score, #pv-score, #rv-score').forEach(el => {
-            el.addEventListener('change', () => {
-                if (document.getElementById('ivc-diameter').value &&
-                    document.getElementById('hv-score').value !== "" &&
-                    document.getElementById('pv-score').value !== "" &&
-                    document.getElementById('rv-score').value !== "") {
-                    calculateVexusScore();
-                }
-            });
-        });
-
-        function calculateVexusScore() {
-            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
-            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
-            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
-            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
-
-            if (isNaN(ivcDiameter)) {
-                document.getElementById('total-score').innerText = "Incomplete Data";
-                return;
-            }
-
-            let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
-            let vexusGrade = ivcDiameter < 2 
-                ? "Grade 0: No Congestion" 
-                : severityCount === 0 
-                    ? "Grade 1: Mild Congestion" 
-                    : severityCount === 1 
-                        ? "Grade 2: Moderate Congestion" 
-                        : "Grade 3: Severe Congestion";
-            document.getElementById('total-score').innerText = vexusGrade;
-        }
-
-        function resetScores() {
-            document.getElementById('ivc-diameter').value = "";
-            document.getElementById('hv-score').value = "";
-            document.getElementById('pv-score').value = "";
-            document.getElementById('rv-score').value = "";
-            document.getElementById('total-score').innerText = '--';
-        }
-
-        async function loadModel() {
-            try {
-                console.log("Loading model...");
-                model = await tf.loadLayersModel("https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json");
-                document.getElementById('model-status').className = "status-box status-ready";
-                document.getElementById('model-status').innerText = "Model loaded and ready";
-            } catch (error) {
-                console.error("Error loading model:", error);
-                document.getElementById('model-status').className = "status-box status-error";
-                document.getElementById('model-status').innerText = "Error loading model";
-            }
-        }
-
-        loadModel();
-
-        document.getElementById('imageUpload').addEventListener('change', async function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!model) {
-                document.getElementById('result').innerText = "Model not loaded!";
-                return;
-            }
-            
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = async function() {
-                const tensor = tf.browser.fromPixels(img)
-                    .resizeNearestNeighbor([224, 224])
-                    .toFloat()
-                    .expandDims();
-                const predictions = await model.predict(tensor).data();
-                displayResults(predictions);
-            };
-        
+     ▋
