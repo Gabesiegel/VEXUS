@@ -52,6 +52,14 @@
             border: 1px solid #ccc;
         }
 
+        .timestamp {
+            text-align: right;
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
         input[type="file"].button.primary {
             width: 100%;
             margin-bottom: 10px;
@@ -90,23 +98,25 @@
         }
 
         .main-logo {
-            width: 200px;
+            width: 500px;
+            height: 250px;
             margin: 0 auto 2em auto;
             display: block;
+            object-fit: contain;
         }
 
         .sidebar-logo {
-            width: 60px;
+            width: 40px;
+            height: auto;
             margin-bottom: 0;
         }
 
         .button-group {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             justify-content: center;
-            margin: 25px auto;
-            width: 90%;
-            max-width: 600px;
+            margin: 35px auto;
+            flex-wrap: wrap;
         }
 
         .button-group button {
@@ -116,6 +126,54 @@
             height: auto;
             padding: 10px 20px;
             line-height: 1.2;
+        }
+
+        /* Feature Grid Styling (matching index.html) */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .feature-card i {
+            font-size: 3.5em;
+            margin-bottom: 25px;
+            color: #585858;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .feature-card p {
+            font-size: 1.2em;
+            line-height: 1.6;
         }
 
         #menu {
@@ -149,6 +207,21 @@
             width: 90%;
             max-width: 600px;
         }
+
+        @media screen and (max-width: 980px) {
+            .main-logo {
+                width: 400px;
+                height: 200px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -170,6 +243,7 @@
             <h2>Menu</h2>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                 <li><a href="#score-calculator">Score Calculator</a></li>
                 <li><a href="#about">About VExUS AI</a></li>
                 <li><a href="#documentation">Documentation</a></li>
@@ -180,6 +254,11 @@
         <div id="main">
             <div class="inner">
                 <div class="container">
+                    <div class="timestamp">
+                        Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-02-11 05:41:42<br>
+                        Current User's Login: Gabesiegel
+                    </div>
+
                     <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
                     <h1>VExUS AI - Image Recognition & Scoring</h1>
                     
@@ -236,6 +315,20 @@
                         </div>
                         <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                     </div>
+
+                    <!-- Added Feature Grid -->
+                    <div class="feature-grid">
+                        <a href="acquisition.html" class="feature-card">
+                            <i class="fas fa-camera"></i>
+                            <h3>Image Acquisition Guide</h3>
+                            <p>Step-by-step guide for acquiring standardized VExUS images</p>
+                        </a>
+                        <a href="index.html" class="feature-card">
+                            <i class="fas fa-home"></i>
+                            <h3>Return Home</h3>
+                            <p>Back to VExUS AI main page</p>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -249,6 +342,7 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
+        // Original JavaScript remains unchanged
         document.querySelectorAll('#ivc-diameter, #hv-score, #pv-score, #rv-score').forEach(el => {
             el.addEventListener('change', () => {
                 if (document.getElementById('ivc-diameter').value &&
@@ -327,20 +421,4 @@
                 let sortedIndices = [...predictions.keys()]
                     .sort((a, b) => predictions[b] - predictions[a]);
                 let topResults = sortedIndices.slice(0, 3)
-                    .map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(2)}%`)
-                    .join('<br>');
-                document.getElementById('top-results').innerHTML = topResults;
-                
-                const highestIndex = sortedIndices[0];
-                if (highestIndex < 3) {
-                    document.getElementById("hv-score").value = highestIndex;
-                } else if (highestIndex < 6) {
-                    document.getElementById("pv-score").value = highestIndex - 3;
-                } else {
-                    document.getElementById("rv-score").value = highestIndex - 6;
-                }
-            };
-        });
-    </script>
-</body>
-</html>
+                    .map(i => `${labels
