@@ -1,8 +1,7 @@
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Home</title>
+    <title>VExUS AI - Calculator</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -10,6 +9,9 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     
     <style>
         .container {
@@ -20,6 +22,7 @@
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .logo-container {
@@ -37,113 +40,216 @@
             object-fit: contain;
         }
 
+        /* Updated sidebar styles to match index.html */
         .sidebar-logo {
-            width: 40px;
+            width: 100px;
             height: auto;
-            margin-bottom: 0;
+            margin-bottom: 1em;
+            padding: 10px;
+        }
+
+        nav#menu {
+            background: #585858;
+            padding: 20px;
         }
 
         nav#menu .logo-container {
-            padding: 10px;
+            padding: 15px;
             display: flex;
             justify-content: center;
+            margin-bottom: 1em;
         }
 
-        .title-container {
+        nav#menu h2 {
+            color: white;
+            margin-bottom: 1em;
+            font-size: 1.2em;
             text-align: center;
-            margin: 2em 0;
         }
 
-        .title-container h1 {
-            font-size: 3.5em;
-            margin-bottom: 0.2em;
+        nav#menu ul li {
+            border-top: solid 1px rgba(255, 255, 255, 0.125);
+            padding: 0.7em 0;
         }
 
-        .built-by {
-            font-size: 1.5em;
-            color: #666;
-            margin-top: 0.5em;
+        nav#menu ul li a {
+            color: white;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 1em;
+            transition: color 0.2s ease;
         }
 
-        .section {
-            margin: 40px 0;
-            padding: 30px;
-            background: #fafafa;
+        nav#menu ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Updated upload controls for modern look */
+        .input-controls {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: center;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .input-controls:hover {
+            transform: translateY(-5px);
+        }
+
+        .upload-area {
+            border: 2px dashed #007bff;
             border-radius: 10px;
-            border: 1px solid #eee;
-            text-align: center;
+            padding: 40px 20px;
+            margin: 20px auto;
+            background: #f8fbff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #0056b3;
+            background: #f0f7ff;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: none;
+            margin-top: 15px;
+        }
+
+        .upload-button:hover {
+            background: #0056b3;
+        }
+
+        .status-box {
+            width: 100%;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .status-ready {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .status-error {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        /* Updated input groups styling */
+        .score-section {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px auto;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .input-group {
+            margin: 25px auto;
+            text-align: left;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input[type="number"]:focus,
+        .input-group select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+            outline: none;
         }
 
         .button-group {
             display: flex;
-            gap: 40px;
+            gap: 20px;
             justify-content: center;
             margin: 35px auto;
             flex-wrap: wrap;
-            max-width: 1300px;
         }
 
-        .button-group .button {
-            min-width: 300px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            padding: 0 30px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin: 30px auto;
-            width: 100%;
-            max-width: 1300px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 35px 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            height: 350px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .feature-card i {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #585858;
-        }
-
-        .feature-card h3 {
-            font-size: 1.6em;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-
-        .feature-card p {
+        .button-group button {
+            padding: 12px 30px;
+            border-radius: 25px;
             font-size: 1.1em;
-            line-height: 1.4;
-            padding: 0 15px;
-            width: 100%;
-            margin: 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .button-group button.primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .button-group button.primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .button-group button:not(.primary) {
+            background: #f8f9fa;
+            color: #444;
+            border: 1px solid #ddd;
+        }
+
+        .button-group button:not(.primary):hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
         }
 
         @media screen and (max-width: 980px) {
@@ -157,19 +263,19 @@
                 height: 200px;
             }
 
-            .button-group .button {
-                min-width: 250px;
-                height: 70px;
+            .input-controls,
+            .score-section {
+                padding: 30px;
             }
 
-            .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
             }
 
-            .feature-card {
-                height: 300px;
-                padding: 25px;
+            .button-group button {
+                width: 100%;
+                max-width: none;
             }
         }
     </style>
@@ -195,8 +301,8 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="#about">About VExUS AI</a></li>
-                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="about.html">About VExUS AI</a></li>
+                <li><a href="literature.html">Literature</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -209,41 +315,64 @@
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
 
-                    <div class="title-container">
-                        <h1>VExUS AI</h1>
-                        <div class="built-by">Built by The POCUS Atlas</div>
+                    <h1>VExUS AI - Image Recognition & Scoring</h1>
+                    
+                    <div class="input-controls">
+                        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Drag and drop your image here or click to browse</p>
+                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                            <button class="upload-button">Choose File</button>
+                        </div>
+                        <div id="model-status" class="status-box status-error">Model not loaded</div>
                     </div>
+                    
+                    <p id="result">Image recognition result will appear here...</p>
+                    <p id="top-results"></p>
+                    
+                    <div class="score-section">
+                        <h2>VExUS Score Calculation</h2>
+                        
+                        <div class="input-group">
+                            <label for="ivc-diameter">IVC Diameter (cm):</label>
+                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
+                        </div>
 
-                    <div class="section">
-                        <p>Advanced venous congestion assessment through artificial intelligence and point-of-care ultrasound.</p>
+                        <div class="input-group">
+                            <label for="hv-score">Hepatic Vein Score:</label>
+                            <select id="hv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="pv-score">Portal Vein Score:</label>
+                            <select id="pv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="rv-score">Renal Vein Score:</label>
+                            <select id="rv-score">
+                                <option value="">-- Select --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Severe</option>
+                            </select>
+                        </div>
                         
                         <div class="button-group">
-                            <a href="acquisition.html" class="button primary">Image Acquisition Guide</a>
-                            <a href="calculator.html" class="button">VExUS Calculator</a>
+                            <button onclick="calculateVexusScore()" class="primary">Calculate VExUS Score</button>
+                            <button onclick="resetScores()">Reset Scores</button>
                         </div>
-                    </div>
-
-                    <div class="feature-grid">
-                        <a href="acquisition.html" class="feature-card">
-                            <i class="fas fa-camera"></i>
-                            <h3>Image Acquisition</h3>
-                            <p>Step-by-step guide for acquiring standardized VExUS images</p>
-                        </a>
-                        <a href="calculator.html" class="feature-card">
-                            <i class="fas fa-calculator"></i>
-                            <h3>AI-Powered Analysis</h3>
-                            <p>Automated VExUS scoring with machine learning</p>
-                        </a>
-                        <a href="#" class="feature-card">
-                            <i class="fas fa-chart-line"></i>
-                            <h3>Clinical Assessment</h3>
-                            <p>Comprehensive venous congestion evaluation</p>
-                        </a>
-                    </div>
-
-                    <div class="section">
-                        <h2>About VExUS</h2>
-                        <p>The Venous Excess UltraSound (VExUS) grading system is a point-of-care ultrasound technique for assessing systemic venous congestion. It combines measurements of inferior vena cava diameter with Doppler patterns of hepatic, portal, and intrarenal veins to provide a comprehensive evaluation of venous congestion.</p>
+                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                     </div>
                 </div>
             </div>
