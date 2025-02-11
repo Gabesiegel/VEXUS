@@ -1,27 +1,138 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>About VExUS AI</title>
+    <title>VExUS AI - Image Acquisition Guide</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-
+    
     <style>
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 60px;
-            margin-bottom: 2em;
-            flex-wrap: wrap;
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .logo {
-            width: 500px;
-            height: 250px;
-            object-fit: contain;
+        .title-container {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+
+        .main-logo {
+            width: 300px;
+            margin: 0 auto 2em auto;
+            display: block;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 1.5em;
+            color: #585858;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5em;
+        }
+
+        .acquisition-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .technique-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .image-section {
+            width: 100%;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .text-section {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+
+        .technique-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .technique-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .technique-list li:last-child {
+            border-bottom: none;
+        }
+
+        .grading-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .grading-table th, 
+        .grading-table td {
+            padding: 15px;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .grading-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .grading-table tr:last-child td {
+            border-bottom: none;
         }
 
         .sidebar-logo {
@@ -30,113 +141,20 @@
             margin-bottom: 0;
         }
 
-        nav#menu {
-            background: #f5f5f5;
-            padding: 20px;
-        }
-
         nav#menu .logo-container {
             padding: 10px;
             display: flex;
             justify-content: center;
         }
 
-        nav#menu h2 {
-            color: #585858;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.125);
-            padding: 0.5em 0;
-        }
-
-        nav#menu ul li a {
-            color: #585858;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-        }
-
-        nav#menu ul li a:hover {
-            color: #007bff;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            background: white;
-            padding: 60px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
-            margin: 40px auto;
-        }
-
-        .team-card {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .team-member-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: block;
-            object-fit: cover;
-        }
-
-        .team-card h3 {
-            font-size: 1.8em;
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .team-card p {
-            font-size: 1.2em;
-            line-height: 1.6;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .team-card .role {
-            font-size: 1.4em;
-            color: #007bff;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 500;
-        }
-
         @media screen and (max-width: 980px) {
-            .container {
-                padding: 30px;
-                max-width: 95%;
+            .technique-container {
+                flex-direction: column;
             }
 
-            .team-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .logo {
-                width: 400px;
-                height: 200px;
+            .image-section,
+            .text-section {
+                width: 100%;
             }
         }
     </style>
@@ -162,8 +180,8 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="about.html">About VExUS AI</a></li>
-                <li><a href="literature.html">Literature</a></li>
+                <li><a href="#about">About VExUS AI</a></li>
+                <li><a href="#documentation">Documentation</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -171,12 +189,197 @@
         <div id="main">
             <div class="inner">
                 <div class="container">
-                    <div class="logo-container">
-                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
-                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    <div class="title-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                        <h1>VExUS Image Acquisition Guide</h1>
                     </div>
 
-                
+                    <!-- Overview Section -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">Overview</h2>
+                        
+                        <div class="info-box">
+                            <h3>Why Use VExUS?</h3>
+                            <ul class="technique-list">
+                                <li>Non-invasive quantification of venous congestion</li>
+                                <li>Real-time hemodynamic insight for immediate assessment</li>
+                                <li>Guide therapeutic interventions and monitor treatment response</li>
+                                <li>Early detection of organ dysfunction risk</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>Clinical Indications</h3>
+                            <ul class="technique-list">
+                                <li>Suspected volume overload</li>
+                                <li>Heart Failure</li>
+                                <li>Hemodynamic AKI</li>
+                                <li>Shock states</li>
+                                <li>Unexplained hypotension</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <h3>Required Equipment</h3>
+                            <ul class="technique-list">
+                                <li>Ultrasound machine with 2D imaging, color Doppler, and pulsed-wave Doppler</li>
+                                <li>Phased array or curvilinear transducer</li>
+                                <li>ECG module (recommended)</li>
+                                <li>Ultrasound gel and gloves</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- IVC Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">1. Inferior Vena Cava (IVC) Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/1_IVC_assessment_v002.png" alt="IVC Assessment">
+                            </div>
+                            <div class="text-section">
+                                <h3>Technique</h3>
+                                <ul class="technique-list">
+                                    <li>Place transducer 1-2 cm below xiphoid process</li>
+                                    <li>Measure maximal IVC diameter 2 cm below RA-IVC junction</li>
+                                    <li>Assess in both short and long axis views</li>
+                                </ul>
+                                
+                                <div class="warning-box">
+                                    <h4>Key Considerations</h4>
+                                    <ul class="technique-list">
+                                        <li>Differentiate from aorta</li>
+                                        <li>Account for athletic adaptation</li>
+                                        <li>Consider intra-abdominal pressure effects</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hepatic Vein Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">2. Hepatic Vein Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Assessment">
+                            </div>
+                            <div class="text-section">
+                                <h3>Waveform Analysis</h3>
+                                <ul class="technique-list">
+                                    <li>A Wave: Atrial contraction</li>
+                                    <li>S Wave: Ventricular systole</li>
+                                    <li>V Wave: Tricuspid return</li>
+                                    <li>D Wave: Ventricular diastole</li>
+                                </ul>
+                                
+                                <div class="warning-box">
+                                    <h4>Important Considerations</h4>
+                                    <ul class="technique-list">
+                                        <li>Assess for atrial fibrillation effects</li>
+                                        <li>Consider liver disease impact</li>
+                                        <li>Account for tricuspid regurgitation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portal Vein Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">3. Portal Vein Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Assessment">
+                            </div>
+                            <div class="text-section">
+                                <h3>PVPF Calculation</h3>
+                                <p>PVPF = [(Vmax - Vmin) / Vmax] x 100%</p>
+                                <ul class="technique-list">
+                                    <li>Normal: PVPF < 30%</li>
+                                    <li>Mild congestion: PVPF 30-50%</li>
+                                    <li>Severe congestion: PVPF > 50%</li>
+                                </ul>
+                                
+                                <div class="warning-box">
+                                    <h4>Technical Considerations</h4>
+                                    <ul class="technique-list">
+                                        <li>Account for respiratory variation</li>
+                                        <li>Consider cirrhosis effects</li>
+                                        <li>Optimize Doppler angle</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intrarenal Vein Assessment -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">4. Intrarenal Vein Assessment</h2>
+                        <div class="technique-container">
+                            <div class="image-section">
+                                <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Intrarenal Vein Assessment">
+                            </div>
+                            <div class="text-section">
+                                <h3>Technique Optimization</h3>
+                                <ul class="technique-list">
+                                    <li>Optimize renal parenchyma visualization</li>
+                                    <li>Use color Doppler to locate vessels</li>
+                                    <li>Assess interlobar vessel waveforms</li>
+                                </ul>
+                                
+                                <div class="warning-box">
+                                    <h4>Pattern Recognition</h4>
+                                    <ul class="technique-list">
+                                        <li>Normal: Continuous flow</li>
+                                        <li>Mild-Moderate: Biphasic (S/D waves)</li>
+                                        <li>Severe: Monophasic pattern</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VExUS Grading System -->
+                    <div class="acquisition-section">
+                        <h2 class="section-title">VExUS Grading System</h2>
+                        <table class="grading-table">
+                            <thead>
+                                <tr>
+                                    <th>Grade</th>
+                                    <th>Criteria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Grade 0</td>
+                                    <td>IVC ≤ 2 cm</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade 1</td>
+                                    <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade 2</td>
+                                    <td>IVC > 2 cm, one severely abnormal waveform</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade 3</td>
+                                    <td>IVC > 2 cm, two or more severely abnormal waveforms</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="warning-box">
+                            <h3>Important Limitations</h3>
+                            <ul class="technique-list">
+                                <li>Does not differentiate volume vs pressure overload</li>
+                                <li>Must be integrated with clinical context</li>
+                                <li>Not a volume responsiveness tool</li>
+                                <li>Limited validation in some populations</li>
+                                <li>Assess only part of hemodynamic circuit</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,4 +393,3 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
 </body>
-</html>
