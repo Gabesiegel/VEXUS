@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Image Recognition & Scoring</title>
+    <title>VExUS AI - Image Acquisition Guide</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-    
-    <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     
     <style>
         .container {
@@ -22,132 +19,68 @@
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
-        .input-controls {
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
+        .acquisition-section {
+            margin: 30px 0;
+            padding: 20px;
             background: #fafafa;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .image-card {
+            background: white;
             padding: 15px;
             border-radius: 5px;
-            border: 1px solid #eee;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .input-group {
-            margin: 15px auto;
-            text-align: left;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .input-group input[type="number"],
-        .input-group select {
+        .image-card img {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        input[type="file"].button.primary {
-            width: 100%;
-            margin-bottom: 10px;
-            background: white;
-        }
-
-        .status-box {
-            width: 100%;
-            margin: 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .status-ready {
-            background-color: #28a745;
-            color: white;
-            border: 2px solid #218838;
-        }
-
-        .status-error {
-            background-color: #dc3545;
-            color: white;
-            border: 2px solid #c82333;
-        }
-
-        .score-section {
-            background: #fafafa;
-            padding: 25px;
-            border-radius: 5px;
-            margin-top: 20px;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid #eee;
-        }
-
-        .main-logo {
-            width: 200px;
-            margin: 0 auto 2em auto;
-            display: block;
-        }
-
-        .sidebar-logo {
-            width: 60px;
-            margin-bottom: 0;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 25px auto;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .button-group button {
-            flex: 1;
-            max-width: 250px;
-            white-space: normal;
             height: auto;
-            padding: 10px 20px;
-            line-height: 1.2;
+            border-radius: 5px;
         }
 
-        #menu {
+        .technique-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .technique-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .technique-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #585858;
+        }
+
+        .grading-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        .grading-table th, .grading-table td {
+            padding: 10px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        .grading-table th {
             background: #f5f5f5;
-            padding: 20px;
-        }
-
-        #menu h2 {
-            color: #585858;
-            margin-bottom: 1em;
-        }
-
-        #menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.125);
-        }
-
-        #menu ul li a {
-            color: #585858;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-        }
-
-        #menu ul li a:hover {
-            color: #007bff;
-        }
-
-        #result, #top-results {
-            text-align: center;
-            margin: 15px auto;
-            width: 90%;
-            max-width: 600px;
         }
     </style>
 </head>
@@ -170,6 +103,7 @@
             <h2>Menu</h2>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="acquisition.html">Image Acquisition</a></li>
                 <li><a href="#score-calculator">Score Calculator</a></li>
                 <li><a href="#about">About VExUS AI</a></li>
                 <li><a href="#documentation">Documentation</a></li>
@@ -181,60 +115,124 @@
             <div class="inner">
                 <div class="container">
                     <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                    <h1>VExUS AI - Image Recognition & Scoring</h1>
-                    
-                    <div class="input-controls">
-                        <p>Upload an image for image recognition:</p>
-                        <input type="file" id="imageUpload" accept="image/*" class="button primary">
-                        <div id="model-status" class="status-box status-error">Model not loaded</div>
+                    <h1>VExUS Image Acquisition Guide</h1>
+
+                    <div class="acquisition-section">
+                        <h2>Equipment and Preparation</h2>
+                        <ul class="technique-list">
+                            <li><strong>Ultrasound Machine:</strong> 2D imaging, color Doppler, and pulsed-wave Doppler capabilities</li>
+                            <li><strong>Transducer:</strong> Phased array or curvilinear transducer</li>
+                            <li><strong>Additional Equipment:</strong> ECG module (recommended)</li>
+                            <li><strong>Patient Position:</strong> Supine, examination table at operator's waist level</li>
+                        </ul>
                     </div>
-                    
-                    <p id="result">Image recognition result will appear here...</p>
-                    <p id="top-results"></p>
-                    
-                    <div class="score-section">
-                        <h2>VExUS Score Calculation</h2>
-                        
-                        <div class="input-group">
-                            <label for="ivc-diameter">IVC Diameter (cm):</label>
-                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
-                        </div>
 
-                        <div class="input-group">
-                            <label for="hv-score">Hepatic Vein Score:</label>
-                            <select id="hv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
+                    <div class="acquisition-section">
+                        <h2>1. IVC Assessment</h2>
+                        <div class="image-card">
+                            <img src="images/1_IVC_assessment_v002.png" alt="IVC Assessment">
+                            <h3>Technique:</h3>
+                            <ul class="technique-list">
+                                <li>Place transducer 1-2 cm below xiphoid process</li>
+                                <li>Measure maximal diameter 2 cm below RA-IVC junction</li>
+                                <li>Use B-mode for accuracy</li>
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="input-group">
-                            <label for="pv-score">Portal Vein Score:</label>
-                            <select id="pv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
+                    <div class="acquisition-section">
+                        <h2>2. Hepatic Vein Assessment</h2>
+                        <div class="image-grid">
+                            <div class="image-card">
+                                <img src="images/2_Hepatic_vein_assessment_long_axis_v002 (1).png" alt="Hepatic Vein Long Axis">
+                                <h3>Long Axis View</h3>
+                                <p>Assess for proper waveform patterns including S and D waves</p>
+                            </div>
+                            <div class="image-card">
+                                <img src="images/3_Hepatic_vein_assessment_short_axis_v002 (1).png" alt="Hepatic Vein Short Axis">
+                                <h3>Short Axis View</h3>
+                                <p>Confirm positioning and flow patterns</p>
+                            </div>
+                            <div class="image-card">
+                                <img src="images/4_Hepatic_vein_subxiphoid_view_v001 (1).png" alt="Hepatic Vein Subxiphoid">
+                                <h3>Subxiphoid View</h3>
+                                <p>Alternative approach for optimal visualization</p>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="input-group">
-                            <label for="rv-score">Renal Vein Score:</label>
-                            <select id="rv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
+                    <div class="acquisition-section">
+                        <h2>3. Portal Vein Assessment</h2>
+                        <div class="image-grid">
+                            <div class="image-card">
+                                <img src="images/5_Portal_vein_subxiphoid_view_v001 (1).png" alt="Portal Vein Subxiphoid">
+                                <h3>Subxiphoid Approach</h3>
+                                <p>Primary approach for PV assessment</p>
+                            </div>
+                            <div class="image-card">
+                                <img src="images/6_Portal_vien_assessment_long_axis_v001 (1).png" alt="Portal Vein Long Axis">
+                                <h3>Long Axis View</h3>
+                                <p>Evaluate flow patterns and pulsatility</p>
+                            </div>
+                            <div class="image-card">
+                                <img src="images/7_Portal_vien_assessment_short_axis_v001 (1).png" alt="Portal Vein Short Axis">
+                                <h3>Short Axis View</h3>
+                                <p>Confirm findings and assess flow characteristics</p>
+                            </div>
                         </div>
-                        
-                        <div class="button-group">
-                            <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                            <button onclick="resetScores()" class="button">Reset Scores</button>
+                    </div>
+
+                    <div class="acquisition-section">
+                        <h2>4. Intrarenal Vein Assessment</h2>
+                        <div class="image-grid">
+                            <div class="image-card">
+                                <img src="images/8_Renal_vein_assessment_long_axis_v001 (1).png" alt="Renal Vein Long Axis">
+                                <h3>Long Axis Approach</h3>
+                                <p>Primary view for renal vein assessment</p>
+                            </div>
+                            <div class="image-card">
+                                <img src="images/9_Renal_vein_assessment_short_axis_v002 (1).png" alt="Renal Vein Short Axis">
+                                <h3>Short Axis View</h3>
+                                <p>Confirmatory view for complete assessment</p>
+                            </div>
                         </div>
-                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
+                    </div>
+
+                    <div class="acquisition-section">
+                        <h2>VExUS Grading System</h2>
+                        <table class="grading-table">
+                            <tr>
+                                <th>Grade</th>
+                                <th>Criteria</th>
+                            </tr>
+                            <tr>
+                                <td>Grade 0</td>
+                                <td>IVC ≤ 2 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Grade 1</td>
+                                <td>IVC > 2 cm, one or more mildly abnormal Doppler waveforms</td>
+                            </tr>
+                            <tr>
+                                <td>Grade 2</td>
+                                <td>IVC > 2 cm, one severely abnormal waveform</td>
+                            </tr>
+                            <tr>
+                                <td>Grade 3</td>
+                                <td>IVC > 2 cm, two or more severely abnormal waveforms</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="acquisition-section">
+                        <h2>Important Considerations</h2>
+                        <ul class="technique-list">
+                            <li>Combine with patient history and physical examination</li>
+                            <li>VExUS does not differentiate between volume and pressure overload</li>
+                            <li>Not a tool for volume responsiveness</li>
+                            <li>Should not be performed in isolation</li>
+                            <li>Primarily studied in cardiac surgery and heart failure patients</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -247,100 +245,5 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-
-    <script>
-        document.querySelectorAll('#ivc-diameter, #hv-score, #pv-score, #rv-score').forEach(el => {
-            el.addEventListener('change', () => {
-                if (document.getElementById('ivc-diameter').value &&
-                    document.getElementById('hv-score').value !== "" &&
-                    document.getElementById('pv-score').value !== "" &&
-                    document.getElementById('rv-score').value !== "") {
-                    calculateVexusScore();
-                }
-            });
-        });
-
-        function calculateVexusScore() {
-            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
-            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
-            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
-            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
-
-            if (isNaN(ivcDiameter)) {
-                document.getElementById('total-score').innerText = "Incomplete Data";
-                return;
-            }
-
-            let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
-            let vexusGrade = ivcDiameter < 2 
-                ? "Grade 0: No Congestion" 
-                : severityCount === 0 
-                    ? "Grade 1: Mild Congestion" 
-                    : severityCount === 1 
-                        ? "Grade 2: Moderate Congestion" 
-                        : "Grade 3: Severe Congestion";
-            document.getElementById('total-score').innerText = vexusGrade;
-        }
-
-        function resetScores() {
-            document.getElementById('ivc-diameter').value = "";
-            document.getElementById('hv-score').value = "";
-            document.getElementById('pv-score').value = "";
-            document.getElementById('rv-score').value = "";
-            document.getElementById('total-score').innerText = '--';
-        }
-
-        async function loadModel() {
-            try {
-                console.log("Loading model...");
-                model = await tf.loadLayersModel("https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json");
-                document.getElementById('model-status').className = "status-box status-ready";
-                document.getElementById('model-status').innerText = "Model loaded and ready";
-            } catch (error) {
-                console.error("Error loading model:", error);
-                document.getElementById('model-status').className = "status-box status-error";
-                document.getElementById('model-status').innerText = "Error loading model";
-            }
-        }
-
-        loadModel();
-
-        document.getElementById('imageUpload').addEventListener('change', async function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!model) {
-                document.getElementById('result').innerText = "Model not loaded!";
-                return;
-            }
-            
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = async function() {
-                const tensor = tf.browser.fromPixels(img)
-                    .resizeNearestNeighbor([224, 224])
-                    .toFloat()
-                    .expandDims();
-                const predictions = await model.predict(tensor).data();
-                const labels = ["HV Normal", "HV Mild", "HV Severe", 
-                              "PV Normal", "PV Mild", "PV Severe", 
-                              "RV Normal", "RV Mild", "RV Severe"];
-                let sortedIndices = [...predictions.keys()]
-                    .sort((a, b) => predictions[b] - predictions[a]);
-                let topResults = sortedIndices.slice(0, 3)
-                    .map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(2)}%`)
-                    .join('<br>');
-                document.getElementById('top-results').innerHTML = topResults;
-                
-                const highestIndex = sortedIndices[0];
-                if (highestIndex < 3) {
-                    document.getElementById("hv-score").value = highestIndex;
-                } else if (highestIndex < 6) {
-                    document.getElementById("pv-score").value = highestIndex - 3;
-                } else {
-                    document.getElementById("rv-score").value = highestIndex - 6;
-                }
-            };
-        });
-    </script>
 </body>
 </html>
