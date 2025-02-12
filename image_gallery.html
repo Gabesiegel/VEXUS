@@ -1,11 +1,10 @@
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Image Acquisition Guide</title>
+    <title>VExUS AI - Image Gallery</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <meta name="author" content="Gabesiegel" />
-    <meta name="last-modified" content="2025-02-11T09:49:16Z" />
     
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
@@ -13,104 +12,33 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <style>
-        /* Root Variables for Consistent Styling */
-        :root {
-            --primary-color: #007bff;
-            --bg-color: #f5f7fa;
-            --card-bg: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --text-color: #333333;
-        }
+        /* Reuse and adapt the same style references from the provided code */
 
-        /* Updated Logo Styling */
-        .main-logo {
-            width: 200px; /* Increased size */
-            height: auto;
-            display: block;
-            margin: 0 auto 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        /* Single Tile Design for Content Sections */
-        .technique-container {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px var(--shadow-color);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Image Section */
-        .image-section {
-            margin-bottom: 2rem;
+        .container {
             width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 60px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .image-section img {
-            width: 100%;
-            max-height: 800px;
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            width: 500px;
+            height: 250px;
             object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
         }
 
-        /* Text Section */
-        .text-section {
-            padding: 1rem 0;
-        }
-
-        .text-section h3, 
-        .text-section h4 {
-            margin: 0.5em 0;
-        }
-
-        .text-section p {
-            margin: 0.3em 0;
-        }
-
-        .text-section ul {
-            margin: 0.3em 0;
-        }
-
-        /* Title Container - No Box */
-        .title-container {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        /* Info Box - Simplified */
-        .info-box {
-            padding: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Enhanced Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 95%;
-            max-height: 95vh;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
-        /* Sidebar Logo */
         .sidebar-logo {
             width: 100px;
             height: auto;
@@ -118,7 +46,6 @@
             padding: 5px;
         }
 
-        /* Menu Navigation */
         nav#menu {
             background: #ffffff;
             padding: 20px;
@@ -154,70 +81,172 @@
             color: #007bff !important;
         }
 
-        /* User Info Panel - Simplified */
+        .title-container {
+            text-align: center;
+            margin: 2em 0;
+        }
+
+        .title-container h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.2em;
+        }
+
+        /* Gallery Grid Styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .gallery-item h3 {
+            margin-top: 1em;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .gallery-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Modal/Lightbox Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            padding-top: 50px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 90%;
+            justify-content: center;
+        }
+
+        .modal-content img {
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Navigation arrows (optional) */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 40px;
+            transition: 0.3s;
+            user-select: none;
+            padding: 0 15px;
+        }
+        .next {
+            right: 0;
+        }
+        .prev:hover,
+        .next:hover {
+            color: #bbb;
+        }
+
+        /* User Info */
         .user-info {
             position: fixed;
             bottom: 10px;
             right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-size: 0.8em;
             color: #888888;
         }
 
-        /* Responsive Design */
         @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+
+            .logo {
+                width: 400px;
+                height: 200px;
+            }
+
             .user-info {
                 position: static;
                 margin: 20px auto;
                 text-align: center;
             }
         }
-
-        .acquisition-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .acquisition-tile {
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            overflow: hidden;
-            padding: 20px;
-            text-align: center;
-            transition: box-shadow 0.2s;
-            height: 100%; /* Ensure consistent height */
-        }
-
-        .acquisition-tile img {
-            width: 100%;
-            height: 300px; /* Fixed height for images */
-            object-fit: cover;
-            margin-bottom: 0.5em;
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body class="is-preload">
-    <!-- Header and Menu -->
-    <header id="header">
-        <div class="inner">
-            <nav>
-                <ul>
-                    <li><a href="#menu">Menu</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div id="wrapper">
+        <!-- Header (hamburger menu) -->
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
 
-    <!-- Sidebar Navigation -->
-    <nav id="menu">
-        <div class="logo-container">
-            <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
-        </div>
-        <h2>Menu</h2>
-        <ul>
+        <!-- Sidebar Navigation -->
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
@@ -226,279 +255,110 @@
                 <li><a href="about.html">About VExUS AI</a></li>
                 <li><a href="image_gallery.html">Image Gallery</a></li>
                 <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+            </ul>
+        </nav>
 
-    <!-- Main Content -->
-    <div id="main">
-        <div class="inner">
-            <div class="container">
-                <!-- Title Section -->
-                <div class="title-container">
-                    <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                    <h1>VExUS Image Acquisition Guide</h1>
-                </div>
-
-                <!-- Overview Section -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="technique-container">
-                        <h3>Why Use VExUS?</h3>
-                        <ul class="technique-list">
-                            <li>Non-invasive quantification of venous congestion</li>
-                            <li>Real-time hemodynamic insight for immediate assessment</li>
-                            <li>Guide therapeutic interventions and monitor treatment response</li>
-                            <li>Early detection of organ dysfunction risk</li>
-                        </ul>
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <!-- Logos -->
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
-                </div>
 
-                <!-- IVC Assessment -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">1. IVC Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/IVC.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
-                            <h3>IVC Diameter Measurement</h3>
+                    <!-- Title -->
+                    <div class="title-container">
+                        <h1>Image Gallery</h1>
+                        <p>Explore ultrasound images for VExUS assessment</p>
+                    </div>
+
+                    <!-- Gallery Grid -->
+                    <div class="gallery-grid">
+                        <!-- IVC Tile -->
+                        <div class="gallery-item" onclick="openModal('ivcModal')">
+                            <img src="images/IVC_icon.jpeg" alt="IVC Thumbnail">
+                            <h3>IVC</h3>
                         </div>
-                        <div class="text-section">
-                            <h3>Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place a phased array or curvilinear ultrasound probe in the subxiphoid position, just below the xiphoid process. Angle the probe slightly toward the patient's right shoulder to optimize the view of the IVC entering the right atrium.</p>
-                            <h4>Measurement Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a clear longitudinal view of the IVC</li>
-                                <li>Measure the IVC diameter 1cm proximal to hepatic vein confluence</li>
-                                <li>Assess the IVC's collapsibility index with respiration</li>
-                                <li>Record both maximum and minimum diameters</li>
-                            </ul>
+
+                        <!-- Hepatic Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('hepaticModal')">
+                            <img src="images/hepatic_icon.jpeg" alt="Hepatic Vein Thumbnail">
+                            <h3>Hepatic Vein</h3>
+                        </div>
+
+                        <!-- Portal Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('portalModal')">
+                            <img src="images/portal_icon.png" alt="Portal Vein Thumbnail">
+                            <h3>Portal Vein</h3>
+                        </div>
+
+                        <!-- Renal Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('renalModal')">
+                            <img src="images/renal_icon.png" alt="Renal Vein Thumbnail">
+                            <h3>Renal Vein</h3>
                         </div>
                     </div>
                 </div>
-
-                <!-- Hepatic Vein Assessment -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">2. Hepatic Vein Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/hepatic_long.png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
-                            <h3>Hepatic Vein - Long Axis View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Long Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place the curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a clear long-axis view of the hepatic veins</li>
-                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
-                                <li>Measure velocities of systolic and diastolic waves</li>
-                                <li>Evaluate waveform morphology (triphasic, biphasic, or monophasic)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add Hepatic Short Axis Section after Hepatic Long Axis -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">2b. Hepatic Vein Short Axis Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/hepatic_short.png" alt="Hepatic Vein Short Axis" onclick="expandImage(this)">
-                            <h3>Hepatic Vein - Short Axis View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Short Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a clear short-axis view of the hepatic veins</li>
-                                <li>Identify hepatic veins as they enter the IVC</li>
-                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
-                                <li>Confirm findings from long-axis view</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Portal Vein Assessment -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">3. Portal Vein Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Portal_sub.png" alt="Portal Vein Assessment" onclick="expandImage(this)">
-                            <h3>Portal Vein Measurement</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place the probe in the subxiphoid region, angling slightly to the patient's right and superiorly.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a clear view of the portal vein</li>
-                                <li>Apply color Doppler to assess flow direction</li>
-                                <li>Use pulsed-wave Doppler to measure flow patterns</li>
-                                <li>Calculate portal vein pulsatility index</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add Portal Vein Long Axis Section -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">3a. Portal Vein Long Axis Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Portal_long_axis.png" alt="Portal Vein Long Axis" onclick="expandImage(this)">
-                            <h3>Portal Vein - Long Axis View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Long Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place the probe in either the right mid-axillary line or the epigastric region, angled toward the right shoulder.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a clear long-axis view of the portal vein</li>
-                                <li>Apply color Doppler to confirm flow direction</li>
-                                <li>Use pulsed-wave Doppler to assess flow patterns</li>
-                                <li>Evaluate for pulsatility and flow reversal</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add Portal Vein Short Axis Section -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">3b. Portal Vein Short Axis Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Portal_short_axis.png" alt="Portal Vein Short Axis" onclick="expandImage(this)">
-                            <h3>Portal Vein - Short Axis View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Short Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Supine or semi-recumbent.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Obtain a short-axis view of the portal vein</li>
-                                <li>Distinguish portal vein from hepatic artery</li>
-                                <li>Apply pulsed-wave Doppler to assess flow</li>
-                                <li>Compare pulsatility with adjacent arterial flow</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Renal Vein Assessment -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">4. Renal Vein Assessment</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Renal_vein_long.png" alt="Renal Vein Assessment" onclick="expandImage(this)">
-                            <h3>Renal Vein Doppler Assessment</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Left lateral decubitus position for right renal vein, right lateral decubitus for left renal vein.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place the curvilinear probe in the lateral position at the level of the renal hilum. Angle slightly to optimize visualization of the renal vein.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Identify the renal vein at the renal hilum</li>
-                                <li>Apply color Doppler to confirm venous flow</li>
-                                <li>Use pulsed-wave Doppler to assess flow pattern</li>
-                                <li>Measure peak velocities during both respiratory phases</li>
-                                <li>Document venous flow pattern (continuous vs. phasic)</li>
-                                <li>Assess for presence of renal venous congestion</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Replace the acquisition-grid div with these sections: -->
-                
-                <!-- Renal Vein Long Axis Detail -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">4a. Renal Vein Long Axis Detail</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Renal_vein_long.png" alt="Renal Vein Long Axis" onclick="expandImage(this)">
-                            <h3>Renal Vein - Long Axis Detailed View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Long Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Left lateral decubitus position for right renal vein assessment.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Place in coronal plane over right kidney, angled cephalad.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Identify interlobar vein in long axis</li>
-                                <li>Apply color Doppler to confirm venous flow</li>
-                                <li>Use pulsed-wave Doppler to assess flow patterns</li>
-                                <li>Document progression from continuous to pulsatile with congestion</li>
-                                <li>Record peak velocities during respiratory cycle</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Renal Vein Short Axis Detail -->
-                <div class="acquisition-section">
-                    <h2 class="section-title">4b. Renal Vein Short Axis Detail</h2>
-                    <div class="technique-container">
-                        <div class="image-section">
-                            <img src="images/Renal_short_axis.png" alt="Renal Vein Short Axis" onclick="expandImage(this)">
-                            <h3>Renal Vein - Short Axis Detailed View</h3>
-                        </div>
-                        <div class="text-section">
-                            <h3>Short Axis Technique</h3>
-                            <h4>Patient Positioning</h4>
-                            <p>Maintain lateral decubitus position.</p>
-                            <h4>Probe Positioning</h4>
-                            <p>Rotate probe 90° from long-axis position.</p>
-                            <h4>Instructions</h4>
-                            <ul class="technique-list">
-                                <li>Identify interlobar vein and artery side by side</li>
-                                <li>Apply color Doppler to differentiate vessels</li>
-                                <li>Compare venous and arterial waveforms</li>
-                                <li>Document venous flow characteristics</li>
-                                <li>Assess for signs of venous congestion</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Continue with existing footer content -->
             </div>
         </div>
-    </div>
 
-    <!-- User Info Panel -->
-    <div class="user-info">
-        <p>User: Gabesiegel</p>
-        <p>Date: 2025-02-11 09:55:20 UTC</p>
-    </div>
+        <!-- Modals for Each Vein (Lightbox style) -->
+        <!-- IVC Modal -->
+        <div id="ivcModal" class="modal">
+            <span class="close" onclick="closeModal('ivcModal')">&times;</span>
+            <!-- Optional arrows for multi-image navigation -->
+            <a class="prev" onclick="plusSlides(-1, 'ivcSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'ivcSlides')">&#10095;</a>
 
-    <!-- Modal for Image Expansion -->
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="expandedImage">
+            <div class="modal-content ivcSlides">
+                <img src="images/ivc_icon.jpeg" alt="IVC Image 1">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Hepatic Vein Modal -->
+        <div id="hepaticModal" class="modal">
+            <span class="close" onclick="closeModal('hepaticModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'hepaticSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'hepaticSlides')">&#10095;</a>
+
+            <div class="modal-content hepaticSlides">
+                <img src="images/hepatic_icon.jpeg" alt="Hepatic Vein Image 1">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Portal Vein Modal -->
+        <div id="portalModal" class="modal">
+            <span class="close" onclick="closeModal('portalModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'portalSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'portalSlides')">&#10095;</a>
+
+            <div class="modal-content portalSlides">
+                <img src="images/portal_icon.png" alt="Portal Vein Image 1">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Renal Vein Modal -->
+        <div id="renalModal" class="modal">
+            <span class="close" onclick="closeModal('renalModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'renalSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'renalSlides')">&#10095;</a>
+
+            <div class="modal-content renalSlides">
+                <img src="images/renal_icon.png" alt="Renal Vein Image 1">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info">
+            <p>User: Gabesiegel</p>
+            <p>Date: 2025-02-11 09:16:21 UTC</p>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -507,44 +367,35 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-    
-    <!-- Image Modal JavaScript -->
+
     <script>
-        var modal = document.getElementById("imageModal");
-        var modalImg = document.getElementById("expandedImage");
-        var body = document.body;
-
-        function expandImage(img) {
-            modal.style.display = "block";
-            modalImg.src = img.src;
-            body.style.overflow = 'hidden';
-            
-            modal.onclick = function(e) {
-                if (e.target === modal || e.target === modalImg) {
-                    closeModal();
-                }
-            };
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === "Escape") {
-                    closeModal();
-                }
-            });
+        // Open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
         }
 
-        function closeModal() {
-            modal.style.display = "none";
-            body.style.overflow = 'auto';
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('.image-section img');
-            images.forEach(img => {
-                img.onclick = function() {
-                    expandImage(this);
-                };
-            });
-        });
+        // Slide navigation (simple approach):
+        // When plusSlides is called, we rearrange the images in the container 
+        // or you can implement a more robust slider. This is a basic placeholder.
+
+        function plusSlides(n, className) {
+            let container = document.getElementsByClassName(className)[0];
+            if (!container) return;
+            let imgs = container.getElementsByTagName("img");
+            if (imgs.length <= 1) return;
+
+            // Move the first or last element in the node list to rotate the slides
+            if (n > 0) {
+                container.appendChild(imgs[0]);
+            } else {
+                container.insertBefore(imgs[imgs.length - 1], imgs[0]);
+            }
+        }
     </script>
 </body>
 </html>
