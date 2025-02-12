@@ -31,7 +31,7 @@
             transition: transform 0.3s ease;
         }
 
-        /* Section Container for Each Technique */
+        /* Container for each technique or step */
         .technique-container {
             background: var(--card-bg);
             padding: 2rem;
@@ -40,11 +40,11 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Image Sections - Show Full Image */
+        /* Image Section - show the full image */
         .image-section img {
             width: 100%;
-            height: auto;        /* auto-height preserves full image */
-            object-fit: contain; /* no cropping */
+            height: auto;         /* Keeps original ratio */
+            object-fit: contain;  /* No cropping, entire image is visible */
             border-radius: 8px;
             margin-bottom: 1.5rem;
             cursor: pointer;
@@ -69,13 +69,13 @@
             margin: 0.3em 0;
         }
 
-        /* Title Container - No Box */
+        /* Title Container - no box, just centered */
         .title-container {
             text-align: center;
             margin-bottom: 3rem;
         }
 
-        /* Info Box - Simplified */
+        /* Info Box - simplified styling */
         .info-box {
             padding: 2rem;
             margin-top: 1.5rem;
@@ -149,7 +149,7 @@
             color: #007bff !important;
         }
 
-        /* User Info Panel - Simplified */
+        /* User Info Panel - simplified */
         .user-info {
             position: fixed;
             bottom: 10px;
@@ -158,7 +158,7 @@
             color: #888888;
         }
 
-        /* Responsive Adjustments */
+        /* Responsive Adjustments for smaller screens */
         @media screen and (max-width: 980px) {
             .user-info {
                 position: static;
@@ -226,4 +226,276 @@
                 <div class="acquisition-section">
                     <h2 class="section-title">1. IVC Assessment</h2>
                     <div class="technique-container">
-                        <d
+                        <div class="image-section">
+                            <img src="images/IVC.png" alt="IVC Diameter Assessment" onclick="expandImage(this)">
+                            <h3>IVC Diameter Measurement</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place a phased array or curvilinear ultrasound probe in the subxiphoid position, just below the xiphoid process. Angle the probe slightly toward the patient's right shoulder to optimize the view of the IVC entering the right atrium.</p>
+                            <h4>Measurement Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear longitudinal view of the IVC</li>
+                                <li>Measure the IVC diameter 1cm proximal to hepatic vein confluence</li>
+                                <li>Assess the IVC's collapsibility index with respiration</li>
+                                <li>Record both maximum and minimum diameters</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hepatic Vein Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">2. Hepatic Vein Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/hepatic_long.png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
+                            <h3>Hepatic Vein - Long Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Long Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear long-axis view of the hepatic veins</li>
+                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Measure velocities of systolic and diastolic waves</li>
+                                <li>Evaluate waveform morphology (triphasic, biphasic, or monophasic)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hepatic Vein Short Axis -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">2b. Hepatic Vein Short Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/hepatic_short.png" alt="Hepatic Vein Short Axis" onclick="expandImage(this)">
+                            <h3>Hepatic Vein - Short Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Short Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear short-axis view of the hepatic veins</li>
+                                <li>Identify hepatic veins as they enter the IVC</li>
+                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Confirm findings from long-axis view</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portal Vein Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3. Portal Vein Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Portal_sub.png" alt="Portal Vein Assessment" onclick="expandImage(this)">
+                            <h3>Portal Vein Measurement</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the probe in the subxiphoid region, angling slightly to the patient's right and superiorly.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear view of the portal vein</li>
+                                <li>Apply color Doppler to assess flow direction</li>
+                                <li>Use pulsed-wave Doppler to measure flow patterns</li>
+                                <li>Calculate portal vein pulsatility index</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portal Vein Long Axis -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3a. Portal Vein Long Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Portal_long_axis.png" alt="Portal Vein Long Axis" onclick="expandImage(this)">
+                            <h3>Portal Vein - Long Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Long Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the probe in either the right mid-axillary line or the epigastric region, angled toward the right shoulder.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear long-axis view of the portal vein</li>
+                                <li>Apply color Doppler to confirm flow direction</li>
+                                <li>Use pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Evaluate for pulsatility and flow reversal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portal Vein Short Axis -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3b. Portal Vein Short Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Portal_short_axis.png" alt="Portal Vein Short Axis" onclick="expandImage(this)">
+                            <h3>Portal Vein - Short Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Short Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a short-axis view of the portal vein</li>
+                                <li>Distinguish portal vein from hepatic artery</li>
+                                <li>Apply pulsed-wave Doppler to assess flow</li>
+                                <li>Compare pulsatility with adjacent arterial flow</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Renal Vein Assessment -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">4. Renal Vein Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Renal_vein_long.png" alt="Renal Vein Assessment" onclick="expandImage(this)">
+                            <h3>Renal Vein Doppler Assessment</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Left lateral decubitus position for right renal vein, right lateral decubitus for left renal vein.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the curvilinear probe in the lateral position at the level of the renal hilum. Angle slightly to optimize visualization of the renal vein.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Identify the renal vein at the renal hilum</li>
+                                <li>Apply color Doppler to confirm venous flow</li>
+                                <li>Use pulsed-wave Doppler to assess flow pattern</li>
+                                <li>Measure peak velocities during both respiratory phases</li>
+                                <li>Document venous flow pattern (continuous vs. phasic)</li>
+                                <li>Assess for presence of renal venous congestion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Renal Vein Views -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">Renal Vein Views (Additional)</h2>
+
+                    <!-- Renal Vein - Long Axis Tile -->
+                    <div class="technique-container">
+                        <h2>Renal Vein: Long Axis</h2>
+                        <div class="image-section">
+                            <img src="images/Renal_vein_long.png" alt="Renal Vein Long Axis" onclick="expandImage(this)">
+                        </div>
+                        <div class="text-section">
+                            <p>
+                                <strong>• Probe:</strong> Coronal plane over right kidney, angled cephalad.<br>
+                                <strong>• Structures:</strong> Interlobar vein in long axis.<br>
+                                <strong>• Doppler:</strong> Continuous → increasingly pulsatile with congestion.<br>
+                                <strong>• Assessment:</strong> Document venous flow pattern and peak velocities.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Renal Vein - Short Axis Tile -->
+                    <div class="technique-container">
+                        <h2>Renal Vein: Short Axis</h2>
+                        <div class="image-section">
+                            <img src="images/Renal_short_axis.png" alt="Renal Vein Short Axis" onclick="expandImage(this)">
+                        </div>
+                        <div class="text-section">
+                            <p>
+                                <strong>• Probe Rotation:</strong> 90° from long-axis.<br>
+                                <strong>• Structures:</strong> Interlobar vein + artery side by side.<br>
+                                <strong>Doppler:</strong> Compare venous and arterial waveforms.<br>
+                                <strong>• Key Feature:</strong> Distinguish venous from arterial flow patterns.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Info Panel -->
+    <div class="user-info">
+        <p>User: Gabesiegel</p>
+        <p>Date: 2025-02-11 09:55:20 UTC</p>
+    </div>
+
+    <!-- Modal for Image Expansion -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="expandedImage">
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    
+    <!-- Image Modal JavaScript -->
+    <script>
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("expandedImage");
+        var body = document.body;
+
+        function expandImage(img) {
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            body.style.overflow = 'hidden';
+            
+            modal.onclick = function(e) {
+                if (e.target === modal || e.target === modalImg) {
+                    closeModal();
+                }
+            };
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "Escape") {
+                    closeModal();
+                }
+            });
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make the .image-section images clickable for modal expansion
+            const images = document.querySelectorAll('.image-section img');
+            images.forEach(img => {
+                img.onclick = function() {
+                    expandImage(this);
+                };
+            });
+        });
+    </script>
+</body>
+</html>
