@@ -23,7 +23,7 @@
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            text-align: center; /* Ensures content inside is centered */
         }
         
         /* Step section with light grey background */
@@ -267,151 +267,156 @@
         <!-- Main Content -->
         <div id="main">
             <div class="inner">
+                
+                <!-- Logo and Title are now inside the .inner container -->
+                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
+                <h1>VExUS AI - Stepwise Image Recognition &amp; Scoring</h1>
+
+                <!-- STEP 1: IVC (No image upload, just a dropdown) -->
+                <div class="step-section" id="step1">
+                    <div class="step-number">1</div>
+                    <h2>IVC Measurement</h2>
+                    <p class="step-instructions">Select whether IVC is &lt; 2 cm or &gt; 2 cm.</p>
+                    
+                    <div class="input-group">
+                        <label for="ivcDropdown">IVC Diameter:</label>
+                        <select id="ivcDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="<2cm">IVC &lt; 2 cm</option>
+                            <option value=">2cm">IVC &gt; 2 cm</option>
+                        </select>
                     </div>
-m                   <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                    <h1>VExUS AI - Stepwise Image Recognition & Scoring</h1>
-                    </div>
-
-                    <!-- STEP 1: IVC (No image upload, just a dropdown) -->
-                    <div class="step-section" id="step1">
-                        <div class="step-number">1</div>
-                        <h2>IVC Measurement</h2>
-                        <p class="step-instructions">Select whether IVC is &lt; 2 cm or &gt; 2 cm.</p>
-                        
-                        <div class="input-group">
-                            <label for="ivcDropdown">IVC Diameter:</label>
-                            <select id="ivcDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="<2cm">IVC &lt; 2 cm</option>
-                                <option value=">2cm">IVC &gt; 2 cm</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- STEP 2: Hepatic Vein -->
-                    <div class="step-section" id="step2">
-                        <div class="step-number">2</div>
-                        <h2>Hepatic Vein Image Upload</h2>
-                        <p class="step-instructions">Upload your Hepatic Vein ultrasound image. A separate model will classify it.</p>
-                        
-                        <!-- Model status for Hepatic Vein -->
-                        <div id="hepaticModelStatus" class="model-status">
-                            Loading hepatic model...
-                        </div>
-
-                        <div class="upload-area" onclick="document.getElementById('hepaticImageUpload').click()">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Click to upload a Hepatic Vein image</p>
-                            <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
-                        </div>
-                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Preview">
-
-                        <!-- Recognition result for Hepatic -->
-                        <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
-                        <div class="top-results" id="hepaticTopResults"></div>
-                        
-                        <!-- Hepatic Dropdown -->
-                        <div class="input-group">
-                            <label for="hepaticDropdown">Hepatic Vein Classification (Autofilled if >50%):</label>
-                            <select id="hepaticDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="HV Normal">HV Normal</option>
-                                <option value="HV Mild">HV Mild</option>
-                                <option value="HV Severe">HV Severe</option>
-                            </select>
-                            <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 3: Portal Vein -->
-                    <div class="step-section" id="step3">
-                        <div class="step-number">3</div>
-                        <h2>Portal Vein Image Upload</h2>
-                        <p class="step-instructions">Upload your Portal Vein ultrasound image. A separate model will classify it.</p>
-                        
-                        <!-- Model status for Portal Vein -->
-                        <div id="portalModelStatus" class="model-status">
-                            Loading portal model...
-                        </div>
-
-                        <div class="upload-area" onclick="document.getElementById('portalImageUpload').click()">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Click to upload a Portal Vein image</p>
-                            <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
-                        </div>
-                        <img id="portalPreview" class="image-preview" alt="Portal Preview">
-
-                        <!-- Recognition result for Portal -->
-                        <div class="step-result" id="portalResult">Portal recognition result will appear here...</div>
-                        <div class="top-results" id="portalTopResults"></div>
-                        
-                        <!-- Portal Dropdown -->
-                        <div class="input-group">
-                            <label for="portalDropdown">Portal Vein Classification (Autofilled if >50%):</label>
-                            <select id="portalDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="PV Normal">PV Normal</option>
-                                <option value="PV Mild">PV Mild</option>
-                                <option value="PV Severe">PV Severe</option>
-                            </select>
-                            <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 4: Renal Vein -->
-                    <div class="step-section" id="step4">
-                        <div class="step-number">4</div>
-                        <h2>Renal Vein Image Upload</h2>
-                        <p class="step-instructions">Upload your Renal Vein ultrasound image. A separate model will classify it.</p>
-                        
-                        <!-- Model status for Renal Vein -->
-                        <div id="renalModelStatus" class="model-status">
-                            Loading renal model...
-                        </div>
-
-                        <div class="upload-area" onclick="document.getElementById('renalImageUpload').click()">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Click to upload a Renal Vein image</p>
-                            <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
-                        </div>
-                        <img id="renalPreview" class="image-preview" alt="Renal Preview">
-
-                        <!-- Recognition result for Renal -->
-                        <div class="step-result" id="renalResult">Renal recognition result will appear here...</div>
-                        <div class="top-results" id="renalTopResults"></div>
-                        
-                        <!-- Renal Dropdown -->
-                        <div class="input-group">
-                            <label for="renalDropdown">Renal Vein Classification (Autofilled if >50%):</label>
-                            <select id="renalDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="RV Normal">RV Normal</option>
-                                <option value="RV Mild">RV Mild</option>
-                                <option value="RV Severe">RV Severe</option>
-                            </select>
-                            <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Calculate & Reset Buttons + Score Display -->
-                    <div class="step-section">
-                        <div class="button-group">
-                            <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                            <button onclick="resetAll()" class="button">Reset</button>
-                        </div>
-                        <h3>Total VExUS Score: <span id="total-score">--</span></h3>
-                    </div>
-
                 </div>
-            </div>
-        </div>
-    </div>
+
+                <!-- STEP 2: Hepatic Vein -->
+                <div class="step-section" id="step2">
+                    <div class="step-number">2</div>
+                    <h2>Hepatic Vein Image Upload</h2>
+                    <p class="step-instructions">Upload your Hepatic Vein ultrasound image. A separate model will classify it.</p>
+                    
+                    <!-- Model status for Hepatic Vein -->
+                    <div id="hepaticModelStatus" class="model-status">
+                        Loading hepatic model...
+                    </div>
+
+                    <div class="upload-area" onclick="document.getElementById('hepaticImageUpload').click()">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload a Hepatic Vein image</p>
+                        <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    <img id="hepaticPreview" class="image-preview" alt="Hepatic Preview">
+
+                    <!-- Recognition result for Hepatic -->
+                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
+                    <div class="top-results" id="hepaticTopResults"></div>
+                    
+                    <!-- Hepatic Dropdown -->
+                    <div class="input-group">
+                        <label for="hepaticDropdown">Hepatic Vein Classification (Autofilled if &gt;50%):</label>
+                        <select id="hepaticDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="HV Normal">HV Normal</option>
+                            <option value="HV Mild">HV Mild</option>
+                            <option value="HV Severe">HV Severe</option>
+                            <!-- New Option for <50% Confidence -->
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Portal Vein -->
+                <div class="step-section" id="step3">
+                    <div class="step-number">3</div>
+                    <h2>Portal Vein Image Upload</h2>
+                    <p class="step-instructions">Upload your Portal Vein ultrasound image. A separate model will classify it.</p>
+                    
+                    <!-- Model status for Portal Vein -->
+                    <div id="portalModelStatus" class="model-status">
+                        Loading portal model...
+                    </div>
+
+                    <div class="upload-area" onclick="document.getElementById('portalImageUpload').click()">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload a Portal Vein image</p>
+                        <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    <img id="portalPreview" class="image-preview" alt="Portal Preview">
+
+                    <!-- Recognition result for Portal -->
+                    <div class="step-result" id="portalResult">Portal recognition result will appear here...</div>
+                    <div class="top-results" id="portalTopResults"></div>
+                    
+                    <!-- Portal Dropdown -->
+                    <div class="input-group">
+                        <label for="portalDropdown">Portal Vein Classification (Autofilled if &gt;50%):</label>
+                        <select id="portalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="PV Normal">PV Normal</option>
+                            <option value="PV Mild">PV Mild</option>
+                            <option value="PV Severe">PV Severe</option>
+                            <!-- New Option for <50% Confidence -->
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Renal Vein -->
+                <div class="step-section" id="step4">
+                    <div class="step-number">4</div>
+                    <h2>Renal Vein Image Upload</h2>
+                    <p class="step-instructions">Upload your Renal Vein ultrasound image. A separate model will classify it.</p>
+                    
+                    <!-- Model status for Renal Vein -->
+                    <div id="renalModelStatus" class="model-status">
+                        Loading renal model...
+                    </div>
+
+                    <div class="upload-area" onclick="document.getElementById('renalImageUpload').click()">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload a Renal Vein image</p>
+                        <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    <img id="renalPreview" class="image-preview" alt="Renal Preview">
+
+                    <!-- Recognition result for Renal -->
+                    <div class="step-result" id="renalResult">Renal recognition result will appear here...</div>
+                    <div class="top-results" id="renalTopResults"></div>
+                    
+                    <!-- Renal Dropdown -->
+                    <div class="input-group">
+                        <label for="renalDropdown">Renal Vein Classification (Autofilled if &gt;50%):</label>
+                        <select id="renalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="RV Normal">RV Normal</option>
+                            <option value="RV Mild">RV Mild</option>
+                            <option value="RV Severe">RV Severe</option>
+                            <!-- New Option for <50% Confidence -->
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculate & Reset Buttons + Score Display -->
+                <div class="step-section">
+                    <div class="button-group">
+                        <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
+                        <button onclick="resetAll()" class="button">Reset</button>
+                    </div>
+                    <h3>Total VExUS Score: <span id="total-score">--</span></h3>
+                </div>
+
+            </div><!-- closes the .inner div -->
+        </div><!-- closes the #main div -->
+    </div><!-- closes the #wrapper -->
 
     <!-- Scripts -->
     <script src="html5up-phantom/assets/js/jquery.min.js"></script>
@@ -502,16 +507,19 @@ m                   <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" clas
                     '<strong>Top 3 Predictions:</strong><br>' +
                     top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
 
-                // If top1.prob > 50, autofill dropdown, else show error note
+                // If top1.prob > 50, set dropdown to top1.label; else show error note & set dropdown to <50% option
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
 
                 if (parseFloat(top1.prob) > 50) {
                     let matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
-                    if (matchedOption) dropdown.value = matchedOption.value;
+                    if (matchedOption) {
+                        dropdown.value = matchedOption.value;
+                    }
                     errorNote.style.display = "none";
                 } else {
-                    dropdown.value = "";
+                    // Force dropdown to "Confidence of waveform < 50%"
+                    dropdown.value = "Confidence of waveform < 50%";
                     errorNote.style.display = "block";
                 }
 
@@ -601,27 +609,39 @@ m                   <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" clas
             
             // Step #2: Hepatic from dropdown
             const hvChoice = document.getElementById('hepaticDropdown').value;
-            let hvScore = 0;
-            if (hvChoice === "HV Mild")   hvScore = 1;
-            if (hvChoice === "HV Severe") hvScore = 2;
-
             // Step #3: Portal from dropdown
             const pvChoice = document.getElementById('portalDropdown').value;
-            let pvScore = 0;
-            if (pvChoice === "PV Mild")   pvScore = 1;
-            if (pvChoice === "PV Severe") pvScore = 2;
-
             // Step #4: Renal from dropdown
             const rvChoice = document.getElementById('renalDropdown').value;
-            let rvScore = 0;
-            if (rvChoice === "RV Mild")   rvScore = 1;
-            if (rvChoice === "RV Severe") rvScore = 2;
 
             // If IVC wasn't selected, we cannot proceed
             if (!ivcValue) {
                 document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
                 return;
             }
+
+            // If any of the waveforms have "Confidence of waveform < 50%", we cannot calculate
+            if (
+                hvChoice === "Confidence of waveform < 50%" ||
+                pvChoice === "Confidence of waveform < 50%" ||
+                rvChoice === "Confidence of waveform < 50%"
+            ) {
+                document.getElementById('total-score').textContent = "Cannot Calculate Score";
+                return;
+            }
+
+            // Convert dropdown choices to numerical scores
+            let hvScore = 0;
+            if (hvChoice === "HV Mild")   hvScore = 1;
+            if (hvChoice === "HV Severe") hvScore = 2;
+
+            let pvScore = 0;
+            if (pvChoice === "PV Mild")   pvScore = 1;
+            if (pvChoice === "PV Severe") pvScore = 2;
+
+            let rvScore = 0;
+            if (rvChoice === "RV Mild")   rvScore = 1;
+            if (rvChoice === "RV Severe") rvScore = 2;
 
             // Count how many "Severe" among HV, PV, RV
             let severityCount = 0;
