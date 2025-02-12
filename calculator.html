@@ -87,24 +87,6 @@
             margin-bottom: 15px;
         }
 
-        /* Modern "Choose File" button: light grey border, transparent interior */
-        .upload-button {
-            display: inline-block;
-            padding: 10px 25px;
-            color: #333;
-            background: transparent; 
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
-        }
-        .upload-button:hover {
-            background: #eee;
-            color: #111;
-            border-color: #999;
-        }
-
         /* Hide the real file input */
         .file-input {
             display: none;
@@ -335,7 +317,6 @@
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <p class="upload-text">Click to upload a Hepatic Vein image</p>
                             <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
-                            <button class="upload-button">Choose File</button>
                         </div>
                         <img id="hepaticPreview" class="image-preview" alt="Hepatic Preview">
 
@@ -373,7 +354,6 @@
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <p class="upload-text">Click to upload a Portal Vein image</p>
                             <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
-                            <button class="upload-button">Choose File</button>
                         </div>
                         <img id="portalPreview" class="image-preview" alt="Portal Preview">
 
@@ -411,7 +391,6 @@
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <p class="upload-text">Click to upload a Renal Vein image</p>
                             <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
-                            <button class="upload-button">Choose File</button>
                         </div>
                         <img id="renalPreview" class="image-preview" alt="Renal Preview">
 
