@@ -213,11 +213,43 @@
             object-fit: contain;
         }
 
-        /* Sidebar Logo */
+        /* Sidebar styling from Image Gallery snippet */
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+        nav#menu ul li a:hover {
+            color: #007bff !important;
+        }
+
+        /* Sidebar logo from Image Gallery snippet */
         .sidebar-logo {
-            width: 40px;
+            width: 100px;
             height: auto;
             margin-bottom: 0;
+            padding: 5px;
         }
 
         @media screen and (max-width: 980px) {
@@ -241,9 +273,9 @@
             </div>
         </header>
 
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation (from the Image Gallery file) -->
         <nav id="menu">
-            <div class="logo-container" style="text-align:center;">
+            <div class="logo-container">
                 <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
             </div>
             <h2>Menu</h2>
@@ -660,9 +692,30 @@
 
             // Clear each step's image preview & results
             let steps = [
-                { dropdown: 'hepaticDropdown', preview: 'hepaticPreview', result: 'hepaticResult', top: 'hepaticTopResults', error: 'hepaticErrorNote', input: 'hepaticImageUpload' },
-                { dropdown: 'portalDropdown', preview: 'portalPreview', result: 'portalResult', top: 'portalTopResults', error: 'portalErrorNote', input: 'portalImageUpload' },
-                { dropdown: 'renalDropdown',  preview: 'renalPreview',  result: 'renalResult',  top: 'renalTopResults',  error: 'renalErrorNote',  input: 'renalImageUpload' }
+                {
+                    dropdown: 'hepaticDropdown',
+                    preview: 'hepaticPreview',
+                    result: 'hepaticResult',
+                    top: 'hepaticTopResults',
+                    error: 'hepaticErrorNote',
+                    input: 'hepaticImageUpload'
+                },
+                {
+                    dropdown: 'portalDropdown',
+                    preview: 'portalPreview',
+                    result: 'portalResult',
+                    top: 'portalTopResults',
+                    error: 'portalErrorNote',
+                    input: 'portalImageUpload'
+                },
+                {
+                    dropdown: 'renalDropdown',
+                    preview: 'renalPreview',
+                    result: 'renalResult',
+                    top: 'renalTopResults',
+                    error: 'renalErrorNote',
+                    input: 'renalImageUpload'
+                }
             ];
 
             steps.forEach(s => {
