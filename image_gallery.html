@@ -1,19 +1,402 @@
-<!DOCTYPE html>
-<!-- ...existing code... -->
-<nav id="menu">
-    <div class="logo-container">
-        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
-    </div>
-    <h2>Menu</h2>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Education.html">Education</a></li>
-        <li><a href="calculator.html">Score Calculator</a></li>
-        <li><a href="acquisition.html">Image Acquisition Guide</a></li>
-        <li><a href="about.html">About VExUS AI</a></li>
-        <li><a href="image_gallery.html">Image Gallery</a></li>
-        <li><a href="#contact">Contact</a></li>
-    </ul>
-</nav>
-<!-- ...existing code... -->
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS AI - Image Gallery</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Phantom Template CSS -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    
+    <style>
+        /* Reuse and adapt the same style references from the provided code */
 
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 60px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            width: 500px;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        nav#menu ul li a:hover {
+            color: #007bff !important;
+        }
+
+        .title-container {
+            text-align: center;
+            margin: 2em 0;
+        }
+
+        .title-container h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.2em;
+        }
+
+        /* Gallery Grid Styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .gallery-item h3 {
+            margin-top: 1em;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .gallery-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Modal/Lightbox Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            padding-top: 50px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 90%;
+            justify-content: center;
+        }
+
+        .modal-content img {
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Navigation arrows (optional) */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 40px;
+            transition: 0.3s;
+            user-select: none;
+            padding: 0 15px;
+        }
+        .next {
+            right: 0;
+        }
+        .prev:hover,
+        .next:hover {
+            color: #bbb;
+        }
+
+        /* User Info */
+        .user-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+
+            .logo {
+                width: 400px;
+                height: 200px;
+            }
+
+            .user-info {
+                position: static;
+                margin: 20px auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="wrapper">
+        <!-- Header (hamburger menu) -->
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
+                <li><a href="about.html">About VExUS AI</a></li>
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <!-- Logos -->
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    </div>
+
+                    <!-- Title -->
+                    <div class="title-container">
+                        <h1>Image Gallery</h1>
+                        <p>Explore ultrasound images for VExUS assessment</p>
+                    </div>
+
+                    <!-- Gallery Grid -->
+                    <div class="gallery-grid">
+                        <!-- IVC Tile -->
+                        <div class="gallery-item" onclick="openModal('ivcModal')">
+                            <img src="images/ivc-thumbnail.jpg" alt="IVC Thumbnail">
+                            <h3>IVC</h3>
+                        </div>
+
+                        <!-- Hepatic Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('hepaticModal')">
+                            <img src="images/hepatic-thumbnail.jpg" alt="Hepatic Vein Thumbnail">
+                            <h3>Hepatic Vein</h3>
+                        </div>
+
+                        <!-- Portal Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('portalModal')">
+                            <img src="images/portal-thumbnail.jpg" alt="Portal Vein Thumbnail">
+                            <h3>Portal Vein</h3>
+                        </div>
+
+                        <!-- Renal Vein Tile -->
+                        <div class="gallery-item" onclick="openModal('renalModal')">
+                            <img src="images/renal-thumbnail.jpg" alt="Renal Vein Thumbnail">
+                            <h3>Renal Vein</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals for Each Vein (Lightbox style) -->
+        <!-- IVC Modal -->
+        <div id="ivcModal" class="modal">
+            <span class="close" onclick="closeModal('ivcModal')">&times;</span>
+            <!-- Optional arrows for multi-image navigation -->
+            <a class="prev" onclick="plusSlides(-1, 'ivcSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'ivcSlides')">&#10095;</a>
+
+            <div class="modal-content ivcSlides">
+                <img src="images/ivc1.jpg" alt="IVC Image 1">
+                <img src="images/ivc2.jpg" alt="IVC Image 2">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Hepatic Vein Modal -->
+        <div id="hepaticModal" class="modal">
+            <span class="close" onclick="closeModal('hepaticModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'hepaticSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'hepaticSlides')">&#10095;</a>
+
+            <div class="modal-content hepaticSlides">
+                <img src="images/hepatic1.jpg" alt="Hepatic Vein Image 1">
+                <img src="images/hepatic2.jpg" alt="Hepatic Vein Image 2">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Portal Vein Modal -->
+        <div id="portalModal" class="modal">
+            <span class="close" onclick="closeModal('portalModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'portalSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'portalSlides')">&#10095;</a>
+
+            <div class="modal-content portalSlides">
+                <img src="images/portal1.jpg" alt="Portal Vein Image 1">
+                <img src="images/portal2.jpg" alt="Portal Vein Image 2">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- Renal Vein Modal -->
+        <div id="renalModal" class="modal">
+            <span class="close" onclick="closeModal('renalModal')">&times;</span>
+            <a class="prev" onclick="plusSlides(-1, 'renalSlides')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'renalSlides')">&#10095;</a>
+
+            <div class="modal-content renalSlides">
+                <img src="images/renal1.jpg" alt="Renal Vein Image 1">
+                <img src="images/renal2.jpg" alt="Renal Vein Image 2">
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info">
+            <p>User: Gabesiegel</p>
+            <p>Date: 2025-02-11 09:16:21 UTC</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+
+    <script>
+        // Open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Slide navigation (simple approach):
+        // When plusSlides is called, we rearrange the images in the container 
+        // or you can implement a more robust slider. This is a basic placeholder.
+
+        function plusSlides(n, className) {
+            let container = document.getElementsByClassName(className)[0];
+            if (!container) return;
+            let imgs = container.getElementsByTagName("img");
+            if (imgs.length <= 1) return;
+
+            // Move the first or last element in the node list to rotate the slides
+            if (n > 0) {
+                container.appendChild(imgs[0]);
+            } else {
+                container.insertBefore(imgs[imgs.length - 1], imgs[0]);
+            }
+        }
+    </script>
+</body>
+</html>
