@@ -37,7 +37,7 @@
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 4px 20px var(--shadow-color);
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
         }
 
         /* Image Section */
@@ -59,6 +59,19 @@
         /* Text Section */
         .text-section {
             padding: 1rem 0;
+        }
+
+        .text-section h3, 
+        .text-section h4 {
+            margin: 0.5em 0;
+        }
+
+        .text-section p {
+            margin: 0.3em 0;
+        }
+
+        .text-section ul {
+            margin: 0.3em 0;
         }
 
         /* Title Container - No Box */
@@ -158,6 +171,32 @@
                 text-align: center;
             }
         }
+
+        .acquisition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .acquisition-tile {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 20px;
+            text-align: center;
+            transition: box-shadow 0.2s;
+            height: 100%; /* Ensure consistent height */
+        }
+
+        .acquisition-tile img {
+            width: 100%;
+            height: 300px; /* Fixed height for images */
+            object-fit: cover;
+            margin-bottom: 0.5em;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -244,7 +283,7 @@
                     <h2 class="section-title">2. Hepatic Vein Assessment</h2>
                     <div class="technique-container">
                         <div class="image-section">
-                            <img src="images/Hepatic_long_axis.png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
+                            <img src="images/hepatic_long.png" alt="Hepatic Vein Long Axis" onclick="expandImage(this)">
                             <h3>Hepatic Vein - Long Axis View</h3>
                         </div>
                         <div class="text-section">
@@ -259,6 +298,31 @@
                                 <li>Apply pulsed-wave Doppler to assess flow patterns</li>
                                 <li>Measure velocities of systolic and diastolic waves</li>
                                 <li>Evaluate waveform morphology (triphasic, biphasic, or monophasic)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Hepatic Short Axis Section after Hepatic Long Axis -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">2b. Hepatic Vein Short Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/hepatic_short.png" alt="Hepatic Vein Short Axis" onclick="expandImage(this)">
+                            <h3>Hepatic Vein - Short Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Short Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear short-axis view of the hepatic veins</li>
+                                <li>Identify hepatic veins as they enter the IVC</li>
+                                <li>Apply pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Confirm findings from long-axis view</li>
                             </ul>
                         </div>
                     </div>
@@ -287,12 +351,64 @@
                             </ul>
                         </div>
                     </div>
-                </div><!-- Renal Vein Assessment -->
+                </div>
+
+                <!-- Add Portal Vein Long Axis Section -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3a. Portal Vein Long Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Portal_long_axis.png" alt="Portal Vein Long Axis" onclick="expandImage(this)">
+                            <h3>Portal Vein - Long Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Long Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Place the probe in either the right mid-axillary line or the epigastric region, angled toward the right shoulder.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a clear long-axis view of the portal vein</li>
+                                <li>Apply color Doppler to confirm flow direction</li>
+                                <li>Use pulsed-wave Doppler to assess flow patterns</li>
+                                <li>Evaluate for pulsatility and flow reversal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Portal Vein Short Axis Section -->
+                <div class="acquisition-section">
+                    <h2 class="section-title">3b. Portal Vein Short Axis Assessment</h2>
+                    <div class="technique-container">
+                        <div class="image-section">
+                            <img src="images/Portal_short_axis.png" alt="Portal Vein Short Axis" onclick="expandImage(this)">
+                            <h3>Portal Vein - Short Axis View</h3>
+                        </div>
+                        <div class="text-section">
+                            <h3>Short Axis Technique</h3>
+                            <h4>Patient Positioning</h4>
+                            <p>Supine or semi-recumbent.</p>
+                            <h4>Probe Positioning</h4>
+                            <p>Rotate the probe 90 degrees counterclockwise from the long-axis position.</p>
+                            <h4>Instructions</h4>
+                            <ul class="technique-list">
+                                <li>Obtain a short-axis view of the portal vein</li>
+                                <li>Distinguish portal vein from hepatic artery</li>
+                                <li>Apply pulsed-wave Doppler to assess flow</li>
+                                <li>Compare pulsatility with adjacent arterial flow</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Renal Vein Assessment -->
                 <div class="acquisition-section">
                     <h2 class="section-title">4. Renal Vein Assessment</h2>
                     <div class="technique-container">
                         <div class="image-section">
-                            <img src="images/Renal_short.png" alt="Renal Vein Assessment" onclick="expandImage(this)">
+                            <img src="images/Renal_vein_long.png" alt="Renal Vein Assessment" onclick="expandImage(this)">
                             <h3>Renal Vein Doppler Assessment</h3>
                         </div>
                         <div class="text-section">
@@ -313,6 +429,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="acquisition-grid">
+            <!-- Renal Vein - Long Axis Tile -->
+            <div class="acquisition-tile">
+                <h2>Renal Vein: Long Axis</h2>
+                <img src="images/Renal_vein_long.png" alt="Renal Vein Long Axis">
+                <p>
+                    <strong>• Probe:</strong> Coronal plane over right kidney, angled cephalad.<br>
+                    <strong>• Structures:</strong> Interlobar vein in long axis.<br>
+                    <strong>• Doppler:</strong> Continuous → increasingly pulsatile with congestion.<br>
+                    <strong>• Assessment:</strong> Document venous flow pattern and peak velocities.
+                </p>
+            </div>
+
+            <!-- Renal Vein - Short Axis Tile -->
+            <div class="acquisition-tile">
+                <h2>Renal Vein: Short Axis</h2>
+                <img src="images/Renal_short_axis.png" alt="Renal Vein Short Axis">
+                <p>
+                    <strong>• Probe Rotation:</strong> 90° from long-axis.<br>
+                    <strong>• Structures:</strong> Interlobar vein + artery side by side.<br>
+                    <strong>• Doppler:</strong> Compare venous and arterial waveforms.<br>
+                    <strong>• Key Feature:</strong> Distinguish venous from arterial flow patterns.
+                </p>
             </div>
         </div>
     </div>
