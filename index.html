@@ -1,14 +1,19 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI</title>
+    <title>VExUS AI - Image Acquisition Guide</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Gabesiegel" />
+    <meta name="last-modified" content="2025-02-12T00:31:49Z" />
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-
+    
     <style>
+        /* Copied Sidebar Styles */
         .logo-container {
             display: flex;
             justify-content: center;
@@ -16,12 +21,6 @@
             gap: 60px;
             margin-bottom: 2em;
             flex-wrap: wrap;
-        }
-
-        .logo {
-            width: 500px;
-            height: 250px;
-            object-fit: contain;
         }
 
         .sidebar-logo {
@@ -66,105 +65,213 @@
             color: #007bff !important;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin: 30px auto;
-            width: 100%;
-            max-width: 1300px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 30px 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .feature-card i {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            color: #585858;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .feature-card p {
-            font-size: 1.1em;
-            line-height: 1.4;
+        /* Updated Modern Tile Design */
+        :root {
+            --pure-white: #ffffff;
+            --off-white: #f8f9fa;
+            --shadow-color: rgba(0, 0, 0, 0.1);
         }
 
         .container {
             width: 100%;
             max-width: 1400px;
-            background: white;
+            background: var(--pure-white);
             padding: 60px;
             margin: 20px auto;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px var(--shadow-color);
         }
 
-        .user-info {
+        .title-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .main-logo {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .acquisition-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            color: #585858;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* Modern Tile Design for Technique Containers */
+        .technique-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .image-section {
+            background: var(--off-white);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .image-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-section img {
+            width: 100%;
+            max-height: 800px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .image-section h3 {
+            color: #585858;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .text-section {
+            background: var(--pure-white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            width: 100%;
+        }
+
+        .text-section h3 {
+            color: #585858;
+            margin-bottom: 20px;
+        }
+
+        .text-section h4 {
+            color: #686868;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .technique-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .technique-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .technique-list li:before {
+            content: "•";
+            color: #007bff;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Image Modal Styles */
+        .modal {
+            display: none;
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.8em;
-            color: #888888;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            overflow: hidden;
         }
 
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* New Feature Tile Styles */
+        .feature-tile {
+            background: var(--off-white);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            width: 100%;
+            transition: transform 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .feature-tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-tile i {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .feature-tile h3 {
+            color: #585858;
+            margin-bottom: 10px;
+        }
+
+        .feature-tile p {
+            color: #888888;
+            font-size: 0.9em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        /* Responsive Design */
         @media screen and (max-width: 980px) {
             .container {
                 padding: 30px;
                 max-width: 95%;
             }
 
-            .logo {
-                width: 400px;
-                height: 200px;
+            .image-section {
+                padding: 15px;
             }
 
-            .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .feature-card {
-                height: auto;
-                min-height: 250px;
-            }
-
-            .user-info {
-                position: static;
-                margin: 20px auto;
-                text-align: center;
+            .text-section {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body class="is-preload">
+    <!-- Navigation -->
     <div id="wrapper">
         <header id="header">
             <div class="inner">
@@ -176,6 +283,7 @@
             </div>
         </header>
 
+        <!-- Copied Sidebar Menu -->
         <nav id="menu">
             <div class="logo-container">
                 <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
@@ -184,6 +292,8 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="gallery.html">Image Gallery</a></li>
                 <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="about.html">About VExUS AI</a></li>
                 <li><a href="literature.html">Literature</a></li>
@@ -191,54 +301,23 @@
             </ul>
         </nav>
 
-        <div id="main">
-            <div class="inner">
-                <div class="container">
-                    <div class="logo-container">
-                        <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="logo">
-                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
-                    </div>
-                    <h1 style="text-align: center; color: #585858; margin: 0.5em 0; font-size: 2.5em;">VExUS AI</h1>
-                    <h3 style="text-align: center;">Built by The POCUS Atlas</h3>
-
-                    <div class="feature-grid">
-                        <a href="calculator.html" class="feature-card">
-                            <i class="fas fa-calculator"></i>
-                            <h3>VExUS Calculator</h3>
-                            <p>Calculate VExUS scores and analyze ultrasound images using our AI-powered tool</p>
-                        </a>
-                        <a href="acquisition.html" class="feature-card">
-                            <i class="fas fa-camera"></i>
-                            <h3>Image Acquisition</h3>
-                            <p>Learn proper techniques for acquiring standardized VExUS ultrasound images</p>
-                        </a>
-                        <a href="about.html" class="feature-card">
-                            <i class="fas fa-info-circle"></i>
-                            <h3>About VExUS AI</h3>
-                            <p>Learn about our team and the development of VExUS AI</p>
-                        </a>
-                        <a href="literature.html" class="feature-card">
-                            <i class="fas fa-book"></i>
-                            <h3>Literature</h3>
-                            <p>Access published research and documentation about VExUS</p>
-                        </a>
-                    </div>
+        <!-- Main Content Area -->
+        <div class="container">
+            <!-- Feature Tiles -->
+            <div class="features-grid">
+                <div class="feature-tile">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Education</h3>
+                    <p>Access educational resources and training materials to enhance your understanding of VExUS.</p>
+                </div>
+                
+                <div class="feature-tile">
+                    <i class="fas fa-images"></i>
+                    <h3>Image Gallery</h3>
+                    <p>Browse through our collection of VExUS images and case studies.</p>
                 </div>
             </div>
         </div>
-
-        <!-- User Info -->
-        <div class="user-info">
-            <p>User: Gabesiegel</p>
-            <p>Date: 2025-02-11 09:03:55 UTC</p>
-        </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-    <script src="html5up-phantom/assets/js/browser.min.js"></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-    <script src="html5up-phantom/assets/js/util.js"></script>
-    <script src="html5up-phantom/assets/js/main.js"></script>
 </body>
 </html>
