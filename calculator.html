@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Image Recognition & Scoring</title>
+    <title>VExUS AI - Stepwise Image Recognition & Scoring</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     
     <style>
+        /* Overall container */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -24,31 +25,54 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-
-        .input-controls {
-            width: 90%;
-            max-width: 600px;
-            margin: 30px auto;
-            text-align: center;
+        
+        /* Step section with light grey background */
+        .step-section {
             background: #f5f5f5;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
-            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
+        /* Larger step number circle centered above the step title */
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: #ccc; /* Light grey */
+            color: #333;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 80px;
+            font-weight: bold;
+            margin: 0 auto 10px auto;
+            font-size: 2em; /* Bigger number */
+        }
+
+        .step-section h2 {
+            margin-bottom: 15px;
+        }
+        
+        /* Gray instruction text for each step */
+        .step-instructions {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        /* Upload area: simpler, more modern look */
         .upload-area {
-            border: 2px dashed #cccccc;
-            border-radius: 8px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
             padding: 30px 20px;
             margin: 15px auto;
-            background: #ffffff;
+            background: transparent; /* Clear interior */
             cursor: pointer;
             transition: all 0.2s ease;
+            max-width: 600px;
         }
-
         .upload-area:hover {
-            border-color: #999999;
-            background: #fafafa;
+            border-color: #999;
         }
 
         .upload-icon {
@@ -63,22 +87,69 @@
             margin-bottom: 15px;
         }
 
+        /* Modern "Choose File" button: light grey border, transparent interior */
         .upload-button {
             display: inline-block;
             padding: 10px 25px;
-            background: #585858;
-            color: white;
+            color: #333;
+            background: transparent; 
+            border: 2px solid #ccc;
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
-            transition: background 0.2s ease;
-            border: none;
+            transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
         }
-
         .upload-button:hover {
-            background: #666666;
+            background: #eee;
+            color: #111;
+            border-color: #999;
         }
 
+        /* Hide the real file input */
+        .file-input {
+            display: none;
+        }
+
+        /* Preview image */
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 15px auto;
+            display: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Model status under each upload */
+        .model-status {
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #dc3545; /* default red if error/not ready */
+            color: #fff;
+            font-weight: 500;
+        }
+        .model-ready {
+            background-color: #28a745; /* green if ready */
+        }
+
+        /* Recognition result text */
+        .step-result {
+            margin: 10px auto;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        /* Confidence text (top 3) */
+        .top-results {
+            margin: 5px auto 15px auto;
+            color: #555;
+        }
+
+        /* Autofill dropdown in each step */
         .input-group {
             margin: 15px auto;
             text-align: left;
@@ -86,73 +157,26 @@
             max-width: 600px;
         }
 
-        .input-group input[type="number"],
+        .input-group label {
+            font-weight: bold;
+        }
+
         .input-group select {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
 
-        .timestamp {
-            text-align: right;
-            color: #999;
+        /* If can't classify -> show a small note */
+        .cannot-calc-note {
+            color: #dc3545;
+            margin-top: 5px;
             font-size: 0.9em;
-            margin-bottom: 20px;
-            font-family: monospace;
         }
 
-        .status-box {
-            width: 100%;
-            margin: 15px 0 0 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: 500;
-        }
-
-        .status-ready {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .status-error {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .score-section {
-            background: #fafafa;
-            padding: 25px;
-            border-radius: 5px;
-            margin-top: 20px;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid #eee;
-        }
-
-        .main-logo {
-            width: 500px;
-            height: 250px;
-            margin: 0 auto 2em auto;
-            display: block;
-            object-fit: contain;
-        }
-
-        .sidebar-logo {
-            width: 40px;
-            height: auto;
-            margin-bottom: 0;
-        }
-
-        #imagePreview {
-            max-width: 100%;
-            max-height: 300px;
-            margin: 20px auto;
-            display: none;
-        }
-
+        /* Button group for Calc and Reset */
         .button-group {
             display: flex;
             gap: 30px;
@@ -164,29 +188,49 @@
         .button-group button {
             flex: 1;
             max-width: 250px;
-            white-space: normal;
             height: auto;
             padding: 10px 20px;
             line-height: 1.2;
+            white-space: normal;
+            font-size: 1em;
         }
 
-        #result, #top-results {
-            text-align: center;
-            margin: 15px auto;
-            width: 90%;
-            max-width: 600px;
+        /* Timestamp and user info */
+        .timestamp {
+            text-align: right;
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        /* Main Logo */
+        .main-logo {
+            width: 400px;
+            height: 200px;
+            margin: 0 auto 2em auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Sidebar Logo */
+        .sidebar-logo {
+            width: 40px;
+            height: auto;
+            margin-bottom: 0;
         }
 
         @media screen and (max-width: 980px) {
             .main-logo {
-                width: 400px;
-                height: 200px;
+                width: 300px;
+                height: 150px;
             }
         }
     </style>
 </head>
 <body class="is-preload">
     <div id="wrapper">
+        <!-- Header (Hamburger Menu) -->
         <header id="header">
             <div class="inner">
                 <nav>
@@ -197,91 +241,175 @@
             </div>
         </header>
 
+        <!-- Sidebar Navigation -->
         <nav id="menu">
-            <div class="logo-container">
+            <div class="logo-container" style="text-align:center;">
                 <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
             </div>
             <h2>Menu</h2>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="Education.html">Education</a></li>
-                <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
                 <li><a href="about.html">About VExUS AI</a></li>
                 <li><a href="image_gallery.html">Image Gallery</a></li>
+                <li><a href="#documentation">Documentation</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
 
+        <!-- Main Content -->
         <div id="main">
             <div class="inner">
                 <div class="container">
+                    <!-- User info timestamp -->
                     <div class="timestamp">
                         Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-02-11 08:24:55<br>
                         Current User's Login: Gabesiegel
                     </div>
 
                     <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                    <h1>VExUS AI - Image Recognition & Scoring</h1>
-                    
-                    <div class="input-controls">
-                        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                    <h1>VExUS AI - Stepwise Image Recognition & Scoring</h1>
+
+                    <!-- STEP 1: IVC (No image upload, just a dropdown) -->
+                    <div class="step-section" id="step1">
+                        <div class="step-number">1</div>
+                        <h2>IVC Measurement</h2>
+                        <p class="step-instructions">Select whether IVC is &lt; 2 cm or &gt; 2 cm.</p>
+                        
+                        <div class="input-group">
+                            <label for="ivcDropdown">IVC Diameter:</label>
+                            <select id="ivcDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="<2cm">IVC &lt; 2 cm</option>
+                                <option value=">2cm">IVC &gt; 2 cm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Hepatic Vein -->
+                    <div class="step-section" id="step2">
+                        <div class="step-number">2</div>
+                        <h2>Hepatic Vein Image Upload</h2>
+                        <p class="step-instructions">Upload your Hepatic Vein ultrasound image. A separate model will classify it.</p>
+                        
+                        <!-- Model status for Hepatic Vein -->
+                        <div id="hepaticModelStatus" class="model-status">
+                            Loading hepatic model...
+                        </div>
+
+                        <div class="upload-area" onclick="document.getElementById('hepaticImageUpload').click()">
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Click to upload an image for VExUS analysis</p>
-                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                            <p class="upload-text">Click to upload a Hepatic Vein image</p>
+                            <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
                             <button class="upload-button">Choose File</button>
                         </div>
-                        <img id="imagePreview" alt="Preview">
-                        <div id="model-status" class="status-box status-error">Model not loaded</div>
+                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Preview">
+
+                        <!-- Recognition result for Hepatic -->
+                        <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
+                        <div class="top-results" id="hepaticTopResults"></div>
+                        
+                        <!-- Hepatic Dropdown -->
+                        <div class="input-group">
+                            <label for="hepaticDropdown">Hepatic Vein Classification (Autofilled if >50%):</label>
+                            <select id="hepaticDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="HV Normal">HV Normal</option>
+                                <option value="HV Mild">HV Mild</option>
+                                <option value="HV Severe">HV Severe</option>
+                            </select>
+                            <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
+                            </div>
+                        </div>
                     </div>
-                    
-                    <p id="result">Image recognition result will appear here...</p>
-                    <p id="top-results"></p>
-                    
-                    <div class="score-section">
-                        <h2>VExUS Score Calculation</h2>
+
+                    <!-- STEP 3: Portal Vein -->
+                    <div class="step-section" id="step3">
+                        <div class="step-number">3</div>
+                        <h2>Portal Vein Image Upload</h2>
+                        <p class="step-instructions">Upload your Portal Vein ultrasound image. A separate model will classify it.</p>
                         
-                        <div class="input-group">
-                            <label for="ivc-diameter">IVC Diameter (cm):</label>
-                            <input type="number" id="ivc-diameter" step="0.1" placeholder="Enter IVC diameter">
+                        <!-- Model status for Portal Vein -->
+                        <div id="portalModelStatus" class="model-status">
+                            Loading portal model...
                         </div>
 
-                        <div class="input-group">
-                            <label for="hv-score">Hepatic Vein Score:</label>
-                            <select id="hv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
+                        <div class="upload-area" onclick="document.getElementById('portalImageUpload').click()">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Click to upload a Portal Vein image</p>
+                            <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
+                            <button class="upload-button">Choose File</button>
                         </div>
+                        <img id="portalPreview" class="image-preview" alt="Portal Preview">
 
-                        <div class="input-group">
-                            <label for="pv-score">Portal Vein Score:</label>
-                            <select id="pv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="rv-score">Renal Vein Score:</label>
-                            <select id="rv-score">
-                                <option value="">-- Select --</option>
-                                <option value="0">Normal</option>
-                                <option value="1">Mild</option>
-                                <option value="2">Severe</option>
-                            </select>
-                        </div>
+                        <!-- Recognition result for Portal -->
+                        <div class="step-result" id="portalResult">Portal recognition result will appear here...</div>
+                        <div class="top-results" id="portalTopResults"></div>
                         
+                        <!-- Portal Dropdown -->
+                        <div class="input-group">
+                            <label for="portalDropdown">Portal Vein Classification (Autofilled if >50%):</label>
+                            <select id="portalDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="PV Normal">PV Normal</option>
+                                <option value="PV Mild">PV Mild</option>
+                                <option value="PV Severe">PV Severe</option>
+                            </select>
+                            <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: Renal Vein -->
+                    <div class="step-section" id="step4">
+                        <div class="step-number">4</div>
+                        <h2>Renal Vein Image Upload</h2>
+                        <p class="step-instructions">Upload your Renal Vein ultrasound image. A separate model will classify it.</p>
+                        
+                        <!-- Model status for Renal Vein -->
+                        <div id="renalModelStatus" class="model-status">
+                            Loading renal model...
+                        </div>
+
+                        <div class="upload-area" onclick="document.getElementById('renalImageUpload').click()">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Click to upload a Renal Vein image</p>
+                            <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
+                            <button class="upload-button">Choose File</button>
+                        </div>
+                        <img id="renalPreview" class="image-preview" alt="Renal Preview">
+
+                        <!-- Recognition result for Renal -->
+                        <div class="step-result" id="renalResult">Renal recognition result will appear here...</div>
+                        <div class="top-results" id="renalTopResults"></div>
+                        
+                        <!-- Renal Dropdown -->
+                        <div class="input-group">
+                            <label for="renalDropdown">Renal Vein Classification (Autofilled if >50%):</label>
+                            <select id="renalDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="RV Normal">RV Normal</option>
+                                <option value="RV Mild">RV Mild</option>
+                                <option value="RV Severe">RV Severe</option>
+                            </select>
+                            <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image. Cannot calculate score.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculate & Reset Buttons + Score Display -->
+                    <div class="step-section">
                         <div class="button-group">
                             <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                            <button onclick="resetScores()" class="button">Reset Scores</button>
+                            <button onclick="resetAll()" class="button">Reset</button>
                         </div>
                         <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -295,107 +423,256 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
-        let model;
+        /**********************************
+         * Load Three Separate Models
+         *********************************/
+        let hepaticModel = null;
+        let portalModel = null;
+        let renalModel = null;
 
-        async function loadModel() {
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHepaticModel();
+            loadPortalModel();
+            loadRenalModel();
+        });
+
+        async function loadHepaticModel() {
             try {
-                console.log("Loading model...");
-                // Updated model path with both model.json and weights.bin paths
-                const modelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/model.json";
-                const weightsPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/weights.bin";
-                
-                model = await tf.loadLayersModel(modelPath);
-                console.log("Model loaded successfully");
-                document.getElementById('model-status').className = "status-box status-ready";
-                document.getElementById('model-status').textContent = "Model loaded and ready";
+                const hepaticModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/hepaticModel/model.json";
+                hepaticModel = await tf.loadLayersModel(hepaticModelPath);
+                document.getElementById('hepaticModelStatus').textContent = "Model loaded and ready";
+                document.getElementById('hepaticModelStatus').classList.add('model-ready');
             } catch (error) {
-                console.error("Error loading model:", error);
-                document.getElementById('model-status').className = "status-box status-error";
-                document.getElementById('model-status').textContent = "Error loading model: " + error.message;
+                document.getElementById('hepaticModelStatus').textContent = "Error loading hepatic model: " + error.message;
+            }
+        }
+        async function loadPortalModel() {
+            try {
+                const portalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/portalModel/model.json";
+                portalModel = await tf.loadLayersModel(portalModelPath);
+                document.getElementById('portalModelStatus').textContent = "Model loaded and ready";
+                document.getElementById('portalModelStatus').classList.add('model-ready');
+            } catch (error) {
+                document.getElementById('portalModelStatus').textContent = "Error loading portal model: " + error.message;
+            }
+        }
+        async function loadRenalModel() {
+            try {
+                const renalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/renalModel/model.json";
+                renalModel = await tf.loadLayersModel(renalModelPath);
+                document.getElementById('renalModelStatus').textContent = "Model loaded and ready";
+                document.getElementById('renalModelStatus').classList.add('model-ready');
+            } catch (error) {
+                document.getElementById('renalModelStatus').textContent = "Error loading renal model: " + error.message;
             }
         }
 
-        document.getElementById('imageUpload').addEventListener('change', async function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        /*************************************************************
+         * Generic classification function
+         *************************************************************/
+        async function classifyImage(model, imgElement, resultId, topResultsId, dropdownId, errorNoteId, labelSet) {
             if (!model) {
-                document.getElementById('result').textContent = "Model not loaded!";
+                document.getElementById(resultId).textContent = "Model not loaded or error!";
                 return;
             }
-            
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            
-            // Show preview
-            const preview = document.getElementById('imagePreview');
-            preview.src = img.src;
-            preview.style.display = 'block';
-            
-            img.onload = async function() {
-                try {
-                    const tensor = tf.browser.fromPixels(img)
-                        .resizeNearestNeighbor([224, 224])
-                        .toFloat()
-                        .expandDims();
-                    const predictions = await model.predict(tensor).data();
-                    const labels = ["HV Normal", "HV Mild", "HV Severe", 
-                                  "PV Normal", "PV Mild", "PV Severe", 
-                                  "RV Normal", "RV Mild", "RV Severe"];
-                    
-                    let sortedIndices = [...predictions.keys()]
-                        .sort((a, b) => predictions[b] - predictions[a]);
-                    
-                    let topResults = sortedIndices.slice(0, 3)
-                        .map(i => `${labels[i]}: ${(predictions[i] * 100).toFixed(1)}%`);
-                    
-                    document.getElementById('result').textContent = `Top prediction: ${topResults[0]}`;
-                    document.getElementById('top-results').innerHTML = '<h3>Top 3 Predictions:</h3>' + 
-                        topResults.join('<br>');
+            try {
+                const tensor = tf.browser.fromPixels(imgElement)
+                    .resizeNearestNeighbor([224, 224])
+                    .toFloat()
+                    .expandDims(); // shape = [1,224,224,3]
+                
+                const predictions = await model.predict(tensor).data();
+                
+                // Sort predictions by probability, descending
+                let sortedIndices = [...predictions.keys()]
+                    .sort((a, b) => predictions[b] - predictions[a]);
+                
+                // Top 3
+                let top3 = sortedIndices.slice(0, 3).map(i => {
+                    return {
+                        label: labelSet[i],
+                        prob: (predictions[i] * 100).toFixed(1)
+                    };
+                });
 
-                    tensor.dispose();
-                } catch (error) {
-                    console.error('Error processing image:', error);
-                    document.getElementById('result').textContent = 'Error processing image: ' + error.message;
+                // Display top result and top 3
+                let top1 = top3[0];
+                document.getElementById(resultId).textContent = 
+                    `Top prediction: ${top1.label} (${top1.prob}%)`;
+                
+                document.getElementById(topResultsId).innerHTML = 
+                    '<strong>Top 3 Predictions:</strong><br>' +
+                    top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
+
+                // If top1.prob > 50, autofill dropdown, else show error note
+                const dropdown = document.getElementById(dropdownId);
+                const errorNote = document.getElementById(errorNoteId);
+
+                if (parseFloat(top1.prob) > 50) {
+                    let matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
+                    if (matchedOption) dropdown.value = matchedOption.value;
+                    errorNote.style.display = "none";
+                } else {
+                    dropdown.value = "";
+                    errorNote.style.display = "block";
                 }
+
+                // Cleanup
+                tensor.dispose();
+            } catch (err) {
+                console.error("Error during classification:", err);
+                document.getElementById(resultId).textContent = "Error during classification: " + err.message;
+            }
+        }
+
+        /***************************************************************
+         * Event listeners for each image upload
+         ***************************************************************/
+        document.getElementById('hepaticImageUpload').addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            
+            const previewImg = document.getElementById('hepaticPreview');
+            previewImg.src = URL.createObjectURL(file);
+            previewImg.style.display = 'block';
+            previewImg.onload = function() {
+                const hepaticLabels = ["HV Normal", "HV Mild", "HV Severe"];
+                classifyImage(
+                    hepaticModel,
+                    previewImg,
+                    'hepaticResult',
+                    'hepaticTopResults',
+                    'hepaticDropdown',
+                    'hepaticErrorNote',
+                    hepaticLabels
+                );
             };
         });
 
-        function calculateVexusScore() {
-            const ivcDiameter = parseFloat(document.getElementById('ivc-diameter').value);
-            const hvScore = parseInt(document.getElementById('hv-score').value) || 0;
-            const pvScore = parseInt(document.getElementById('pv-score').value) || 0;
-            const rvScore = parseInt(document.getElementById('rv-score').value) || 0;
+        document.getElementById('portalImageUpload').addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            
+            const previewImg = document.getElementById('portalPreview');
+            previewImg.src = URL.createObjectURL(file);
+            previewImg.style.display = 'block';
+            previewImg.onload = function() {
+                const portalLabels = ["PV Normal", "PV Mild", "PV Severe"];
+                classifyImage(
+                    portalModel,
+                    previewImg,
+                    'portalResult',
+                    'portalTopResults',
+                    'portalDropdown',
+                    'portalErrorNote',
+                    portalLabels
+                );
+            };
+        });
 
-            if (isNaN(ivcDiameter)) {
-                document.getElementById('total-score').textContent = "Incomplete Data";
+        document.getElementById('renalImageUpload').addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            
+            const previewImg = document.getElementById('renalPreview');
+            previewImg.src = URL.createObjectURL(file);
+            previewImg.style.display = 'block';
+            previewImg.onload = function() {
+                const renalLabels = ["RV Normal", "RV Mild", "RV Severe"];
+                classifyImage(
+                    renalModel,
+                    previewImg,
+                    'renalResult',
+                    'renalTopResults',
+                    'renalDropdown',
+                    'renalErrorNote',
+                    renalLabels
+                );
+            };
+        });
+
+        /********************************************
+         * VExUS Score Calculation
+         ********************************************/
+        function calculateVexusScore() {
+            // Step #1: IVC <2cm or >2cm
+            const ivcSelection = document.getElementById('ivcDropdown').value;
+            let ivcValue = null; 
+            if (ivcSelection === "<2cm") ivcValue = 1.9;
+            if (ivcSelection === ">2cm") ivcValue = 2.1;
+            
+            // Step #2: Hepatic from dropdown
+            const hvChoice = document.getElementById('hepaticDropdown').value;
+            let hvScore = 0;
+            if (hvChoice === "HV Mild")   hvScore = 1;
+            if (hvChoice === "HV Severe") hvScore = 2;
+
+            // Step #3: Portal from dropdown
+            const pvChoice = document.getElementById('portalDropdown').value;
+            let pvScore = 0;
+            if (pvChoice === "PV Mild")   pvScore = 1;
+            if (pvChoice === "PV Severe") pvScore = 2;
+
+            // Step #4: Renal from dropdown
+            const rvChoice = document.getElementById('renalDropdown').value;
+            let rvScore = 0;
+            if (rvChoice === "RV Mild")   rvScore = 1;
+            if (rvChoice === "RV Severe") rvScore = 2;
+
+            // If IVC wasn't selected, we cannot proceed
+            if (!ivcValue) {
+                document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
                 return;
             }
 
-            let severityCount = (hvScore === 2) + (pvScore === 2) + (rvScore === 2);
-            let vexusGrade = ivcDiameter < 2 
-                ? "Grade 0: No Congestion" 
-                : severityCount === 0 
-                    ? "Grade 1: Mild Congestion" 
-                    : severityCount === 1 
-                        ? "Grade 2: Moderate Congestion" 
-                        : "Grade 3: Severe Congestion";
+            // Count how many "Severe" among HV, PV, RV
+            let severityCount = 0;
+            if (hvScore === 2) severityCount++;
+            if (pvScore === 2) severityCount++;
+            if (rvScore === 2) severityCount++;
+
+            // Basic VExUS logic
+            let vexusGrade;
+            if (ivcValue < 2) {
+                vexusGrade = "Grade 0: No Congestion";
+            } else if (severityCount === 0) {
+                vexusGrade = "Grade 1: Mild Congestion";
+            } else if (severityCount === 1) {
+                vexusGrade = "Grade 2: Moderate Congestion";
+            } else {
+                vexusGrade = "Grade 3: Severe Congestion";
+            }
 
             document.getElementById('total-score').textContent = vexusGrade;
         }
 
-        function resetScores() {
-            document.getElementById('ivc-diameter').value = "";
-            document.getElementById('hv-score').value = "";
-            document.getElementById('pv-score').value = "";
-            document.getElementById('rv-score').value = "";
-            document.getElementById('total-score').textContent = '--';
-            document.getElementById('result').textContent = 'Image recognition result will appear here...';
-            document.getElementById('top-results').textContent = '';
-            document.getElementById('imagePreview').style.display = 'none';
-        }
+        /* Reset all fields and results */
+        function resetAll() {
+            // Clear IVC
+            document.getElementById('ivcDropdown').value = "";
+            // Clear final score
+            document.getElementById('total-score').textContent = "--";
 
-        // Initialize model loading when page loads
-        document.addEventListener('DOMContentLoaded', loadModel);
+            // Clear the 3 vein dropdowns
+            document.getElementById('hepaticDropdown').value = "";
+            document.getElementById('portalDropdown').value = "";
+            document.getElementById('renalDropdown').value = "";
+
+            // Clear each step's image preview & results
+            let steps = [
+                { dropdown: 'hepaticDropdown', preview: 'hepaticPreview', result: 'hepaticResult', top: 'hepaticTopResults', error: 'hepaticErrorNote', input: 'hepaticImageUpload' },
+                { dropdown: 'portalDropdown', preview: 'portalPreview', result: 'portalResult', top: 'portalTopResults', error: 'portalErrorNote', input: 'portalImageUpload' },
+                { dropdown: 'renalDropdown',  preview: 'renalPreview',  result: 'renalResult',  top: 'renalTopResults',  error: 'renalErrorNote',  input: 'renalImageUpload' }
+            ];
+
+            steps.forEach(s => {
+                document.getElementById(s.preview).style.display = "none";
+                document.getElementById(s.result).textContent = s.dropdown + " recognition result will appear here...";
+                document.getElementById(s.top).textContent = "";
+                document.getElementById(s.error).style.display = "none";
+                document.getElementById(s.input).value = "";
+            });
+        }
     </script>
 </body>
 </html>
