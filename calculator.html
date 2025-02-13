@@ -267,16 +267,23 @@
         <!-- Main Content -->
         <div id="main">
             <div class="inner">
-                
-                <!-- Logo and Title are now inside the .inner container -->
+
+                <!-- Logo and Title -->
                 <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
                 <h1>VExUS AI - Stepwise Image Recognition &amp; Scoring</h1>
+
+                <!-- Description about AI tool -->
+                <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
+                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment. <strong>Please do not upload any images containing PHI (Protected Health Information).</strong>
+                </p>
 
                 <!-- STEP 1: IVC (No image upload, just a dropdown) -->
                 <div class="step-section" id="step1">
                     <div class="step-number">1</div>
                     <h2>IVC Measurement</h2>
-                    <p class="step-instructions">Select whether IVC is &lt; 2 cm or &gt; 2 cm.</p>
+                    <p class="step-instructions">
+                        Select whether IVC is &lt; 2 cm or &gt; 2 cm.
+                    </p>
                     
                     <div class="input-group">
                         <label for="ivcDropdown">IVC Diameter:</label>
@@ -292,13 +299,17 @@
                 <div class="step-section" id="step2">
                     <div class="step-number">2</div>
                     <h2>Hepatic Vein Image Upload</h2>
-                    <p class="step-instructions">Upload your Hepatic Vein ultrasound image. A separate model will classify it.</p>
+                    <!-- Updated instructions, removed "A separate model..." & added PHI warning -->
+                    <p class="step-instructions">
+                        Upload your Hepatic Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
+                    </p>
                     
                     <!-- Model status for Hepatic Vein -->
                     <div id="hepaticModelStatus" class="model-status">
                         Loading hepatic model...
                     </div>
 
+                    <!-- PHI confirmation & upload area -->
                     <div class="upload-area" onclick="confirmPHIUpload('hepaticImageUpload')">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload a Hepatic Vein image</p>
@@ -318,7 +329,7 @@
                             <option value="HV Normal">HV Normal</option>
                             <option value="HV Mild">HV Mild</option>
                             <option value="HV Severe">HV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
                         </select>
                         <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
                             Probability below 50%. Please upload a higher quality image.
@@ -330,7 +341,10 @@
                 <div class="step-section" id="step3">
                     <div class="step-number">3</div>
                     <h2>Portal Vein Image Upload</h2>
-                    <p class="step-instructions">Upload your Portal Vein ultrasound image. A separate model will classify it.</p>
+                    <!-- Updated instructions, removed "A separate model..." & added PHI warning -->
+                    <p class="step-instructions">
+                        Upload your Portal Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
+                    </p>
                     
                     <!-- Model status for Portal Vein -->
                     <div id="portalModelStatus" class="model-status">
@@ -356,7 +370,7 @@
                             <option value="PV Normal">PV Normal</option>
                             <option value="PV Mild">PV Mild</option>
                             <option value="PV Severe">PV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
                         </select>
                         <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
                             Probability below 50%. Please upload a higher quality image.
@@ -368,7 +382,10 @@
                 <div class="step-section" id="step4">
                     <div class="step-number">4</div>
                     <h2>Renal Vein Image Upload</h2>
-                    <p class="step-instructions">Upload your Renal Vein ultrasound image. A separate model will classify it.</p>
+                    <!-- Updated instructions, removed "A separate model..." & added PHI warning -->
+                    <p class="step-instructions">
+                        Upload your Renal Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
+                    </p>
                     
                     <!-- Model status for Renal Vein -->
                     <div id="renalModelStatus" class="model-status">
@@ -394,7 +411,7 @@
                             <option value="RV Normal">RV Normal</option>
                             <option value="RV Mild">RV Mild</option>
                             <option value="RV Severe">RV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
                         </select>
                         <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
                             Probability below 50%. Please upload a higher quality image.
@@ -438,7 +455,6 @@
 
         async function loadHepaticModel() {
             try {
-                // Updated hepatic model path
                 const hepaticModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/HV/modelhv.json";
                 hepaticModel = await tf.loadLayersModel(hepaticModelPath);
                 document.getElementById('hepaticModelStatus').textContent = "Model loaded and ready";
@@ -450,7 +466,6 @@
 
         async function loadPortalModel() {
             try {
-                // Updated portal model path
                 const portalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/PV/modelPV.json";
                 portalModel = await tf.loadLayersModel(portalModelPath);
                 document.getElementById('portalModelStatus').textContent = "Model loaded and ready";
@@ -462,7 +477,6 @@
 
         async function loadRenalModel() {
             try {
-                // Updated renal model path
                 const renalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/RV/modelRV.json";
                 renalModel = await tf.loadLayersModel(renalModelPath);
                 document.getElementById('renalModelStatus').textContent = "Model loaded and ready";
