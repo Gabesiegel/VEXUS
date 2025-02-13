@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Stepwise Image Recognition & Scoring</title>
+    <title>VExUS AI - Stepwise Image Recognition &amp; Scoring</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
@@ -299,7 +299,7 @@
                         Loading hepatic model...
                     </div>
 
-                    <div class="upload-area" onclick="document.getElementById('hepaticImageUpload').click()">
+                    <div class="upload-area" onclick="confirmPHIUpload('hepaticImageUpload')">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload a Hepatic Vein image</p>
                         <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
@@ -318,7 +318,6 @@
                             <option value="HV Normal">HV Normal</option>
                             <option value="HV Mild">HV Mild</option>
                             <option value="HV Severe">HV Severe</option>
-                            <!-- New Option for <50% Confidence -->
                             <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
                         </select>
                         <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
@@ -338,7 +337,7 @@
                         Loading portal model...
                     </div>
 
-                    <div class="upload-area" onclick="document.getElementById('portalImageUpload').click()">
+                    <div class="upload-area" onclick="confirmPHIUpload('portalImageUpload')">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload a Portal Vein image</p>
                         <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
@@ -357,7 +356,6 @@
                             <option value="PV Normal">PV Normal</option>
                             <option value="PV Mild">PV Mild</option>
                             <option value="PV Severe">PV Severe</option>
-                            <!-- New Option for <50% Confidence -->
                             <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
                         </select>
                         <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
@@ -377,7 +375,7 @@
                         Loading renal model...
                     </div>
 
-                    <div class="upload-area" onclick="document.getElementById('renalImageUpload').click()">
+                    <div class="upload-area" onclick="confirmPHIUpload('renalImageUpload')">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload a Renal Vein image</p>
                         <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
@@ -396,7 +394,6 @@
                             <option value="RV Normal">RV Normal</option>
                             <option value="RV Mild">RV Mild</option>
                             <option value="RV Severe">RV Severe</option>
-                            <!-- New Option for <50% Confidence -->
                             <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
                         </select>
                         <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
@@ -441,7 +438,8 @@
 
         async function loadHepaticModel() {
             try {
-                const hepaticModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/hepaticModel/model.json";
+                // Updated hepatic model path
+                const hepaticModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/HV/modelhv.json";
                 hepaticModel = await tf.loadLayersModel(hepaticModelPath);
                 document.getElementById('hepaticModelStatus').textContent = "Model loaded and ready";
                 document.getElementById('hepaticModelStatus').classList.add('model-ready');
@@ -449,9 +447,11 @@
                 document.getElementById('hepaticModelStatus').textContent = "Error loading hepatic model: " + error.message;
             }
         }
+
         async function loadPortalModel() {
             try {
-                const portalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/portalModel/model.json";
+                // Updated portal model path
+                const portalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/PV/modelPV.json";
                 portalModel = await tf.loadLayersModel(portalModelPath);
                 document.getElementById('portalModelStatus').textContent = "Model loaded and ready";
                 document.getElementById('portalModelStatus').classList.add('model-ready');
@@ -459,15 +459,29 @@
                 document.getElementById('portalModelStatus').textContent = "Error loading portal model: " + error.message;
             }
         }
+
         async function loadRenalModel() {
             try {
-                const renalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/main/renalModel/model.json";
+                // Updated renal model path
+                const renalModelPath = "https://raw.githubusercontent.com/Gabesiegel/VEXUS/refs/heads/main/models/RV/modelRV.json";
                 renalModel = await tf.loadLayersModel(renalModelPath);
                 document.getElementById('renalModelStatus').textContent = "Model loaded and ready";
                 document.getElementById('renalModelStatus').classList.add('model-ready');
             } catch (error) {
                 document.getElementById('renalModelStatus').textContent = "Error loading renal model: " + error.message;
             }
+        }
+
+        /*****************************************************
+         *  Confirmation function to warn about PHI
+         *****************************************************/
+        function confirmPHIUpload(inputId) {
+            const message = "Please confirm that the image you are about to upload does NOT contain any Protected Health Information (PHI).";
+            if (confirm(message)) {
+                // If the user clicks 'OK', open the file selector
+                document.getElementById(inputId).click();
+            }
+            // If they click 'Cancel', do nothing
         }
 
         /*************************************************************
