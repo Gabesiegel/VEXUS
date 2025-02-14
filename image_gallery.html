@@ -1,29 +1,23 @@
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
     <title>VExUS ATLAS - Image Gallery</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-    
     <style>
-        /* Reuse and adapt the same style references from the provided code */
-
         .container {
             width: 100%;
             max-width: 1400px;
-            background: white;
+            background: #fff;
             padding: 60px;
             margin: 20px auto;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         .logo-container {
             display: flex;
             justify-content: center;
@@ -32,65 +26,53 @@
             margin-bottom: 2em;
             flex-wrap: wrap;
         }
-
         .logo {
             width: 500px;
             height: 250px;
             object-fit: contain;
         }
-
         .sidebar-logo {
             width: 100px;
             height: auto;
             margin-bottom: 0;
             padding: 5px;
         }
-
         nav#menu {
             background: #ffffff;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         nav#menu .logo-container {
             padding: 10px;
             display: flex;
             justify-content: center;
         }
-
         nav#menu h2 {
-            color: #888888;
+            color: #888;
             margin-bottom: 1em;
             font-size: inherit;
         }
-
         nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(0,0,0,0.1);
             padding: 0.5em 0;
         }
-
         nav#menu ul li a {
-            color: #888888 !important;
+            color: #888 !important;
             text-decoration: none;
-            border-bottom: none;
             font-size: 0.9em;
             transition: color 0.2s ease;
         }
-
         nav#menu ul li a:hover {
             color: #007bff !important;
         }
-
         .title-container {
             text-align: center;
             margin: 2em 0;
         }
-
         .title-container h1 {
             font-size: 3.5em;
             margin-bottom: 0.2em;
         }
-
         /* Gallery Grid Styles */
         .gallery-grid {
             display: grid;
@@ -98,49 +80,50 @@
             gap: 30px;
             margin-top: 40px;
         }
-
         .gallery-item {
-            position: relative;
-            background: white;
+            background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             overflow: hidden;
             cursor: pointer;
             text-align: center;
             padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
         .gallery-item img {
             width: 100%;
             height: 150px;
             object-fit: cover;
             border-radius: 5px;
         }
-
         .gallery-item h3 {
             margin-top: 1em;
             font-size: 1.1em;
             color: #333;
         }
-
+        .gallery-item .caption {
+            margin-top: 0.5em;
+            font-size: 0.9em;
+            color: #666;
+            min-height: 1.2em;
+        }
         .gallery-item:hover {
+            transform: translateY(-5px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-
-        /* Modal/Lightbox Styles */
+        /* Modal Styles */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 9999; 
-            padding-top: 50px; 
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            padding-top: 50px;
             left: 0;
             top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
+            width: 100%;
+            height: 100%;
+            overflow: auto;
             background-color: rgba(0,0,0,0.8);
         }
-
         .modal-content {
             position: relative;
             margin: auto;
@@ -150,13 +133,11 @@
             max-width: 90%;
             justify-content: center;
         }
-
         .modal-content img {
             max-width: 400px;
             border-radius: 10px;
             margin: 10px;
         }
-
         .close {
             position: absolute;
             top: 20px;
@@ -165,60 +146,88 @@
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+            z-index: 1000;
         }
         .close:hover,
         .close:focus {
             color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
         }
-
-        /* Navigation arrows (optional) */
         .prev, .next {
             cursor: pointer;
             position: absolute;
             top: 50%;
             width: auto;
-            margin-top: -22px;
             color: #fff;
             font-weight: bold;
             font-size: 40px;
             transition: 0.3s;
             user-select: none;
             padding: 0 15px;
+            z-index: 500;
         }
         .next {
             right: 0;
         }
-        .prev:hover,
-        .next:hover {
+        .prev:hover, .next:hover {
             color: #bbb;
         }
-
-        /* User Info */
         .user-info {
             position: fixed;
             bottom: 10px;
             right: 10px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-size: 0.8em;
-            color: #888888;
+            color: #888;
         }
-
+        /* Sub-tiles Styles for Portal/Renal/Hepatic modals */
+        .sub-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px auto 0;
+            width: 100%;
+            max-width: 600px;
+        }
+        .sub-tile {
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+            padding: 15px;
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .sub-tile img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        .sub-tile p {
+            margin-top: 0.5em;
+            color: #333;
+            font-weight: 600;
+        }
+        .sub-tile:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .sub-modal-content img {
+            max-width: 500px;
+            border-radius: 10px;
+            margin: 10px;
+        }
         @media screen and (max-width: 980px) {
             .container {
                 padding: 30px;
                 max-width: 95%;
             }
-
             .logo {
                 width: 400px;
                 height: 200px;
             }
-
             .user-info {
                 position: static;
                 margin: 20px auto;
@@ -239,7 +248,6 @@
                 </nav>
             </div>
         </header>
-
         <!-- Sidebar Navigation -->
         <nav id="menu">
             <div class="logo-container">
@@ -257,7 +265,6 @@
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
-
         <!-- Main Content -->
         <div id="main">
             <div class="inner">
@@ -267,132 +274,241 @@
                         <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="logo">
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
-
                     <!-- Title -->
                     <div class="title-container">
                         <h1>Image Gallery</h1>
                         <p>Explore ultrasound images for VExUS assessment</p>
                     </div>
-
                     <!-- Gallery Grid -->
                     <div class="gallery-grid">
                         <!-- IVC Tile -->
                         <div class="gallery-item" onclick="openModal('ivcModal')">
                             <img src="images/IVC_icon.jpeg" alt="IVC Thumbnail">
                             <h3>IVC</h3>
+                            <p class="caption">Tap to view details</p>
                         </div>
-
                         <!-- Hepatic Vein Tile -->
                         <div class="gallery-item" onclick="openModal('hepaticModal')">
                             <img src="images/hepatic_icon.jpeg" alt="Hepatic Vein Thumbnail">
                             <h3>Hepatic Vein</h3>
+                            <p class="caption">Tap to view Mild/Normal/Severe</p>
                         </div>
-
                         <!-- Portal Vein Tile -->
                         <div class="gallery-item" onclick="openModal('portalModal')">
                             <img src="images/portal_icon.png" alt="Portal Vein Thumbnail">
                             <h3>Portal Vein</h3>
+                            <p class="caption">Tap to view Mild/Normal/Severe</p>
                         </div>
-
                         <!-- Renal Vein Tile -->
                         <div class="gallery-item" onclick="openModal('renalModal')">
                             <img src="images/renal_icon.png" alt="Renal Vein Thumbnail">
                             <h3>Renal Vein</h3>
+                            <p class="caption">Tap to view Mild/Normal/Severe</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Modals for Each Vein (Lightbox style) -->
-        <!-- IVC Modal -->
+        <!-- IVC Modal with arrow controls -->
         <div id="ivcModal" class="modal">
             <span class="close" onclick="closeModal('ivcModal')">&times;</span>
-            <!-- Optional arrows for multi-image navigation -->
-            <a class="prev" onclick="plusSlides(-1, 'ivcSlides')">&#10094;</a>
-            <a class="next" onclick="plusSlides(1, 'ivcSlides')">&#10095;</a>
-
+            <span class="prev" onclick="plusSlides(-1, 'ivcSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'ivcSlides')">&#10095;</span>
             <div class="modal-content ivcSlides">
-                <img src="images/ivc_icon.jpeg" alt="IVC Image 1">
-                <!-- Add more images as needed -->
+                <img src="images/IVC_icon.jpeg" alt="IVC Example Image">
             </div>
         </div>
-
-        <!-- Hepatic Vein Modal -->
+        <!-- Hepatic Vein Modal: Sub-tiles for Mild/Normal/Severe -->
         <div id="hepaticModal" class="modal">
             <span class="close" onclick="closeModal('hepaticModal')">&times;</span>
-            <a class="prev" onclick="plusSlides(-1, 'hepaticSlides')">&#10094;</a>
-            <a class="next" onclick="plusSlides(1, 'hepaticSlides')">&#10095;</a>
-
-            <div class="modal-content hepaticSlides">
-                <img src="images/hepatic_icon.jpeg" alt="Hepatic Vein Image 1">
-                <!-- Add more images as needed -->
+            <div class="modal-content">
+                <div class="sub-tiles">
+                    <!-- Normal -->
+                    <div class="sub-tile" onclick="openModal('hepaticNormalModal')">
+                        <img src="images/image_gallery/Hepatic/Normal/01.02.4.HV.NL.png" alt="Hepatic Normal">
+                        <p>Normal</p>
+                    </div>
+                    <!-- Mild -->
+                    <div class="sub-tile" onclick="openModal('hepaticMildModal')">
+                        <img src="images/image_gallery/Hepatic/Mild/02.0.2.HV.MD.png" alt="Hepatic Mild">
+                        <p>Mild</p>
+                    </div>
+                    <!-- Severe -->
+                    <div class="sub-tile" onclick="openModal('hepaticSevereModal')">
+                        <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe">
+                        <p>Severe</p>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Portal Vein Modal -->
+        <!-- Hepatic Sub-modals with arrow controls -->
+        <div id="hepaticNormalModal" class="modal">
+            <span class="close" onclick="closeModal('hepaticNormalModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'hepaticNormalSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'hepaticNormalSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content hepaticNormalSlides">
+                <!-- Original Normal Image -->
+                <img src="images/image_gallery/Hepatic/Normal/01.02.4.HV.NL.png" alt="Hepatic Normal Image">
+                <!-- New Normal Image (absolute path) -->
+                <img src="images/image_gallery/Hepatic/Normal/05.02.02.HV.NL.png" alt="Hepatic Normal Image 2">
+            </div>
+        </div>
+        <div id="hepaticMildModal" class="modal">
+            <span class="close" onclick="closeModal('hepaticMildModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'hepaticMildSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'hepaticMildSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content hepaticMildSlides">
+                <!-- Original Mild Image -->
+                <img src="images/image_gallery/Hepatic/Mild/02.0.2.HV.MD.png" alt="Hepatic Mild Image">
+                <!-- New Mild Image (absolute path) -->
+                <img src="images/image_gallery/Hepatic/Mild/06.03.01.HV.MD.png" alt="Hepatic Mild Image 2">
+            </div>
+        </div>
+        <div id="hepaticSevereModal" class="modal">
+            <span class="close" onclick="closeModal('hepaticSevereModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'hepaticSevereSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'hepaticSevereSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content hepaticSevereSlides">
+                <!-- Original Severe Image -->
+                <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image">
+                <!-- New Severe Image (absolute path) -->
+                <img src="/images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image 2">
+            </div>
+        </div>
+        <!-- Portal Vein Modal: Sub-tiles for Mild/Normal/Severe -->
         <div id="portalModal" class="modal">
             <span class="close" onclick="closeModal('portalModal')">&times;</span>
-            <a class="prev" onclick="plusSlides(-1, 'portalSlides')">&#10094;</a>
-            <a class="next" onclick="plusSlides(1, 'portalSlides')">&#10095;</a>
-
-            <div class="modal-content portalSlides">
-                <img src="images/portal_icon.png" alt="Portal Vein Image 1">
-                <!-- Add more images as needed -->
+            <div class="modal-content">
+                <div class="sub-tiles">
+                    <!-- Normal -->
+                    <div class="sub-tile" onclick="openModal('portalNormalModal')">
+                        <img src="images/image_gallery/Portal_Vein/Normal/01.1.2.PV.NL.png" alt="Portal Normal">
+                        <p>Normal</p>
+                    </div>
+                    <!-- Mild -->
+                    <div class="sub-tile" onclick="openModal('portalMildModal')">
+                        <img src="images/image_gallery/Portal_Vein/Mild/01.0.1.PV.MD.png" alt="Portal Mild">
+                        <p>Mild</p>
+                    </div>
+                    <!-- Severe -->
+                    <div class="sub-tile" onclick="openModal('portalSevereModal')">
+                        <img src="images/image_gallery/Portal_Vein/Severe/09.01.01.PV.SR.png" alt="Portal Severe">
+                        <p>Severe</p>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Renal Vein Modal -->
+        <!-- Portal Sub-modals with arrow controls -->
+        <div id="portalNormalModal" class="modal">
+            <span class="close" onclick="closeModal('portalNormalModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'portalNormalSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'portalNormalSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content portalNormalSlides">
+                <img src="images/image_gallery/Portal_Vein/Normal/01.1.2.PV.NL.png" alt="Portal Normal Image">
+            </div>
+        </div>
+        <div id="portalMildModal" class="modal">
+            <span class="close" onclick="closeModal('portalMildModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'portalMildSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'portalMildSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content portalMildSlides">
+                <img src="images/image_gallery/Portal_Vein/Mild/01.0.1.PV.MD.png" alt="Portal Mild Image">
+            </div>
+        </div>
+        <div id="portalSevereModal" class="modal">
+            <span class="close" onclick="closeModal('portalSevereModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'portalSevereSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'portalSevereSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content portalSevereSlides">
+                <img src="images/image_gallery/Portal_Vein/Severe/09.01.01.PV.SR.png" alt="Portal Severe Image">
+            </div>
+        </div>
+        <!-- Renal Vein Modal: Sub-tiles for Mild/Normal/Severe -->
         <div id="renalModal" class="modal">
             <span class="close" onclick="closeModal('renalModal')">&times;</span>
-            <a class="prev" onclick="plusSlides(-1, 'renalSlides')">&#10094;</a>
-            <a class="next" onclick="plusSlides(1, 'renalSlides')">&#10095;</a>
-
-            <div class="modal-content renalSlides">
-                <img src="images/renal_icon.png" alt="Renal Vein Image 1">
-                <!-- Add more images as needed -->
+            <div class="modal-content">
+                <div class="sub-tiles">
+                    <!-- Normal -->
+                    <div class="sub-tile" onclick="openModal('renalNormalModal')">
+                        <img src="images/image_gallery/Renal/Normal/01.03.1.RV.NL.png" alt="Renal Normal">
+                        <p>Normal</p>
+                    </div>
+                    <!-- Mild -->
+                    <div class="sub-tile" onclick="openModal('renalMildModal')">
+                        <img src="images/image_gallery/Renal/Mild/02.0.01.RV.MD.png" alt="Renal Mild">
+                        <p>Mild</p>
+                    </div>
+                    <!-- Severe -->
+                    <div class="sub-tile" onclick="openModal('renalSevereModal')">
+                        <img src="images/image_gallery/Renal/Severe/61.0.2.RV.SR.png" alt="Renal Severe">
+                        <p>Severe</p>
+                    </div>
+                </div>
             </div>
         </div>
-
+        <!-- Renal Sub-modals with arrow controls -->
+        <div id="renalNormalModal" class="modal">
+            <span class="close" onclick="closeModal('renalNormalModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalNormalSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalNormalSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content renalNormalSlides">
+                <img src="images/image_gallery/Renal/Normal/01.03.1.RV.NL.png" alt="Renal Normal Image">
+            </div>
+        </div>
+        <div id="renalMildModal" class="modal">
+            <span class="close" onclick="closeModal('renalMildModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalMildSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalMildSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content renalMildSlides">
+                <img src="images/image_gallery/Renal/Mild/02.0.01.RV.MD.png" alt="Renal Mild Image">
+            </div>
+        </div>
+        <div id="renalSevereModal" class="modal">
+            <span class="close" onclick="closeModal('renalSevereModal')">&times;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalSevereSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalSevereSlides')">&#10095;</span>
+            <div class="modal-content sub-modal-content renalSevereSlides">
+                <img src="images/image_gallery/Renal/Severe/61.0.2.RV.SR.png" alt="Renal Severe Image">
+            </div>
+        </div>
         <!-- User Info -->
         <div class="user-info">
             <p>User: Gabesiegel</p>
             <p>Date: 2025-02-11 09:16:21 UTC</p>
         </div>
     </div>
-
     <!-- Scripts -->
     <script src="html5up-phantom/assets/js/jquery.min.js"></script>
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-
     <script>
-        // Open modal
+        // Opens a given modal by ID.
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "block";
+            }
         }
-
-        // Close modal
+        // Closes a given modal by ID.
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "none";
+            }
         }
-
-        // Slide navigation (simple approach):
-        // When plusSlides is called, we rearrange the images in the container 
-        // or you can implement a more robust slider. This is a basic placeholder.
-
+        // Rotates images inside a slideshow modal.
         function plusSlides(n, className) {
-            let container = document.getElementsByClassName(className)[0];
+            const container = document.getElementsByClassName(className)[0];
             if (!container) return;
-            let imgs = container.getElementsByTagName("img");
+            const imgs = container.getElementsByTagName("img");
             if (imgs.length <= 1) return;
-
-            // Move the first or last element in the node list to rotate the slides
             if (n > 0) {
+                // move the first image to the end
                 container.appendChild(imgs[0]);
             } else {
+                // move the last image to the front
                 container.insertBefore(imgs[imgs.length - 1], imgs[0]);
             }
         }
