@@ -9,6 +9,11 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
 
     <style>
+        body {
+            background-color: #f9f9f9;
+        }
+
+        /* From index.html: Logo container styling */
         .logo-container {
             display: flex;
             justify-content: center;
@@ -16,6 +21,7 @@
             gap: 60px;
             margin-bottom: 2em;
             flex-wrap: wrap;
+            padding: 20px;
         }
 
         .logo {
@@ -31,6 +37,7 @@
             padding: 5px;
         }
 
+        /* Sidebar */
         nav#menu {
             background: #ffffff;
             padding: 20px;
@@ -66,10 +73,11 @@
             color: #007bff !important;
         }
 
+        /* Main container */
         .container {
             width: 100%;
             max-width: 1400px;
-            background: white;
+            background: #ffffff;
             padding: 50px;
             margin: 20px auto;
             border-radius: 15px;
@@ -79,10 +87,9 @@
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 2em;
-            font-size: 2.5em;
+            margin-bottom: 1em;
+            font-size: 2.2em;
             font-weight: 600;
-            letter-spacing: -0.02em;
         }
 
         form label {
@@ -90,6 +97,7 @@
             margin-top: 1em;
             margin-bottom: 0.5em;
             font-weight: 600;
+            color: #2c3e50;
         }
 
         input[type="text"],
@@ -116,11 +124,19 @@
             background-color: #0056b3;
         }
 
+        /* Footer / Additional info */
+        .thank-you {
+            text-align: center;
+            margin-top: 2em;
+            color: #555555;
+        }
+
         @media screen and (max-width: 980px) {…}
     </style>
 </head>
 <body class="is-preload">
     <div id="wrapper">
+
         <!-- Header -->
         <header id="header">
             <div class="inner">
@@ -132,11 +148,12 @@
             </div>
         </header>
 
-        <!-- Sidebar Navigation (Matches index.html) -->
+        <!-- Sidebar Navigation (same as index.html) -->
         <nav id="menu">
             <div class="logo-container">
-                <!-- Replace with your real logo path if needed -->
-                <img src="images/vexus-ai-logo.png" alt="VExUS Hub Logo" class="sidebar-logo" />
+                <!-- Two logos from index.html, adjust paths if needed -->
+                <img src="images/vexus-ai-logo.png" alt="VExUS Hub Logo" class="logo" />
+                <img src="images/another-logo.png" alt="Another Logo" class="logo" />
             </div>
             <h2>Menu</h2>
             <ul>
@@ -168,6 +185,10 @@
 
                         <button type="submit">Send</button>
                     </form>
+
+                    <div class="thank-you">
+                        <p>Thank you for visiting VExUS Hub. Email us for collaboration or any questions you might have!</p>
+                    </div>
                 </div>
             </div>
         </div>
