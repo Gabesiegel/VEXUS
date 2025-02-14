@@ -9,17 +9,12 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
 
     <style>
-        body {
-            background-color: #f9f9f9;
-        }
-
-        /* From index.html: Logo container styling */
         .logo-container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 60px;
-            margin-bottom: 2em;
+            margin-bottom: 1em;
             flex-wrap: wrap;
             padding: 20px;
         }
@@ -30,14 +25,14 @@
             object-fit: contain;
         }
 
-        .sidebar-logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 0;
-            padding: 5px;
+        .thank-you {
+            text-align: center;
+            color: #585858;
+            margin: 1em 0 2em 0;
+            font-size: 1.1em;
+            line-height: 1.6;
         }
 
-        /* Sidebar */
         nav#menu {
             background: #ffffff;
             padding: 20px;
@@ -73,23 +68,14 @@
             color: #007bff !important;
         }
 
-        /* Main container */
         .container {
             width: 100%;
             max-width: 1400px;
-            background: #ffffff;
+            background: white;
             padding: 50px;
             margin: 20px auto;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 1em;
-            font-size: 2.2em;
-            font-weight: 600;
         }
 
         form label {
@@ -106,38 +92,54 @@
             width: 100%;
             padding: 0.7em;
             margin-bottom: 1em;
-            border: 1px solid #ccc;
+            border: 1px solid #dedede;
             border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            background-color: #ffffff;
+            border-color: #2c3e50;
+            box-shadow: 0 0 5px rgba(44, 62, 80, 0.1);
         }
 
         button[type="submit"] {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 0.7em 1.5em;
-            border: none;
+            background-color: #f0f0f0;
+            color: #2c3e50;
+            padding: 1em 2em;
+            border: 1px solid #dedede;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         button[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #e4e4e4;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        /* Footer / Additional info */
-        .thank-you {
-            text-align: center;
-            margin-top: 2em;
-            color: #555555;
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+            .logo {
+                width: 400px;
+                height: 200px;
+            }
         }
-
-        @media screen and (max-width: 980px) {…}
     </style>
 </head>
 <body class="is-preload">
     <div id="wrapper">
-
-        <!-- Header -->
         <header id="header">
             <div class="inner">
                 <nav>
@@ -148,12 +150,9 @@
             </div>
         </header>
 
-        <!-- Sidebar Navigation (same as index.html) -->
         <nav id="menu">
             <div class="logo-container">
-                <!-- Two logos from index.html, adjust paths if needed -->
-                <img src="images/vexus-ai-logo.png" alt="VExUS Hub Logo" class="logo" />
-                <img src="images/another-logo.png" alt="Another Logo" class="logo" />
+                <img src="images/vexus-ai-logo.png" alt="VExUS Hub Logo" class="sidebar-logo">
             </div>
             <h2>Menu</h2>
             <ul>
@@ -168,10 +167,18 @@
             </ul>
         </nav>
 
-        <!-- Main Content -->
         <div id="main">
             <div class="inner">
                 <div class="container">
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS Hub Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    </div>
+                    
+                    <div class="thank-you">
+                        <p>Thank you for visiting VExUS Hub. We welcome collaboration opportunities and look forward to hearing from you!</p>
+                    </div>
+
                     <h1>Contact Us</h1>
                     <form id="contactForm" method="POST" action="/submitContact">
                         <label for="name">Name:</label>
@@ -183,18 +190,12 @@
                         <label for="message">Message:</label>
                         <textarea id="message" name="message" rows="6" required></textarea>
 
-                        <button type="submit">Send</button>
+                        <div style="text-align: center; margin-top: 2em;">
+                            <button type="submit">Send Message</button>
+                        </div>
                     </form>
-
-                    <div class="thank-you">
-                        <p>Thank you for visiting VExUS Hub. Email us for collaboration or any questions you might have!</p>
-                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Optional user-info section -->
-        <div class="user-info">
         </div>
     </div>
 
