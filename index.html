@@ -184,7 +184,7 @@
             object-fit: contain;
         }
 
-        /* Sidebar styling */
+        /* Sidebar styling from Image Gallery snippet */
         nav#menu {
             background: #ffffff;
             padding: 20px;
@@ -432,19 +432,20 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
-        /************************************
-         * 1) PHI Confirmation
-         ************************************/
+        /*************************************************************
+         * 1) PHI Confirmation Before Opening File Dialog
+         *************************************************************/
         function confirmPHIUpload(inputId) {
             const message = "Please confirm that the image you are about to upload does NOT contain any Protected Health Information (PHI).";
             if (confirm(message)) {
                 document.getElementById(inputId).click();
             }
+            // If user cancels, do nothing
         }
 
-        /************************************
-         * 2) Convert <img> to Base64
-         ************************************/
+        /*************************************************************
+         * 2) Convert <img> to Base64 for API
+         *************************************************************/
         function convertImgToBase64(imgElement) {
             return new Promise((resolve, reject) => {
                 const canvas = document.createElement("canvas");
@@ -453,21 +454,24 @@
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(imgElement, 0, 0);
 
-                const dataURL = canvas.toDataURL("image/png"); 
+                // dataURL is "data:image/png;base64,XXXX..."
+                const dataURL = canvas.toDataURL("image/png");
+                // Remove the "data:image/png;base64," prefix
                 const base64String = dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
                 resolve(base64String);
             });
         }
 
-        /************************************
-         * 3) CLASSIFY VIA VERTEX AI (Hepatic)
-         ************************************/
+        /*************************************************************
+         * 3) CLASSIFY VIA VERTEX AI (Hepatic Only)
+         *    Replace PROJECT_ID, ENDPOINT_ID with your actual values.
+         *************************************************************/
         async function classifyImageViaVertexAi(imgElement, labelSet, resultId, topResultsId, dropdownId, errorNoteId) {
             try {
-                // Convert <img> to base64
+                // 1. Convert <img> to base64
                 const base64Image = await convertImgToBase64(imgElement);
 
-                // Fetch an access token
+                // 2. Get an access token from our server's /refresh-token
                 const tokenRes = await fetch('/refresh-token', { method: 'POST' });
                 const tokenData = await tokenRes.json();
                 const accessToken = tokenData.access_token;
@@ -475,14 +479,12 @@
                     throw new Error("No access token from /refresh-token");
                 }
 
-                // (A) Mark model as ready (green)
-                const hepaticStatus = document.getElementById('hepaticModelStatus');
-                hepaticStatus.textContent = "Hepatic Model Ready!";
-                hepaticStatus.classList.add('model-ready');
+                // 3. Call Vertex AI endpoint
+                // Example: https://us-central1-aiplatform.googleapis.com/v1/projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808:predict
+                const endpointUrl = 'https://us-central1-aiplatform.googleapis.com/v1/projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808:predict';
 
-                // (B) Call Vertex AI endpoint
-                const endpointUrl = 'https://us-central1-aiplatform.googleapis.com/v1/projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048:predict';
-
+                // Vertex expects an array of instances. 
+                // Here's a minimal example with "content" field for base64 image
                 const body = {
                     instances: [
                         { content: base64Image }
@@ -503,36 +505,43 @@
                     throw new Error("Vertex AI Error: " + errTxt);
                 }
 
-                // Parse the response
+                // 4. Parse the response from Vertex
+                // Example structure might be:
+                // {
+                //   "predictions": [
+                //     { "confidences": [0.82, 0.15, 0.03] }
+                //   ]
+                // }
                 const vertexData = await vertexRes.json();
                 if (!vertexData.predictions || !vertexData.predictions[0]) {
                     throw new Error("No predictions returned from Vertex AI");
                 }
 
-                // Example: "confidences": [0.82, 0.15, 0.03]
+                // Assume the "confidences" array matches the order in labelSet
                 const confidences = vertexData.predictions[0].confidences; 
+                // Pair each confidence with its label
                 const combined = labelSet.map((label, idx) => ({
                     label,
                     probability: confidences[idx]
                 }));
 
-                // Sort by probability
+                // Sort by probability descending
                 combined.sort((a, b) => b.probability - a.probability);
                 const top1 = combined[0];
 
-                // Show top1
+                // 5. Display top1 in the UI
                 const top1Percent = (top1.probability * 100).toFixed(1);
                 document.getElementById(resultId).textContent = 
                     `Top prediction: ${top1.label} (${top1Percent}%)`;
 
-                // Show top 3
+                // Show top 3 predictions
                 const top3 = combined.slice(0, 3)
                     .map(item => `${item.label}: ${(item.probability * 100).toFixed(1)}%`)
                     .join("<br>");
                 document.getElementById(topResultsId).innerHTML =
                     `<strong>Top 3 Predictions:</strong><br>${top3}`;
 
-                // Autofill if > 0.5
+                // 6. Autofill dropdown if top1.prob > 0.5
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
                 if (parseFloat(top1.probability) > 0.5) {
@@ -553,16 +562,18 @@
             }
         }
 
-        /************************************
-         * 4) classifyImageViaApi() for Portal & Renal
-         ************************************/
+        /*************************************************************
+         * 4) classifyImageViaApi() for Portal & Renal (placeholder)
+         *************************************************************/
         async function classifyImageViaApi(imgElement, labelSet, resultId, topResultsId, dropdownId, errorNoteId) {
             try {
+                // Convert <img> to base64
                 const base64Image = await convertImgToBase64(imgElement);
 
+                // Build request body (depends on your existing API)
                 const requestBody = { image: base64Image };
 
-                // Placeholder external API call
+                // POST to external classification API (placeholder)
                 const response = await fetch("https://example.com/api/classify", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -575,20 +586,23 @@
 
                 const apiResult = await response.json();
 
-                // Sort predictions
+                // Sort predictions by probability desc
                 const sorted = apiResult.predictions.sort((a, b) => b.probability - a.probability);
                 const top1 = sorted[0];
 
+                // Display top1 in the UI
                 const top1Percent = (top1.probability * 100).toFixed(1);
                 document.getElementById(resultId).textContent = 
                     `Top prediction: ${top1.label} (${top1Percent}%)`;
 
+                // Show top 3 predictions
                 const top3 = sorted.slice(0, 3)
                     .map(item => `${item.label}: ${(item.probability * 100).toFixed(1)}%`)
                     .join("<br>");
                 document.getElementById(topResultsId).innerHTML =
                     `<strong>Top 3 Predictions:</strong><br>${top3}`;
 
+                // Autofill dropdown if top1.prob > 0.5
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
                 if (parseFloat(top1.probability) > 0.5) {
@@ -609,10 +623,12 @@
             }
         }
 
-        /************************************
-         * 5) Event Listeners for File Inputs
-         ************************************/
-        // HEPATIC -> Vertex AI
+        /*************************************************************
+         * 5) Handle Each File Input -> Display Preview -> Classify
+         *    For HEPATIC Vein, we call Vertex AI.
+         *    For PORTAL & RENAL, we still call the old "classifyImageViaApi".
+         *************************************************************/
+        // -------------- HEPATIC -> Vertex AI --------------
         document.getElementById('hepaticImageUpload').addEventListener('change', function() {
             const file = this.files[0];
             if (!file) return;
@@ -632,7 +648,7 @@
             };
         });
 
-        // PORTAL -> example.com
+        // -------------- PORTAL -> example.com --------------
         document.getElementById('portalImageUpload').addEventListener('change', function() {
             const file = this.files[0];
             if (!file) return;
@@ -652,7 +668,7 @@
             };
         });
 
-        // RENAL -> example.com
+        // -------------- RENAL -> example.com --------------
         document.getElementById('renalImageUpload').addEventListener('change', function() {
             const file = this.files[0];
             if (!file) return;
@@ -672,17 +688,21 @@
             };
         });
 
-        /************************************
+        /********************************************
          * 6) VExUS Score Calculation
-         ************************************/
+         ********************************************/
         function calculateVexusScore() {
+            // Step #1: IVC <2cm or >2cm
             const ivcSelection = document.getElementById('ivcDropdown').value;
             let ivcValue = null; 
             if (ivcSelection === "<2cm") ivcValue = 1.9;
             if (ivcSelection === ">2cm") ivcValue = 2.1;
             
+            // Step #2: Hepatic from dropdown
             const hvChoice = document.getElementById('hepaticDropdown').value;
+            // Step #3: Portal from dropdown
             const pvChoice = document.getElementById('portalDropdown').value;
+            // Step #4: Renal from dropdown
             const rvChoice = document.getElementById('renalDropdown').value;
 
             // If IVC wasn't selected, we cannot proceed
@@ -691,7 +711,7 @@
                 return;
             }
 
-            // If any waveforms < 50%
+            // If any waveforms have "Confidence of waveform < 50%", we cannot calculate
             if (
                 hvChoice === "Confidence of waveform < 50%" ||
                 pvChoice === "Confidence of waveform < 50%" ||
@@ -701,6 +721,7 @@
                 return;
             }
 
+            // Convert dropdown choices to numerical scores
             let hvScore = 0;
             if (hvChoice === "HV Mild")   hvScore = 1;
             if (hvChoice === "HV Severe") hvScore = 2;
@@ -713,11 +734,13 @@
             if (rvChoice === "RV Mild")   rvScore = 1;
             if (rvChoice === "RV Severe") rvScore = 2;
 
+            // Count how many "Severe"
             let severityCount = 0;
             if (hvScore === 2) severityCount++;
             if (pvScore === 2) severityCount++;
             if (rvScore === 2) severityCount++;
 
+            // Basic VExUS logic
             let vexusGrade;
             if (ivcValue < 2) {
                 vexusGrade = "Grade 0: No Congestion";
@@ -732,20 +755,20 @@
             document.getElementById('total-score').textContent = vexusGrade;
         }
 
-        /************************************
-         * 7) Reset
-         ************************************/
+        /********************************************
+         * 7) Reset All Fields & Results
+         ********************************************/
         function resetAll() {
             // Clear IVC
             document.getElementById('ivcDropdown').value = "";
             document.getElementById('total-score').textContent = "--";
 
-            // Clear waveforms
+            // Clear the 3 vein dropdowns
             document.getElementById('hepaticDropdown').value = "";
             document.getElementById('portalDropdown').value = "";
             document.getElementById('renalDropdown').value = "";
 
-            // Clear images & text
+            // Clear each step's image preview & results
             let steps = [
                 {
                     dropdown: 'hepaticDropdown',
@@ -780,11 +803,6 @@
                 document.getElementById(s.error).style.display = "none";
                 document.getElementById(s.input).value = "";
             });
-
-            // Optionally revert hepatic to yellow again
-            const hepaticStatus = document.getElementById('hepaticModelStatus');
-            hepaticStatus.textContent = "Ready for classification via Vertex AI";
-            hepaticStatus.classList.remove('model-ready');
         }
     </script>
 </body>
