@@ -1,7 +1,7 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'VEXUS/VEXUS'
+    dir: 'VEXUS'
     args: ['build', '-t', 'gcr.io/plucky-weaver-450819-k7/vexus-ai', '.']
   
   # Push the container image to Container Registry
