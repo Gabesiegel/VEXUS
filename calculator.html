@@ -1,791 +1,211 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS AI - Stepwise Image Recognition &amp; Scoring (Vertex Integration)</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    
-    <!-- Phantom Template CSS -->
-    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
-    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
-    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-    
-    <style>
-        /* Overall container */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background: white;
-            padding: 40px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        
-        /* Step section with light grey background */
-        .step-section {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+  <title>VExUS AI - Vertex Integration</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  
+  <!-- Optional Phantom Template CSS -->
+  <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+  <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+  <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
 
-        /* Larger step number circle centered above the step title */
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: #ccc;
-            color: #333;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 80px;
-            font-weight: bold;
-            margin: 0 auto 10px auto;
-            font-size: 2em;
-        }
+  <style>
+    /* Minimal styling to illustrate the "green" model-ready class. */
+    .model-status {
+      background-color: #ffc107; /* default yellow */
+      color: #333;
+      padding: 8px;
+      border-radius: 5px;
+      max-width: 600px;
+      margin: 10px auto;
+      text-align: center;
+      font-weight: 500;
+    }
+    .model-ready {
+      background-color: #28a745; /* green if ready */
+      color: #fff;
+    }
 
-        .step-section h2 {
-            margin-bottom: 15px;
-        }
-        
-        /* Gray instruction text for each step */
-        .step-instructions {
-            font-size: 1em;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        
-        /* Upload area */
-        .upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            padding: 30px 20px;
-            margin: 15px auto;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            max-width: 600px;
-        }
-        .upload-area:hover {
-            border-color: #999;
-        }
-
-        .upload-icon {
-            font-size: 2.5em;
-            color: #666666;
-            margin-bottom: 10px;
-        }
-
-        .upload-text {
-            font-size: 1.1em;
-            color: #666666;
-            margin-bottom: 15px;
-        }
-
-        /* Hide the real file input */
-        .file-input {
-            display: none;
-        }
-
-        /* Preview image */
-        .image-preview {
-            max-width: 100%;
-            max-height: 250px;
-            margin: 15px auto;
-            display: none;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* Model status under each upload */
-        .model-status {
-            width: 90%;
-            max-width: 600px;
-            margin: 10px auto;
-            padding: 8px;
-            border-radius: 5px;
-            background-color: #ffc107; /* default yellow for demonstration */
-            color: #333;
-            font-weight: 500;
-        }
-        .model-ready {
-            background-color: #28a745; /* green if ready */
-            color: #fff;
-        }
-
-        /* Recognition result text */
-        .step-result {
-            margin: 10px auto;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-        /* Confidence text (top 3) */
-        .top-results {
-            margin: 5px auto 15px auto;
-            color: #555;
-        }
-
-        /* Autofill dropdown in each step */
-        .input-group {
-            margin: 15px auto;
-            text-align: left;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .input-group label {
-            font-weight: bold;
-        }
-
-        .input-group select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        /* If can't classify -> show a small note */
-        .cannot-calc-note {
-            color: #dc3545;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-
-        /* Button group for Calc and Reset */
-        .button-group {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            margin: 35px auto;
-            flex-wrap: wrap;
-        }
-
-        .button-group button {
-            flex: 1;
-            max-width: 250px;
-            height: auto;
-            padding: 10px 20px;
-            line-height: 1.2;
-            white-space: normal;
-            font-size: 1em;
-        }
-
-        /* Main Logo */
-        .main-logo {
-            width: 400px;
-            height: 200px;
-            margin: 0 auto 2em auto;
-            display: block;
-            object-fit: contain;
-        }
-
-        /* Sidebar styling */
-        nav#menu {
-            background: #ffffff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        nav#menu .logo-container {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-        nav#menu h2 {
-            color: #888888;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.1);
-            padding: 0.5em 0;
-        }
-        nav#menu ul li a {
-            color: #888888 !important;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-            transition: color 0.2s ease;
-        }
-        nav#menu ul li a:hover {
-            color: #007bff !important;
-        }
-
-        .sidebar-logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 0;
-            padding: 5px;
-        }
-
-        @media screen and (max-width: 980px) {
-            .main-logo {
-                width: 300px;
-                height: 150px;
-            }
-        }
-    </style>
+    .cannot-calc-note {
+      color: #dc3545;
+    }
+  </style>
 </head>
-<body class="is-preload">
-    <div id="wrapper">
-        <!-- Header (Hamburger Menu) -->
-        <header id="header">
-            <div class="inner">
-                <nav>
-                    <ul>
-                        <li><a href="#menu">Menu</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+<body>
+  <h1>VExUS AI - Stepwise Image Recognition &amp; Scoring</h1>
 
-        <!-- Sidebar Navigation -->
-        <nav id="menu">
-            <div class="logo-container">
-                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="sidebar-logo">
-            </div>
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="calculator.html">Score Calculator</a></li>
-                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
-                <li><a href="education.html">Education</a></li>
-                <li><a href="literature.html">Literature</a></li>
-                <li><a href="about.html">About VExUS AI</a></li>
-                <li><a href="image_gallery.html">Image Gallery</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+  <!-- HEPATIC Vein Section -->
+  <section>
+    <h2>Hepatic Vein</h2>
+    <div id="hepaticModelStatus" class="model-status">
+      Ready for classification via Vertex AI
+    </div>
 
-        <!-- Main Content -->
-        <div id="main">
-            <div class="inner">
-                
-                <!-- Logo and Title -->
-                <img src="images/vexus-ai-logo.png" alt="VExUS AI Logo" class="main-logo">
-                <h1>VExUS AI - Stepwise Image Recognition &amp; Scoring</h1>
+    <div style="border: 2px dashed #ccc; padding: 20px; max-width: 400px; margin: auto;" onclick="confirmPHIUpload('hepaticImageInput')">
+      <p>Click to upload a Hepatic Vein image</p>
+      <input type="file" id="hepaticImageInput" style="display: none;" accept="image/*">
+    </div>
+    <img id="hepaticPreview" style="display: none; max-width: 400px; margin: 15px auto; border: 1px solid #ccc;">
 
-                <!-- Description about AI tool -->
-                <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
-                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. 
-                    It is not a substitute for clinical judgment. <strong>Please do not upload any images containing PHI (Protected Health Information).</strong>
-                </p>
+    <div id="hepaticResult">Hepatic recognition result will appear here...</div>
+    <div id="hepaticTopResults"></div>
 
-                <!-- STEP 1: IVC -->
-                <div class="step-section" id="step1">
-                    <div class="step-number">1</div>
-                    <h2>IVC Measurement</h2>
-                    <p class="step-instructions">Select whether IVC is &lt; 2 cm or &gt; 2 cm.</p>
-                    
-                    <div class="input-group">
-                        <label for="ivcDropdown">IVC Diameter:</label>
-                        <select id="ivcDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="<2cm">IVC &lt; 2 cm</option>
-                            <option value=">2cm">IVC &gt; 2 cm</option>
-                        </select>
-                    </div>
-                </div>
+    <select id="hepaticDropdown">
+      <option value="">-- Select --</option>
+      <option value="HV Normal">HV Normal</option>
+      <option value="HV Mild">HV Mild</option>
+      <option value="HV Severe">HV Severe</option>
+      <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+    </select>
+    <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+      Probability below 50%. Please upload a higher quality image.
+    </div>
+  </section>
 
-                <!-- STEP 2: Hepatic Vein -->
-                <div class="step-section" id="step2">
-                    <div class="step-number">2</div>
-                    <h2>Hepatic Vein Image Upload</h2>
-                    <p class="step-instructions">
-                        Upload your Hepatic Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
-                    </p>
-                    
-                    <!-- Model status for Hepatic Vein -->
-                    <div id="hepaticModelStatus" class="model-status">
-                        Ready for classification via Vertex AI
-                    </div>
+  <script>
+    /********************************************************
+     * 1) Confirm PHI
+     ********************************************************/
+    function confirmPHIUpload(inputId) {
+      const message = "Confirm that this image does NOT contain PHI (Protected Health Info).";
+      if (confirm(message)) {
+        document.getElementById(inputId).click();
+      }
+    }
 
-                    <div class="upload-area" onclick="confirmPHIUpload('hepaticImageUpload')">
-                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <p class="upload-text">Click to upload a Hepatic Vein image</p>
-                        <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
-                    </div>
-                    <img id="hepaticPreview" class="image-preview" alt="Hepatic Preview">
+    /********************************************************
+     * 2) Convert <img> to Base64
+     ********************************************************/
+    function convertImgToBase64(imgEl) {
+      return new Promise((resolve, reject) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgEl.naturalWidth;
+        canvas.height = imgEl.naturalHeight;
+        canvas.getContext('2d').drawImage(imgEl, 0, 0);
+        
+        const dataURL = canvas.toDataURL('image/png'); 
+        // dataURL -> "data:image/png;base64,iVBOR..."
+        const base64 = dataURL.replace(/^data:image\/(png|jpeg);base64,/, '');
+        resolve(base64);
+      });
+    }
 
-                    <!-- Recognition result for Hepatic -->
-                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
-                    <div class="top-results" id="hepaticTopResults"></div>
-                    
-                    <!-- Hepatic Dropdown -->
-                    <div class="input-group">
-                        <label for="hepaticDropdown">Hepatic Vein Classification (Autofilled if &gt;50%):</label>
-                        <select id="hepaticDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="HV Normal">HV Normal</option>
-                            <option value="HV Mild">HV Mild</option>
-                            <option value="HV Severe">HV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                        </select>
-                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
-                </div>
+    /********************************************************
+     * 3) Classify with Vertex AI (Hepatic Only)
+     ********************************************************/
+    async function classifyImageViaVertexAi(imgEl, labelSet, resultId, topResultsId, dropdownId, errorNoteId) {
+      try {
+        // A) Convert to base64
+        const base64Image = await convertImgToBase64(imgEl);
 
-                <!-- STEP 3: Portal Vein -->
-                <div class="step-section" id="step3">
-                    <div class="step-number">3</div>
-                    <h2>Portal Vein Image Upload</h2>
-                    <p class="step-instructions">
-                        Upload your Portal Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
-                    </p>
-                    
-                    <!-- Model status for Portal Vein -->
-                    <div id="portalModelStatus" class="model-status">
-                        Ready for classification via external API (placeholder)
-                    </div>
-
-                    <div class="upload-area" onclick="confirmPHIUpload('portalImageUpload')">
-                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <p class="upload-text">Click to upload a Portal Vein image</p>
-                        <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
-                    </div>
-                    <img id="portalPreview" class="image-preview" alt="Portal Preview">
-
-                    <!-- Recognition result for Portal -->
-                    <div class="step-result" id="portalResult">Portal recognition result will appear here...</div>
-                    <div class="top-results" id="portalTopResults"></div>
-                    
-                    <!-- Portal Dropdown -->
-                    <div class="input-group">
-                        <label for="portalDropdown">Portal Vein Classification (Autofilled if &gt;50%):</label>
-                        <select id="portalDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="PV Normal">PV Normal</option>
-                            <option value="PV Mild">PV Mild</option>
-                            <option value="PV Severe">PV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                        </select>
-                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 4: Renal Vein -->
-                <div class="step-section" id="step4">
-                    <div class="step-number">4</div>
-                    <h2>Renal Vein Image Upload</h2>
-                    <p class="step-instructions">
-                        Upload your Renal Vein ultrasound image. <strong>Do NOT upload PHI.</strong>
-                    </p>
-                    
-                    <!-- Model status for Renal Vein -->
-                    <div id="renalModelStatus" class="model-status">
-                        Ready for classification via external API (placeholder)
-                    </div>
-
-                    <div class="upload-area" onclick="confirmPHIUpload('renalImageUpload')">
-                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <p class="upload-text">Click to upload a Renal Vein image</p>
-                        <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
-                    </div>
-                    <img id="renalPreview" class="image-preview" alt="Renal Preview">
-
-                    <!-- Recognition result for Renal -->
-                    <div class="step-result" id="renalResult">Renal recognition result will appear here...</div>
-                    <div class="top-results" id="renalTopResults"></div>
-                    
-                    <!-- Renal Dropdown -->
-                    <div class="input-group">
-                        <label for="renalDropdown">Renal Vein Classification (Autofilled if &gt;50%):</label>
-                        <select id="renalDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="RV Normal">RV Normal</option>
-                            <option value="RV Mild">RV Mild</option>
-                            <option value="RV Severe">RV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                        </select>
-                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Calculate & Reset Buttons + Score Display -->
-                <div class="step-section">
-                    <div class="button-group">
-                        <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                        <button onclick="resetAll()" class="button">Reset</button>
-                    </div>
-                    <h3>Total VExUS Score: <span id="total-score">--</span></h3>
-                </div>
-
-            </div><!-- closes .inner -->
-        </div><!-- closes #main -->
-    </div><!-- closes #wrapper -->
-
-    <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-    <script src="html5up-phantom/assets/js/browser.min.js"></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-    <script src="html5up-phantom/assets/js/util.js"></script>
-    <script src="html5up-phantom/assets/js/main.js"></script>
-
-    <script>
-        /************************************
-         * 1) PHI Confirmation
-         ************************************/
-        function confirmPHIUpload(inputId) {
-            const message = "Please confirm that the image you are about to upload does NOT contain any Protected Health Information (PHI).";
-            if (confirm(message)) {
-                document.getElementById(inputId).click();
-            }
+        // B) Get token from /refresh-token
+        const tokenResp = await fetch('/refresh-token', { method: 'POST' });
+        if (!tokenResp.ok) {
+          throw new Error(`Token request failed: ${tokenResp.statusText}`);
+        }
+        const tokenData = await tokenResp.json();
+        if (!tokenData.access_token) {
+          throw new Error("No access_token returned from /refresh-token");
         }
 
-        /************************************
-         * 2) Convert <img> to Base64
-         ************************************/
-        function convertImgToBase64(imgElement) {
-            return new Promise((resolve, reject) => {
-                const canvas = document.createElement("canvas");
-                canvas.width = imgElement.naturalWidth;
-                canvas.height = imgElement.naturalHeight;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(imgElement, 0, 0);
+        // Turn hepatic model to green
+        const hepaticStatus = document.getElementById('hepaticModelStatus');
+        hepaticStatus.classList.add('model-ready');
+        hepaticStatus.textContent = "Hepatic Model Ready!";
 
-                const dataURL = canvas.toDataURL("image/png"); 
-                const base64String = dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-                resolve(base64String);
-            });
-        }
+        // C) Call your Vertex AI endpoint
+        // Replace PROJECT_ID, ENDPOINT_ID with your real IDs
+        const endpointUrl = 'https://us-central1-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/us-central1/endpoints/ENDPOINT_ID:predict';
 
-        /************************************
-         * 3) CLASSIFY VIA VERTEX AI (Hepatic)
-         ************************************/
-        async function classifyImageViaVertexAi(imgElement, labelSet, resultId, topResultsId, dropdownId, errorNoteId) {
-            try {
-                // Convert <img> to base64
-                const base64Image = await convertImgToBase64(imgElement);
+        const body = {
+          instances: [
+            { content: base64Image }
+          ]
+        };
 
-                // Fetch an access token
-                const tokenRes = await fetch('/refresh-token', { method: 'POST' });
-                const tokenData = await tokenRes.json();
-                const accessToken = tokenData.access_token;
-                if (!accessToken) {
-                    throw new Error("No access token from /refresh-token");
-                }
-
-                // (A) Mark model as ready (green)
-                const hepaticStatus = document.getElementById('hepaticModelStatus');
-                hepaticStatus.textContent = "Hepatic Model Ready!";
-                hepaticStatus.classList.add('model-ready');
-
-                // (B) Call Vertex AI endpoint
-                const endpointUrl = 'https://us-central1-aiplatform.googleapis.com/v1/projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048:predict';
-
-                const body = {
-                    instances: [
-                        { content: base64Image }
-                    ]
-                };
-
-                const vertexRes = await fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + accessToken
-                    },
-                    body: JSON.stringify(body)
-                });
-
-                if (!vertexRes.ok) {
-                    const errTxt = await vertexRes.text();
-                    throw new Error("Vertex AI Error: " + errTxt);
-                }
-
-                // Parse the response
-                const vertexData = await vertexRes.json();
-                if (!vertexData.predictions || !vertexData.predictions[0]) {
-                    throw new Error("No predictions returned from Vertex AI");
-                }
-
-                // Example: "confidences": [0.82, 0.15, 0.03]
-                const confidences = vertexData.predictions[0].confidences; 
-                const combined = labelSet.map((label, idx) => ({
-                    label,
-                    probability: confidences[idx]
-                }));
-
-                // Sort by probability
-                combined.sort((a, b) => b.probability - a.probability);
-                const top1 = combined[0];
-
-                // Show top1
-                const top1Percent = (top1.probability * 100).toFixed(1);
-                document.getElementById(resultId).textContent = 
-                    `Top prediction: ${top1.label} (${top1Percent}%)`;
-
-                // Show top 3
-                const top3 = combined.slice(0, 3)
-                    .map(item => `${item.label}: ${(item.probability * 100).toFixed(1)}%`)
-                    .join("<br>");
-                document.getElementById(topResultsId).innerHTML =
-                    `<strong>Top 3 Predictions:</strong><br>${top3}`;
-
-                // Autofill if > 0.5
-                const dropdown = document.getElementById(dropdownId);
-                const errorNote = document.getElementById(errorNoteId);
-                if (parseFloat(top1.probability) > 0.5) {
-                    let matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
-                    if (matchedOption) {
-                        dropdown.value = matchedOption.value;
-                    }
-                    errorNote.style.display = "none";
-                } else {
-                    dropdown.value = "Confidence of waveform < 50%";
-                    errorNote.style.display = "block";
-                }
-
-            } catch (err) {
-                console.error("Error during classification via Vertex AI:", err);
-                document.getElementById(resultId).textContent = 
-                    "Error during classification: " + err.message;
-            }
-        }
-
-        /************************************
-         * 4) classifyImageViaApi() for Portal & Renal
-         ************************************/
-        async function classifyImageViaApi(imgElement, labelSet, resultId, topResultsId, dropdownId, errorNoteId) {
-            try {
-                const base64Image = await convertImgToBase64(imgElement);
-
-                const requestBody = { image: base64Image };
-
-                // Placeholder external API call
-                const response = await fetch("https://example.com/api/classify", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.statusText}`);
-                }
-
-                const apiResult = await response.json();
-
-                // Sort predictions
-                const sorted = apiResult.predictions.sort((a, b) => b.probability - a.probability);
-                const top1 = sorted[0];
-
-                const top1Percent = (top1.probability * 100).toFixed(1);
-                document.getElementById(resultId).textContent = 
-                    `Top prediction: ${top1.label} (${top1Percent}%)`;
-
-                const top3 = sorted.slice(0, 3)
-                    .map(item => `${item.label}: ${(item.probability * 100).toFixed(1)}%`)
-                    .join("<br>");
-                document.getElementById(topResultsId).innerHTML =
-                    `<strong>Top 3 Predictions:</strong><br>${top3}`;
-
-                const dropdown = document.getElementById(dropdownId);
-                const errorNote = document.getElementById(errorNoteId);
-                if (parseFloat(top1.probability) > 0.5) {
-                    let matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
-                    if (matchedOption) {
-                        dropdown.value = matchedOption.value;
-                    }
-                    errorNote.style.display = "none";
-                } else {
-                    dropdown.value = "Confidence of waveform < 50%";
-                    errorNote.style.display = "block";
-                }
-
-            } catch (err) {
-                console.error("Error during classification via API:", err);
-                document.getElementById(resultId).textContent = 
-                    "Error during classification: " + err.message;
-            }
-        }
-
-        /************************************
-         * 5) Event Listeners for File Inputs
-         ************************************/
-        // HEPATIC -> Vertex AI
-        document.getElementById('hepaticImageUpload').addEventListener('change', function() {
-            const file = this.files[0];
-            if (!file) return;
-            const previewImg = document.getElementById('hepaticPreview');
-            previewImg.src = URL.createObjectURL(file);
-            previewImg.style.display = 'block';
-            previewImg.onload = function() {
-                const hepaticLabels = ["HV Normal", "HV Mild", "HV Severe"];
-                classifyImageViaVertexAi(
-                    previewImg,
-                    hepaticLabels,
-                    'hepaticResult',
-                    'hepaticTopResults',
-                    'hepaticDropdown',
-                    'hepaticErrorNote'
-                );
-            };
+        const vertexRes = await fetch(endpointUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + tokenData.access_token
+          },
+          body: JSON.stringify(body)
         });
 
-        // PORTAL -> example.com
-        document.getElementById('portalImageUpload').addEventListener('change', function() {
-            const file = this.files[0];
-            if (!file) return;
-            const previewImg = document.getElementById('portalPreview');
-            previewImg.src = URL.createObjectURL(file);
-            previewImg.style.display = 'block';
-            previewImg.onload = function() {
-                const portalLabels = ["PV Normal", "PV Mild", "PV Severe"];
-                classifyImageViaApi(
-                    previewImg,
-                    portalLabels,
-                    'portalResult',
-                    'portalTopResults',
-                    'portalDropdown',
-                    'portalErrorNote'
-                );
-            };
-        });
-
-        // RENAL -> example.com
-        document.getElementById('renalImageUpload').addEventListener('change', function() {
-            const file = this.files[0];
-            if (!file) return;
-            const previewImg = document.getElementById('renalPreview');
-            previewImg.src = URL.createObjectURL(file);
-            previewImg.style.display = 'block';
-            previewImg.onload = function() {
-                const renalLabels = ["RV Normal", "RV Mild", "RV Severe"];
-                classifyImageViaApi(
-                    previewImg,
-                    renalLabels,
-                    'renalResult',
-                    'renalTopResults',
-                    'renalDropdown',
-                    'renalErrorNote'
-                );
-            };
-        });
-
-        /************************************
-         * 6) VExUS Score Calculation
-         ************************************/
-        function calculateVexusScore() {
-            const ivcSelection = document.getElementById('ivcDropdown').value;
-            let ivcValue = null; 
-            if (ivcSelection === "<2cm") ivcValue = 1.9;
-            if (ivcSelection === ">2cm") ivcValue = 2.1;
-            
-            const hvChoice = document.getElementById('hepaticDropdown').value;
-            const pvChoice = document.getElementById('portalDropdown').value;
-            const rvChoice = document.getElementById('renalDropdown').value;
-
-            // If IVC wasn't selected, we cannot proceed
-            if (!ivcValue) {
-                document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
-                return;
-            }
-
-            // If any waveforms < 50%
-            if (
-                hvChoice === "Confidence of waveform < 50%" ||
-                pvChoice === "Confidence of waveform < 50%" ||
-                rvChoice === "Confidence of waveform < 50%"
-            ) {
-                document.getElementById('total-score').textContent = "Cannot Calculate Score";
-                return;
-            }
-
-            let hvScore = 0;
-            if (hvChoice === "HV Mild")   hvScore = 1;
-            if (hvChoice === "HV Severe") hvScore = 2;
-
-            let pvScore = 0;
-            if (pvChoice === "PV Mild")   pvScore = 1;
-            if (pvChoice === "PV Severe") pvScore = 2;
-
-            let rvScore = 0;
-            if (rvChoice === "RV Mild")   rvScore = 1;
-            if (rvChoice === "RV Severe") rvScore = 2;
-
-            let severityCount = 0;
-            if (hvScore === 2) severityCount++;
-            if (pvScore === 2) severityCount++;
-            if (rvScore === 2) severityCount++;
-
-            let vexusGrade;
-            if (ivcValue < 2) {
-                vexusGrade = "Grade 0: No Congestion";
-            } else if (severityCount === 0) {
-                vexusGrade = "Grade 1: Mild Congestion";
-            } else if (severityCount === 1) {
-                vexusGrade = "Grade 2: Moderate Congestion";
-            } else {
-                vexusGrade = "Grade 3: Severe Congestion";
-            }
-
-            document.getElementById('total-score').textContent = vexusGrade;
+        if (!vertexRes.ok) {
+          const errText = await vertexRes.text();
+          throw new Error(`Vertex error: ${errText}`);
         }
 
-        /************************************
-         * 7) Reset
-         ************************************/
-        function resetAll() {
-            // Clear IVC
-            document.getElementById('ivcDropdown').value = "";
-            document.getElementById('total-score').textContent = "--";
-
-            // Clear waveforms
-            document.getElementById('hepaticDropdown').value = "";
-            document.getElementById('portalDropdown').value = "";
-            document.getElementById('renalDropdown').value = "";
-
-            // Clear images & text
-            let steps = [
-                {
-                    dropdown: 'hepaticDropdown',
-                    preview: 'hepaticPreview',
-                    result: 'hepaticResult',
-                    top: 'hepaticTopResults',
-                    error: 'hepaticErrorNote',
-                    input: 'hepaticImageUpload'
-                },
-                {
-                    dropdown: 'portalDropdown',
-                    preview: 'portalPreview',
-                    result: 'portalResult',
-                    top: 'portalTopResults',
-                    error: 'portalErrorNote',
-                    input: 'portalImageUpload'
-                },
-                {
-                    dropdown: 'renalDropdown',
-                    preview: 'renalPreview',
-                    result: 'renalResult',
-                    top: 'renalTopResults',
-                    error: 'renalErrorNote',
-                    input: 'renalImageUpload'
-                }
-            ];
-
-            steps.forEach(s => {
-                document.getElementById(s.preview).style.display = "none";
-                document.getElementById(s.result).textContent = s.dropdown + " recognition result will appear here...";
-                document.getElementById(s.top).textContent = "";
-                document.getElementById(s.error).style.display = "none";
-                document.getElementById(s.input).value = "";
-            });
-
-            // Optionally revert hepatic to yellow again
-            const hepaticStatus = document.getElementById('hepaticModelStatus');
-            hepaticStatus.textContent = "Ready for classification via Vertex AI";
-            hepaticStatus.classList.remove('model-ready');
+        const vertexData = await vertexRes.json();
+        if (!vertexData.predictions || !vertexData.predictions[0]) {
+          throw new Error("No predictions returned from Vertex AI");
         }
-    </script>
+
+        // Suppose "confidences": [0.8, 0.15, 0.05]
+        const confs = vertexData.predictions[0].confidences;
+        const combined = labelSet.map((label, idx) => ({
+          label,
+          probability: confs[idx]
+        }));
+
+        combined.sort((a,b) => b.probability - a.probability);
+        const top1 = combined[0];
+        const top1Pct = (top1.probability * 100).toFixed(1);
+
+        // Show result
+        document.getElementById(resultId).textContent = `Top: ${top1.label} (${top1Pct}%)`;
+
+        const top3Html = combined.slice(0, 3)
+          .map(x => `${x.label}: ${(x.probability * 100).toFixed(1)}%`)
+          .join('<br>');
+        document.getElementById(topResultsId).innerHTML = `<strong>Top 3:</strong><br>${top3Html}`;
+
+        // Autofill if > 50%
+        const dropdown = document.getElementById(dropdownId);
+        const errorNote = document.getElementById(errorNoteId);
+
+        if (top1.probability > 0.5) {
+          // Attempt to match label
+          const opt = [...dropdown.options].find(o => o.value === top1.label);
+          if (opt) dropdown.value = opt.value;
+          errorNote.style.display = "none";
+        } else {
+          dropdown.value = "Confidence of waveform < 50%";
+          errorNote.style.display = "block";
+        }
+      } catch(err) {
+        console.error("Classification Error:", err);
+        document.getElementById(resultId).textContent = "Error: " + err.message;
+      }
+    }
+
+    /********************************************************
+     * 4) Listen for Hepatic File Upload
+     ********************************************************/
+    document.getElementById('hepaticImageInput').addEventListener('change', function(){
+      const file = this.files[0];
+      if (!file) return;
+
+      // Show preview
+      const preview = document.getElementById('hepaticPreview');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+
+      // Once loaded, call classify
+      preview.onload = function() {
+        const hepaticLabels = ["HV Normal", "HV Mild", "HV Severe"];
+        classifyImageViaVertexAi(
+          preview, 
+          hepaticLabels, 
+          'hepaticResult', 
+          'hepaticTopResults', 
+          'hepaticDropdown', 
+          'hepaticErrorNote'
+        );
+      };
+    });
+  </script>
 </body>
 </html>
