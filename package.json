@@ -2,6 +2,7 @@
   "name": "vexus-atlas",
   "version": "1.0.0",
   "description": "An example Node.js app for VExUS AI",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
