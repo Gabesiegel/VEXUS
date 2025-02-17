@@ -11,7 +11,8 @@ const app = express();
 
 /**
  * Configure Vertex AI client
- * Use default Application Default Credentials (no manual key needed)
+ * Using Application Default Credentials
+ * And specifying project + endpoint
  */
 const options = {
   apiEndpoint: 'us-central1-aiplatform.googleapis.com',
@@ -21,25 +22,30 @@ const predictionClient = new PredictionServiceClient(options);
 console.log('✅ Successfully initialized Vertex AI client');
 
 /**
- * Serve static files from the React 'build' folder
- * (Make sure `npm run build` actually creates `build/`).
+ * Serve the compiled React files from the "build" directory
+ * Ensure you actually run "npm run build" so "build/" is created
  */
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
-// Prediction API endpoint
+/**
+ * Prediction API endpoint
+ */
 app.post('/predict', async (req, res) => {
   try {
     console.log('📡 Received prediction request:', req.body);
 
-    const endpointPath = process.env.VERTEX_AI_ENDPOINT; // from Cloud Run env var
+    // The environment variable must be set in Cloud Run
+    // e.g. --set-env-vars=VERTEX_AI_ENDPOINT=projects/PROJECT_ID/locations/us-central1/endpoints/ENDPOINT_ID
+    const endpointPath = process.env.VERTEX_AI_ENDPOINT;
     console.log('🌍 Using Vertex AI endpoint:', endpointPath);
 
+    // Build the request
     const request = {
       name: endpointPath,
       instances: [
         {
-          content: req.body.content,
+          content: req.body.content,  // base64 or relevant data
           mimeType: 'image/jpeg'
         }
       ]
@@ -49,14 +55,15 @@ app.post('/predict', async (req, res) => {
     const [response] = await predictionClient.predict(request);
     console.log('✅ Vertex AI response:', response);
 
+    // Format the response for your frontend
     const formattedResponse = {
       predictions: [{
         confidences: response.predictions?.[0]?.confidences || [],
         labels: response.predictions?.[0]?.displayNames || []
       }]
     };
-
     res.json(formattedResponse);
+
   } catch (error) {
     console.error('❌ Error:', error);
     res.status(500).json({
@@ -67,15 +74,15 @@ app.post('/predict', async (req, res) => {
 });
 
 /**
- * Catch-all route for client-side routing
- * If your React app uses React Router, this ensures deep links still load.
+ * Catch-all route for client-side React Router
+ * This ensures any unrecognized route returns index.html
  */
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 /**
- * Start listening on port 8080 (or the value of process.env.PORT)
+ * Start listening on the port set by Cloud Run (8080 by default)
  */
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
