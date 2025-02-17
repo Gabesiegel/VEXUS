@@ -1,17 +1,13 @@
 steps:
-  # Step 1: Clone the GitHub repository
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY.git']
-
-  # Step 2: Install dependencies
+  # Step 1: Install dependencies
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
 
-  # Step 3: Build the frontend (creates the `dist/` folder)
+  # Step 2: Build React App
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build']
 
-  # Step 4: Deploy to Cloud Run
+  # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
       'run', 'deploy', 'vexus-web',
@@ -20,5 +16,3 @@ steps:
       '--region', 'us-central1',
       '--set-env-vars', 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
     ]
-
-timeout: '1600s'
