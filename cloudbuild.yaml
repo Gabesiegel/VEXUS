@@ -1,14 +1,24 @@
 steps:
-  # Build the container image
-  - name: 'gcr.io/cloud-builders/docker'
-    dir: 'VEXUS'
-    args: ['build', '-t', 'gcr.io/plucky-weaver-450819-k7/vexus-ai', '.']
-  
-  # Push the container image to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/plucky-weaver-450819-k7/vexus-ai']
+  # Step 1: Clone the GitHub repository
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY.git']
 
-images:
-  - 'gcr.io/plucky-weaver-450819-k7/vexus-ai'
+  # Step 2: Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
 
-timeout: '1800s'
+  # Step 3: Build the frontend (creates the `dist/` folder)
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'vexus-web',
+      '--source', '.',
+      '--allow-unauthenticated',
+      '--region', 'us-central1',
+      '--set-env-vars', 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
+    ]
+
+timeout: '1600s'
