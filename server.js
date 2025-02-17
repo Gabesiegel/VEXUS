@@ -48,7 +48,7 @@ app.post('/predict', async (req, res) => {
         const token = await client.getAccessToken();
 
         const endpointPath = 
-            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808`;
+            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808`;
 
         // Make prediction request
         const response = await fetch(
