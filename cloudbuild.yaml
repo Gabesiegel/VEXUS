@@ -2,20 +2,32 @@ steps:
   # Step 1: Install dependencies
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
-  # Step 2: Build React app (create build folder)
+
+  # Step 2: Build the React app
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build']
-  # Step 3: Deploy to Cloud Run
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - run
-      - deploy
-      - vexus-web
-      - --source=.
-      - --region=us-central1
-      - --allow-unauthenticated
-      - --set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808
-      # If you want to specify a particular Docker image, see notes below.
 
-# Optional: Adjust logs/timeouts if desired
-timeout: "800s"
+  # (Optional) Step 3: If you need to build a Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build', '-t', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE',
+      '.'
+    ]
+
+  # (Optional) Step 4: Push the image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE'
+    ]
+
+  # Step 5: Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'vexus-web',
+      '--image', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE',
+      '--region', 'us-central1',
+      '--allow-unauthenticated'
+    ]
+
+# Increase timeout if needed
+timeout: "600s"
