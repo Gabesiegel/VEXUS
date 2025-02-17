@@ -14,15 +14,15 @@ const auth = new GoogleAuth({
     scopes: ['https://www.googleapis.com/auth/cloud-platform']
 });
 
-// Initialize Vertex AI client
+// Initialize Vertex AI client with your project details
 const vertexAI = new PredictionServiceClient({
     projectId: 'plucky-weaver-450819-k7',
     apiEndpoint: 'us-central1-aiplatform.googleapis.com'
 });
 
 // Middleware
-app.use(express.json({ limit: '50mb' }));
-app.use(express.static(__dirname));
+app.use(express.json({ limit: '50mb' }));  // Increased limit for image handling
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Auth token endpoint
 app.get('/auth/token', async (req, res) => {
@@ -45,7 +45,7 @@ app.post('/predict', async (req, res) => {
         const client = await auth.getClient();
         const token = await client.getAccessToken();
         const endpointPath = 
-            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808`;
+            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808`;
         
         const response = await fetch(
             `https://us-central1-aiplatform.googleapis.com/v1/${endpointPath}:predict`,
@@ -81,13 +81,9 @@ app.post('/predict', async (req, res) => {
     }
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Server error:', err);
-    res.status(500).json({
-        error: 'Internal server error',
-        message: err.message
-    });
+// Serve React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // Health check endpoint
@@ -99,7 +95,7 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
-    console.log(`✅ Vertex AI client initialized`);
+    console.log(`✅ Vertex AI client initialized for project: plucky-weaver-450819-k7`);
 });
 
 // Graceful shutdown
