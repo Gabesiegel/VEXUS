@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
-// ESM helper for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,7 +18,7 @@ const options = {
   projectId: 'plucky-weaver-450819-k7'
 };
 
-// Use credentials only when running locally
+// Use credentials only if running locally
 if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
   options.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 }
@@ -28,9 +27,7 @@ const predictionClient = new PredictionServiceClient(options);
 console.log('✅ Successfully initialized Vertex AI client');
 
 app.use(express.json());
-
-// Serve static frontend files
-app.use(express.static('dist'));
+app.use(express.static('dist')); // Serve React frontend
 
 // Prediction API endpoint
 app.post('/predict', async (req, res) => {
@@ -42,14 +39,12 @@ app.post('/predict', async (req, res) => {
 
     const request = {
       name: endpointPath,
-      payload: {
-        instances: [
-          {
-            content: req.body.content,
-            mimeType: 'image/jpeg'
-          }
-        ]
-      }
+      instances: [
+        {
+          content: req.body.content,
+          mimeType: 'image/jpeg'
+        }
+      ]
     };
 
     console.log('🛠 Sending request to Vertex AI...');
@@ -70,7 +65,7 @@ app.post('/predict', async (req, res) => {
   }
 });
 
-// Fallback route for React apps
+// Serve frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
