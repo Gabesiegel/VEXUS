@@ -3,11 +3,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { GoogleAuth } from 'google-auth-library';
-import fetch from 'node-fetch';  // Add this for fetch in Node.js
+import fetch from 'node-fetch';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
 
 // Initialize Google Auth
@@ -22,7 +21,7 @@ const vertexAI = new PredictionServiceClient({
 });
 
 // Middleware
-app.use(express.json({ limit: '50mb' }));  // Increased limit for image handling
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static(__dirname));
 
 // Auth token endpoint
@@ -43,14 +42,11 @@ app.get('/auth/token', async (req, res) => {
 // Prediction endpoint
 app.post('/predict', async (req, res) => {
     try {
-        // Get auth token
         const client = await auth.getClient();
         const token = await client.getAccessToken();
-
         const endpointPath = 
-            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808`;
-
-        // Make prediction request
+            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808`;
+        
         const response = await fetch(
             `https://us-central1-aiplatform.googleapis.com/v1/${endpointPath}:predict`,
             {
@@ -76,7 +72,6 @@ app.post('/predict', async (req, res) => {
 
         const predictionResult = await response.json();
         res.json(predictionResult);
-
     } catch (error) {
         console.error('Prediction error:', error);
         res.status(500).json({
@@ -102,7 +97,7 @@ app.get('/health', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
     console.log(`✅ Vertex AI client initialized`);
 });
