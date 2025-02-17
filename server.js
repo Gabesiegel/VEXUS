@@ -1,55 +1,102 @@
-/****************************************************************
- * server.js
- * - /refresh-token returns JSON (no HTML)
- * - CORS enabled so you can call from any domain
- * - Serves static files (including calculator.html)
- ****************************************************************/
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const { GoogleAuth } = require('google-auth-library');
+import express from 'express'
+import { PredictionServiceClient } from '@google-cloud/aiplatform'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
 
-const app = express();
+// Load environment variables
+dotenv.config()
 
-// 1) Enable CORS for all routes
-app.use(cors());
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-// 2) Parse JSON bodies
-app.use(express.json());
+const app = express()
+const options = {
+  apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+  projectId: 'plucky-weaver-450819-k7',
+  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+};
 
-// 3) /refresh-token route
-app.post('/refresh-token', async (req, res) => {
+const predictionClient = new PredictionServiceClient(options);
+
+console.log('Successfully initialized Vertex AI client');
+
+app.use(express.json())
+app.use(express.static('dist'))
+
+// Prediction endpoint
+app.post('/predict', async (req, res) => {
   try {
-    // Your service account key
-    const auth = new GoogleAuth({
-      keyFilename: path.join(__dirname, 'credentials', 'key.json'),
-      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    console.log('Received prediction request:', req.body);
+    
+    const endpointPath = process.env.VERTEX_AI_ENDPOINT;
+    console.log('Using endpoint:', endpointPath);
+
+    console.log('Received request body:', req.body);
+    
+    // Format request according to Vertex AI Image Classification requirements
+    const request = {
+      name: endpointPath,
+      payload: {
+        instances: [
+          {
+            content: req.body.content,
+            mimeType: 'image/jpeg'
+          }
+        ]
+      }
+    };
+
+    console.log('Making prediction request with payload:', JSON.stringify({
+      name: endpointPath,
+      instanceCount: 1,
+      mimeType: 'image/jpeg'
+    }));
+
+    const [response] = await predictionClient.predict(request);
+    console.log('Received raw response:', response);
+
+    // Format response for frontend
+    const formattedResponse = {
+      predictions: [{
+        confidences: response.predictions?.[0]?.confidences || [],
+        labels: response.predictions?.[0]?.displayNames || []
+      }]
+    };
+
+    console.log('Sending formatted response:', formattedResponse);
+    res.json(formattedResponse);
+  } catch (error) {
+    console.error('Error details:', {
+      code: error.code,
+      details: error.details,
+      metadata: error.metadata,
+      stack: error.stack
     });
 
-    // Get token
-    const client = await auth.getClient();
-    const tokenResponse = await client.getAccessToken();
-    if (!tokenResponse.token) {
-      return res.status(500).json({ error: 'No token returned from GoogleAuth' });
-    }
-
-    // Return JSON
-    res.json({
-      access_token: tokenResponse.token,
-      expires_in: 3600
+    res.status(500).json({ 
+      error: 'Failed to make prediction',
+      message: error.message,
+      details: error.details || 'No additional details available'
     });
-
-  } catch (err) {
-    console.error('Error in /refresh-token:', err);
-    res.status(500).json({ error: err.message });
   }
 });
 
-// 4) Serve static files, e.g. your calculator.html
-app.use(express.static(__dirname));
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message
+  })
+})
 
-// 5) Start server
-const PORT = process.env.PORT || 3000;
+// Serve static files from the dist directory
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
+
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
