@@ -1,43 +1,45 @@
-import express from 'express'
-import { PredictionServiceClient } from '@google-cloud/aiplatform'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import dotenv from 'dotenv'
+import express from 'express';
+import { PredictionServiceClient } from '@google-cloud/aiplatform';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
 // Load environment variables
-dotenv.config()
+dotenv.config();
 
-// ESM helper to get __dirname
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// ESM helper for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const app = express()
+const app = express();
 
 // Configure Vertex AI Prediction client
 const options = {
   apiEndpoint: 'us-central1-aiplatform.googleapis.com',
-  projectId: 'plucky-weaver-450819-k7',
-  // If you're running on Cloud Run with a service account, you can omit keyFilename
-  // and rely on Application Default Credentials. But if you still need the key file:
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+  projectId: 'plucky-weaver-450819-k7'
 };
+
+// Use credentials only when running locally
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  options.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+}
+
 const predictionClient = new PredictionServiceClient(options);
-console.log('Successfully initialized Vertex AI client');
+console.log('✅ Successfully initialized Vertex AI client');
 
-app.use(express.json())
+app.use(express.json());
 
-// Serve static files from "dist" folder (e.g. your React build)
-app.use(express.static('dist'))
+// Serve static frontend files
+app.use(express.static('dist'));
 
-// Prediction endpoint
+// Prediction API endpoint
 app.post('/predict', async (req, res) => {
   try {
-    console.log('Received prediction request:', req.body);
-    
-    const endpointPath = process.env.VERTEX_AI_ENDPOINT;
-    console.log('Using endpoint:', endpointPath);
+    console.log('📡 Received prediction request:', req.body);
 
-    // Format request for Vertex AI
+    const endpointPath = process.env.VERTEX_AI_ENDPOINT;
+    console.log('🌍 Using Vertex AI endpoint:', endpointPath);
+
     const request = {
       name: endpointPath,
       payload: {
@@ -50,16 +52,10 @@ app.post('/predict', async (req, res) => {
       }
     };
 
-    console.log('Making prediction request with payload:', JSON.stringify({
-      name: endpointPath,
-      instanceCount: 1,
-      mimeType: 'image/jpeg'
-    }));
-
+    console.log('🛠 Sending request to Vertex AI...');
     const [response] = await predictionClient.predict(request);
-    console.log('Received raw response:', response);
+    console.log('✅ Vertex AI response:', response);
 
-    // Format response for frontend
     const formattedResponse = {
       predictions: [{
         confidences: response.predictions?.[0]?.confidences || [],
@@ -67,40 +63,20 @@ app.post('/predict', async (req, res) => {
       }]
     };
 
-    console.log('Sending formatted response:', formattedResponse);
     res.json(formattedResponse);
   } catch (error) {
-    console.error('Error details:', {
-      code: error.code,
-      details: error.details,
-      metadata: error.metadata,
-      stack: error.stack
-    });
-
-    res.status(500).json({ 
-      error: 'Failed to make prediction',
-      message: error.message,
-      details: error.details || 'No additional details available'
-    });
+    console.error('❌ Error:', error);
+    res.status(500).json({ error: 'Failed to make prediction', message: error.message });
   }
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: err.message
-  })
-})
-
-// Fallback to index.html for client-side routing (React, etc.)
+// Fallback route for React apps
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-})
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
-// IMPORTANT: Use PORT=8080 for Cloud Run, or fallback to 3000 locally
-const PORT = process.env.PORT || 8080
+// Ensure correct Cloud Run port
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  console.log(`🚀 Server running on port ${PORT}`);
+});
