@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -12,7 +11,7 @@
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <style>
-        /* Overall container */
+        /* Keeping all your original CSS unchanged */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -24,7 +23,6 @@
             text-align: center;
         }
         
-        /* Step section with light grey background */
         .step-section {
             background: #f5f5f5;
             padding: 20px;
@@ -33,7 +31,6 @@
             text-align: center;
         }
 
-        /* Larger step number circle centered above the step title */
         .step-number {
             width: 80px;
             height: 80px;
@@ -51,14 +48,12 @@
             margin-bottom: 15px;
         }
         
-        /* Gray instruction text for each step */
         .step-instructions {
             font-size: 1em;
             color: #555;
             margin-bottom: 20px;
         }
         
-        /* Upload area: simpler, more modern look */
         .upload-area {
             border: 2px dashed #ccc;
             border-radius: 10px;
@@ -69,6 +64,7 @@
             transition: all 0.2s ease;
             max-width: 600px;
         }
+        
         .upload-area:hover {
             border-color: #999;
         }
@@ -85,12 +81,10 @@
             margin-bottom: 15px;
         }
 
-        /* Hide the real file input */
         .file-input {
             display: none;
         }
 
-        /* Preview image */
         .image-preview {
             max-width: 100%;
             max-height: 250px;
@@ -100,7 +94,6 @@
             border-radius: 5px;
         }
 
-        /* Model status under each upload */
         .model-status {
             width: 90%;
             max-width: 600px;
@@ -111,11 +104,11 @@
             color: #fff;
             font-weight: 500;
         }
+        
         .model-ready {
             background-color: #28a745;
         }
 
-        /* Recognition result text */
         .step-result {
             margin: 10px auto;
             width: 90%;
@@ -123,13 +116,11 @@
             text-align: center;
         }
         
-        /* Confidence text (top 3) */
         .top-results {
             margin: 5px auto 15px auto;
             color: #555;
         }
 
-        /* Autofill dropdown in each step */
         .input-group {
             margin: 15px auto;
             text-align: left;
@@ -149,14 +140,12 @@
             border: 1px solid #ccc;
         }
 
-        /* If can't classify -> show a small note */
         .cannot-calc-note {
             color: #dc3545;
             margin-top: 5px;
             font-size: 0.9em;
         }
 
-        /* Button group for Calc and Reset */
         .button-group {
             display: flex;
             gap: 30px;
@@ -175,7 +164,6 @@
             font-size: 1em;
         }
 
-        /* Main Logo */
         .main-logo {
             width: 400px;
             height: 200px;
@@ -184,26 +172,29 @@
             object-fit: contain;
         }
 
-        /* Sidebar styling from Image Gallery snippet */
         nav#menu {
             background: #ffffff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        
         nav#menu .logo-container {
             padding: 10px;
             display: flex;
             justify-content: center;
         }
+        
         nav#menu h2 {
             color: #888888;
             margin-bottom: 1em;
             font-size: inherit;
         }
+        
         nav#menu ul li {
             border-top: solid 1px rgba(0, 0, 0, 0.1);
             padding: 0.5em 0;
         }
+        
         nav#menu ul li a {
             color: #888888 !important;
             text-decoration: none;
@@ -211,11 +202,11 @@
             font-size: 0.9em;
             transition: color 0.2s ease;
         }
+        
         nav#menu ul li a:hover {
             color: #007bff !important;
         }
 
-        /* Sidebar logo from Image Gallery snippet */
         .sidebar-logo {
             width: 100px;
             height: auto;
@@ -328,8 +319,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- STEP 3: Portal Vein -->
+<!-- STEP 3: Portal Vein -->
                 <div class="step-section" id="step3">
                     <div class="step-number">3</div>
                     <h2>Portal Vein Image Upload</h2>
@@ -424,46 +414,41 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
+        // Configuration
+        const config = {
+            projectId: 'plucky-weaver-450819-k7',
+            location: 'us-central1',
+            endpointId: '401033999995895808'
+        };
+
+        // Model labels for each vein type
+        const modelLabels = {
+            hepatic: ["HV Normal", "HV Mild", "HV Severe"],
+            portal: ["PV Normal", "PV Mild", "PV Severe"],
+            renal: ["RV Normal", "RV Mild", "RV Severe"]
+        };
+
         /**********************************
          * Token Management
          *********************************/
-        let currentToken = {
-            value: 'ya29.a0AXeO80TBJ03eXjLQ5U0bGBR39PdpcoZ3_10SZlJMAtS4iYrTEjcPEOOVH_hki3EWjRq6O_dORUjIkJp2pQpurQmj_Enr_2DZMEgiWilw_Uw4hr986uyGA6CBFtqCqPtWlCdp9HcQ9C5tU3JWW5foo4YOIcwvv4vjGgLeeO1iktNYfIPCB-YF55Zp3-cpZab7AdyMbdcHBgC5SQjWgtBUf67Xf4a7yxZgDT6kwjfHg5VhsKI8ZV8R1VL0bXKoJVXhcJ7h9zrFcTyHoX2-zBn5I4N2Ip7u46_mJUEHCXXyPO4Ji5ENrXzqgdd_lgTZRU3q3K15vHeaFuNMVEOoAy6sF3jYpHTJ5G3DuTCaVq7zE09DHBiO1LrKZAYMGiSIyRJYDx9xUsucgnjKrg50mMyHzv_Ivfuy7YYaCgYKAcESARISFQHGX2MiZgf8ApB0GQKSncq7dhMqSA0422',
-            expiresAt: Date.now() + 3600000 // Token expires in 1 hour
-        };
+        let currentToken = null;
 
-        async function refreshToken() {
+        async function getValidToken() {
             try {
-                const response = await fetch('/refresh-token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
+                const response = await fetch('/auth/token');
                 if (!response.ok) {
-                    throw new Error('Failed to refresh token');
+                    throw new Error('Failed to get auth token');
                 }
-
                 const data = await response.json();
                 currentToken = {
                     value: data.access_token,
                     expiresAt: Date.now() + (data.expires_in * 1000)
                 };
-                
                 return currentToken.value;
             } catch (error) {
-                console.error('Error refreshing token:', error);
+                console.error('Auth error:', error);
                 throw error;
             }
-        }
-
-        async function getValidToken() {
-            // Check if current token is expired or will expire in the next 5 minutes
-            if (Date.now() + 300000 >= currentToken.expiresAt) {
-                return await refreshToken();
-            }
-            return currentToken.value;
         }
 
         /**********************************
@@ -471,29 +456,26 @@
          *********************************/
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Verify token is valid
                 await getValidToken();
                 
                 // Set all model statuses to ready
-                document.getElementById('hepaticModelStatus').textContent = "Ready for classification";
-                document.getElementById('hepaticModelStatus').classList.add('model-ready');
-                document.getElementById('portalModelStatus').textContent = "Ready for classification";
-                document.getElementById('portalModelStatus').classList.add('model-ready');
-                document.getElementById('renalModelStatus').textContent = "Ready for classification";
-                document.getElementById('renalModelStatus').classList.add('model-ready');
+                ['hepatic', 'portal', 'renal'].forEach(type => {
+                    const status = document.getElementById(`${type}ModelStatus`);
+                    status.textContent = "Ready for classification";
+                    status.classList.add('model-ready');
+                });
             } catch (error) {
-                console.error('Error initializing:', error);
-                // Update status to show error
-                const statuses = ['hepaticModelStatus', 'portalModelStatus', 'renalModelStatus'];
-                statuses.forEach(id => {
-                    document.getElementById(id).textContent = "Error: Authentication failed";
-                    document.getElementById(id).classList.remove('model-ready');
+                console.error('Initialization error:', error);
+                ['hepatic', 'portal', 'renal'].forEach(type => {
+                    const status = document.getElementById(`${type}ModelStatus`);
+                    status.textContent = "Error: Authentication failed";
+                    status.classList.remove('model-ready');
                 });
             }
         });
 
         /*****************************************************
-         *  Confirmation function to warn about PHI
+         * Confirmation function to warn about PHI
          *****************************************************/
         function confirmPHIUpload(inputId) {
             const message = "Please confirm that the image you are about to upload does NOT contain any Protected Health Information (PHI).";
@@ -503,10 +485,13 @@
         }
 
         /*************************************************************
-         * Generic classification function
+         * Improved classification function
          *************************************************************/
         async function classifyImage(imgElement, resultId, topResultsId, dropdownId, errorNoteId, labelSet) {
             try {
+                // Show loading state
+                document.getElementById(resultId).textContent = "Analyzing image...";
+                
                 // Convert image to base64
                 const canvas = document.createElement('canvas');
                 canvas.width = imgElement.width;
@@ -515,32 +500,36 @@
                 ctx.drawImage(imgElement, 0, 0);
                 const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
 
-                // Get a valid token
-                const accessToken = await getValidToken();
+                // Get fresh token if needed
+                if (!currentToken || Date.now() >= currentToken.expiresAt) {
+                    await getValidToken();
+                }
 
                 // Make prediction request
-                const predictionResponse = await fetch(
-                    `https://us-central1-aiplatform.googleapis.com/v1/projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808:predict`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${accessToken}`
-                        },
-                        body: JSON.stringify({
-                            instances: [
-                                {
-                                    content: base64Image
-                                }
-                            ]
-                        })
-                    }
-                );
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: base64Image,
+                        mimeType: 'image/jpeg'
+                    })
+                });
 
-                const predictions = await predictionResponse.json();
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const result = await response.json();
                 
+                if (!result.predictions || !result.predictions[0]) {
+                    throw new Error('Invalid prediction response');
+                }
+
                 // Process predictions
-                let top3 = predictions.predictions[0].confidences
+                const confidences = result.predictions[0].confidences;
+                const top3 = confidences
                     .map((conf, idx) => ({
                         label: labelSet[idx],
                         prob: (conf * 100).toFixed(1)
@@ -548,7 +537,8 @@
                     .sort((a, b) => b.prob - a.prob)
                     .slice(0, 3);
 
-                let top1 = top3[0];
+                // Update UI
+                const top1 = top3[0];
                 document.getElementById(resultId).textContent = 
                     `Top prediction: ${top1.label} (${top1.prob}%)`;
                 
@@ -556,11 +546,12 @@
                     '<strong>Top 3 Predictions:</strong><br>' +
                     top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
 
+                // Update dropdown and error note
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
 
                 if (parseFloat(top1.prob) > 50) {
-                    let matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
+                    const matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
                     if (matchedOption) {
                         dropdown.value = matchedOption.value;
                     }
@@ -570,13 +561,14 @@
                     errorNote.style.display = "block";
                 }
 
-            } catch (err) {
-                console.error("Error during classification:", err);
-                document.getElementById(resultId).textContent = "Error during classification: " + err.message;
+            } catch (error) {
+                console.error('Classification error:', error);
+                document.getElementById(resultId).textContent = `Error: ${error.message}`;
+                document.getElementById(topResultsId).textContent = "";
+                document.getElementById(errorNoteId).style.display = "block";
             }
         }
-
-        /***************************************************************
+/***************************************************************
          * Event listeners for each image upload
          ***************************************************************/
         document.getElementById('hepaticImageUpload').addEventListener('change', function() {
@@ -587,14 +579,13 @@
             previewImg.src = URL.createObjectURL(file);
             previewImg.style.display = 'block';
             previewImg.onload = function() {
-                const hepaticLabels = ["HV Normal", "HV Mild", "HV Severe"];
                 classifyImage(
                     previewImg,
                     'hepaticResult',
                     'hepaticTopResults',
                     'hepaticDropdown',
                     'hepaticErrorNote',
-                    hepaticLabels
+                    modelLabels.hepatic
                 );
             };
         });
@@ -607,14 +598,13 @@
             previewImg.src = URL.createObjectURL(file);
             previewImg.style.display = 'block';
             previewImg.onload = function() {
-                const portalLabels = ["PV Normal", "PV Mild", "PV Severe"];
                 classifyImage(
                     previewImg,
                     'portalResult',
                     'portalTopResults',
                     'portalDropdown',
                     'portalErrorNote',
-                    portalLabels
+                    modelLabels.portal
                 );
             };
         });
@@ -627,14 +617,13 @@
             previewImg.src = URL.createObjectURL(file);
             previewImg.style.display = 'block';
             previewImg.onload = function() {
-                const renalLabels = ["RV Normal", "RV Mild", "RV Severe"];
                 classifyImage(
                     previewImg,
                     'renalResult',
                     'renalTopResults',
                     'renalDropdown',
                     'renalErrorNote',
-                    renalLabels
+                    modelLabels.renal
                 );
             };
         });
@@ -649,20 +638,18 @@
             if (ivcSelection === "<2cm") ivcValue = 1.9;
             if (ivcSelection === ">2cm") ivcValue = 2.1;
             
-            // Step #2: Hepatic from dropdown
+            // Get classifications from dropdowns
             const hvChoice = document.getElementById('hepaticDropdown').value;
-            // Step #3: Portal from dropdown
             const pvChoice = document.getElementById('portalDropdown').value;
-            // Step #4: Renal from dropdown
             const rvChoice = document.getElementById('renalDropdown').value;
 
-            // If IVC wasn't selected, we cannot proceed
+            // Check for incomplete data
             if (!ivcValue) {
                 document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
                 return;
             }
 
-            // If any of the waveforms have "Confidence of waveform < 50%", we cannot calculate
+            // Check for low confidence predictions
             if (
                 hvChoice === "Confidence of waveform < 50%" ||
                 pvChoice === "Confidence of waveform < 50%" ||
@@ -672,7 +659,7 @@
                 return;
             }
 
-            // Convert dropdown choices to numerical scores
+            // Convert choices to numerical scores
             let hvScore = 0;
             if (hvChoice === "HV Mild")   hvScore = 1;
             if (hvChoice === "HV Severe") hvScore = 2;
@@ -685,13 +672,13 @@
             if (rvChoice === "RV Mild")   rvScore = 1;
             if (rvChoice === "RV Severe") rvScore = 2;
 
-            // Count how many "Severe" among HV, PV, RV
+            // Count severe cases
             let severityCount = 0;
             if (hvScore === 2) severityCount++;
             if (pvScore === 2) severityCount++;
             if (rvScore === 2) severityCount++;
 
-            // Basic VExUS logic
+            // Calculate VExUS grade
             let vexusGrade;
             if (ivcValue < 2) {
                 vexusGrade = "Grade 0: No Congestion";
@@ -706,20 +693,16 @@
             document.getElementById('total-score').textContent = vexusGrade;
         }
 
-        /* Reset all fields and results */
+        /********************************************
+         * Reset all fields and results
+         ********************************************/
         function resetAll() {
-            // Clear IVC
+            // Clear IVC and score
             document.getElementById('ivcDropdown').value = "";
-            // Clear final score
             document.getElementById('total-score').textContent = "--";
 
-            // Clear the 3 vein dropdowns
-            document.getElementById('hepaticDropdown').value = "";
-            document.getElementById('portalDropdown').value = "";
-            document.getElementById('renalDropdown').value = "";
-
-            // Clear each step's image preview & results
-            let steps = [
+            // Clear all dropdowns and results
+            const steps = [
                 {
                     dropdown: 'hepaticDropdown',
                     preview: 'hepaticPreview',
@@ -748,10 +731,11 @@
 
             steps.forEach(s => {
                 document.getElementById(s.preview).style.display = "none";
-                document.getElementById(s.result).textContent = s.dropdown + " recognition result will appear here...";
+                document.getElementById(s.result).textContent = "Recognition result will appear here...";
                 document.getElementById(s.top).textContent = "";
                 document.getElementById(s.error).style.display = "none";
                 document.getElementById(s.input).value = "";
+                document.getElementById(s.dropdown).value = "";
             });
         }
     </script>
