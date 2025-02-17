@@ -1,4 +1,4 @@
-echo '{
+{
   "name": "vexus-atlas",
   "version": "1.0.0",
   "description": "VExUS ATLAS - AI Image Recognition & Scoring",
@@ -43,4 +43,4 @@ echo '{
       "last 1 safari version"
     ]
   }
-}' > package.json
+}
