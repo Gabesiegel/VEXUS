@@ -1,24 +1,23 @@
-# Update your cloudbuild.yaml
 cat > cloudbuild.yaml << 'EOF'
 steps:
-  - name: 'gcr.io/k8s-skaffold/pack'
-    args:
-      [
-        'build',
-        '--builder=gcr.io/buildpacks/builder',
-        '--publish',
-        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
-      ]
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      [
-        'run', 'deploy', 'vexus-web',
-        '--region', 'us-central1',
-        '--allow-unauthenticated',
-        '--image', 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus',
-        '--set-env-vars',
-        'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808'
-      ]
+- name: 'gcr.io/k8s-skaffold/pack'
+  args:
+    - 'build'
+    - '--builder=gcr.io/buildpacks/builder'
+    - '--publish'
+    - 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'vexus-web'
+    - '--region'
+    - 'us-central1'
+    - '--allow-unauthenticated'
+    - '--image'
+    - 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
+    - '--set-env-vars'
+    - 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808'
 timeout: "900s"
 options:
   logging: CLOUD_LOGGING_ONLY
