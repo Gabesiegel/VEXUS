@@ -2,39 +2,30 @@ import express from 'express';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
-
+// ESM helper for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configure Vertex AI Prediction client
 const options = {
   apiEndpoint: 'us-central1-aiplatform.googleapis.com',
   projectId: 'plucky-weaver-450819-k7'
 };
 
-// Use credentials only if running locally
-if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-  options.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-}
-
 const predictionClient = new PredictionServiceClient(options);
 console.log('✅ Successfully initialized Vertex AI client');
 
 app.use(express.json());
-app.use(express.static('dist')); // Serve React frontend
+app.use(express.static('dist'));
 
 // Prediction API endpoint
 app.post('/predict', async (req, res) => {
   try {
     console.log('📡 Received prediction request:', req.body);
 
-    const endpointPath = process.env.VERTEX_AI_ENDPOINT;
+    const endpointPath = process.env.VERTEX_AI_ENDPOINT;  // Use Cloud Run environment variable
     console.log('🌍 Using Vertex AI endpoint:', endpointPath);
 
     const request = {
