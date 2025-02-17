@@ -1,11 +1,15 @@
 steps:
-- name: 'gcr.io/k8s-skaffold/pack'
-  args:
-    - 'build'
-    - '--builder=gcr.io/buildpacks/builder'
-    - '--publish'
-    - 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
+# Install dependencies
+- name: 'node:18'
+  entrypoint: npm
+  args: ['install']
 
+# Build the React app
+- name: 'node:18'
+  entrypoint: npm
+  args: ['run', 'build']
+
+# Deploy to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
     - 'run'
@@ -14,15 +18,12 @@ steps:
     - '--region'
     - 'us-central1'
     - '--allow-unauthenticated'
-    - '--image'
-    - 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
+    - '--source'
+    - '.'
     - '--set-env-vars'
     - 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
 
 timeout: "900s"
-
 options:
   logging: "CLOUD_LOGGING_ONLY"
-
-# If you keep hitting the "logs bucket" error, remove or comment out:
 serviceAccount: "projects/plucky-weaver-450819-k7/serviceAccounts/vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com"
