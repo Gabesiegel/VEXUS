@@ -5,7 +5,10 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    // Build the React frontend into the /build folder
     "build": "react-scripts build",
+
+    // Start the Node server (Cloud Run will call 'npm start')
     "start": "node server.js"
   },
   "dependencies": {
