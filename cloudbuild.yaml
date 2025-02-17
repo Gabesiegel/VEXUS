@@ -1,3 +1,5 @@
+# Update your cloudbuild.yaml
+cat > cloudbuild.yaml << 'EOF'
 steps:
   - name: 'gcr.io/k8s-skaffold/pack'
     args:
@@ -20,4 +22,5 @@ steps:
 timeout: "900s"
 options:
   logging: CLOUD_LOGGING_ONLY
-serviceAccount: 'vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com'
+serviceAccount: 'projects/plucky-weaver-450819-k7/serviceAccounts/vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com'
+EOF
