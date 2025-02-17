@@ -1,12 +1,12 @@
 {
   "name": "vexus-atlas",
   "version": "1.0.0",
-  "description": "VExUS AI React + Express app",
+  "description": "An example Node.js app for VExUS AI",
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "start": "node server.js"
   },
   "dependencies": {
     "@google-cloud/aiplatform": "^3.34.0",
