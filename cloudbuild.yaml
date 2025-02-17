@@ -2,19 +2,20 @@ steps:
   # Step 1: Install dependencies
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
-
-  # Step 2: Build React App
+  # Step 2: Build React app (create build folder)
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build']
-
   # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: [
-      'run', 'deploy', 'vexus-web',
-      '--source', '.',
-      '--allow-unauthenticated',
-      '--region', 'us-central1',
-      '--set-env-vars', 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
-    ]
+    args:
+      - run
+      - deploy
+      - vexus-web
+      - --source=.
+      - --region=us-central1
+      - --allow-unauthenticated
+      - --set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808
+      # If you want to specify a particular Docker image, see notes below.
 
-logsBucket: "gs://plucky-weaver-logs"
+# Optional: Adjust logs/timeouts if desired
+timeout: "800s"
