@@ -1,27 +1,14 @@
-# cloudbuild.yaml
-
-# If you need to run the build under a special service account,
-# uncomment these lines. If not, you can omit them entirely.
-# serviceAccount: "vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com"
-# options:
-#   logging: CLOUD_LOGGING_ONLY
 
 steps:
-  # 1) Use the pack CLI from k8s-skaffold to build & publish your image
-  #    - This uses Google’s buildpacks (Node/React detection).
-  #    - The final image is automatically pushed to your Artifact Registry repo.
   - name: 'gcr.io/k8s-skaffold/pack'
     args:
       [
         'build',
         '--builder=gcr.io/buildpacks/builder',
         '--publish',
-        # Replace this with your desired image path in Artifact Registry:
         'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
       ]
 
-  # 2) Deploy that image to Cloud Run
-  #    - "vexus-web" is the Cloud Run service name
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
