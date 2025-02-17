@@ -1,33 +1,36 @@
+# cloudbuild.yaml
+
+# If you need to run the build under a special service account,
+# uncomment these lines. If not, you can omit them entirely.
+# serviceAccount: "vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com"
+# options:
+#   logging: CLOUD_LOGGING_ONLY
+
 steps:
-  # Step 1: Install dependencies
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
+  # 1) Use the pack CLI from k8s-skaffold to build & publish your image
+  #    - This uses Google’s buildpacks (Node/React detection).
+  #    - The final image is automatically pushed to your Artifact Registry repo.
+  - name: 'gcr.io/k8s-skaffold/pack'
+    args:
+      [
+        'build',
+        '--builder=gcr.io/buildpacks/builder',
+        '--publish',
+        # Replace this with your desired image path in Artifact Registry:
+        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus'
+      ]
 
-  # Step 2: Build the React app
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['run', 'build']
-
-  # (Optional) Step 3: If you need to build a Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build', '-t', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE',
-      '.'
-    ]
-
-  # (Optional) Step 4: Push the image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE'
-    ]
-
-  # Step 5: Deploy to Cloud Run
+  # 2) Deploy that image to Cloud Run
+  #    - "vexus-web" is the Cloud Run service name
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: [
-      'run', 'deploy', 'vexus-web',
-      '--image', 'us-central1-docker.pkg.dev/PROJECT/REPO/IMAGE',
-      '--region', 'us-central1',
-      '--allow-unauthenticated'
-    ]
+    args:
+      [
+        'run', 'deploy', 'vexus-web',
+        '--region', 'us-central1',
+        '--allow-unauthenticated',
+        '--image', 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus',
+        '--set-env-vars',
+        'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808'
+      ]
 
-# Increase timeout if needed
-timeout: "600s"
+timeout: "900s"
