@@ -1,17 +1,14 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
-// Optional: Vertex AI client if you have a /predict route
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 
-// __dirname in ES modules:
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configure Vertex AI with your project
+// Configure Vertex AI
 const options = {
   apiEndpoint: 'us-central1-aiplatform.googleapis.com',
   projectId: 'plucky-weaver-450819-k7'
@@ -22,52 +19,48 @@ console.log('✅ Vertex AI client initialized.');
 // Parse JSON bodies
 app.use(express.json());
 
-// Serve React’s build output
-app.use(express.static(path.join(__dirname, 'build')));
+// Serve static files from the root directory
+app.use(express.static(__dirname));
 
-/**
- * Example route: /predict
- * This calls your Vertex AI endpoint for predictions.
- * If you don’t need it, remove this route entirely.
- */
+// Serve React build files
+app.use('/app', express.static(path.join(__dirname, 'build')));
+
+// Vertex AI prediction endpoint
 app.post('/predict', async (req, res) => {
   try {
     console.log('📡 Received /predict request:', req.body);
-
-    // Use your real endpoint ID, or read from ENV. Hard-coded fallback here:
-    const endpointPath =
-      process.env.VERTEX_AI_ENDPOINT ||
+    const endpointPath = process.env.VERTEX_AI_ENDPOINT ||
       'projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/401033999995895808';
-
-    // Format request
+    
     const request = {
       name: endpointPath,
       instances: [
         {
           content: req.body.content,
-          mimeType: 'image/jpeg' // or the relevant MIME type
+          mimeType: 'image/jpeg'
         }
       ]
     };
-
-    // Perform prediction
+    
     const [response] = await predictionClient.predict(request);
     console.log('✅ Vertex AI response:', response);
-
     res.json(response);
-
   } catch (error) {
     console.error('❌ Error:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// For React client-side routing
-app.get('*', (req, res) => {
+// Handle React routes
+app.get('/app/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// Cloud Run sets PORT env var. Fallback to 8080 if not set.
+// Handle all other routes by serving static HTML files
+app.get('*', (req, res, next) => {
+  next();
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server listening on port ${PORT}`);
