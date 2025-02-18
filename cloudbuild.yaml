@@ -2,7 +2,7 @@ steps:
 # Install dependencies
 - name: 'node:18'
   entrypoint: npm
-  args: ['install']
+  args: ['ci']  # Using ci instead of install for more reliable builds
 
 # Build the React app
 - name: 'node:18'
@@ -24,8 +24,19 @@ steps:
     - 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
     - '--min-instances'
     - '1'
+    - '--memory'
+    - '1Gi'
+    - '--cpu'
+    - '1'
+    - '--timeout'
+    - '3600'
     - '--port'
     - '8080'
+    - '--execution-environment'
+    - 'gen2'
+    - '--concurrency'
+    - '80'
+    - '--startup-cpu-boost'
 
 timeout: "900s"
 options:
