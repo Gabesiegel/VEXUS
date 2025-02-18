@@ -3,19 +3,18 @@
 # -----------------------------
 FROM node:18 AS builder
 
-# Create a directory for your application
 WORKDIR /app
 
-# Copy package files first (better caching)
+# Copy over package files first (better caching)
 COPY package*.json ./
 
-# Install dependencies (development + production)
+# Install all dependencies (including dev)
 RUN npm ci
 
-# Now copy all your source code into the container
+# Now copy the rest of the code
 COPY . .
 
-# Build your React app for production
+# Build the React app
 RUN npm run build
 
 
@@ -24,22 +23,20 @@ RUN npm run build
 # -----------------------------
 FROM node:18
 
-# Create a directory for the final container
 WORKDIR /app
 
-# Copy only the necessary files for production
+# Copy only production dependencies
 COPY package*.json ./
-# Install only production dependencies in the final image
 RUN npm ci --production
 
-# Copy the built React files from the builder stage
+# Copy the compiled React build from stage 1
 COPY --from=builder /app/build ./build
 
-# Copy your server file (server.js) if it isn't already included
+# Copy the server file
 COPY server.js ./
 
-# Expose the container's port (for Cloud Run, not strictly required, but good for local testing)
+# Expose port 8080 (commonly used by Node & Cloud Run)
 EXPOSE 8080
 
-# Define the command to start your Node server
+# Define startup command
 CMD ["npm", "start"]
