@@ -6,24 +6,50 @@ import { fileURLToPath } from 'url';
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Use the PORT environment variable provided by Cloud Run
-const port = process.env.PORT || 8080;
+// CRITICAL FIX: Explicitly parse port as integer and validate
+const port = parseInt(process.env.PORT || '8080', 10);
+if (isNaN(port)) {
+    console.error('Invalid PORT value');
+    process.exit(1);
+}
 
 // Updated configuration with current timestamp
 const CONFIG = {
     projectId: 'plucky-weaver-450819-k7',
     modelId: '1401033999995895808',
-    lastUpdated: '2025-02-18 02:57:41',
+    lastUpdated: '2025-02-18 03:11:52',
     developer: 'Gabesiegel'
 };
 
-// Body parsing middleware - MUST be before route handlers
+// CRITICAL FIX: Add error handling middleware first
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        timestamp: CONFIG.lastUpdated
+    });
+});
+
+// Body parsing middleware
 app.use(express.json({ limit: '50mb' }));
 
-// CRITICAL: Serve static files from the correct build path
-app.use(express.static('build'));
+// CRITICAL FIX: Check if build directory exists
+import fs from 'fs';
+const buildPath = path.join(process.cwd(), 'build');
+if (!fs.existsSync(buildPath)) {
+    console.error('Build directory not found:', buildPath);
+    process.exit(1);
+}
 
-// Health check endpoint - REQUIRED for Cloud Run
+// Serve static files from the React build directory
+app.use(express.static(buildPath));
+
+// CRITICAL FIX: Cloud Run health check endpoint
+app.get('/_ah/warmup', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Explicit health check
 app.get('/health', (req, res) => {
     res.status(200).json({ 
         status: 'ok',
@@ -41,7 +67,6 @@ app.post('/predict', async (req, res) => {
     try {
         const { content, mimeType } = req.body;
         
-        // Add validation
         if (!content || !mimeType) {
             return res.status(400).json({ 
                 error: 'Missing content or mimeType',
@@ -67,16 +92,41 @@ app.post('/predict', async (req, res) => {
     }
 });
 
-// CRITICAL: This must be after all other routes
+// Handle React routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(buildPath, 'index.html'));
 });
 
-// CRITICAL: Listen on 0.0.0.0 to accept all incoming connections
-app.listen(port, '0.0.0.0', () => {
-    console.log('Server starting...', new Date().toISOString());
-    console.log(`Listening on port ${port}`);
+// CRITICAL FIX: Proper server startup with error handling
+const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`[${new Date().toISOString()}] Server starting...`);
+    console.log(`Server running at http://0.0.0.0:${port}`);
     console.log(`Project ID: ${CONFIG.projectId}`);
     console.log(`Last Updated: ${CONFIG.lastUpdated}`);
-    console.log(`Static files directory: ${path.join(__dirname, 'build')}`);
+    console.log(`Static files directory: ${buildPath}`);
+}).on('error', (error) => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+});
+
+// CRITICAL FIX: Graceful shutdown
+const shutdown = () => {
+    console.log('Shutting down gracefully...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
+// CRITICAL FIX: Handle uncaught errors
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    shutdown();
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
