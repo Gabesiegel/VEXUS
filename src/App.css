@@ -8,15 +8,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  font-size: calc(10px + 2vmin);
-  color: white;
   padding: 20px;
+  color: white;
+}
+
+.subtitle {
+  color: #61dafb;
+}
+
+.upload-section {
+  margin: 20px 0;
 }
 
 .file-input {
   margin: 20px 0;
-  padding: 10px;
+}
+
+.loading {
+  color: #61dafb;
+}
+
+.error {
+  color: #ff6b6b;
 }
 
 .image-preview {
@@ -25,16 +38,14 @@
 
 .prediction-results {
   margin: 20px 0;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.1);
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   max-width: 800px;
-  width: 100%;
 }
 
 .prediction-results pre {
-  text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-size: 16px;
 }
