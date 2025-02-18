@@ -1,21 +1,24 @@
 import express from 'express';
-import fs from 'fs';
+import { v1 } from '@google-cloud/aiplatform';  // <-- Correct import for Vertex AI
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { v1 } from '@google-cloud/aiplatform';
-const { PredictionServiceClient } = v1;
+import fs from 'fs';
+
+///////////////////////////////////////////////////////////////////////////////
+// 1) Create Express app & parse environment
+///////////////////////////////////////////////////////////////////////////////
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// CRITICAL: Parse the PORT as integer
+// Explicitly parse port as integer
 const port = parseInt(process.env.PORT || '8080', 10);
 if (isNaN(port)) {
   console.error('Invalid PORT value');
   process.exit(1);
 }
 
-// Updated configuration (example fields)
+// Basic config object
 const CONFIG = {
   projectId: 'plucky-weaver-450819-k7',
   modelId: '1401033999995895808',
@@ -23,21 +26,35 @@ const CONFIG = {
   developer: 'Gabesiegel'
 };
 
-// Body parsing middleware
+///////////////////////////////////////////////////////////////////////////////
+// 2) Error Handling Middleware (added first, per your original code)
+///////////////////////////////////////////////////////////////////////////////
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    timestamp: CONFIG.lastUpdated
+  });
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// 3) Body Parsing & Build Directory Check
+///////////////////////////////////////////////////////////////////////////////
 app.use(express.json({ limit: '50mb' }));
 
-// Determine the build folder path
-const buildPath = path.join(__dirname, 'build');
-
-// Optional: Warn (but don’t crash) if the build folder is missing
+// Check if the React build directory exists
+const buildPath = path.join(process.cwd(), 'build');
 if (!fs.existsSync(buildPath)) {
-  console.warn('Warning: Build directory not found:', buildPath);
+  console.error('Build directory not found:', buildPath);
+  process.exit(1);
 }
 
-// Serve the static files from the React build directory
+// Serve static files (React build)
 app.use(express.static(buildPath));
 
-// Health-check endpoints (Cloud Run warmup & explicit)
+///////////////////////////////////////////////////////////////////////////////
+// 4) Health Endpoints
+///////////////////////////////////////////////////////////////////////////////
 app.get('/_ah/warmup', (req, res) => {
   res.status(200).send('OK');
 });
@@ -49,12 +66,17 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Initialize Google Cloud AI Platform client
-const aiplatformClient = new AI({
-  apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+///////////////////////////////////////////////////////////////////////////////
+// 5) Vertex AI Prediction Client
+///////////////////////////////////////////////////////////////////////////////
+const { PredictionServiceClient } = v1;
+const predictionClient = new PredictionServiceClient({
+  apiEndpoint: 'us-central1-aiplatform.googleapis.com'
 });
 
-// Endpoint for predictions
+///////////////////////////////////////////////////////////////////////////////
+// 6) /predict Endpoint
+///////////////////////////////////////////////////////////////////////////////
 app.post('/predict', async (req, res) => {
   try {
     const { content, mimeType } = req.body;
@@ -65,7 +87,8 @@ app.post('/predict', async (req, res) => {
       });
     }
 
-    const prediction = await aiplatformClient.predict({
+    // Call the Vertex AI prediction endpoint
+    const [prediction] = await predictionClient.predict({
       endpoint: process.env.VERTEX_AI_ENDPOINT,
       instances: [{
         content,
@@ -83,33 +106,30 @@ app.post('/predict', async (req, res) => {
   }
 });
 
-// Catch-all route to serve the React index.html (if build directory exists)
-app.get('*', (req, res, next) => {
-  if (!fs.existsSync(buildPath)) {
-    return res.status(404).send('Build folder not found.');
-  }
+///////////////////////////////////////////////////////////////////////////////
+// 7) Fallback for React Router
+///////////////////////////////////////////////////////////////////////////////
+app.get('*', (req, res) => {
   res.sendFile(path.join(buildPath, 'index.html'));
 });
 
-// LAST: Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Uncaught Express error:', err);
-  res.status(500).json({
-    error: 'Internal Server Error',
-    timestamp: CONFIG.lastUpdated
-  });
-});
-
-// Start the server
+///////////////////////////////////////////////////////////////////////////////
+// 8) Start the Server
+///////////////////////////////////////////////////////////////////////////////
 const server = app.listen(port, '0.0.0.0', () => {
   console.log(`[${new Date().toISOString()}] Server starting...`);
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running at http://0.0.0.0:${port}`);
   console.log(`Project ID: ${CONFIG.projectId}`);
   console.log(`Last Updated: ${CONFIG.lastUpdated}`);
   console.log(`Static files directory: ${buildPath}`);
+}).on('error', (error) => {
+  console.error('Failed to start server:', error);
+  process.exit(1);
 });
 
-// Graceful shutdown
+///////////////////////////////////////////////////////////////////////////////
+// 9) Graceful Shutdown & Uncaught Errors
+///////////////////////////////////////////////////////////////////////////////
 const shutdown = () => {
   console.log('Shutting down gracefully...');
   server.close(() => {
@@ -121,13 +141,11 @@ const shutdown = () => {
 process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
 
-// Handle uncaught exceptions & rejections
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
   shutdown();
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection:', promise, 'reason:', reason);
-  shutdown();
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
