@@ -22,6 +22,10 @@ steps:
     - '.'
     - '--set-env-vars'
     - 'VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808'
+    - '--min-instances'
+    - '1'
+    - '--port'
+    - '8080'
 
 timeout: "900s"
 options:
