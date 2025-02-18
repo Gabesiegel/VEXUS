@@ -1,108 +1,47 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { PredictionServiceClient } from '@google-cloud/aiplatform';
-import { GoogleAuth } from 'google-auth-library';
-import fetch from 'node-fetch';
+import { AI } from '@google-cloud/aiplatform';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Initialize Google Auth
-const auth = new GoogleAuth({
-    scopes: ['https://www.googleapis.com/auth/cloud-platform']
-});
-
-// Initialize Vertex AI client with your project details
-const vertexAI = new PredictionServiceClient({
+// Updated configuration
+const CONFIG = {
     projectId: 'plucky-weaver-450819-k7',
-    apiEndpoint: 'us-central1-aiplatform.googleapis.com'
+    modelId: '1401033999995895808',
+    location: 'us-central1',
+    lastUpdated: '2025-02-18 01:15:02',
+    developer: 'Gabesiegel'
+};
+
+app.use(express.json({ limit: '50mb' }));
+
+// Initialize Google Cloud AI Platform client
+const aiplatformClient = new AI({
+    apiEndpoint: 'us-central1-aiplatform.googleapis.com',
 });
 
-// Middleware
-app.use(express.json({ limit: '50mb' }));  // Increased limit for image handling
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Auth token endpoint
-app.get('/auth/token', async (req, res) => {
-    try {
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        res.json({
-            access_token: token.token,
-            expires_in: 3600
-        });
-    } catch (error) {
-        console.error('Token error:', error);
-        res.status(500).json({ error: 'Failed to get access token' });
-    }
-});
-
-// Prediction endpoint
+// Endpoint for predictions
 app.post('/predict', async (req, res) => {
     try {
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        const endpointPath = 
-            `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808`;
-        
-        const response = await fetch(
-            `https://us-central1-aiplatform.googleapis.com/v1/${endpointPath}:predict`,
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    instances: [{
-                        content: req.body.content,
-                        mimeType: req.body.mimeType || 'image/jpeg'
-                    }]
-                })
-            }
-        );
+        const { content, mimeType } = req.body;
 
-        if (!response.ok) {
-            const errorData = await response.text();
-            console.error('Vertex AI error:', errorData);
-            throw new Error(`Vertex AI error: ${response.status}`);
-        }
+        const prediction = await aiplatformClient.predict({
+            endpoint: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.modelId}`,
+            instances: [{
+                content: content,
+                mimeType: mimeType
+            }]
+        });
 
-        const predictionResult = await response.json();
-        res.json(predictionResult);
+        res.json(prediction);
     } catch (error) {
         console.error('Prediction error:', error);
-        res.status(500).json({
-            error: error.message,
-            details: 'Error processing prediction request'
-        });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Serve React app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ status: 'healthy' });
-});
-
-// Start server
-const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
-    console.log(`✅ Vertex AI client initialized for project: plucky-weaver-450819-k7`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('SIGTERM received. Shutting down gracefully...');
-    server.close(() => {
-        console.log('Server closed. Exiting process.');
-        process.exit(0);
-    });
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+    console.log(`Project ID: ${CONFIG.projectId}`);
+    console.log(`Last Updated: ${CONFIG.lastUpdated}`);
 });
