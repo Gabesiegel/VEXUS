@@ -35,7 +35,7 @@ steps:
         '--timeout=3600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--startup-cpu-boost'
+        '--cpu-boost' 
       ]
 
 images:
