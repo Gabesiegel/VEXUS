@@ -2,7 +2,8 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { AI } from '@google-cloud/aiplatform';
+import { v1 } from '@google-cloud/aiplatform';
+const { PredictionServiceClient } = v1;
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
