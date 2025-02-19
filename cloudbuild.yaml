@@ -5,16 +5,16 @@ steps:
       [
         'build',
         '-t',
-        'gcr.io/$PROJECT_ID/vexus-web',
-        '.'  # use the Dockerfile in the current directory
+        'gcr.io/plucky-weaver-450819-k7/vexus-web',
+        '.'  # Use the Dockerfile in the current directory
       ]
 
-  # Step 2: Push to Container Registry (or Artifact Registry)
+  # Step 2: Push the image to Container Registry (or Artifact Registry)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
         'push',
-        'gcr.io/$PROJECT_ID/vexus-web'
+        'gcr.io/plucky-weaver-450819-k7/vexus-web'
       ]
 
   # Step 3: Deploy to Cloud Run
@@ -24,19 +24,26 @@ steps:
         'run',
         'deploy',
         'vexus-web',
-        '--image=gcr.io/$PROJECT_ID/vexus-web',
+        '--image=gcr.io/plucky-weaver-450819-k7/vexus-web',
         '--region=us-central1',
         '--allow-unauthenticated',
         '--port=8080',
-        '--set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/1401033999995895808',
+        
+        # Environment variables
+        '--set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/56696020218129940488',
+        
+        # IMPORTANT: Inject your secret as an environment variable:
+        '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
+        
+        # Other Cloud Run settings
         '--min-instances=1',
         '--memory=1Gi',
         '--cpu=1',
         '--timeout=3600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost' 
+        '--cpu-boost'
       ]
 
 images:
-- 'gcr.io/$PROJECT_ID/vexus-web'
+- 'gcr.io/plucky-weaver-450819-k7/vexus-web'

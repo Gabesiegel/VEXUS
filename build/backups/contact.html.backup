@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Contact - VExUS ATLAS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+
+    <style>
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 1em;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 500px;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo {
+            width: 60px;  /* Updated from 100px to 60px */
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        /* ... rest of your CSS styles ... */
+        .thank-you {
+            text-align: center;
+            color: #585858;
+            margin: 1em 0 2em 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        nav#menu ul li a:hover {
+            color: #007bff !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 50px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        form label {
+            display: block;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 0.7em;
+            margin-bottom: 1em;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            background-color: #ffffff;
+            border-color: #2c3e50;
+            box-shadow: 0 0 5px rgba(44, 62, 80, 0.1);
+        }
+
+        button[type="submit"] {
+            background-color: #f0f0f0;
+            color: #2c3e50;
+            padding: 1em 2em;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #e4e4e4;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+            .logo {
+                width: 400px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
+                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="literature.html">Literature</a></li>
+                <li><a href="about.html">About VExUS ATLAS</a></li>
+                <li><a href="image_gallery.html">Image Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    </div>
+                    
+                    <div class="thank-you">
+                        <p>Thank you for visiting VExUS ATLAS. We welcome collaboration opportunities and look forward to hearing from you!</p>
+                    </div>
+
+                    <h1>Contact Us</h1>
+                    <form id="contactForm" method="POST" action="/submitContact">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required />
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required />
+
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
+
+                        <div style="text-align: center; margin-top: 2em;">
+                            <button type="submit">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+</body>
+</html>

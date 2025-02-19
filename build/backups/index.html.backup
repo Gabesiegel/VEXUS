@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS ATLAS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+
+    <style>
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            width: 500px;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        nav#menu ul li a:hover {
+            color: #007bff !important;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px auto;
+            width: 100%;
+            max-width: 1300px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .feature-card i {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #585858;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 60px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+
+            .logo {
+                width: 400px;
+                height: 200px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .feature-card {
+                height: auto;
+                min-height: 250px;
+            }
+
+            .user-info {
+                position: static;
+                margin: 20px auto;
+                text-align: center;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+            .logo {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <nav id="menu">
+            <div class="logo-container">
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+            </div>
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="calculator.html">Score Calculator</a></li>
+                <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="literature.html">Literature</a></li>
+                <li><a href="about.html">About VExUS ATLAS</a></li>
+                <li><a href="image_gallery.html">Image Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <div class="logo-container">
+                        <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="logo">
+                        <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
+                    </div>
+                    <h1 style="text-align: center; color: #585858; margin: 0.5em 0; font-size: 2.5em;">VExUS ATLAS</h1>
+                    <h3 style="text-align: center;">Built by The POCUS Atlas</h3>
+
+                    <div class="feature-grid">
+                        <a href="calculator.html" class="feature-card">
+                            <i class="fas fa-calculator"></i>
+                            <h3>VExUS Calculator</h3>
+                            <p>Calculate VExUS scores and analyze ultrasound images using our AI-powered tool</p>
+                        </a>
+                        <a href="acquisition.html" class="feature-card">
+                            <i class="fas fa-camera"></i>
+                            <h3>Image Acquisition</h3>
+                            <p>Learn proper techniques for acquiring standardized VExUS ultrasound images</p>
+                        </a>
+                        <a href="about.html" class="feature-card">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>About VExUS ATLAS</h3>
+                            <p>Learn about our team and the development of VExUS ATLAS</p>
+                        </a>
+                        <a href="literature.html" class="feature-card">
+                            <i class="fas fa-book"></i>
+                            <h3>Literature</h3>
+                            <p>Access published research and documentation about VExUS</p>
+                        </a>
+                        <a href="education.html" class="feature-card">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Education</h3>
+                            <p>Access educational resources and tutorials</p>
+                        </a>
+                        <a href="image_gallery.html" class="feature-card">
+                            <i class="fas fa-images"></i>
+                            <h3>Image Gallery</h3>
+                            <p>Explore VExUS-related ultrasound images</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info">
+            <p>User: Gabesiegel</p>
+            <p>Date: 2025-02-11 09:03:55 UTC</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+</body>
+</html>

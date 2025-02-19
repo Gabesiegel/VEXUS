@@ -4,7 +4,7 @@ import './App.css';
 // Configuration
 const CONFIG = {
     projectId: 'plucky-weaver-450819-k7',
-    modelId: '1401033999995895808',
+    modelId: '5669602021812994048',
     lastUpdated: '2025-02-18 01:15:02',
     developer: 'Gabesiegel'
 };
