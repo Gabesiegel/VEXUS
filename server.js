@@ -165,9 +165,9 @@ app.post('/predict', async (req, res) => {
 
         // Validate each instance
         for (const instance of instances) {
-            if (!instance.content || !instance.mimeType) {
+            if (!instance.b64 || !instance.mime_type) {
                 return res.status(400).json({
-                    error: 'Each instance must have content and mimeType',
+                    error: 'Each instance must have b64 and mime_type',
                     timestamp: CONFIG.lastUpdated
                 });
             }
