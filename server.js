@@ -22,34 +22,26 @@ const CONFIG = {
     developer: 'Gabesiegel'
 };
 
-// Initialize Vertex AI client with credentials from file or environment
+// Initialize Vertex AI client from environment variable
 async function initializeVertexAI() {
     try {
-        // Use Secret Manager to fetch credentials
-        const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
-        const secretClient = new SecretManagerServiceClient();
+        // Read the JSON creds from environment
+        const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+        if (!credsJson) {
+            throw new Error('No environment variable GOOGLE_APPLICATION_CREDENTIALS_JSON found.');
+        }
 
-        const secretName = "GOOGLE_APPLICATION_CREDENTIALS_JSON"; // user-provided secret name
-        const secretPath = `projects/${CONFIG.projectId}/secrets/${secretName}/versions/latest`;
-
-        console.log('Vertex AI: Attempting to read credentials from Secret Manager:', secretPath);
-        const [version] = await secretClient.accessSecretVersion({ name: secretPath });
-        const credentialsFile = version.payload.data.toString();
-        const credentials = JSON.parse(credentialsFile);
-
-        console.log('Vertex AI: Successfully loaded credentials from Secret Manager');
-
+        const credentials = JSON.parse(credsJson);
         if (!credentials.client_email || !credentials.private_key) {
             throw new Error('Credentials missing required fields (client_email or private_key)');
         }
 
-        console.log('Initializing Vertex AI client from secret:', {
-            project: CONFIG.projectId,
-            serviceAccount: credentials.client_email
-        });
+        console.log('Vertex AI: Loaded credentials from GOOGLE_APPLICATION_CREDENTIALS_JSON environment variable.');
+
+        // Initialize Vertex AI client
         return new v1.PredictionServiceClient({
             credentials,
-            apiEndpoint: '56696020218129940488.us-central1-456295042668.prediction.vertexai.goog',
+            apiEndpoint: 'us-central1-aiplatform.googleapis.com',
             projectId: CONFIG.projectId,
             location: CONFIG.location
         });
@@ -102,20 +94,12 @@ app.get('*', (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
-        // Load credentials from Secret Manager
-        const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
-        const secretClient = new SecretManagerServiceClient();
-
-        const secretName = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
-        const secretPath = `projects/${CONFIG.projectId}/secrets/${secretName}/versions/latest`;
-        console.log('Auth: Attempting to read credentials from Secret Manager:', secretPath);
-
-        const [version] = await secretClient.accessSecretVersion({ name: secretPath });
-        const credentialsFile = version.payload.data.toString();
-        const credentials = JSON.parse(credentialsFile);
-
-        console.log('Auth: Successfully loaded credentials from Secret Manager');
-
+        // Use the same environment-based credentials
+        const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+        if (!credsJson) {
+            throw new Error('No environment variable GOOGLE_APPLICATION_CREDENTIALS_JSON found.');
+        }
+        const credentials = JSON.parse(credsJson);
         if (!credentials.client_email || !credentials.private_key) {
             throw new Error('Credentials missing required fields (client_email or private_key)');
         }
@@ -128,24 +112,18 @@ app.post('/auth/token', async (req, res) => {
         });
 
         console.log('Attempting to get access token...');
-        try {
-            const client = await auth.getClient();
-            const token = await client.getAccessToken();
-
-            if (!token || !token.token) {
-                throw new Error('No token in response');
-            }
-
-            console.log('Successfully obtained access token');
-            res.json({
-                access_token: token.token,
-                expires_in: 3600,
-                timestamp: CONFIG.lastUpdated
-            });
-        } catch (tokenError) {
-            console.error('Token generation error:', tokenError);
-            throw tokenError;
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
+        if (!token || !token.token) {
+            throw new Error('No token in response');
         }
+
+        console.log('Successfully obtained access token');
+        res.json({
+            access_token: token.token,
+            expires_in: 3600,
+            timestamp: CONFIG.lastUpdated
+        });
     } catch (error) {
         console.error('Auth error:', error);
         console.error('Error details:', {
