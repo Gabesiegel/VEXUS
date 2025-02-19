@@ -31,6 +31,7 @@ RUN npm ci --production
 
 # Copy the compiled React build from stage 1
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/public ./public
 
 # Copy the server file
 COPY server.js ./
