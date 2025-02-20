@@ -5,7 +5,7 @@ steps:
       [
         'build',
         '-t',
-        'gcr.io/plucky-weaver-450819-k7/vexus-web',
+        'us-central1-docker.pkg.dev/456295042668/cloud-run-source-deploy/vexus-web',
         '.'
       ]
 
@@ -14,7 +14,7 @@ steps:
     args:
       [
         'push',
-        'gcr.io/plucky-weaver-450819-k7/vexus-web'
+        'us-central1-docker.pkg.dev/456295042668/cloud-run-source-deploy/vexus-web'
       ]
 
   # Step 3: Deploy to Cloud Run
@@ -24,22 +24,22 @@ steps:
         'run',
         'deploy',
         'vexus-web',
-        '--image=gcr.io/plucky-weaver-450819-k7/vexus-web',
+        '--image=us-central1-docker.pkg.dev/456295042668/cloud-run-source-deploy/vexus-web',
         '--region=us-central1',
         '--allow-unauthenticated',
         '--port=8080',
         
         # Environment variables
-        '--set-env-vars=PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=5669602021812994048,VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048',
+        '--set-env-vars=PROJECT_ID=456295042668,LOCATION=us-central1,ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/456295042668/locations/us-central1/endpoints/7513685331732856832',
         
         # Secrets
-        '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=projects/plucky-weaver-450819-k7/secrets/GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
+        '--update-secrets=KEY=KEY:latest',
         
         # Cloud Run settings
         '--min-instances=1',
         '--memory=1Gi',
         '--cpu=1',
-        '--timeout=300',
+        '--timeout=600',
         '--startup-probe-timeout=300',
         '--execution-environment=gen2',
         '--concurrency=80',
@@ -50,4 +50,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-- 'gcr.io/plucky-weaver-450819-k7/vexus-web'
+- 'us-central1-docker.pkg.dev/456295042668/cloud-run-source-deploy/vexus-web'

@@ -88,14 +88,16 @@ app.post('/auth/token', async (req, res) => {
         const auth = new GoogleAuth();
         const client = await auth.getClient();
         const token = await client.getAccessToken();
+        console.log("Token before check:", token);
 
-        if (!token) {
+        if (!token || !token.token) {
             throw new Error('Failed to retrieve access token');
         }
+        console.log("Token after check:", token);
 
         res.json({
             access_token: token.token,
-            expires_in: token.expires_in, // Provide token expiration time
+            expires_in: token.expires_in,
             timestamp: new Date().toISOString()
         });
     } catch (error) {
@@ -131,9 +133,9 @@ app.post('/predict', async (req, res) => {
 
         // Validate each instance
         for (const instance of instances) {
-            if (!instance.b64 || !instance.mime_type) {
+            if (!instance.b64) {
                 return res.status(400).json({
-                    error: 'Each instance must have b64 and mime_type',
+                    error: 'Each instance must have b64 data',
                     timestamp: new Date().toISOString()
                 });
             }
@@ -141,7 +143,13 @@ app.post('/predict', async (req, res) => {
 
         const request = {
             endpoint: CONFIG.vertexEndpoint,
-            instances: instances
+            instances: instances.map(instance => ({
+                content: instance.b64 // Use 'content' for base64 data
+            })),
+            parameters: {          // Add parameters
+                confidenceThreshold: 0.5,
+                maxPredictions: 5
+            }
         };
 
         console.log('Prediction request:', request);
@@ -152,8 +160,18 @@ app.post('/predict', async (req, res) => {
             throw new Error('Invalid response from Vertex AI');
         }
 
+        // Extract display names, if available
+        const predictions = response.predictions.map(prediction => {
+            const { confidences, ids, displayNames } = prediction;
+            return {
+                confidences,
+                ids,
+                displayNames: displayNames || [] // Ensure displayNames is an array
+            };
+        });
+
         res.json({
-            predictions: response.predictions,
+            predictions: predictions, // Use processed predictions
             deployedModelId: response.deployedModelId,
             timestamp: new Date().toISOString()
         });
