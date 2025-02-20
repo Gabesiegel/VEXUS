@@ -83,22 +83,10 @@ app.get('*', async (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
-        const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
-        const auth = new GoogleAuth({
-            credentials,
-            scopes: ['https://www.googleapis.com/auth/cloud-platform']
-        });
-
-        const client = await auth.getClient();
-        const headers = await client.getRequestHeaders();
-        const token = headers['Authorization'].split(' ')[1];
-
-        if (!token) {
-            throw new Error('No token received from Google Auth.');
-        }
-
+        // For testing purposes, return a hardcoded token.
+        // REMOVE THIS AFTER TESTING AND RESTORE THE ORIGINAL AUTH LOGIC.
         res.json({
-            access_token: token.token,
+            access_token: 'test_token_123', // Replace with a test token
             expires_in: 3600,
             timestamp: new Date().toISOString()
         });
