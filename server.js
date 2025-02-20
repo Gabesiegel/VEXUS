@@ -27,7 +27,7 @@ const CONFIG = {
 async function initializeVertexAI() {
     try {
         console.log('Initializing Vertex AI client with Application Default Credentials.');
-        const credentialsPath = '/secrets/google-application-credentials';
+        const credentialsPath = '/secrets/KEY'; // Updated secret path
         const credentialsContent = await fs.readFile(credentialsPath, 'utf-8');
         const credentials = JSON.parse(credentialsContent);
         return new v1.PredictionServiceClient({
@@ -129,24 +129,19 @@ app.post('/predict', async (req, res) => {
             });
         }
 
-        // Validate each instance and remove mime_type (not needed with 'content')
+        // Validate each instance
         for (const instance of instances) {
-            if (!instance.b64) {
+            if (!instance.b64 || !instance.mime_type) {
                 return res.status(400).json({
-                    error: 'Each instance must have b64 data',
+                    error: 'Each instance must have b64 and mime_type',
                     timestamp: new Date().toISOString()
                 });
             }
         }
-    const request = {
+
+        const request = {
             endpoint: CONFIG.vertexEndpoint,
-            instances: instances.map(instance => ({
-                content: instance.b64 // Use 'content' for base64 data
-            })),
-            parameters: {          // Add parameters
-                confidenceThreshold: 0.5,
-                maxPredictions: 5
-            }
+            instances: instances
         };
 
         console.log('Prediction request:', request);
@@ -156,19 +151,9 @@ app.post('/predict', async (req, res) => {
         if (!response || !response.predictions) {
             throw new Error('Invalid response from Vertex AI');
         }
-    
-        // Extract display names, if available
-        const predictions = response.predictions.map(prediction => {
-            const { confidences, ids, displayNames } = prediction;
-            return {
-                confidences,
-                ids,
-                displayNames: displayNames || [] // Ensure displayNames is an array
-            };
-        });
 
         res.json({
-            predictions: predictions, // Use processed predictions
+            predictions: response.predictions,
             deployedModelId: response.deployedModelId,
             timestamp: new Date().toISOString()
         });
