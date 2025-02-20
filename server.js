@@ -15,10 +15,10 @@ const __dirname = path.dirname(__filename);
 ///////////////////////////////////////////////////////////////////////////////
 
 const CONFIG = {
-    projectId: process.env.PROJECT_ID,
-    location: process.env.LOCATION,
-    endpointId: process.env.ENDPOINT_ID,
-    vertexEndpoint: process.env.VERTEX_AI_ENDPOINT,
+    projectId: "456295042668",
+    location: "us-central1", // Finally!
+    endpointId: "7513685331732856832",
+    vertexEndpoint: "projects/456295042668/locations/us-central1/endpoints/7513685331732856832",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel'
 };
@@ -27,7 +27,9 @@ const CONFIG = {
 async function initializeVertexAI() {
     try {
         console.log('Initializing Vertex AI client with Application Default Credentials.');
-       const credentials = JSON.parse(Buffer.from(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, 'base64').toString());
+        const credentialsPath = '/secrets/google-application-credentials';
+        const credentialsContent = await fs.readFile(credentialsPath, 'utf-8');
+        const credentials = JSON.parse(credentialsContent);
         return new v1.PredictionServiceClient({
             credentials,
             apiEndpoint: 'us-central1-aiplatform.googleapis.com',
@@ -110,13 +112,13 @@ app.post('/auth/token', async (req, res) => {
 // 4) Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
 
-// let predictionClient = null; // Comment out Vertex AI client
+let predictionClient = null;
 
 app.post('/predict', async (req, res) => {
     try {
-        // if (!predictionClient) {
-        //     predictionClient = await initializeVertexAI();
-        // } // Comment out Vertex AI initialization
+        if (!predictionClient) {
+            predictionClient = await initializeVertexAI();
+        }
 
         const { instances } = req.body;
         
@@ -127,41 +129,47 @@ app.post('/predict', async (req, res) => {
             });
         }
 
-        // Validate each instance
+        // Validate each instance and remove mime_type (not needed with 'content')
         for (const instance of instances) {
-            if (!instance.b64 || !instance.mime_type) {
+            if (!instance.b64) {
                 return res.status(400).json({
-                    error: 'Each instance must have b64 and mime_type',
+                    error: 'Each instance must have b64 data',
                     timestamp: new Date().toISOString()
                 });
             }
         }
-
-        // const request = {
-        //     endpoint: CONFIG.vertexEndpoint,
-        //     instances: instances
-        // }; // Comment out Vertex AI request
-
-        // console.log('Prediction request:', request);
-        // const [response] = await predictionClient.predict(request);
-        // console.log('Prediction response:', response);
-
-        // if (!response || !response.predictions) {
-        //     throw new Error('Invalid response from Vertex AI');
-        // } // Comment out Vertex AI response handling
-
-        // Mock prediction results
-        const mockPredictions = [
-            {
-                confidences: [0.85, 0.10, 0.05], // Example: High confidence for the first label
-                ids: ["0", "1", "2"],
-                displayNames: ["HV Normal", "HV Mild", "HV Severe"] // Replace with actual labels if needed
+    const request = {
+            endpoint: CONFIG.vertexEndpoint,
+            instances: instances.map(instance => ({
+                content: instance.b64 // Use 'content' for base64 data
+            })),
+            parameters: {          // Add parameters
+                confidenceThreshold: 0.5,
+                maxPredictions: 5
             }
-        ];
+        };
+
+        console.log('Prediction request:', request);
+        const [response] = await predictionClient.predict(request);
+        console.log('Prediction response:', response);
+
+        if (!response || !response.predictions) {
+            throw new Error('Invalid response from Vertex AI');
+        }
+    
+        // Extract display names, if available
+        const predictions = response.predictions.map(prediction => {
+            const { confidences, ids, displayNames } = prediction;
+            return {
+                confidences,
+                ids,
+                displayNames: displayNames || [] // Ensure displayNames is an array
+            };
+        });
 
         res.json({
-            predictions: mockPredictions,
-            // deployedModelId: response.deployedModelId, // Comment out deployedModelId
+            predictions: predictions, // Use processed predictions
+            deployedModelId: response.deployedModelId,
             timestamp: new Date().toISOString()
         });
 
@@ -169,9 +177,9 @@ app.post('/predict', async (req, res) => {
         console.error('Prediction error:', error);
         
         // Reset client on auth errors
-        // if (error.code === 401 || error.code === 403) {
-        //     predictionClient = null;
-        // } // Comment out Vertex AI client reset
+        if (error.code === 401 || error.code === 403) {
+            predictionClient = null;
+        }
 
         res.status(500).json({
             error: 'Prediction failed',
