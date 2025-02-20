@@ -40,10 +40,22 @@ steps:
         '--memory=1Gi',
         '--cpu=1',
         '--timeout=600',
-        '--startup-probe-timeout=300',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost'
+        '--cpu-boost',
+        '--probes',
+        `startup:
+          httpGet:
+            path: /health
+          initialDelaySeconds: 0
+          timeoutSeconds: 240
+          periodSeconds: 240
+        liveness:
+          httpGet:
+            path: /health
+          initialDelaySeconds: 0
+          timeoutSeconds: 3
+          periodSeconds: 10`,
       ]
 
 options:
