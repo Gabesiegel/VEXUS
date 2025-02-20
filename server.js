@@ -10,63 +10,30 @@ import cors from 'cors';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Check build directory exists
-async function checkBuildDir() {
-    try {
-        await fs.access(path.join(__dirname, 'build'));
-        console.log('Build directory exists');
-    } catch (error) {
-        console.warn('Build directory not found:', error.message);
-    }
-}
-checkBuildDir();
-
 ///////////////////////////////////////////////////////////////////////////////
 // 1) Configuration Setup
 ///////////////////////////////////////////////////////////////////////////////
 
 const CONFIG = {
-    projectId: process.env.PROJECT_ID || '456295042668',
-    modelId: process.env.MODEL_ID || '5669602021812994048',
-    location: process.env.LOCATION || 'us-central1',
-    endpointId: process.env.ENDPOINT_ID || '5669602021812994048',
-    vertexEndpoint: process.env.VERTEX_AI_ENDPOINT || 'projects/456295042668/locations/us-central1/endpoints/5669602021812994048',
-    lastUpdated: '2025-02-18 07:02:03',
+    projectId: process.env.PROJECT_ID,
+    location: process.env.LOCATION,
+    endpointId: process.env.ENDPOINT_ID,
+    vertexEndpoint: process.env.VERTEX_AI_ENDPOINT,
+    lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel'
 };
 
-// Initialize Vertex AI client from environment variable
+// Initialize Vertex AI client
 async function initializeVertexAI() {
     try {
-        // Read the JSON creds from environment
-        const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
-if (!credsJson) {
-    console.warn('Vertex AI: No credentials found. Starting server without Vertex AI capabilities.');
-    return null;
-}
-
-        const credentials = JSON.parse(credsJson);
-        if (!credentials.client_email || !credentials.private_key) {
-    console.warn('Vertex AI: Credentials missing required fields (client_email or private_key). Starting anyway without Vertex AI capabilities.');
-    return null;
-}
-
-        console.log('Vertex AI: Loaded credentials from GOOGLE_APPLICATION_CREDENTIALS_JSON environment variable.');
-
-        // Initialize Vertex AI client
+        console.log('Initializing Vertex AI client with Application Default Credentials.');
         return new v1.PredictionServiceClient({
-            credentials,
             apiEndpoint: 'us-central1-aiplatform.googleapis.com',
             projectId: CONFIG.projectId,
             location: CONFIG.location
         });
     } catch (error) {
         console.error('Failed to initialize Vertex AI client:', error);
-        console.error('Error details:', {
-            message: error.message,
-            code: error.code,
-            stack: error.stack
-        });
         throw error;
     }
 }
@@ -88,28 +55,37 @@ app.use(cors({
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json({ limit: '50mb' }));
-// Log static file requests
+
+// Log requests
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] Requesting: ${req.url}`);
     next();
 });
 
-// Serve static files from both build and public directories
-app.use(express.static(path.join(__dirname, 'build')));
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the root of the container
+app.use(express.static(path.join(__dirname, '.')));
 
-// Fallback for HTML5 history API
+// Fallback route handler
 app.get('*', async (req, res) => {
     console.log(`[${new Date().toISOString()}] Fallback for: ${req.url}`);
-    // Try build directory first, then public
-    const buildPath = path.join(__dirname, 'build', 'calculator.html');
-    const publicPath = path.join(__dirname, 'public', 'calculator.html');
     
-    if ((await fs.stat(buildPath).catch(() => false))) {
-        res.sendFile(buildPath);
-    } else {
-        res.sendFile(publicPath);
+    // Try to serve calculator.html first, then index.html as fallback
+    const calculatorPath = path.join(__dirname, 'calculator.html');
+    const indexPath = path.join(__dirname, 'index.html');
+    
+    try {
+        if (await fs.access(calculatorPath).then(() => true).catch(() => false)) {
+            res.sendFile(calculatorPath);
+        } else if (await fs.access(indexPath).then(() => true).catch(() => false)) {
+            res.sendFile(indexPath);
+        } else {
+            res.status(404).send('Not found');
+        }
+    } catch (error) {
+        console.error('Error serving fallback:', error);
+        res.status(500).send('Internal server error');
     }
 });
 
@@ -119,56 +95,33 @@ app.get('*', async (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
-        // Use the same environment-based credentials
-        const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
-        if (!credsJson) {
-            throw new Error('No environment variable GOOGLE_APPLICATION_CREDENTIALS_JSON found.');
-        }
-        const credentials = JSON.parse(credsJson);
-        if (!credentials.client_email || !credentials.private_key) {
-            throw new Error('Credentials missing required fields (client_email or private_key)');
-        }
-
-        console.log('Auth: Initializing with service account:', credentials.client_email);
-
         const auth = new GoogleAuth({
-            credentials,
             scopes: ['https://www.googleapis.com/auth/cloud-platform']
         });
-
-        console.log('Attempting to get access token...');
         const client = await auth.getClient();
         const token = await client.getAccessToken();
+
         if (!token || !token.token) {
-            throw new Error('No token in response');
+            throw new Error('No token received from Google Auth.');
         }
 
-        console.log('Successfully obtained access token');
         res.json({
             access_token: token.token,
             expires_in: 3600,
-            timestamp: CONFIG.lastUpdated
+            timestamp: new Date().toISOString()
         });
     } catch (error) {
         console.error('Auth error:', error);
-        console.error('Error details:', {
-            message: error.message,
-            code: error.code,
-            stack: error.stack
-        });
-        
-        // Send more detailed error response
         res.status(500).json({
             error: 'Authentication failed',
             message: error.message,
-            details: error.code ? `Error code: ${error.code}` : undefined,
-            timestamp: CONFIG.lastUpdated
+            timestamp: new Date().toISOString()
         });
     }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
-// 4) Prediction Endpoint with Error Handling
+// 4) Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
 
 let predictionClient = null;
@@ -184,7 +137,7 @@ app.post('/predict', async (req, res) => {
         if (!instances || !Array.isArray(instances)) {
             return res.status(400).json({
                 error: 'Invalid request format. Expected "instances" array',
-                timestamp: CONFIG.lastUpdated
+                timestamp: new Date().toISOString()
             });
         }
 
@@ -193,7 +146,7 @@ app.post('/predict', async (req, res) => {
             if (!instance.b64 || !instance.mime_type) {
                 return res.status(400).json({
                     error: 'Each instance must have b64 and mime_type',
-                    timestamp: CONFIG.lastUpdated
+                    timestamp: new Date().toISOString()
                 });
             }
         }
@@ -203,9 +156,10 @@ app.post('/predict', async (req, res) => {
             instances: instances
         };
 
+        console.log('Prediction request:', request);
         const [response] = await predictionClient.predict(request);
+        console.log('Prediction response:', response);
 
-        // Add detailed response validation
         if (!response || !response.predictions) {
             throw new Error('Invalid response from Vertex AI');
         }
@@ -213,13 +167,13 @@ app.post('/predict', async (req, res) => {
         res.json({
             predictions: response.predictions,
             deployedModelId: response.deployedModelId,
-            timestamp: CONFIG.lastUpdated
+            timestamp: new Date().toISOString()
         });
 
     } catch (error) {
         console.error('Prediction error:', error);
         
-        // Reset client on error
+        // Reset client on auth errors
         if (error.code === 401 || error.code === 403) {
             predictionClient = null;
         }
@@ -227,7 +181,7 @@ app.post('/predict', async (req, res) => {
         res.status(500).json({
             error: 'Prediction failed',
             message: error.message,
-            timestamp: CONFIG.lastUpdated
+            timestamp: new Date().toISOString()
         });
     }
 });
@@ -238,7 +192,6 @@ app.post('/predict', async (req, res) => {
 
 app.get('/health', async (req, res) => {
     try {
-        // Test Vertex AI client initialization
         const client = await initializeVertexAI();
         
         res.status(200).json({
@@ -246,7 +199,7 @@ app.get('/health', async (req, res) => {
             services: {
                 vertexAI: 'operational'
             },
-            timestamp: CONFIG.lastUpdated,
+            timestamp: new Date().toISOString(),
             config: {
                 projectId: CONFIG.projectId,
                 location: CONFIG.location,
@@ -254,10 +207,11 @@ app.get('/health', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Health check failed:', error);
         res.status(500).json({
             status: 'error',
             error: error.message,
-            timestamp: CONFIG.lastUpdated
+            timestamp: new Date().toISOString()
         });
     }
 });
@@ -267,11 +221,11 @@ app.get('/health', async (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 app.use((err, req, res, next) => {
-    console.error('Error:', err);
+    console.error('Unhandled error:', err);
     res.status(500).json({
         error: 'Internal Server Error',
         message: err.message,
-        timestamp: CONFIG.lastUpdated
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -289,7 +243,6 @@ async function startServer() {
             console.log(`Server running at http://0.0.0.0:${port}`);
             console.log(`Project ID: ${CONFIG.projectId}`);
             console.log(`Last Updated: ${CONFIG.lastUpdated}`);
-            console.log(`Developer: ${CONFIG.developer}`);
         });
 
         // Graceful shutdown

@@ -1,42 +1,42 @@
 # -----------------------------
 # 1) BUILD STAGE
 # -----------------------------
-FROM node:18 AS builder
+FROM node:18-slim AS builder
 
 WORKDIR /app
 
-# Copy over package files first (better caching)
+# Copy package files first (better caching)
 COPY package*.json ./
 
 # Install all dependencies (including dev)
 RUN npm ci
 
-# Now copy the rest of the code
+# Copy the entire project
 COPY . .
 
 # Build the React app
 RUN npm run build
 
-
 # -----------------------------
 # 2) RUN STAGE
 # -----------------------------
-FROM node:18
+FROM node:18-slim
 
 WORKDIR /app
 
 # Copy only production dependencies
 COPY package*.json ./
-RUN npm ci --production
+RUN npm ci --omit=dev
 
-# Copy the compiled React build from stage 1
-COPY --from=builder /app/build ./build
+# Copy the public directory from builder
 COPY --from=builder /app/public ./public
-# Copy the server file
-COPY server.js ./
 
-# Expose port 8080 (commonly used by Node & Cloud Run)
+# Copy the build directory (React build)
+COPY --from=builder /app/build ./build
+
+# Copy server.js
+COPY --from=builder /app/server.js ./
+
 EXPOSE 8080
 
-# Define startup command
-CMD ["node", "--enable-source-maps", "server.js"]
+CMD ["node", "server.js"]
