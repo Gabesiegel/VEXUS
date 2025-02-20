@@ -30,7 +30,7 @@ steps:
         '--port=8080',
         
         # Environment variables
-        '--set-env-vars=^||^PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=5669602021812994048,VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048',
+        '--set-env-vars=PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=5669602021812994048,VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048',
         
         # Secrets
         '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=projects/plucky-weaver-450819-k7/secrets/GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
@@ -40,7 +40,7 @@ steps:
         '--memory=1Gi',
         '--cpu=1',
         '--timeout=300',
-        '--startup-timeout=300',
+        '--startup-probe-timeout=300',
         '--execution-environment=gen2',
         '--concurrency=80',
         '--cpu-boost'
