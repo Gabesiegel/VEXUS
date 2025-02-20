@@ -27,13 +27,16 @@ const CONFIG = {
 async function initializeVertexAI() {
     try {
         console.log('Initializing Vertex AI client with Application Default Credentials.');
+       const credentials = JSON.parse(Buffer.from(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, 'base64').toString());
         return new v1.PredictionServiceClient({
+            credentials,
             apiEndpoint: 'us-central1-aiplatform.googleapis.com',
             projectId: CONFIG.projectId,
-            location: CONFIG.location
+            location: CONFIG.location,
         });
     } catch (error) {
         console.error('Failed to initialize Vertex AI client:', error);
+        console.error('Error details:', { message: error.message, code: error.code, stack: error.stack });
         throw error;
     }
 }
