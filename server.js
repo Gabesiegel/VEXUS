@@ -15,10 +15,10 @@ const __dirname = path.dirname(__filename);
 ///////////////////////////////////////////////////////////////////////////////
 
 const CONFIG = {
-    projectId: "456295042668",
+    projectId: "plucky-weaver-450819-k7",
     location: "us-central1", // Finally!
     endpointId: "7513685331732856832",
-    vertexEndpoint: "projects/456295042668/locations/us-central1/endpoints/7513685331732856832",
+    vertexEndpoint: "projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/7513685331732856832",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel'
 };
