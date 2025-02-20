@@ -64,29 +64,14 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files from the root of the container
-app.use(express.static(path.join(__dirname, '.')));
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Fallback route handler
 app.get('*', async (req, res) => {
     console.log(`[${new Date().toISOString()}] Fallback for: ${req.url}`);
     
-    // Try to serve calculator.html first, then index.html as fallback
-    const calculatorPath = path.join(__dirname, 'calculator.html');
-    const indexPath = path.join(__dirname, 'index.html');
-    
-    try {
-        if (await fs.access(calculatorPath).then(() => true).catch(() => false)) {
-            res.sendFile(calculatorPath);
-        } else if (await fs.access(indexPath).then(() => true).catch(() => false)) {
-            res.sendFile(indexPath);
-        } else {
-            res.status(404).send('Not found');
-        }
-    } catch (error) {
-        console.error('Error serving fallback:', error);
-        res.status(500).send('Internal server error');
-    }
+    res.sendFile(path.join(__dirname, 'public', 'calculator.html'));
 });
 
 ///////////////////////////////////////////////////////////////////////////////
