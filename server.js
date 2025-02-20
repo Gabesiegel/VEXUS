@@ -80,13 +80,17 @@ app.get('*', async (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
+        const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
         const auth = new GoogleAuth({
+            credentials,
             scopes: ['https://www.googleapis.com/auth/cloud-platform']
         });
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
 
-        if (!token || !token.token) {
+        const client = await auth.getClient();
+        const headers = await client.getRequestHeaders();
+        const token = headers['Authorization'].split(' ')[1];
+
+        if (!token) {
             throw new Error('No token received from Google Auth.');
         }
 
