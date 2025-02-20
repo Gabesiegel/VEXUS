@@ -83,11 +83,17 @@ app.get('*', async (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
-        // For testing purposes, return a hardcoded token.
-        // REMOVE THIS AFTER TESTING AND RESTORE THE ORIGINAL AUTH LOGIC.
+        const auth = new GoogleAuth();
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
+
+        if (!token) {
+            throw new Error('Failed to retrieve access token');
+        }
+
         res.json({
-            access_token: 'test_token_123', // Replace with a test token
-            expires_in: 3600,
+            access_token: token.token,
+            expires_in: token.expires_in, // Provide token expiration time
             timestamp: new Date().toISOString()
         });
     } catch (error) {
@@ -104,13 +110,13 @@ app.post('/auth/token', async (req, res) => {
 // 4) Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
 
-let predictionClient = null;
+// let predictionClient = null; // Comment out Vertex AI client
 
 app.post('/predict', async (req, res) => {
     try {
-        if (!predictionClient) {
-            predictionClient = await initializeVertexAI();
-        }
+        // if (!predictionClient) {
+        //     predictionClient = await initializeVertexAI();
+        // } // Comment out Vertex AI initialization
 
         const { instances } = req.body;
         
@@ -131,22 +137,31 @@ app.post('/predict', async (req, res) => {
             }
         }
 
-        const request = {
-            endpoint: CONFIG.vertexEndpoint,
-            instances: instances
-        };
+        // const request = {
+        //     endpoint: CONFIG.vertexEndpoint,
+        //     instances: instances
+        // }; // Comment out Vertex AI request
 
-        console.log('Prediction request:', request);
-        const [response] = await predictionClient.predict(request);
-        console.log('Prediction response:', response);
+        // console.log('Prediction request:', request);
+        // const [response] = await predictionClient.predict(request);
+        // console.log('Prediction response:', response);
 
-        if (!response || !response.predictions) {
-            throw new Error('Invalid response from Vertex AI');
-        }
+        // if (!response || !response.predictions) {
+        //     throw new Error('Invalid response from Vertex AI');
+        // } // Comment out Vertex AI response handling
+
+        // Mock prediction results
+        const mockPredictions = [
+            {
+                confidences: [0.85, 0.10, 0.05], // Example: High confidence for the first label
+                ids: ["0", "1", "2"],
+                displayNames: ["HV Normal", "HV Mild", "HV Severe"] // Replace with actual labels if needed
+            }
+        ];
 
         res.json({
-            predictions: response.predictions,
-            deployedModelId: response.deployedModelId,
+            predictions: mockPredictions,
+            // deployedModelId: response.deployedModelId, // Comment out deployedModelId
             timestamp: new Date().toISOString()
         });
 
@@ -154,9 +169,9 @@ app.post('/predict', async (req, res) => {
         console.error('Prediction error:', error);
         
         // Reset client on auth errors
-        if (error.code === 401 || error.code === 403) {
-            predictionClient = null;
-        }
+        // if (error.code === 401 || error.code === 403) {
+        //     predictionClient = null;
+        // } // Comment out Vertex AI client reset
 
         res.status(500).json({
             error: 'Prediction failed',
