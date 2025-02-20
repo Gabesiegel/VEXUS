@@ -32,7 +32,6 @@ RUN npm ci --production
 # Copy the compiled React build from stage 1
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public
-
 # Copy the server file
 COPY server.js ./
 
@@ -40,4 +39,4 @@ COPY server.js ./
 EXPOSE 8080
 
 # Define startup command
-CMD ["npm", "start"]
+CMD ["node", "--enable-source-maps", "server.js"]

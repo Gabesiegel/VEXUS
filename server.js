@@ -3,21 +3,34 @@ import { v1 } from '@google-cloud/aiplatform';
 import { GoogleAuth } from 'google-auth-library';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
 import cors from 'cors';
 
 // ES modules dirname setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Check build directory exists
+async function checkBuildDir() {
+    try {
+        await fs.access(path.join(__dirname, 'build'));
+        console.log('Build directory exists');
+    } catch (error) {
+        console.warn('Build directory not found:', error.message);
+    }
+}
+checkBuildDir();
+
 ///////////////////////////////////////////////////////////////////////////////
 // 1) Configuration Setup
 ///////////////////////////////////////////////////////////////////////////////
 
 const CONFIG = {
-    projectId: '456295042668',
-    modelId: '5669602021812994048',
-    location: 'us-central1',
-    endpointId: '5669602021812994048',
+    projectId: process.env.PROJECT_ID || '456295042668',
+    modelId: process.env.MODEL_ID || '5669602021812994048',
+    location: process.env.LOCATION || 'us-central1',
+    endpointId: process.env.ENDPOINT_ID || '5669602021812994048',
+    vertexEndpoint: process.env.VERTEX_AI_ENDPOINT || 'projects/456295042668/locations/us-central1/endpoints/5669602021812994048',
     lastUpdated: '2025-02-18 07:02:03',
     developer: 'Gabesiegel'
 };
@@ -27,14 +40,16 @@ async function initializeVertexAI() {
     try {
         // Read the JSON creds from environment
         const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
-        if (!credsJson) {
-            throw new Error('No environment variable GOOGLE_APPLICATION_CREDENTIALS_JSON found.');
-        }
+if (!credsJson) {
+    console.warn('Vertex AI: No credentials found. Starting server without Vertex AI capabilities.');
+    return null;
+}
 
         const credentials = JSON.parse(credsJson);
         if (!credentials.client_email || !credentials.private_key) {
-            throw new Error('Credentials missing required fields (client_email or private_key)');
-        }
+    console.warn('Vertex AI: Credentials missing required fields (client_email or private_key). Starting anyway without Vertex AI capabilities.');
+    return null;
+}
 
         console.log('Vertex AI: Loaded credentials from GOOGLE_APPLICATION_CREDENTIALS_JSON environment variable.');
 
@@ -80,12 +95,22 @@ app.use((req, res, next) => {
     next();
 });
 
+// Serve static files from both build and public directories
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Fallback for HTML5 history API
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
     console.log(`[${new Date().toISOString()}] Fallback for: ${req.url}`);
-    res.sendFile(path.join(__dirname, 'public', 'calculator.html'));
+    // Try build directory first, then public
+    const buildPath = path.join(__dirname, 'build', 'calculator.html');
+    const publicPath = path.join(__dirname, 'public', 'calculator.html');
+    
+    if ((await fs.stat(buildPath).catch(() => false))) {
+        res.sendFile(buildPath);
+    } else {
+        res.sendFile(publicPath);
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,7 +199,7 @@ app.post('/predict', async (req, res) => {
         }
 
         const request = {
-            endpoint: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`,
+            endpoint: CONFIG.vertexEndpoint,
             instances: instances
         };
 

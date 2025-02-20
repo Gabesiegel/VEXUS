@@ -30,7 +30,7 @@ steps:
         '--port=8080',
         
         # Environment variables
-        '--set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/56696020218129940488',
+        '--set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048,PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=5669602021812994048',
         
         # IMPORTANT: Inject your secret as an environment variable:
         '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
@@ -39,12 +39,16 @@ steps:
         '--min-instances=1',
         '--memory=1Gi',
         '--cpu=1',
-        '--timeout=3600',
+        '--timeout=300',
+        '--startup-timeout=300',
         '--execution-environment=gen2',
         '--concurrency=80',
         '--cpu-boost',
         '--build-logging=CLOUD_LOGGING_ONLY'
       ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 images:
 - 'gcr.io/plucky-weaver-450819-k7/vexus-web'
