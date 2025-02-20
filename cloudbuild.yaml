@@ -1,3 +1,8 @@
+# Declare secrets that will be available during build
+secrets:
+- secretEnv:
+    GOOGLE_APPLICATION_CREDENTIALS_JSON: projects/plucky-weaver-450819-k7/secrets/GOOGLE_APPLICATION_CREDENTIALS_JSON/versions/latest
+
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -29,11 +34,9 @@ steps:
         '--allow-unauthenticated',
         '--port=8080',
         
-        # Environment variables
+        # Environment variables and secrets
         '--set-env-vars=VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/5669602021812994048,PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=5669602021812994048',
-        
-        # IMPORTANT: Inject your secret as an environment variable:
-        '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
+        '--update-secrets=GOOGLE_APPLICATION_CREDENTIALS_JSON=projects/plucky-weaver-450819-k7/secrets/GOOGLE_APPLICATION_CREDENTIALS_JSON:latest',
         
         # Other Cloud Run settings
         '--min-instances=1',
