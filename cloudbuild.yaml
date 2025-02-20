@@ -42,7 +42,8 @@ steps:
         '--timeout=3600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost'
+        '--cpu-boost',
+        '--build-logging=CLOUD_LOGGING_ONLY'
       ]
 
 images:
