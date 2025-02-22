@@ -63,40 +63,8 @@ async function initializeVertexAI() {
 ///////////////////////////////////////////////////////////////////////////////
 
 const app = express();
-// Port handling with retries
-const getAvailablePort = async (startPort) => {
-    const net = await import('net');
-    
-    const isPortAvailable = (port) => {
-        return new Promise((resolve) => {
-            const server = net.createServer();
-            server.once('error', () => resolve(false));
-            server.once('listening', () => {
-                server.close();
-                resolve(true);
-            });
-            server.listen(port, '0.0.0.0');
-        });
-    };
-
-    let port = startPort;
-    const maxPort = startPort + 10; // Try up to 10 ports
-
-    while (port <= maxPort) {
-        if (await isPortAvailable(port)) {
-            return port;
-        }
-        port++;
-    }
-    throw new Error('No available ports found');
-};
-
-// Parse initial port
-const initialPort = parseInt(process.env.PORT || '8080', 10);
-if (isNaN(initialPort)) {
-    console.error('Invalid PORT value');
-    process.exit(1);
-}
+// Get port from environment variable
+const PORT = process.env.PORT || 3001;
 
 app.use(cors({
     origin: true,
@@ -299,29 +267,20 @@ async function startServer() {
         // Initialize Vertex AI client
         predictionClient = await initializeVertexAI();
         
-        // Get available port
-        const port = await getAvailablePort(initialPort);
-        
         // Create server with improved error handling
-        const server = app.listen(port, '0.0.0.0');
+        const server = app.listen(PORT, '0.0.0.0');
         
         // Handle server events
         server.on('listening', () => {
             console.log(`[${new Date().toISOString()}] Server starting...`);
-            console.log(`Server running at http://0.0.0.0:${port}`);
+            console.log(`Server running at http://0.0.0.0:${PORT}`);
             console.log(`Project ID: ${CONFIG.projectId}`);
             console.log(`Last Updated: ${CONFIG.lastUpdated}`);
         });
 
         server.on('error', (error) => {
-            if (error.code === 'EADDRINUSE') {
-                console.error(`Port ${port} is in use, trying another port...`);
-                server.close();
-                startServer(); // Retry with next port
-            } else {
-                console.error('Server error:', error);
-                process.exit(1);
-            }
+            console.error('Server error:', error);
+            process.exit(1);
         });
 
         // Improved graceful shutdown
