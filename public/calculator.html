@@ -494,6 +494,8 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(imgElement, 0, 0);
                 const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
+                
+                console.log('base64Image:', base64Image);
 
                 // Make prediction request
                 const response = await fetch('/predict', {
@@ -503,8 +505,7 @@
                     },
                     body: JSON.stringify({
                         instances: [{
-                            b64: base64Image,
-                            mime_type: 'image/jpeg'
+                            b64: base64Image
                         }]
                     })
                 });

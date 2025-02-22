@@ -505,6 +505,7 @@
                 }
 
                 // Make prediction request with correct instances format
+                console.log('base64Image:', base64Image);
                 const response = await fetch('/predict', {
                     method: 'POST',
                     headers: {

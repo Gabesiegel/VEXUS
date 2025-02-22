@@ -23,18 +23,19 @@ steps:
       [
         'run',
         'deploy',
-        'vexus-web',
-        '--image=us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web',
-        '--region=us-central1',
+        '${_SERVICE_NAME}',  # Use the variable
+        '--image=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}', # Use variables
+        '--region=${_DEPLOY_REGION}',  # Use the variable
         '--allow-unauthenticated',
         '--port=3002',
-        
+        '--platform=${_PLATFORM}', # Add platform
+
         # Environment variables
-        '--set-env-vars=PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/7513685331732856832',
-        
+        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/${_AR_PROJECT_ID}/locations/${_DEPLOY_REGION}/endpoints/7513685331732856832',
+
         # Secrets
         '--update-secrets=KEY=KEY:latest',
-        
+
         # Cloud Run settings
         '--min-instances=1',
         '--memory=1Gi',
@@ -42,8 +43,7 @@ steps:
         '--timeout=600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost',
-        '--metadata=startup-probe-type=httpGet,startup-probe-path=/health,startup-probe-initialDelaySeconds=0,startup-probe-timeoutSeconds=240,startup-probe-periodSeconds=240,liveness-probe-type=httpGet,liveness-probe-path=/health,liveness-probe-initialDelaySeconds=0,liveness-probe-timeoutSeconds=3,liveness-probe-periodSeconds=10'
+        '--cpu-boost'
       ]
 options:
   logging: CLOUD_LOGGING_ONLY

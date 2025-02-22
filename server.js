@@ -22,7 +22,7 @@ const CONFIG = {
     endpointId: "7513685331732856832",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel'
-};
+}; // Added a comment to force a redeploy
 
 // Initialize Secret Manager client with ADC
 const secretManagerClient = new SecretManagerServiceClient();
@@ -121,9 +121,10 @@ let predictionClient = null;
 
 app.post('/predict', async (req, res) => {
     try {
+        console.log('[/predict] handler invoked'); // New logging statement
         // Get fresh credentials
         const credentials = await getCredentials();
-        
+
         const { instances } = req.body;
         
         if (!instances || !Array.isArray(instances)) {
@@ -150,31 +151,17 @@ app.post('/predict', async (req, res) => {
         });
 
         // Make prediction request
-        // Format base64 data - ensure it's properly formatted
-        const formatBase64 = (b64data) => {
-            // Remove data URL prefix if present
-            let cleanData = b64data;
-            if (b64data.includes('base64,')) {
-                cleanData = b64data.split('base64,')[1];
-            }
-            // Remove any whitespace
-            cleanData = cleanData.replace(/\s/g, '');
-            // Ensure proper padding
-            while (cleanData.length % 4) {
-                cleanData += '=';
-            }
-            return cleanData;
-        };
-
         const request = {
-            name: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`,
+            name: `projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/7513685331732856832`,
             instances: instances.map(instance => ({
-                content: formatBase64(instance.b64)
+                b64: instance.b64
             }))
         };
 
         console.log('Making prediction request:', request);
-        console.log('Constructed resource name:', request.name); // Added logging
+        console.log('Making prediction request:', request);
+        console.log('Constructed resource name:', request.name);
+	console.log('Full request payload:', JSON.stringify(request, null, 2));
         const [response] = await predictionClient.predict(request);
 
         console.log('Prediction response:', response);
@@ -263,9 +250,10 @@ app.use((err, req, res, next) => {
 
 async function startServer() {
     try {
+        console.log('startServer function invoked');
         // Initialize Vertex AI client
         predictionClient = await initializeVertexAI();
-        
+
         // Create server with improved error handling
         const server = app.listen(PORT, '0.0.0.0');
         
@@ -333,7 +321,7 @@ process.on('uncaughtException', (error) => {
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+        console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 export default app;
