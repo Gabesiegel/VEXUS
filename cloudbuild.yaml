@@ -27,7 +27,7 @@ steps:
         '--image=us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web',
         '--region=us-central1',
         '--allow-unauthenticated',
-        '--port=8080',
+        '--port=3002',
         
         # Environment variables
         '--set-env-vars=PROJECT_ID=plucky-weaver-450819-k7,LOCATION=us-central1,ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/7513685331732856832',

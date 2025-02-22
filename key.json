@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "plucky-weaver-450819-k7",
+  "private_key_id": "a5c9e8565d4c94fffc0e546fddb6f4c58056972c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCy/9utJxlZELnf\nj56jCVejBWwuJAogdlYbh+CN69US50oH0UI+yqB11kgtCTdGQ+7n9SIYBPo8L1x+\n8x3k7loy6wueOZy15ANc+tN23LEk8Wg3VBMe2rINi3KwSHn7XHtcT7Db+SFz6T7w\nWO/wCxtG8udQDx4tBp6BJ8Fz/NlSTxGN/1OijYgmUu6w6fJ+mnIhNlqarQa0+FwO\nTCxlOiOAca3EXlu4F1aQ1cMaURqpsKrnmzPwt3OQ74Nyeh7NZfafJWTZtiRewZMQ\nyX499kIWGx8qpwP0wFi2U9i0w43hCudLyIBrF1D5AhA0GyLSTZ+39yvIcrVzJ31e\n8Aw8OcKnAgMBAAECggEAQszUJOrd/UyOKT22RH7Ei0yHQjLl6pZu7QhIx332vv68\ntG0mDTveJQuqVNBHJfxNKJhlOFSHNDWyjZfaFKjU1YK9C7fRYVnt3WGn0AhtPW2v\n6FICbrXL090yGFJ730/0o48D4Bu5ncGyYMy4AjuK2u/kXg6+QqxhM67r9YarbZj+\nigyGFzo6uweMieeOb2FimgU5T/2xmMGs+VLtRYOqB11hUDsK1OzRk1FUVchNeula\n+bEBencPjs9zcsiGgFXZenj80phSlccOBQD31bKQj2bj6x4eQ7DHFHtm90VQJLZ0\n4S9/pGsWDsEqfKvfX+PnKwBwzIsJmjwo9OyjwhUXvQKBgQDwVOLHZFhoQ/K6J21H\nHb5m81RMDRsIrgLQVXi9OECiwPMyTA2zUou/nxPE5BEkRxvQGwjck/hrJIhELlP5\nLA9HHyVP+KBgl2ubDAt55zdihiO66xs90c4fI5VvBgnRx5VGVW0zlETSbuXdehGP\npRg0GWP9bGWxps5vssT11RI4pQKBgQC+q1gNUjOeItxkUJYt9jeNhFqXyQ9omqXJ\n/bC0DNCk3VTjp0mw9t/psjUimYjQ8nbmH8Jo6SbolXHiX4atW+q5ZgbHBhhlNlad\nW1edCB4VvEIyZf3MiK+yu5uReg1OJwIWF+UF94+hZubO2IORo/Hpd4FU252UhkSD\nzxnzbg8gWwKBgCPGvyuniHGdC9kiXWYky19QAdCAcvHL1adl0d95LEYOKyXlpHR5\naUxRRgQdX1/jJgTIwXz0mhp5Cb/8lYuWP3/65vcMr/MxF1exZ1PyU5BbH56HuTpu\nrRx9k5U/dN7BszsRJHx1KfmZgKaDsXGMxhmbXgMvy8OybTC7kA54dYnxAoGBAK6+\nXCmBP7tbWb86OBkRgaJaPajEZTHKIc14ipzI7eNa0bT+mUPtThNg9t+p9MECpkOL\nseHyZG1eoYwFXmm9Rub5gZafmHYSEdmPYEGTsfbbnZOQ88SjNNtKo231fQI2L+xN\no+EPHPygUUIbHqG4rjn5A3fg+o+nal2ezbrTEFvnAoGAdIfOGPiV5P5m6NZRwOLn\nQFIn8B/dmV+IDJU0RSmqz40VHoEsoB5Z8WCHyBP+D5wlMGWeDvutyKK28KGTnrNX\nNxniLLHqCrqcYwCCx4q/N5deHGl1DiZKh/vd/NP0C7NcrxMmBebGxV7E7FgH2hp1\nnTHYswVCHIeApqs3sIV9uTA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "vertex-service-account@plucky-weaver-450819-k7.iam.gserviceaccount.com",
+  "client_id": "103260855567074970903",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vertex-service-account%40plucky-weaver-450819-k7.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

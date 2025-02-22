@@ -63,8 +63,8 @@ async function initializeVertexAI() {
 ///////////////////////////////////////////////////////////////////////////////
 
 const app = express();
-// Get port from environment variable
-const PORT = process.env.PORT || 3001;
+// Get port from environment variable, defaulting to 3002 if not set
+const PORT = process.env.PORT || 3002;
 
 app.use(cors({
     origin: true,
@@ -169,13 +169,12 @@ app.post('/predict', async (req, res) => {
         const request = {
             name: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`,
             instances: instances.map(instance => ({
-                instance: {
-                    content: formatBase64(instance.b64)
-                }
+                content: formatBase64(instance.b64)
             }))
         };
 
         console.log('Making prediction request:', request);
+        console.log('Constructed resource name:', request.name); // Added logging
         const [response] = await predictionClient.predict(request);
 
         console.log('Prediction response:', response);
