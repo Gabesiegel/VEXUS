@@ -42,20 +42,9 @@ steps:
         '--timeout=600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost'
+        '--cpu-boost',
+        '--metadata=startup-probe-type=httpGet,startup-probe-path=/health,startup-probe-initialDelaySeconds=0,startup-probe-timeoutSeconds=240,startup-probe-periodSeconds=240,liveness-probe-type=httpGet,liveness-probe-path=/health,liveness-probe-initialDelaySeconds=0,liveness-probe-timeoutSeconds=3,liveness-probe-periodSeconds=10'
       ]
-    metadata:
-      annotations:
-        run.googleapis.com/startup-probe-type: "httpGet"
-        run.googleapis.com/startup-probe-path: "/health"
-        run.googleapis.com/startup-probe-initialDelaySeconds: "0"
-        run.googleapis.com/startup-probe-timeoutSeconds: "240"
-        run.googleapis.com/startup-probe-periodSeconds: "240"
-        run.googleapis.com/liveness-probe-type: "httpGet"
-        run.googleapis.com/liveness-probe-path: "/health"
-        run.googleapis.com/liveness-probe-initialDelaySeconds: "0"
-        run.googleapis.com/liveness-probe-timeoutSeconds: "3"
-        run.googleapis.com/liveness-probe-periodSeconds: "10"
 options:
   logging: CLOUD_LOGGING_ONLY
 
