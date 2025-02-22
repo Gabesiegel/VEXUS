@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@google-cloud/aiplatform": "^3.34.0",
+    "@google-cloud/pubsub": "^4.10.0",
     "@google-cloud/secret-manager": "^5.6.0",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",

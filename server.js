@@ -1,6 +1,7 @@
 import express from 'express';
 import { v1 } from '@google-cloud/aiplatform';
-import { GoogleAuth } from 'google-auth-library';
+import { GoogleAuth, JWT } from 'google-auth-library';
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
@@ -16,25 +17,39 @@ const __dirname = path.dirname(__filename);
 
 const CONFIG = {
     projectId: "plucky-weaver-450819-k7",
-    location: "us-central1", // Finally!
+    projectNumber: "456295042668",
+    location: "us-central1",
     endpointId: "7513685331732856832",
-    vertexEndpoint: "projects/plucky-weaver-450819-k7/locations/us-central1/endpoints/7513685331732856832",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel'
 };
 
+// Initialize Secret Manager client with ADC
+const secretManagerClient = new SecretManagerServiceClient();
+
+// Get credentials from Secret Manager
+async function getCredentials() {
+    try {
+        const secretName = `projects/${CONFIG.projectId}/secrets/KEY/versions/latest`;
+        console.log('Getting credentials from Secret Manager:', secretName);
+        const [version] = await secretManagerClient.accessSecretVersion({ name: secretName });
+        return JSON.parse(version.payload.data.toString());
+    } catch (error) {
+        console.error('Failed to get credentials from Secret Manager:', error);
+        throw error;
+    }
+}
+
 // Initialize Vertex AI client
 async function initializeVertexAI() {
     try {
-        console.log('Initializing Vertex AI client with Application Default Credentials.');
-        const credentialsPath = '/secrets/KEY'; // Updated secret path
-        const credentialsContent = await fs.readFile(credentialsPath, 'utf-8');
-        const credentials = JSON.parse(credentialsContent);
+        console.log('Getting credentials from Secret Manager...');
+        const credentials = await getCredentials();
+        
+        console.log('Initializing Vertex AI client with Secret Manager credentials');
         return new v1.PredictionServiceClient({
-            credentials,
             apiEndpoint: 'us-central1-aiplatform.googleapis.com',
-            projectId: CONFIG.projectId,
-            location: CONFIG.location,
+            credentials: credentials
         });
     } catch (error) {
         console.error('Failed to initialize Vertex AI client:', error);
@@ -48,9 +63,37 @@ async function initializeVertexAI() {
 ///////////////////////////////////////////////////////////////////////////////
 
 const app = express();
-const port = parseInt(process.env.PORT || '8080', 10);
+// Port handling with retries
+const getAvailablePort = async (startPort) => {
+    const net = await import('net');
+    
+    const isPortAvailable = (port) => {
+        return new Promise((resolve) => {
+            const server = net.createServer();
+            server.once('error', () => resolve(false));
+            server.once('listening', () => {
+                server.close();
+                resolve(true);
+            });
+            server.listen(port, '0.0.0.0');
+        });
+    };
 
-if (isNaN(port)) {
+    let port = startPort;
+    const maxPort = startPort + 10; // Try up to 10 ports
+
+    while (port <= maxPort) {
+        if (await isPortAvailable(port)) {
+            return port;
+        }
+        port++;
+    }
+    throw new Error('No available ports found');
+};
+
+// Parse initial port
+const initialPort = parseInt(process.env.PORT || '8080', 10);
+if (isNaN(initialPort)) {
     console.error('Invalid PORT value');
     process.exit(1);
 }
@@ -85,19 +128,11 @@ app.get('*', async (req, res) => {
 
 app.post('/auth/token', async (req, res) => {
     try {
-        const auth = new GoogleAuth();
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        console.log("Token before check:", token);
-
-        if (!token || !token.token) {
-            throw new Error('Failed to retrieve access token');
-        }
-        console.log("Token after check:", token);
-
+        // Initialize Vertex AI client to verify credentials
+        await initializeVertexAI();
+        
         res.json({
-            access_token: token.token,
-            expires_in: token.expires_in,
+            status: 'ok',
             timestamp: new Date().toISOString()
         });
     } catch (error) {
@@ -118,10 +153,9 @@ let predictionClient = null;
 
 app.post('/predict', async (req, res) => {
     try {
-        if (!predictionClient) {
-            predictionClient = await initializeVertexAI();
-        }
-
+        // Get fresh credentials
+        const credentials = await getCredentials();
+        
         const { instances } = req.body;
         
         if (!instances || !Array.isArray(instances)) {
@@ -141,37 +175,58 @@ app.post('/predict', async (req, res) => {
             }
         }
 
-        const request = {
-            endpoint: CONFIG.vertexEndpoint,
-            instances: instances.map(instance => ({
-                content: instance.b64 // Use 'content' for base64 data
-            })),
-            parameters: {          // Add parameters
-                confidenceThreshold: 0.5,
-                maxPredictions: 5
+        // Create prediction client
+        const predictionClient = new v1.PredictionServiceClient({
+            apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+            credentials: credentials
+        });
+
+        // Make prediction request
+        // Format base64 data - ensure it's properly formatted
+        const formatBase64 = (b64data) => {
+            // Remove data URL prefix if present
+            let cleanData = b64data;
+            if (b64data.includes('base64,')) {
+                cleanData = b64data.split('base64,')[1];
             }
+            // Remove any whitespace
+            cleanData = cleanData.replace(/\s/g, '');
+            // Ensure proper padding
+            while (cleanData.length % 4) {
+                cleanData += '=';
+            }
+            return cleanData;
         };
 
-        console.log('Prediction request:', request);
+        const request = {
+            name: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`,
+            instances: instances.map(instance => ({
+                instance: {
+                    content: formatBase64(instance.b64)
+                }
+            }))
+        };
+
+        console.log('Making prediction request:', request);
         const [response] = await predictionClient.predict(request);
+
         console.log('Prediction response:', response);
 
         if (!response || !response.predictions) {
             throw new Error('Invalid response from Vertex AI');
         }
 
-        // Extract display names, if available
         const predictions = response.predictions.map(prediction => {
             const { confidences, ids, displayNames } = prediction;
             return {
                 confidences,
                 ids,
-                displayNames: displayNames || [] // Ensure displayNames is an array
+                displayNames: displayNames || []
             };
         });
 
         res.json({
-            predictions: predictions, // Use processed predictions
+            predictions: predictions,
             deployedModelId: response.deployedModelId,
             timestamp: new Date().toISOString()
         });
@@ -244,27 +299,64 @@ async function startServer() {
         // Initialize Vertex AI client
         predictionClient = await initializeVertexAI();
         
-        const server = app.listen(port, '0.0.0.0', () => {
+        // Get available port
+        const port = await getAvailablePort(initialPort);
+        
+        // Create server with improved error handling
+        const server = app.listen(port, '0.0.0.0');
+        
+        // Handle server events
+        server.on('listening', () => {
             console.log(`[${new Date().toISOString()}] Server starting...`);
             console.log(`Server running at http://0.0.0.0:${port}`);
             console.log(`Project ID: ${CONFIG.projectId}`);
             console.log(`Last Updated: ${CONFIG.lastUpdated}`);
         });
 
-        // Graceful shutdown
-        const shutdown = () => {
+        server.on('error', (error) => {
+            if (error.code === 'EADDRINUSE') {
+                console.error(`Port ${port} is in use, trying another port...`);
+                server.close();
+                startServer(); // Retry with next port
+            } else {
+                console.error('Server error:', error);
+                process.exit(1);
+            }
+        });
+
+        // Improved graceful shutdown
+        const shutdown = async () => {
             console.log('Shutting down gracefully...');
-            server.close(() => {
-                console.log('Server closed');
-                process.exit(0);
+            
+            // Close server first
+            await new Promise((resolve) => {
+                server.close(() => {
+                    console.log('Server closed');
+                    resolve();
+                });
             });
 
-            setTimeout(() => {
+            // Cleanup any active connections
+            if (predictionClient) {
+                try {
+                    await predictionClient.close();
+                    console.log('Prediction client closed');
+                } catch (error) {
+                    console.error('Error closing prediction client:', error);
+                }
+            }
+
+            // Exit after cleanup or timeout
+            const forceExit = setTimeout(() => {
                 console.error('Forced shutdown after timeout');
                 process.exit(1);
             }, 10000);
+
+            process.exit(0);
+            clearTimeout(forceExit);
         };
 
+        // Handle shutdown signals
         process.on('SIGTERM', shutdown);
         process.on('SIGINT', shutdown);
         
