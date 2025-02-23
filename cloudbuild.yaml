@@ -17,7 +17,7 @@ steps:
         'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA'
       ]
 
-  # Step 3: Deploy to Cloud Run
+  # Step 3: Deploy to Cloud Run without traffic
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
@@ -30,6 +30,7 @@ steps:
         '--allow-unauthenticated',
         '--port=3002',
         '--platform=${_PLATFORM}', # Add platform
+        '--no-traffic', # Deploy without traffic
 
         # Environment variables
         '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/456295042668/locations/${_DEPLOY_REGION}/endpoints/7513685331732856832',
@@ -44,8 +45,23 @@ steps:
         '--timeout=600',
         '--execution-environment=gen2',
         '--concurrency=80',
-        '--cpu-boost'
+        '--cpu-boost',
+        '--tag=release-$SHORT_SHA'  # Tag the revision for identification
       ]
+
+  # Step 4: Update traffic
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'run',
+        'services',
+        'update-traffic',
+        '${_SERVICE_NAME}',
+        '--region=${_DEPLOY_REGION}',
+        '--platform=${_PLATFORM}',
+        '--to-tags=release-$SHORT_SHA=100'  # Send 100% traffic to new revision
+      ]
+
 options:
   logging: CLOUD_LOGGING_ONLY
 
