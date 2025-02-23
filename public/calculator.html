@@ -522,7 +522,13 @@
                 }
 
                 // Process predictions
+                if (!result.predictions || !result.predictions[0] || !result.predictions[0].confidences) {
+                    throw new Error('Invalid prediction response format');
+                }
                 const confidences = result.predictions[0].confidences;
+                if (!Array.isArray(confidences)) {
+                    throw new Error('Confidences is not an array');
+                }
                 const top3 = confidences
                     .map((conf, idx) => ({
                         label: labelSet[idx],

@@ -5,7 +5,7 @@ steps:
       [
         'build',
         '-t',
-        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web',
+        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA',
         '.'
       ]
 
@@ -14,24 +14,25 @@ steps:
     args:
       [
         'push',
-        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web'
+        'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA'
       ]
 
   # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
+        'beta',
         'run',
         'deploy',
         '${_SERVICE_NAME}',  # Use the variable
-        '--image=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}', # Use variables
+        '--image=us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA',
         '--region=${_DEPLOY_REGION}',  # Use the variable
         '--allow-unauthenticated',
         '--port=3002',
         '--platform=${_PLATFORM}', # Add platform
 
         # Environment variables
-        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/${_AR_PROJECT_ID}/locations/${_DEPLOY_REGION}/endpoints/7513685331732856832',
+        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=7513685331732856832,VERTEX_AI_ENDPOINT=projects/456295042668/locations/${_DEPLOY_REGION}/endpoints/7513685331732856832',
 
         # Secrets
         '--update-secrets=KEY=KEY:latest',
@@ -49,4 +50,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-- 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web'
+- 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA'

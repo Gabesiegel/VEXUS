@@ -1,0 +1,23 @@
+title: ImageClassification
+type: object
+required:
+- content
+properties:
+  content:
+    type: string
+    format: byte
+    x-batchpredict-preprocessing: load-bytes-from-gcs
+    description: The image bytes or Cloud Storage URI to make the prediction on.
+  mimeType:
+    type: string
+    description: >
+      The MIME type of the content of the image. Only the images in below listed
+      MIME types are supported.
+    enum:
+    - image/jpeg
+    - image/gif
+    - image/png
+    - image/webp
+    - image/bmp
+    - image/tiff
+    - image/vnd.microsoft.icon
