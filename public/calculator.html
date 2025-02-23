@@ -482,7 +482,7 @@
         let authRetryCount = 0;
         const MAX_AUTH_RETRIES = 3;
 
-        async function classifyImage(imgElement, resultId, topResultsId, dropdownId, errorNoteId, labelSet) {
+        async function classifyImage(imgElement, resultId, topResultsId, dropdownId, errorNoteId, labelSet, imageType) {
             try {
                 // Show loading state
                 document.getElementById(resultId).textContent = "Analyzing image...";
@@ -493,8 +493,11 @@
                 canvas.height = imgElement.height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(imgElement, 0, 0);
-                const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
-                
+                const base64DataURL = canvas.toDataURL('image/jpeg');
+                const base64Image = base64DataURL.split(',')[1];
+
+                console.log('imgElement.src:', imgElement.src);
+                console.log('base64DataURL:', base64DataURL);
                 console.log('base64Image:', base64Image);
 
                 // Make prediction request
@@ -504,6 +507,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        imageType: imageType,
                         instances: [{
                             b64: base64Image
                         }]
@@ -516,6 +520,9 @@
                 }
 
                 const result = await response.json();
+
+                // Log the ENTIRE result object for debugging
+                console.log('Full prediction response:', result);
                 
                 if (!result.predictions || !result.predictions[0]) {
                     throw new Error('Invalid prediction response');
@@ -536,27 +543,39 @@
                 }
 
                 const top3 = confidences
-                    .map((conf, idx) => ({
-                        label: result.predictions[0].displayNames[idx],
-                        prob: (conf * 100).toFixed(1)
-                    }))
+                    .map((conf, idx) => {
+                        const displayName = result.predictions[0].displayNames[idx];
+                        return {
+                            label: displayName || "Unknown", // Provide a default label
+                            prob: (conf * 100).toFixed(1)
+                        };
+                    })
                     .sort((a, b) => b.prob - a.prob)
                     .slice(0, 3);
 
+                // Initialize top1 to null
+                let top1 = null;
+
                 // Update UI
-                const top1 = top3[0];
-                document.getElementById(resultId).textContent =
-                    `Top prediction: ${top1.label} (${top1.prob}%)`;
-                
-                document.getElementById(topResultsId).innerHTML = 
-                    '<strong>Top 3 Predictions:</strong><br>' +
-                    top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
+                if (top3.length > 0) {
+                    top1 = top3[0]; // Reassign top1 if predictions are available
+                    document.getElementById(resultId).textContent =
+                        `Top prediction: ${top1.label} (${top1.prob}%)`;
+
+                    document.getElementById(topResultsId).innerHTML =
+                        '<strong>Top 3 Predictions:</strong><br>' +
+                        top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
+                } else {
+                    document.getElementById(resultId).textContent = "No predictions found.";
+                    document.getElementById(topResultsId).innerHTML = "";
+                }
 
                 // Update dropdown and error note
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
 
-                if (parseFloat(top1.prob) > 50) {
+                // Check if top1 is defined before accessing its properties
+                if (top1 && parseFloat(top1.prob) > 50) {
                     const matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
                     if (matchedOption) {
                         dropdown.value = matchedOption.value;
@@ -651,7 +670,8 @@
                     'hepaticTopResults',
                     'hepaticDropdown',
                     'hepaticErrorNote',
-                    modelLabels.hepatic
+                    modelLabels.hepatic,
+                    'hepatic'
                 );
             };
         });
@@ -670,7 +690,8 @@
                     'portalTopResults',
                     'portalDropdown',
                     'portalErrorNote',
-                    modelLabels.portal
+                    modelLabels.portal,
+                    'portal'
                 );
             };
         });
@@ -689,7 +710,8 @@
                     'renalTopResults',
                     'renalDropdown',
                     'renalErrorNote',
-                    modelLabels.renal
+                    modelLabels.renal,
+                    'renal'
                 );
             };
         });

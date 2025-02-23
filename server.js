@@ -2,6 +2,7 @@ import express from 'express';
 import { v1, helpers } from '@google-cloud/aiplatform';
 import { GoogleAuth, JWT } from 'google-auth-library';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { Storage } from '@google-cloud/storage';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
@@ -21,8 +22,34 @@ const CONFIG = {
     location: "us-central1",
     endpointId: "7513685331732856832",
     lastUpdated: new Date().toISOString(),
-    developer: 'Gabesiegel'
+    developer: 'Gabesiegel',
+    bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
 }; // Added a comment to force a redeploy
+
+// Initialize Cloud Storage client
+const storage = new Storage();
+const bucket = storage.bucket(CONFIG.bucketName);
+
+// Function to upload image to Cloud Storage
+async function uploadImage(base64Image, imageType) {
+    try {
+        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Data, 'base64');
+        const filename = `${imageType}_${Date.now()}.jpg`;
+        const file = bucket.file(filename);
+        
+        await file.save(buffer, {
+            metadata: {
+                contentType: 'image/jpeg'
+            }
+        });
+        
+        return `gs://${CONFIG.bucketName}/${filename}`;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw error;
+    }
+}
 
 // Initialize Secret Manager client with ADC
 const secretManagerClient = new SecretManagerServiceClient();
@@ -157,6 +184,8 @@ app.post('/predict', async (req, res) => {
             if (!instance.b64) {
                 return res.status(400).json({ error: 'Each instance must have b64 data', timestamp: new Date().toISOString() });
             }
+            // Log the received base64 data for each instance
+            console.log("Received base64 data for instance:", instance.b64);
         }
 
         const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
@@ -167,14 +196,11 @@ app.post('/predict', async (req, res) => {
             instances: instances.map(instance => helpers.toValue({ content: instance.b64 }))
         };
 
-        console.log('Instances being sent:', instances);
-        console.log('Making prediction request:', request);
-        console.log('Constructed resource name:', request.name);
-        console.log('Full request payload:', JSON.stringify(request, null, 2));
+        // Log the full request object before sending
+        console.log("Full request object:", JSON.stringify(request, null, 2));
 
         console.log("Sending prediction request...");
         const [response] = await predictionClient.predict(request);
-        console.log('Prediction successful:', response);
 
         // Log the raw response for debugging
         console.log('Raw Vertex AI response:', JSON.stringify(response, null, 2));
