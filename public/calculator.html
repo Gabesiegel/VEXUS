@@ -529,9 +529,15 @@
                 if (!Array.isArray(confidences)) {
                     throw new Error('Confidences is not an array');
                 }
+
+                // Add check for displayNames
+                if (!result.predictions[0].displayNames || !Array.isArray(result.predictions[0].displayNames)) {
+                    throw new Error('displayNames is missing or not an array');
+                }
+
                 const top3 = confidences
                     .map((conf, idx) => ({
-                        label: labelSet[idx],
+                        label: result.predictions[0].displayNames[idx],
                         prob: (conf * 100).toFixed(1)
                     }))
                     .sort((a, b) => b.prob - a.prob)
@@ -539,7 +545,7 @@
 
                 // Update UI
                 const top1 = top3[0];
-                document.getElementById(resultId).textContent = 
+                document.getElementById(resultId).textContent =
                     `Top prediction: ${top1.label} (${top1.prob}%)`;
                 
                 document.getElementById(topResultsId).innerHTML = 
