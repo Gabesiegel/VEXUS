@@ -143,36 +143,16 @@ app.post('/predict', async (req, res) => {
         const credentials = await getCredentials();
         console.log("Credentials fetched:", credentials); // REMOVE THIS LATER - SENSITIVE INFO!
 
-        console.log("Checking predictionClient...");
-        if (!predictionClient) {
-            console.log("Creating new predictionClient...");
-            predictionClient = new v1.PredictionServiceClient({
-                apiEndpoint: 'us-central1-aiplatform.googleapis.com',
-                credentials: credentials
-            });
-            console.log("New predictionClient created");
+        // Force re-initialization of predictionClient for every request (diagnostic)
+        console.log("Creating new predictionClient...");
+        predictionClient = new v1.PredictionServiceClient({
+            apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+            credentials: credentials
+        });
+        console.log("New predictionClient created");
 
-            // Attempt to log serving signature
-            try {
-                const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
-                predictionClient.getEndpoint({name: endpointPath}).then(result => {
-                    const endpoint = result[0];
-                    if (endpoint && endpoint.deployedModels && endpoint.deployedModels.length > 0) {
-                        const deployedModelId = endpoint.deployedModels[0].id;
-                        console.log("Deployed Model ID:", deployedModelId);
-                        console.log("Endpoint:", endpoint); // Log the entire endpoint object
-                    } else {
-                        console.log("No deployed models found on the endpoint.");
-                    }
-                }).catch(err => {
-                    console.error("Error getting endpoint:", err);
-                });
-            } catch (error) {
-                console.error("Error logging serving signature:", error);
-            }
-        } else {
-            console.log("Using existing predictionClient");
-        }
+        // Log the endpointId to double-check
+        console.log("Endpoint ID from CONFIG:", CONFIG.endpointId);
 
         const { instances } = req.body;
 
