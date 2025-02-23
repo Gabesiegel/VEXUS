@@ -523,7 +523,7 @@
 
                 // Log the ENTIRE result object for debugging
                 console.log('Full prediction response:', result);
-                
+
                 if (!result.predictions || !result.predictions[0]) {
                     throw new Error('Invalid prediction response');
                 }
@@ -542,6 +542,10 @@
                     throw new Error('displayNames is missing or not an array');
                 }
 
+                console.log('Confidences length:', confidences.length);
+                console.log('DisplayNames length:', result.predictions[0].displayNames.length);
+
+
                 const top3 = confidences
                     .map((conf, idx) => {
                         const displayName = result.predictions[0].displayNames[idx];
@@ -556,26 +560,25 @@
                 // Initialize top1 to null
                 let top1 = null;
 
-                // Update UI
+                // Update UI and set top1
                 if (top3.length > 0) {
-                    top1 = top3[0]; // Reassign top1 if predictions are available
-                    document.getElementById(resultId).textContent =
-                        `Top prediction: ${top1.label} (${top1.prob}%)`;
-
-                    document.getElementById(topResultsId).innerHTML =
-                        '<strong>Top 3 Predictions:</strong><br>' +
-                        top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
+                  top1 = top3[0];
+                  document.getElementById(resultId).textContent = `Top prediction: ${top1.label} (${top1.prob}%)`;
+                  document.getElementById(topResultsId).innerHTML = '<strong>Top 3 Predictions:</strong><br>' + top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
                 } else {
-                    document.getElementById(resultId).textContent = "No predictions found.";
-                    document.getElementById(topResultsId).innerHTML = "";
+                  document.getElementById(resultId).textContent = "No predictions found.";
+                  document.getElementById(topResultsId).innerHTML = "";
                 }
+
+                // Log top1 for debugging
+                console.log('top1:', top1);
 
                 // Update dropdown and error note
                 const dropdown = document.getElementById(dropdownId);
                 const errorNote = document.getElementById(errorNoteId);
 
-                // Check if top1 is defined before accessing its properties
-                if (top1 && parseFloat(top1.prob) > 50) {
+                // Check if top1 is defined and has the label property before accessing it
+                if (top1 && top1.label && parseFloat(top1.prob) > 50) {
                     const matchedOption = [...dropdown.options].find(opt => opt.value === top1.label);
                     if (matchedOption) {
                         dropdown.value = matchedOption.value;

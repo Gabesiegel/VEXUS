@@ -186,19 +186,19 @@ app.post('/predict', async (req, res) => {
         console.log('Raw Vertex AI response:', JSON.stringify(response, null, 2));
 
         // Ensure predictions array exists and has the expected structure
-        const predictions = response.predictions.map(prediction => {
+        const predictions = response.predictions ? response.predictions.map(prediction => {
             // Extract the values we need, with defaults if missing
             const confidences = prediction.confidences || [];
             const ids = prediction.ids || [];
             const displayNames = prediction.displayNames || [];
-            
+
             // Return an object matching the expected client format
             return {
                 confidences: Array.isArray(confidences) ? confidences : [],
                 ids: Array.isArray(ids) ? ids : [],
                 displayNames: Array.isArray(displayNames) ? displayNames : []
             };
-        });
+        }) : []; // Return an empty array if response.predictions is undefined
 
         // Send response with full metadata
         res.json({
