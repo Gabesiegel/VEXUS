@@ -32,7 +32,7 @@ steps:
         '--platform=${_PLATFORM}', # Add platform
 
         # Environment variables
-        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=685115590871875584,VERTEX_AI_ENDPOINT=projects/456295042668/locations/${_DEPLOY_REGION}/endpoints/685115590871875584',
+        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=8159951878260523008,VERTEX_AI_ENDPOINT=projects/456295042668/locations/${_DEPLOY_REGION}/endpoints/8159951878260523008',
 
         # Secrets
         '--update-secrets=KEY=KEY:latest',

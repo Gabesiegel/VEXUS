@@ -20,7 +20,7 @@ const CONFIG = {
     projectId: "plucky-weaver-450819-k7",
     projectNumber: "456295042668",
     location: "us-central1",
-    endpointId: "685115590871875584",
+    endpointId: "8159951878260523008",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
@@ -75,7 +75,7 @@ async function initializeVertexAI() {
 
         console.log('Initializing Vertex AI client with Secret Manager credentials');
         return new v1.PredictionServiceClient({
-            apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+            apiEndpoint: process.env.VERTEX_AI_ENDPOINT,
             credentials: credentials
         });
     } catch (error) {
@@ -146,7 +146,7 @@ app.post('/predict', async (req, res) => {
         // Force re-initialization of predictionClient for every request (diagnostic)
         console.log("Creating new predictionClient...");
         predictionClient = new v1.PredictionServiceClient({
-            apiEndpoint: 'us-central1-aiplatform.googleapis.com',
+            apiEndpoint: process.env.VERTEX_AI_ENDPOINT,
             credentials: credentials
         });
         console.log("New predictionClient created");
