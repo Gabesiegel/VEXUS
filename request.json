@@ -1,0 +1,20 @@
+{
+    "displayName": "vexus_prediction_job",
+    "model": "projects/456295042668/locations/us-central1/endpoints/8159951878260523008",
+    "modelParameters": {
+      "confidenceThreshold": 0.5,
+      "maxPredictions": 5
+    },
+    "inputConfig": {
+        "instancesFormat": "jsonl",
+        "gcsSource": {
+            "uris": ["gs://vexus_images/input.jsonl"]
+        }
+    },
+    "outputConfig": {
+        "predictionsFormat": "jsonl",
+        "gcsDestination": {
+            "outputUriPrefix": "gs://vexus_images/predictions/"
+        }
+    }
+}

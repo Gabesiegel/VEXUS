@@ -161,11 +161,11 @@ app.post('/predict', async (req, res) => {
         }
 
         for (const instance of instances) {
-            if (!instance.b64) {
-                return res.status(400).json({ error: 'Each instance must have b64 data', timestamp: new Date().toISOString() });
+            if (!instance.content) { // Corrected check for 'content'
+                return res.status(400).json({ error: 'Each instance must have content data', timestamp: new Date().toISOString() });
             }
             // Log the received base64 data for each instance
-            console.log("Received base64 data for instance:", instance.b64);
+            console.log("Received base64 data for instance:", instance.content); // Corrected log
         }
 
         const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
@@ -173,7 +173,7 @@ app.post('/predict', async (req, res) => {
 
         const request = {
             endpoint: endpointPath,
-            instances: instances.map(instance => helpers.toValue({ content: instance.b64 }))
+            instances: instances.map(instance => helpers.toValue({ content: instance.content })) // Corrected 'content'
         };
 
         // Log the full request object before sending
