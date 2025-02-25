@@ -20,7 +20,7 @@ const CONFIG = {
     projectId: "plucky-weaver-450819-k7",
     projectNumber: "456295042668",
     location: "us-central1",
-    endpointId: "7513685331732856832",
+    endpointId: "685115590871875584",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"

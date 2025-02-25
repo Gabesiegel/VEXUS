@@ -1,0 +1,10 @@
+{
+  "instances": [
+    {
+      "prompt": "a corgi wearing a top hat"
+    }
+  ],
+  "parameters": {
+    "sampleCount": 1
+  }
+}
