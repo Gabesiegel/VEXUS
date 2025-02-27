@@ -6,6 +6,7 @@ import { Storage } from '@google-cloud/storage';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
+import {spawn} from 'child_process';
 import cors from 'cors';
 
 // ES modules dirname setup
@@ -20,7 +21,7 @@ const CONFIG = {
     projectId: "plucky-weaver-450819-k7",
     projectNumber: "456295042668",
     location: "us-central1",
-    endpointId: "8159951878260523008",
+    endpointId: "8159951878260523008", // Correct endpoint ID
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
@@ -30,24 +31,117 @@ const CONFIG = {
 const storage = new Storage();
 const bucket = storage.bucket(CONFIG.bucketName);
 
-// Function to upload image to Cloud Storage
-async function uploadImage(base64Image, imageType) {
+// Function to ensure required directories exist in the bucket
+async function ensureStorageDirectories() {
     try {
-        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
+        const requiredDirs = ['images', 'results'];
+        
+        for (const dir of requiredDirs) {
+            const file = bucket.file(`${dir}/.keep`);
+            
+            // Check if directory exists (checking for .keep file)
+            const [exists] = await file.exists();
+            
+            if (!exists) {
+                console.log(`Creating directory: ${dir}/`);
+                await file.save('', { contentType: 'text/plain' });
+                console.log(`Created directory marker: ${dir}/.keep`);
+            } else {
+                console.log(`Directory already exists: ${dir}/`);
+            }
+        }
+        
+        console.log('Storage directories verified');
+    } catch (error) {
+        console.error('Error ensuring storage directories:', error);
+        // Don't throw an error to allow server to continue starting
+    }
+}
+
+// Function to upload image to Cloud Storage
+async function uploadImage(base64Image, imageType = 'unknown') {
+    try {
+        let base64Data = base64Image;
+        
+        // Handle data URL format if provided
+        if (base64Image.includes('data:')) {
+            const dataURLParts = base64Image.split(',');
+            if (dataURLParts.length !== 2) {
+                throw new Error('Invalid data URL format');
+            }
+            imageType = dataURLParts[0].match(/:(.*?);/)[1];
+            base64Data = dataURLParts[1];
+        }
+
         const buffer = Buffer.from(base64Data, 'base64');
-        const filename = `${imageType}_${Date.now()}.jpg`;
+        const extension = imageType.split('/')[1] || 'jpg';
+        const timestamp = Date.now();
+        const filename = `image_${timestamp}.${extension}`;
+        const file = bucket.file(`images/${filename}`);
+
+        console.log(`Uploading image: ${filename}`);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Uploading image: ${filename}\n`);
+
+        try {
+            await file.save(buffer, {
+                metadata: {
+                    contentType: imageType
+                }
+            });
+        } catch (uploadError) {
+            console.error('Error during file.save:', uploadError);
+            await fs.appendFile('server.log', `[${new Date().toISOString()}] Error during file.save: ${uploadError}\n`);
+            throw uploadError;
+        }
+        
+        const publicUrl = `https://storage.googleapis.com/${CONFIG.bucketName}/images/${filename}`;
+        const gcsPath = `gs://${CONFIG.bucketName}/images/${filename}`;
+        
+        console.log("Image uploaded to:", gcsPath);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Image uploaded to: ${gcsPath}\n`);
+        
+        return {
+            filename,
+            gcsPath,
+            publicUrl,
+            timestamp
+        };
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Error in uploadImage function: ${error}\n`);
+        throw error;
+    }
+}
+
+// Function to store prediction results in Cloud Storage
+async function storePredictionResults(imageInfo, predictions, type = 'unknown') {
+    try {
+        const resultData = {
+            imageInfo,
+            predictions,
+            type,
+            timestamp: new Date().toISOString()
+        };
+        
+        const filename = `results/${imageInfo.filename.replace(/\.[^/.]+$/, '')}_results.json`;
         const file = bucket.file(filename);
         
-        await file.save(buffer, {
+        await file.save(JSON.stringify(resultData, null, 2), {
             metadata: {
-                contentType: 'image/jpeg'
+                contentType: 'application/json'
             }
         });
         
-        return `gs://${CONFIG.bucketName}/${filename}`;
+        const gcsPath = `gs://${CONFIG.bucketName}/${filename}`;
+        console.log("Prediction results stored at:", gcsPath);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Prediction results stored at: ${gcsPath}\n`);
+        
+        return gcsPath;
     } catch (error) {
-        console.error('Error uploading image:', error);
-        throw error;
+        console.error('Error storing prediction results:', error);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Error storing prediction results: ${error}\n`);
+        // Don't throw error to avoid failing the main request
+        return null;
     }
 }
 
@@ -88,9 +182,10 @@ async function initializeVertexAI() {
 ///////////////////////////////////////////////////////////////////////////////
 // 2) Express App Setup
 ///////////////////////////////////////////////////////////////////////////////
-
 const app = express();
-const PORT = process.env.PORT || 3002;
+const DEFAULT_PORT = process.env.PORT || 3003;
+let PORT = DEFAULT_PORT;
+
 
 app.use(cors({
     origin: true,
@@ -98,143 +193,359 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
 app.use(express.json({ limit: '50mb' }));
 
+
 // Log requests
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     console.log(`[${new Date().toISOString()}] Requesting: ${req.url}`);
+    await fs.appendFile('server.log', `Requesting: ${req.url}\n`);
     next();
 });
+
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Fallback route handler
-app.get('*', async (req, res) => {
-    console.log(`[${new Date().toISOString()}] Fallback for: ${req.url}`);
-    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Serve index.html as fallback
-});
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // 3) Authentication Endpoint
 ///////////////////////////////////////////////////////////////////////////////
-
 app.post('/auth/token', async (req, res) => {
-    try {
-        await initializeVertexAI(); // Initialize Vertex AI client to verify credentials
-        res.json({ status: 'ok', timestamp: new Date().toISOString() });
-    } catch (error) {
-        console.error('Auth error:', error);
-        res.status(500).json({ error: 'Authentication failed', message: error.message, timestamp: new Date().toISOString() });
-    }
+  try {
+    await initializeVertexAI(); // Initialize Vertex AI client to verify credentials
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  } catch (error) {
+    console.error('Auth error:', error);
+    res.status(500).json({ error: 'Authentication failed', message: error.message, timestamp: new Date().toISOString() });
+  }
 });
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // 4) Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
-
 let predictionClient = null;
 
 app.post('/predict', async (req, res) => {
     try {
-        console.log('[/predict] handler invoked');
-        console.log('Request body:', JSON.stringify(req.body, null, 2));
-        console.log("Fetching credentials...");
-        const credentials = await getCredentials();
-        console.log("Credentials fetched:", credentials); // REMOVE THIS LATER - SENSITIVE INFO!
+        console.log(`[${new Date().toISOString()}] /predict handler invoked`);
+        await fs.appendFile('server.log', `/predict handler invoked\n`);
 
-        // Force re-initialization of predictionClient for every request (diagnostic)
-        console.log("Creating new predictionClient...");
-        predictionClient = new v1.PredictionServiceClient({
-            apiEndpoint: process.env.VERTEX_AI_ENDPOINT,
-            credentials: credentials
-        });
-        console.log("New predictionClient created");
-
-        // Log the endpointId to double-check
-        console.log("Endpoint ID from CONFIG:", CONFIG.endpointId);
-
-        const { instances } = req.body;
+        const { instances, parameters } = req.body;
 
         if (!instances || !Array.isArray(instances)) {
             return res.status(400).json({ error: 'Invalid request format. Expected "instances" array', timestamp: new Date().toISOString() });
         }
 
         for (const instance of instances) {
-            if (!instance.content) { // Corrected check for 'content'
+            if (!instance.content) {
                 return res.status(400).json({ error: 'Each instance must have content data', timestamp: new Date().toISOString() });
             }
-            // Log the received base64 data for each instance
-            console.log("Received base64 data for instance:", instance.content); // Corrected log
         }
 
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
-        console.log("Constructed endpoint path:", endpointPath);
+        if (!predictionClient) {
+            predictionClient = await initializeVertexAI();
+        }
 
+
+        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
+
+        // Create the request object in the format expected by Vertex AI
         const request = {
             endpoint: endpointPath,
-            instances: instances.map(instance => helpers.toValue({ content: instance.content })) // Corrected 'content'
+            instances: instances,
+            parameters: parameters || {
+                confidenceThreshold: 0.0,
+                maxPredictions: 5
+            }
         };
 
-        // Log the full request object before sending
-        console.log("Full request object:", JSON.stringify(request, null, 2));
-
-        console.log("Sending prediction request...");
+        console.log("Sending prediction request to Vertex AI:", JSON.stringify(request, null, 2));
         const [response] = await predictionClient.predict(request);
 
-        // Log the raw response for debugging
-        console.log('Raw Vertex AI response:', JSON.stringify(response, null, 2));
-
-        // Ensure predictions array exists and has the expected structure
-        const predictions = response.predictions ? response.predictions.map(prediction => {
-            // Extract the values we need, with defaults if missing
-            const confidences = prediction.confidences || [];
-            const ids = prediction.ids || [];
+        const predictions = (response.predictions || []).map(prediction => {
             const displayNames = prediction.displayNames || [];
+            const confidences = prediction.confidences || [];
+            const results = displayNames.map((className, idx) => {
+                const conf = confidences[idx] || 0;
+                const percentage = `${(conf * 100).toFixed(0)}%`;
+                return {
+                    label: className,
+                    confidencePerc: percentage,
+                    confidenceVal: conf.toFixed(3)
+                };
+            });
+            return results;
+        });
 
-            // Return an object matching the expected client format
-            return {
-                confidences: Array.isArray(confidences) ? confidences : [],
-                ids: Array.isArray(ids) ? ids : [],
-                displayNames: Array.isArray(displayNames) ? displayNames : []
-            };
-        }) : []; // Return an empty array if response.predictions is undefined
-
-        // Send response with full metadata
         res.json({
-            predictions,
-            deployedModelId: response.deployedModelId || null,
-            model: response.model || null,
-            modelDisplayName: response.modelDisplayName || null,
-            modelVersionId: response.modelVersionId || null,
-            timestamp: new Date().toISOString()
+          predictions,
+          deployedModelId: response.deployedModelId || null,
+          model: response.model || null,
+          modelDisplayName: response.modelDisplayName || null,
+          modelVersionId: response.modelVersionId || null,
+          timestamp: new Date().toISOString()
         });
 
     } catch (error) {
-        console.error('Prediction error:', error);
-
-        if (error.code === 401 || error.code === 403) {
-            predictionClient = null;
-        }
-
+        console.error('Prediction error:', error); // Keep console logging for local debugging
         res.status(500).json({ error: 'Prediction failed', message: error.message, timestamp: new Date().toISOString() });
     }
 });
 
+// Default route (API fallback for React Router)
+app.get('*', (req, res) => {
+    console.log(`[${new Date().toISOString()}] Fallback route handler for: ${req.url}`);
+    
+    // Only serve index.html for browser requests (HTML), not for API calls
+    const acceptHeader = req.get('accept') || '';
+    if (acceptHeader.includes('text/html')) {
+        console.log('Serving index.html as fallback');
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else {
+        console.log('Non-HTML request to unknown route, returning 404');
+        res.status(404).json({ error: 'Not found', path: req.url });
+    }
+});
 // ... (Health Check and Error Handling Middleware)
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 5) Image Upload and Prediction Endpoint
+///////////////////////////////////////////////////////////////////////////////
+app.post('/api/predict', async (req, res) => {
+    try {
+        console.log(`[${new Date().toISOString()}] /api/predict handler invoked`);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] /api/predict handler invoked\n`);
+
+        const { instances, parameters } = req.body;
+        
+        console.log("Received request body:", JSON.stringify(req.body, (key, value) => {
+            // Don't log the entire content string, just the first 100 chars
+            if (key === 'content' && typeof value === 'string' && value.length > 100) {
+                return value.substring(0, 100) + '... [truncated]';
+            }
+            return value;
+        }, 2));
+        
+        if (!instances || !Array.isArray(instances)) {
+            return res.status(400).json({ 
+                error: 'Invalid request format. Expected "instances" array', 
+                timestamp: new Date().toISOString() 
+            });
+        }
+
+        // Validate and log each instance's format
+        for (let i = 0; i < instances.length; i++) {
+            const instance = instances[i];
+            console.log(`Checking instance ${i}:`);
+            
+            if (!instance.content) {
+                return res.status(400).json({ 
+                    error: 'Each instance must have content data', 
+                    instanceIndex: i,
+                    timestamp: new Date().toISOString() 
+                });
+            }
+            
+            // Check if content is directly a string (base64)
+            if (typeof instance.content === 'string') {
+                console.log(`Instance ${i}: content is a base64 string (length: ${instance.content.length})`);
+            } 
+            // Check if content is an object with b64 field
+            else if (typeof instance.content === 'object' && instance.content.b64) {
+                console.log(`Instance ${i}: content has b64 field (length: ${instance.content.b64.length})`);
+                // Convert to format expected by Vertex AI
+                console.log(`Converting instance ${i} from {content: {b64: '...'}} to {content: '...'} format`);
+                instances[i] = {
+                    content: instance.content.b64
+                };
+            } else {
+                console.log(`Instance ${i}: has unexpected content format:`, typeof instance.content);
+            }
+        }
+
+        // Store the image in Cloud Storage
+        let imageInfo = null;
+        try {
+            // Get the image content from the first instance
+            const imageContent = instances[0].content;
+            // Extract image type if metadata is provided
+            const imageType = req.body.metadata?.imageType || 'image/jpeg';
+            // Extract vein type if provided
+            const veinType = req.body.metadata?.veinType || 'unknown';
+            
+            // Upload the image to Cloud Storage
+            imageInfo = await uploadImage(imageContent, imageType);
+            console.log(`Image stored successfully with ID: ${imageInfo.filename}`);
+            
+            // Add metadata to imageInfo
+            imageInfo.veinType = veinType;
+        } catch (storageError) {
+            console.error('Error storing image in Cloud Storage:', storageError);
+            // Continue with prediction even if storage fails
+        }
+
+        // Get credentials from Secret Manager
+        console.log('Getting credentials from Secret Manager...');
+        const credentials = await getCredentials();
+        
+        // Get an access token using the credentials
+        const auth = new GoogleAuth({
+            credentials: credentials,
+            scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
+        
+        console.log('Successfully obtained access token');
+        
+        // Construct the predict request URL
+        const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
+        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
+        const url = `${baseApiUrl}/${endpointPath}:predict`;
+        
+        console.log(`Making prediction request to: ${url}`);
+        
+        // Construct the payload
+        const payload = {
+            instances: instances,
+            parameters: parameters || {
+                confidenceThreshold: 0.0,
+                maxPredictions: 5
+            }
+        };
+        
+        console.log("Sending prediction request to Vertex AI:", JSON.stringify(payload, (key, value) => {
+            // Don't log the entire content string, just the first 100 chars
+            if (key === 'content' && typeof value === 'string' && value.length > 100) {
+                return value.substring(0, 100) + '... [truncated]';
+            }
+            return value;
+        }, 2));
+        
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Sending prediction request to endpoint: ${endpointPath}\n`);
+        
+        // Make the API call using fetch instead of the client library
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        console.log(`Response status: ${response.status} ${response.statusText}`);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error response:', errorText);
+            throw new Error(`Vertex AI API error: ${response.status} ${response.statusText}`);
+        }
+        
+        // Process the response
+        const result = await response.json();
+        console.log('Successfully received predictions');
+        
+        // Handle empty predictions
+        if (!result.predictions || result.predictions.length === 0) {
+            return res.status(404).json({ error: 'No predictions returned from the model' });
+        }
+        
+        // Format the prediction response for the frontend
+        const prediction = result.predictions[0];
+        
+        // Store the prediction results if we have image info
+        let resultStoragePath = null;
+        if (imageInfo) {
+            try {
+                // Extract vein type from request metadata if available
+                const veinType = req.body.metadata?.veinType || 'unknown';
+                
+                resultStoragePath = await storePredictionResults(
+                    imageInfo,
+                    {
+                        displayNames: prediction.displayNames || [],
+                        confidences: prediction.confidences || [],
+                        modelId: result.deployedModelId || null
+                    },
+                    veinType
+                );
+            } catch (resultStorageError) {
+                console.error('Error storing prediction results:', resultStorageError);
+                // Continue even if result storage fails
+            }
+        }
+        
+        // Return response with additional storage information
+        res.json({
+            displayNames: prediction.displayNames || [],
+            confidences: prediction.confidences || [],
+            modelId: result.deployedModelId || null,
+            timestamp: new Date().toISOString(),
+            storage: imageInfo ? {
+                imageUrl: imageInfo.publicUrl,
+                resultsPath: resultStoragePath,
+                stored: true
+            } : {
+                stored: false,
+                reason: 'Image storage failed or was not attempted'
+            }
+        });
+    } catch (error) {
+        console.error('Error in /api/predict:', error);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Error in /api/predict: ${error}\n`);
+        res.status(500).json({ error: 'Prediction failed', message: error.message });
+    }
+});
+
+
+
 
 async function startServer() {
     try {
         console.log('startServer function invoked');
-        predictionClient = await initializeVertexAI();
 
-        const server = app.listen(PORT, '0.0.0.0');
+        // Initialize Vertex AI client
+        predictionClient = await initializeVertexAI();
+        
+        // Ensure storage directories exist
+        await ensureStorageDirectories();
+
+        // Try to start server with fallback ports if primary port is in use
+        let maxPortAttempts = 5;
+        let server;
+
+        for (let attempt = 0; attempt < maxPortAttempts; attempt++) {
+            try {
+                PORT = DEFAULT_PORT + attempt;
+                server = app.listen(PORT, '0.0.0.0');
+                break; // If successful, exit the loop
+            } catch (err) {
+                if (err.code === 'EADDRINUSE' && attempt < maxPortAttempts - 1) {
+                    console.log(`Port ${PORT} is in use, trying ${PORT + 1}...`);
+                    continue;
+                }
+                throw err; // If it's not an address-in-use error or we've tried all ports, rethrow
+            }
+        }
 
         server.on('listening', () => {
             console.log(`[${new Date().toISOString()}] Server starting...`);
             console.log(`Server running at http://0.0.0.0:${PORT}`);
             console.log(`Project ID: ${CONFIG.projectId}`);
             console.log(`Last Updated: ${CONFIG.lastUpdated}`);
+            console.log(`Cloud Storage bucket: ${CONFIG.bucketName}`);
+            
+            // Log port information
+            console.log(`Port: ${PORT}${PORT !== DEFAULT_PORT ? ' (fallback from ' + DEFAULT_PORT + ')' : ''}`);
         });
 
         server.on('error', (error) => {
@@ -243,7 +554,17 @@ async function startServer() {
         });
 
         const shutdown = async () => {
-            // ... (Shutdown logic)
+            console.log('Shutting down gracefully...');
+            server.close(() => {
+                console.log('Server closed');
+                process.exit(0);
+            });
+            
+            // Force close after 5 seconds if not closed gracefully
+            setTimeout(() => {
+                console.log('Forcing shutdown after timeout');
+                process.exit(1);
+            }, 5000);
         };
 
         process.on('SIGTERM', shutdown);
@@ -251,13 +572,14 @@ async function startServer() {
 
     } catch (error) {
         console.error('Failed to start server:', error);
+        process.exit(1);
     }
 }
 
-// Start server
+
 startServer();
 
-// Handle uncaught errors and rejections
+
 process.on('uncaughtException', (error) => {
     console.error('Uncaught Exception:', error);
     process.exit(1);
@@ -267,4 +589,5 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-export default app; // Moved export statement here
+
+export default app;

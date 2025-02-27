@@ -415,20 +415,20 @@
 
     <script>
         // Configuration
-    const config = {
-        projectId: 'plucky-weaver-450819-k7',
-        location: 'us-central1',
-        endpointId: '5669602021812994048',
-        lastUpdated: '2025-02-18 01:14:07',
-        developer: 'Gabesiegel'
-};
+        const config = {
+            projectId: 'plucky-weaver-450819-k7',
+            location: 'us-central1',
+            endpointId: '8159951878260523008',
+            lastUpdated: '2025-02-27',
+            developer: 'Gabesiegel'
+        };
 
-// Model labels for each vein type (keep your existing structure)
-const modelLabels = {
-    hepatic: ["HV Normal", "HV Mild", "HV Severe"],
-    portal: ["PV Normal", "PV Mild", "PV Severe"],
-    renal: ["RV Normal", "RV Mild", "RV Severe"]
-};
+        // Model labels for each vein type (keep your existing structure)
+        const modelLabels = {
+            hepatic: ["HV Normal", "HV Mild", "HV Severe"],
+            portal: ["PV Normal", "PV Mild", "PV Severe"],
+            renal: ["RV Normal", "RV Mild", "RV Severe"]
+        };
 
         /**********************************
          * Token Management

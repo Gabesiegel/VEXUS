@@ -1101,7 +1101,7 @@ Sending prediction request...
 Prediction successful: {
   predictions: [ { structValue: [Object], kind: 'structValue' } ],
   deployedModelId: '8002242328418844672',
-  model: 'projects/456295042668/locations/us-central1/models/6041241350047793152',
+  model: 'projects/456295042668/locations/us-central1/models/8159951878260523008',
   modelDisplayName: 'VExUS - Hepatic Vein',
   modelVersionId: '1',
   metadata: null
@@ -1231,7 +1231,7 @@ Sending prediction request...
 Prediction successful: {
   predictions: [ { structValue: [Object], kind: 'structValue' } ],
   deployedModelId: '8002242328418844672',
-  model: 'projects/456295042668/locations/us-central1/models/6041241350047793152',
+  model: 'projects/456295042668/locations/us-central1/models/8159951878260523008',
   modelDisplayName: 'VExUS - Hepatic Vein',
   modelVersionId: '1',
   metadata: null
@@ -1373,7 +1373,7 @@ Sending prediction request...
 Prediction successful: {
   predictions: [ { structValue: [Object], kind: 'structValue' } ],
   deployedModelId: '8002242328418844672',
-  model: 'projects/456295042668/locations/us-central1/models/6041241350047793152',
+  model: 'projects/456295042668/locations/us-central1/models/8159951878260523008',
   modelDisplayName: 'VExUS - Hepatic Vein',
   modelVersionId: '1',
   metadata: null
@@ -1530,7 +1530,7 @@ Sending prediction request...
 Prediction successful: {
   predictions: [ { structValue: [Object], kind: 'structValue' } ],
   deployedModelId: '8002242328418844672',
-  model: 'projects/456295042668/locations/us-central1/models/6041241350047793152',
+  model: 'projects/456295042668/locations/us-central1/models/8159951878260523008',
   modelDisplayName: 'VExUS - Hepatic Vein',
   modelVersionId: '1',
   metadata: null
@@ -1656,7 +1656,7 @@ Sending prediction request...
 Prediction successful: {
   predictions: [ { structValue: [Object], kind: 'structValue' } ],
   deployedModelId: '8002242328418844672',
-  model: 'projects/456295042668/locations/us-central1/models/6041241350047793152',
+  model: 'projects/456295042668/locations/us-central1/models/8159951878260523008',
   modelDisplayName: 'VExUS - Hepatic Vein',
   modelVersionId: '1',
   metadata: null

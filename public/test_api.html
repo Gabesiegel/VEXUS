@@ -1,0 +1,582 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS API Test</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px 20px;
+            margin: 15px auto;
+            background: transparent;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #999;
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .json-view {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .loading {
+            display: none;
+            margin: 15px 0;
+        }
+        
+        .error {
+            color: red;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 15px auto;
+            display: none;
+        }
+        
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .test-buttons button {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .storage-info {
+            background: #e7f7ed;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .storage-info h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        
+        .storage-info a {
+            color: #2e7d32;
+            text-decoration: underline;
+        }
+        
+        .vein-type-select {
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>VExUS API Test</h1>
+    
+    <div class="container">
+        <h2>1. Upload Image Test</h2>
+        <p>Upload your own ultrasound image or use the test images below.</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div>Click or drag to upload an image</div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        </div>
+        
+        <img id="imagePreview" class="image-preview">
+        
+        <div>
+            <label for="veinTypeSelect">Vein Type:</label>
+            <select id="veinTypeSelect" class="vein-type-select">
+                <option value="hepatic">Hepatic Vein</option>
+                <option value="portal">Portal Vein</option>
+                <option value="renal">Renal Vein</option>
+                <option value="unknown">Unknown/Other</option>
+            </select>
+        </div>
+        
+        <div class="test-buttons">
+            <button id="testHepaticBtn">Test with Hepatic Image</button>
+            <button id="testPortalBtn">Test with Portal Image</button>
+            <button id="testRenalBtn">Test with Renal Image</button>
+        </div>
+        
+        <div class="loading" id="loading">Processing image...</div>
+        <div class="error" id="error"></div>
+        
+        <button id="analyzeBtn" disabled>Analyze Image</button>
+        
+        <!-- Storage Info Section -->
+        <div class="storage-info" id="storageInfo">
+            <h3>Image Storage Information</h3>
+            <div id="storageDetails"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>2. API Response</h2>
+        <div class="result-container">
+            <div class="json-view" id="responseData">No data yet. Upload and analyze an image first.</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>3. Format Tests</h2>
+        <div class="test-buttons">
+            <button id="testStandardFormat">Test Standard Format</button>
+            <button id="testB64Format">Test B64 Format</button>
+        </div>
+        <div class="result-container">
+            <h3>Format Test Results:</h3>
+            <div class="json-view" id="formatTestResults">No format tests run yet.</div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const responseData = document.getElementById('responseData');
+        const formatTestResults = document.getElementById('formatTestResults');
+        const veinTypeSelect = document.getElementById('veinTypeSelect');
+        const storageInfo = document.getElementById('storageInfo');
+        const storageDetails = document.getElementById('storageDetails');
+        
+        // Test image buttons
+        const testHepaticBtn = document.getElementById('testHepaticBtn');
+        const testPortalBtn = document.getElementById('testPortalBtn');
+        const testRenalBtn = document.getElementById('testRenalBtn');
+        
+        // Format test buttons
+        const testStandardFormat = document.getElementById('testStandardFormat');
+        const testB64Format = document.getElementById('testB64Format');
+        
+        // Current file
+        let currentFile = null;
+        
+        // Upload area click handler
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // File input change handler
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageSelection(e.target.files[0]);
+            }
+        });
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#4CAF50';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleImageSelection(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // Analyze button click handler
+        analyzeBtn.addEventListener('click', () => {
+            if (currentFile) {
+                analyzeImage(currentFile);
+            }
+        });
+        
+        // Test image buttons click handlers
+        testHepaticBtn.addEventListener('click', () => {
+            loadTestImage('test_hepatic.png');
+            veinTypeSelect.value = 'hepatic';
+        });
+        
+        testPortalBtn.addEventListener('click', () => {
+            loadTestImage('test_portal.png');
+            veinTypeSelect.value = 'portal';
+        });
+        
+        testRenalBtn.addEventListener('click', () => {
+            loadTestImage('test_renal.png');
+            veinTypeSelect.value = 'renal';
+        });
+        
+        // Format test buttons click handlers
+        testStandardFormat.addEventListener('click', testStandardFormatFn);
+        testB64Format.addEventListener('click', testB64FormatFn);
+        
+        // Function to handle image selection
+        function handleImageSelection(file) {
+            if (!file.type.match('image.*')) {
+                showError('Please select an image file.');
+                return;
+            }
+            
+            currentFile = file;
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                analyzeBtn.disabled = false;
+            };
+            
+            reader.readAsDataURL(file);
+            
+            // Clear previous results
+            responseData.textContent = 'Ready to analyze. Click the "Analyze Image" button.';
+            hideError();
+            
+            // Hide storage info
+            storageInfo.style.display = 'none';
+        }
+        
+        // Function to load test images
+        function loadTestImage(imageName) {
+            fetch(imageName)
+                .then(response => response.blob())
+                .then(blob => {
+                    const file = new File([blob], imageName, { type: 'image/png' });
+                    handleImageSelection(file);
+                })
+                .catch(err => {
+                    showError(`Error loading test image: ${err.message}`);
+                });
+        }
+        
+        // Function to analyze the image
+        async function analyzeImage(file) {
+            showLoading();
+            hideError();
+            
+            try {
+                // Get base64 data
+                const base64Data = await readFileAsBase64(file);
+                
+                // Extract base64 content and mime type
+                const parts = base64Data.split(',');
+                const base64Content = parts[1];
+                const mimeType = parts[0].match(/:(.*?);/)[1];
+                
+                // Get selected vein type
+                const veinType = veinTypeSelect.value;
+                
+                // Create payload with metadata
+                const payload = {
+                    instances: [
+                        {
+                            content: {
+                                b64: base64Content
+                            }
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: veinType,
+                        imageType: mimeType,
+                        timestamp: Date.now(),
+                        source: 'test_api.html'
+                    }
+                };
+                
+                // Send to API
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                responseData.textContent = JSON.stringify(result, null, 2);
+                
+                // Display storage information if available
+                if (result.storage && result.storage.stored) {
+                    storageInfo.style.display = 'block';
+                    
+                    // Create storage details HTML with links
+                    const storageHTML = `
+                        <p><strong>Image URL:</strong> <a href="${result.storage.imageUrl}" target="_blank">${result.storage.imageUrl}</a></p>
+                        <p><strong>Results Path:</strong> ${result.storage.resultsPath}</p>
+                        <p><strong>Timestamp:</strong> ${result.timestamp}</p>
+                    `;
+                    
+                    storageDetails.innerHTML = storageHTML;
+                } else {
+                    storageInfo.style.display = 'none';
+                }
+                
+            } catch (err) {
+                showError(`Error: ${err.message}`);
+                responseData.textContent = 'Error occurred. See error message above.';
+                storageInfo.style.display = 'none';
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Function to test standard format
+        async function testStandardFormatFn() {
+            formatTestResults.textContent = 'Testing standard format...';
+            
+            try {
+                const testImage = await fetch('test_hepatic.png')
+                    .then(response => response.blob())
+                    .then(blob => readFileAsBase64(blob));
+                
+                const parts = testImage.split(',');
+                const base64Content = parts[1];
+                const mimeType = parts[0].match(/:(.*?);/)[1];
+                
+                // Standard format payload with metadata
+                const payload = {
+                    instances: [
+                        {
+                            content: base64Content
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: 'hepatic',
+                        imageType: mimeType,
+                        timestamp: Date.now(),
+                        source: 'test_api_standard_format'
+                    }
+                };
+                
+                const startTime = Date.now();
+                
+                // Send to API
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                // Check storage info
+                const storageInfo = result.storage && result.storage.stored 
+                    ? `✅ Stored at: ${result.storage.imageUrl}` 
+                    : '❌ Not stored';
+                
+                formatTestResults.textContent = `
+Standard Format Test:
+- Status: SUCCESS ✅
+- Response Time: ${responseTime}ms
+- Status Code: ${response.status}
+- Storage: ${storageInfo}
+- First Prediction: ${result.displayNames && result.confidences ? 
+                     result.displayNames.map((name, i) => `${name}: ${(result.confidences[i] * 100).toFixed(1)}%`).join(', ') : 
+                     'No predictions'}
+`;
+                
+            } catch (err) {
+                formatTestResults.textContent = `
+Standard Format Test:
+- Status: FAILED ❌
+- Error: ${err.message}
+`;
+            }
+        }
+        
+        // Function to test b64 format
+        async function testB64FormatFn() {
+            formatTestResults.textContent = 'Testing b64 format...';
+            
+            try {
+                const testImage = await fetch('test_hepatic.png')
+                    .then(response => response.blob())
+                    .then(blob => readFileAsBase64(blob));
+                
+                const parts = testImage.split(',');
+                const base64Content = parts[1];
+                const mimeType = parts[0].match(/:(.*?);/)[1];
+                
+                // B64 format payload with metadata
+                const payload = {
+                    instances: [
+                        {
+                            content: {
+                                b64: base64Content
+                            }
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: 'hepatic',
+                        imageType: mimeType,
+                        timestamp: Date.now(),
+                        source: 'test_api_b64_format'
+                    }
+                };
+                
+                const startTime = Date.now();
+                
+                // Send to API
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                // Check storage info
+                const storageInfo = result.storage && result.storage.stored 
+                    ? `✅ Stored at: ${result.storage.imageUrl}` 
+                    : '❌ Not stored';
+                
+                formatTestResults.textContent = `
+B64 Format Test:
+- Status: SUCCESS ✅
+- Response Time: ${responseTime}ms
+- Status Code: ${response.status}
+- Storage: ${storageInfo}
+- First Prediction: ${result.displayNames && result.confidences ? 
+                     result.displayNames.map((name, i) => `${name}: ${(result.confidences[i] * 100).toFixed(1)}%`).join(', ') : 
+                     'No predictions'}
+`;
+                
+            } catch (err) {
+                formatTestResults.textContent = `
+B64 Format Test:
+- Status: FAILED ❌
+- Error: ${err.message}
+`;
+            }
+        }
+        
+        // Helper function to read file as base64
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Helper functions for UI
+        function showLoading() {
+            loading.style.display = 'block';
+            analyzeBtn.disabled = true;
+        }
+        
+        function hideLoading() {
+            loading.style.display = 'none';
+            analyzeBtn.disabled = false;
+        }
+        
+        function showError(message) {
+            error.textContent = message;
+            error.style.display = 'block';
+        }
+        
+        function hideError() {
+            error.style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

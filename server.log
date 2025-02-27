@@ -1,0 +1,465 @@
+startServer function invoked
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+[2025-02-26T23:58:28.237Z] Server starting...
+Server running at http://0.0.0.0:3003
+Project ID: plucky-weaver-450819-k7
+Last Updated: 2025-02-26T23:58:24.993Z
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /predict
+/predict handler invoked
+Requesting: /
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /predict
+/predict handler invoked
+Requesting: /predict
+/predict handler invoked
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /predict
+/predict handler invoked
+Requesting: /predict
+/predict handler invoked
+Requesting: /predict
+/predict handler invoked
+Requesting: /
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /predict
+/predict handler invoked
+Requesting: /predict
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/Denver.POCUS.png
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/Denver.POCUS.png
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /predict
+/predict handler invoked
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /api/predict
+Requesting: /api/predict
+[2025-02-27T01:05:40.879Z] Uploading image: image/png_1740618340879.png
+[2025-02-27T01:05:40.880Z] Uploading image: image/png_1740618340880.png
+[2025-02-27T01:05:40.880Z] Content type: image/png
+[2025-02-27T01:05:40.880Z] Content type: image/png
+[2025-02-27T01:05:42.031Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/image/png_1740618340879.png
+[2025-02-27T01:05:42.041Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/image/png_1740618340880.png
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /api/predict
+[2025-02-27T13:04:20.354Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /predict
+/predict handler invoked
+Requesting: /
+Requesting: /calculator.html
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /auth/token
+Requesting: /favicon.ico
+Requesting: /api/predict
+Requesting: /api/predict
+[2025-02-27T13:31:16.660Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+[2025-02-27T13:31:16.661Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:31:19.159Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:20.183Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:20.422Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:20.658Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:48.912Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:49.147Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:49.378Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:49.555Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:49.753Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:34:49.897Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T13:35:30.660Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /auth/token
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /auth/token
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-02-27T18:19:44.331Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /auth/token
+Requesting: /api/predict
+[2025-02-27T22:37:35.408Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+/api/predict handler invoked
+[2025-02-27T22:39:19.450Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+/api/predict handler invoked
+[2025-02-27T22:40:27.642Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:06:26.034Z] /api/predict handler invoked
+[2025-02-27T23:06:26.034Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:06:36.317Z] Prediction error details: {"code":3,"message":"3 INVALID_ARGUMENT: ","details":"No additional details","metadata":{"endpoint-load-metrics-bin":[{"type":"Buffer","data":[49,39,109,123,234,54,98,121,64,57,252,126,208,174,72,167,56,64,73,155,26,40,219,160,4,215,63]}],"grpc-server-stats-bin":[{"type":"Buffer","data":[0,0,53,231,213,1,0,0,0,0]}],"pc-high-bwd-bin":[{"type":"Buffer","data":[75,103,73,89,69,65]}]}}
+[2025-02-27T23:06:36.318Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:06:36.340Z] /api/predict handler invoked
+[2025-02-27T23:06:36.593Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:06:36.653Z] Prediction error details: {"code":3,"message":"3 INVALID_ARGUMENT: ","details":"No additional details","metadata":{"endpoint-load-metrics-bin":[{"type":"Buffer","data":[49,159,184,30,162,88,204,121,64,57,176,200,134,70,119,144,55,64,73,142,47,235,132,89,224,210,63]}],"grpc-server-stats-bin":[{"type":"Buffer","data":[0,0,164,225,228,1,0,0,0,0]}],"pc-high-bwd-bin":[{"type":"Buffer","data":[75,103,73,89,67,119]}]}}
+[2025-02-27T23:06:36.653Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:08:21.282Z] /api/predict handler invoked
+[2025-02-27T23:08:21.282Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:08:31.406Z] Prediction error details: {"code":3,"message":"3 INVALID_ARGUMENT: ","details":"No additional details","metadata":{"endpoint-load-metrics-bin":[{"type":"Buffer","data":[49,99,98,14,58,148,49,122,64,57,141,249,20,206,97,102,54,64,73,117,8,118,39,26,9,212,63]}],"grpc-server-stats-bin":[{"type":"Buffer","data":[0,0,59,247,80,1,0,0,0,0]}],"pc-high-bwd-bin":[{"type":"Buffer","data":[75,103,73,89,68,81]}]}}
+[2025-02-27T23:08:31.407Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:09:29.886Z] /api/predict handler invoked
+[2025-02-27T23:09:29.887Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:09:40.019Z] Prediction error details: {"code":3,"message":"3 INVALID_ARGUMENT: ","details":"No additional details","metadata":{"endpoint-load-metrics-bin":[{"type":"Buffer","data":[49,246,215,124,241,143,136,124,64,57,145,84,247,36,111,177,46,64,73,16,202,212,208,62,207,215,63]}],"grpc-server-stats-bin":[{"type":"Buffer","data":[0,0,118,1,80,2,0,0,0,0]}],"pc-high-bwd-bin":[{"type":"Buffer","data":[75,103,73,89,72,81]}]}}
+[2025-02-27T23:09:40.020Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:09:40.042Z] /api/predict handler invoked
+[2025-02-27T23:09:40.261Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:09:40.316Z] Prediction error details: {"code":3,"message":"3 INVALID_ARGUMENT: ","details":"No additional details","metadata":{"endpoint-load-metrics-bin":[{"type":"Buffer","data":[49,110,164,210,106,145,78,125,64,57,172,245,14,157,34,10,48,64,73,97,70,254,11,99,82,215,63]}],"grpc-server-stats-bin":[{"type":"Buffer","data":[0,0,201,237,157,1,0,0,0,0]}],"pc-high-bwd-bin":[{"type":"Buffer","data":[75,103,73,89,67,119]}]}}
+[2025-02-27T23:09:40.317Z] Error in /api/predict: Error: 3 INVALID_ARGUMENT: 
+Requesting: /api/predict
+[2025-02-27T23:11:51.749Z] /api/predict handler invoked
+[2025-02-27T23:11:51.973Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:11:52.676Z] /api/predict handler invoked
+[2025-02-27T23:11:52.861Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /
+Requesting: /api/predict
+[2025-02-27T23:17:18.861Z] /api/predict handler invoked
+[2025-02-27T23:17:19.081Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:17:19.298Z] Error in /api/predict: Error: Vertex AI API error: 400 Bad Request
+Requesting: /api/predict
+[2025-02-27T23:17:28.682Z] /api/predict handler invoked
+[2025-02-27T23:17:28.863Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:17:29.568Z] /api/predict handler invoked
+[2025-02-27T23:17:30.035Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_api.html
+Requesting: /favicon.ico
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:20:15.452Z] /api/predict handler invoked
+[2025-02-27T23:20:15.657Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:20:20.673Z] /api/predict handler invoked
+[2025-02-27T23:20:20.856Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:20:35.692Z] /api/predict handler invoked
+[2025-02-27T23:20:35.881Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:01.937Z] /api/predict handler invoked
+[2025-02-27T23:21:02.154Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:04.054Z] /api/predict handler invoked
+[2025-02-27T23:21:04.617Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:09.197Z] /api/predict handler invoked
+[2025-02-27T23:21:09.549Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:21:13.842Z] /api/predict handler invoked
+[2025-02-27T23:21:14.006Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:27.783Z] /api/predict handler invoked
+[2025-02-27T23:21:27.942Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:21:28.681Z] Error in /api/predict: Error: Vertex AI API error: 400 Bad Request
+Requesting: /api/predict
+[2025-02-27T23:21:29.936Z] /api/predict handler invoked
+[2025-02-27T23:21:30.133Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:21:30.770Z] Error in /api/predict: Error: Vertex AI API error: 400 Bad Request
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:32.881Z] /api/predict handler invoked
+[2025-02-27T23:21:33.302Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:21:37.370Z] /api/predict handler invoked
+[2025-02-27T23:21:37.539Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /auth/token
+Requesting: /api/predict
+[2025-02-27T23:23:56.157Z] /api/predict handler invoked
+[2025-02-27T23:23:56.404Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:24:22.569Z] /api/predict handler invoked
+[2025-02-27T23:24:22.754Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /literature_review.html
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /auth/token
+Requesting: /api/predict
+[2025-02-27T23:38:45.376Z] /api/predict handler invoked
+[2025-02-27T23:38:45.594Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-02-27T23:38:55.768Z] /api/predict handler invoked
+[2025-02-27T23:38:55.959Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_api.html
+Requesting: /favicon.ico
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:50:46.822Z] /api/predict handler invoked
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:50:50.177Z] /api/predict handler invoked
+[2025-02-27T23:50:50.568Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-27T23:50:50.581Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:50:59.157Z] /api/predict handler invoked
+[2025-02-27T23:50:59.536Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:51:20.025Z] /api/predict handler invoked
+[2025-02-27T23:51:20.355Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /test_hepatic.png
+Requesting: /api/predict
+[2025-02-27T23:53:16.168Z] /api/predict handler invoked
+[2025-02-27T23:53:16.368Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
