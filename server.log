@@ -463,3 +463,4 @@ Requesting: /test_hepatic.png
 Requesting: /api/predict
 [2025-02-27T23:53:16.168Z] /api/predict handler invoked
 [2025-02-27T23:53:16.368Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /favicon.ico

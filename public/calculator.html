@@ -789,6 +789,10 @@
             preview.src = '';
             preview.style.display = 'none';
             
+            // Show the upload area again
+            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            uploadArea.style.display = 'block';
+            
             // Clear the results
             document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
             document.getElementById(`${type}TopResults`).innerHTML = '';
@@ -874,6 +878,7 @@
             const topResultsElement = document.getElementById(`${type}TopResults`);
             const errorContainer = document.getElementById(`${type}ErrorContainer`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
             
             // Hide preview and clear previous results
             previewImg.style.display = 'none';
@@ -892,9 +897,11 @@
             // Create preview
             previewImg.src = URL.createObjectURL(file);
             
-            // When image is loaded, classify it
+            // When image is loaded, classify it and hide the upload area
             previewImg.onload = () => {
                 previewImg.style.display = 'block';
+                // Hide the upload area and show the image instead
+                uploadArea.style.display = 'none';
                 classifyImage(type, file);
             };
             
@@ -1100,6 +1107,12 @@
             // Check for incomplete data
             if (!ivcValue) {
                 document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
+                return;
+            }
+            
+            // Check if all vein classifications are selected
+            if (!hvChoice || !pvChoice || !rvChoice) {
+                document.getElementById('total-score').textContent = "Incomplete Data (All Vein Classifications Required)";
                 return;
             }
 

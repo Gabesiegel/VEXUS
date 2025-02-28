@@ -519,23 +519,11 @@ async function startServer() {
         // Ensure storage directories exist
         await ensureStorageDirectories();
 
-        // Try to start server with fallback ports if primary port is in use
-        let maxPortAttempts = 5;
-        let server;
-
-        for (let attempt = 0; attempt < maxPortAttempts; attempt++) {
-            try {
-                PORT = DEFAULT_PORT + attempt;
-                server = app.listen(PORT, '0.0.0.0');
-                break; // If successful, exit the loop
-            } catch (err) {
-                if (err.code === 'EADDRINUSE' && attempt < maxPortAttempts - 1) {
-                    console.log(`Port ${PORT} is in use, trying ${PORT + 1}...`);
-                    continue;
-                }
-                throw err; // If it's not an address-in-use error or we've tried all ports, rethrow
-            }
-        }
+        // In Cloud Run, we must always use the PORT env variable
+        // No fallback port logic should be used in production
+        PORT = process.env.PORT || DEFAULT_PORT;
+        
+        const server = app.listen(PORT, '0.0.0.0');
 
         server.on('listening', () => {
             console.log(`[${new Date().toISOString()}] Server starting...`);
@@ -545,7 +533,7 @@ async function startServer() {
             console.log(`Cloud Storage bucket: ${CONFIG.bucketName}`);
             
             // Log port information
-            console.log(`Port: ${PORT}${PORT !== DEFAULT_PORT ? ' (fallback from ' + DEFAULT_PORT + ')' : ''}`);
+            console.log(`Port: ${PORT}`);
         });
 
         server.on('error', (error) => {
