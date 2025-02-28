@@ -692,11 +692,14 @@
             initializeModelStatus('portalModelStatus');
             initializeModelStatus('renalModelStatus');
             
-            // Set up event listeners for image uploads
+            // Setup the warning modal functionality
+            setupModalListeners();
+            
+            // Setup image upload event handlers
             setupImageUploadListeners();
             
-            // Set up PHI warning modal listeners
-            setupModalListeners();
+            // Setup dropdown listeners
+            setupDropdownListeners();
             
             // Check API connection
             checkApiConnection();
@@ -736,6 +739,7 @@
             
             confirmBetaBtn.addEventListener('click', function() {
                 betaModal.style.display = 'none';
+                // Only after confirming both modals, trigger the file input click
                 if (currentUploadType) {
                     document.getElementById(`${currentUploadType}ImageUpload`).click();
                 }
@@ -770,19 +774,6 @@
             document.getElementById('renalPreviewDelete').addEventListener('click', function() {
                 clearImageUpload('renal');
             });
-
-            // Add event listeners to dropdowns to hide modals when selection is made
-            document.getElementById('hepaticDropdown').addEventListener('change', function() {
-                hideModals();
-            });
-
-            document.getElementById('portalDropdown').addEventListener('change', function() {
-                hideModals();
-            });
-
-            document.getElementById('renalDropdown').addEventListener('change', function() {
-                hideModals();
-            });
         }
         
         // Function to hide all modals
@@ -794,6 +785,7 @@
         // Function to initiate image upload with HIPAA warning first
         function initiateImageUpload(type) {
             currentUploadType = type;
+            // First, show the HIPAA warning modal
             const hipaaModal = document.getElementById('hipaaWarningModal');
             hipaaModal.style.display = 'block';
         }
@@ -900,7 +892,7 @@
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
             
-            // Hide modals
+            // Hide HIPAA and beta warning modals when an image is selected
             hideModals();
             
             // Hide preview and clear previous results
@@ -1077,18 +1069,21 @@
                         }
                         errorNoteElement.style.display = "none";
                         
-                        // Hide modals when dropdown value is set automatically
+                        // Hide modals when classification is complete
                         hideModals();
                     } else {
                         dropdownElement.value = "Confidence of waveform < 50%";
                         errorNoteElement.style.display = "block";
                         
-                        // Hide modals when dropdown value is set automatically
+                        // Hide modals even when confidence is low
                         hideModals();
                     }
                 } else {
                     resultElement.textContent = "No predictions found.";
                     topResultsElement.innerHTML = "";
+                    
+                    // Hide modals even when no predictions are found
+                    hideModals();
                 }
 
             } catch (error) {
@@ -1096,6 +1091,9 @@
                 
                 // Hide loading indicator
                 loadingIndicator.style.display = 'none';
+                
+                // Hide modals even in case of error
+                hideModals();
                 
                 // Update model status
                 modelStatus.textContent = "Error";
@@ -1198,6 +1196,22 @@
             // Clear all vein type data
             ['hepatic', 'portal', 'renal'].forEach(type => {
                 clearImageUpload(type);
+            });
+        }
+
+        // Function to setup dropdown listeners
+        function setupDropdownListeners() {
+            // Add change event listeners to the dropdowns
+            document.getElementById('hepaticDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('portalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('renalDropdown').addEventListener('change', function() {
+                hideModals();
             });
         }
     </script>

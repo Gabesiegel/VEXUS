@@ -210,93 +210,105 @@
     </style>
 </head>
 <body>
-    <header id="header">
-        <a href="index.html" class="logo">
-            <span class="symbol"><img src="images/vexus-ai-logo.png" alt="VEXUS ATLAS" /></span>
-            <span class="title">VExUS ATLAS</span>
-        </a>
-        <nav>
-            <a href="#menu">Menu</a>
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+
+                <!-- Nav -->
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="calculator.html">Score Calculator</a></li>
+                    <li><a href="acquisition.html">Image Acquisition</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="literature.html">Literature</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
         </nav>
-    </header>
 
-    <!-- Nav -->
-    <nav id="menu">
-        <div class="logo-container">
-            <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
-        </div>
-        <h2>Menu</h2>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="calculator.html">Score Calculator</a></li>
-            <li><a href="acquisition.html">Image Acquisition</a></li>
-            <li><a href="education.html">Education</a></li>
-            <li><a href="literature.html">Literature</a></li>
-            <li><a href="Publications.html">Publications</a></li>
-            <li><a href="image_gallery.html">Image Gallery</a></li>
-            <li><a href="about.html">About VExUS</a></li>
-            <li><a href="our_team.html">Our Team</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
-
-    <h1>VExUS API Test</h1>
-    
-    <div class="container">
-        <h2>1. Upload Image Test</h2>
-        <p>Upload your own ultrasound image or use the test images below.</p>
+        <h1>VExUS API Test</h1>
         
-        <div class="upload-area" id="uploadArea">
-            <div>Click or drag to upload an image</div>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-        </div>
-        
-        <img id="imagePreview" class="image-preview">
-        
-        <div>
-            <label for="veinTypeSelect">Vein Type:</label>
-            <select id="veinTypeSelect" class="vein-type-select">
-                <option value="hepatic">Hepatic Vein</option>
-                <option value="portal">Portal Vein</option>
-                <option value="renal">Renal Vein</option>
-                <option value="unknown">Unknown/Other</option>
-            </select>
+        <div class="container">
+            <h2>1. Upload Image Test</h2>
+            <p>Upload your own ultrasound image or use the test images below.</p>
+            
+            <div class="upload-area" id="uploadArea">
+                <div>Click or drag to upload an image</div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+            
+            <img id="imagePreview" class="image-preview">
+            
+            <div>
+                <label for="veinTypeSelect">Vein Type:</label>
+                <select id="veinTypeSelect" class="vein-type-select">
+                    <option value="hepatic">Hepatic Vein</option>
+                    <option value="portal">Portal Vein</option>
+                    <option value="renal">Renal Vein</option>
+                    <option value="unknown">Unknown/Other</option>
+                </select>
+            </div>
+            
+            <div class="test-buttons">
+                <button id="testHepaticBtn">Test with Hepatic Image</button>
+                <button id="testPortalBtn">Test with Portal Image</button>
+                <button id="testRenalBtn">Test with Renal Image</button>
+            </div>
+            
+            <div class="loading" id="loading">Processing image...</div>
+            <div class="error" id="error"></div>
+            
+            <button id="analyzeBtn" disabled>Analyze Image</button>
+            
+            <!-- Storage Info Section -->
+            <div class="storage-info" id="storageInfo">
+                <h3>Image Storage Information</h3>
+                <div id="storageDetails"></div>
+            </div>
         </div>
         
-        <div class="test-buttons">
-            <button id="testHepaticBtn">Test with Hepatic Image</button>
-            <button id="testPortalBtn">Test with Portal Image</button>
-            <button id="testRenalBtn">Test with Renal Image</button>
+        <div class="container">
+            <h2>2. API Response</h2>
+            <div class="result-container">
+                <div class="json-view" id="responseData">No data yet. Upload and analyze an image first.</div>
+            </div>
         </div>
         
-        <div class="loading" id="loading">Processing image...</div>
-        <div class="error" id="error"></div>
-        
-        <button id="analyzeBtn" disabled>Analyze Image</button>
-        
-        <!-- Storage Info Section -->
-        <div class="storage-info" id="storageInfo">
-            <h3>Image Storage Information</h3>
-            <div id="storageDetails"></div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <h2>2. API Response</h2>
-        <div class="result-container">
-            <div class="json-view" id="responseData">No data yet. Upload and analyze an image first.</div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <h2>3. Format Tests</h2>
-        <div class="test-buttons">
-            <button id="testStandardFormat">Test Standard Format</button>
-            <button id="testB64Format">Test B64 Format</button>
-        </div>
-        <div class="result-container">
-            <h3>Format Test Results:</h3>
-            <div class="json-view" id="formatTestResults">No format tests run yet.</div>
+        <div class="container">
+            <h2>3. Format Tests</h2>
+            <div class="test-buttons">
+                <button id="testStandardFormat">Test Standard Format</button>
+                <button id="testB64Format">Test B64 Format</button>
+            </div>
+            <div class="result-container">
+                <h3>Format Test Results:</h3>
+                <div class="json-view" id="formatTestResults">No format tests run yet.</div>
+            </div>
         </div>
     </div>
     
@@ -705,5 +717,6 @@ B64 Format Test:
             });
         });
     </script>
+    </div> <!-- Close wrapper div -->
 </body>
 </html> 
