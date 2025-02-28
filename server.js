@@ -21,7 +21,12 @@ const CONFIG = {
     projectId: "plucky-weaver-450819-k7",
     projectNumber: "456295042668",
     location: "us-central1",
-    endpointId: "8159951878260523008", // Correct endpoint ID
+    endpointIds: {
+        default: "8159951878260523008", // Default endpoint ID
+        hepatic: "8159951878260523008", // Hepatic vein prediction endpoint
+        renal: "1148704877514326016",   // Renal vein prediction endpoint
+        portal: "2970410926785691648"   // Portal vein prediction endpoint
+    },
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
@@ -252,7 +257,7 @@ app.post('/predict', async (req, res) => {
         }
 
 
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
+        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointIds.default}`;
 
         // Create the request object in the format expected by Vertex AI
         const request = {
@@ -406,9 +411,17 @@ app.post('/api/predict', async (req, res) => {
         
         console.log('Successfully obtained access token');
         
+        // Extract vein type from request metadata to determine endpoint
+        const veinType = req.body.metadata?.veinType || 'default';
+        console.log(`Vein type from request metadata: ${veinType}`);
+        
+        // Select the appropriate endpoint ID based on vein type
+        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.default;
+        console.log(`Selected endpoint ID for ${veinType}: ${endpointId}`);
+        
         // Construct the predict request URL
         const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointId}`;
+        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
         const url = `${baseApiUrl}/${endpointPath}:predict`;
         
         console.log(`Making prediction request to: ${url}`);

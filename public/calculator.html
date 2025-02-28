@@ -665,22 +665,21 @@
     <script src="html5up-phantom/assets/js/main.js"></script>
 
     <script>
-        // Configuration
+        // Global configuration - automatically updated by deployment process
         const config = {
+            appName: 'VExUS ATLAS',
+            apiBase: window.location.origin,
+            developer: 'Gabesiegel',
+            lastUpdated: '2024-02-28',
             projectId: 'plucky-weaver-450819-k7',
-            location: 'us-central1',
-            endpointId: '8159951878260523008', // Correct endpoint ID
-            lastUpdated: '2025-02-21 09:25:40',
-            developer: 'Gabesiegel'
+            // Remove the explicit endpointId - now handled on server side with model-specific IDs
+            modelLabels: {
+                hepatic: ['HV Normal', 'HV Mild', 'HV Severe'],
+                portal: ['PV Normal', 'PV Mild', 'PV Severe'],
+                renal: ['RV Normal', 'RV Mild', 'RV Severe'],
+            }
         };
 
-        // Model labels for each vein type
-        const modelLabels = {
-            hepatic: ["HV Normal", "HV Mild", "HV Severe"],
-            portal: ["PV Normal", "PV Mild", "PV Severe"],
-            renal: ["RV Normal", "RV Mild", "RV Severe"]
-        };
-        
         // Global variables for upload handling
         let currentUploadType = null;
         let currentUploadFile = null;
@@ -1157,18 +1156,18 @@
                 return;
             }
 
-            // Convert choices to numerical scores
+            // Convert choices to numerical scores based on model labels
             let hvScore = 0;
-            if (hvChoice === "HV Mild")   hvScore = 1;
-            if (hvChoice === "HV Severe") hvScore = 2;
+            if (hvChoice === config.modelLabels.hepatic[1]) hvScore = 1; // HV Mild
+            if (hvChoice === config.modelLabels.hepatic[2]) hvScore = 2; // HV Severe
 
             let pvScore = 0;
-            if (pvChoice === "PV Mild")   pvScore = 1;
-            if (pvChoice === "PV Severe") pvScore = 2;
+            if (pvChoice === config.modelLabels.portal[1]) pvScore = 1; // PV Mild
+            if (pvChoice === config.modelLabels.portal[2]) pvScore = 2; // PV Severe
 
             let rvScore = 0;
-            if (rvChoice === "RV Mild")   rvScore = 1;
-            if (rvChoice === "RV Severe") rvScore = 2;
+            if (rvChoice === config.modelLabels.renal[1]) rvScore = 1; // RV Mild
+            if (rvChoice === config.modelLabels.renal[2]) rvScore = 2; // RV Severe
 
             // Count severe cases
             let severityCount = 0;
