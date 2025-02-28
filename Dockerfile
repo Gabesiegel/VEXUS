@@ -10,7 +10,7 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 3003
+EXPOSE 3002
 
 # Command to run the application
 CMD ["node", "server.js"]

@@ -183,7 +183,7 @@ async function initializeVertexAI() {
 // 2) Express App Setup
 ///////////////////////////////////////////////////////////////////////////////
 const app = express();
-const DEFAULT_PORT = process.env.PORT || 3003;
+const DEFAULT_PORT = process.env.PORT || 3002;
 let PORT = DEFAULT_PORT;
 
 
