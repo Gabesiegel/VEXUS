@@ -28,7 +28,7 @@ steps:
         '--image=us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA',
         '--region=${_DEPLOY_REGION}',  # Use the variable
         '--allow-unauthenticated',
-        '--port=3002',
+        '--port=3003',
         '--platform=${_PLATFORM}', # Add platform
 
         # Environment variables

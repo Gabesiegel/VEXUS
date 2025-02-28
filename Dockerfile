@@ -1,18 +1,16 @@
-# Stage 1: Build the React app
-FROM node:18-slim AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-# Stage 2: Serve the app with Node.js
+# Single-stage build for Node.js application
 FROM node:18-slim
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm ci --omit=dev
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/server.js ./
-EXPOSE 3002
+
+# Copy application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3003
+
+# Command to run the application
 CMD ["node", "server.js"]
