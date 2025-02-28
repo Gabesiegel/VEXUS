@@ -1059,28 +1059,32 @@
                     topResultsElement.innerHTML = '<strong>Top 3 Predictions:</strong><br>' + 
                         top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
                     
-                    // Update dropdown based on confidence
-                    if (parseFloat(top1.prob) > 50) {
-                        const matchingOption = Array.from(dropdownElement.options)
-                            .find(opt => opt.value === top1.label);
-                            
-                        if (matchingOption) {
-                            dropdownElement.value = matchingOption.value;
-                        }
-                        errorNoteElement.style.display = "none";
+                    // Always set dropdown to top prediction regardless of confidence
+                    const matchingOption = Array.from(dropdownElement.options)
+                        .find(opt => opt.value === top1.label);
                         
-                        // Hide modals when classification is complete
-                        hideModals();
-                    } else {
+                    if (matchingOption) {
+                        dropdownElement.value = matchingOption.value;
+                    } else if (parseFloat(top1.prob) <= 50) {
+                        // If no matching option and confidence is low, set to the low confidence option
                         dropdownElement.value = "Confidence of waveform < 50%";
-                        errorNoteElement.style.display = "block";
-                        
-                        // Hide modals even when confidence is low
-                        hideModals();
                     }
+                    
+                    // Show warning if confidence is low
+                    if (parseFloat(top1.prob) > 50) {
+                        errorNoteElement.style.display = "none";
+                    } else {
+                        errorNoteElement.style.display = "block";
+                    }
+                    
+                    // Hide modals when classification is complete
+                    hideModals();
                 } else {
                     resultElement.textContent = "No predictions found.";
                     topResultsElement.innerHTML = "";
+                    
+                    // Reset dropdown when no predictions are found
+                    dropdownElement.value = "";
                     
                     // Hide modals even when no predictions are found
                     hideModals();
