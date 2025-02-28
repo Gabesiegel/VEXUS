@@ -769,6 +769,25 @@
             document.getElementById('renalPreviewDelete').addEventListener('click', function() {
                 clearImageUpload('renal');
             });
+
+            // Add event listeners to dropdowns to hide modals when selection is made
+            document.getElementById('hepaticDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('portalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('renalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+        }
+        
+        // Function to hide all modals
+        function hideModals() {
+            document.getElementById('hipaaWarningModal').style.display = 'none';
+            document.getElementById('betaWarningModal').style.display = 'none';
         }
         
         // Function to initiate image upload with HIPAA warning first
@@ -879,6 +898,9 @@
             const errorContainer = document.getElementById(`${type}ErrorContainer`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            
+            // Hide modals
+            hideModals();
             
             // Hide preview and clear previous results
             previewImg.style.display = 'none';
@@ -1053,9 +1075,15 @@
                             dropdownElement.value = matchingOption.value;
                         }
                         errorNoteElement.style.display = "none";
+                        
+                        // Hide modals when dropdown value is set automatically
+                        hideModals();
                     } else {
                         dropdownElement.value = "Confidence of waveform < 50%";
                         errorNoteElement.style.display = "block";
+                        
+                        // Hide modals when dropdown value is set automatically
+                        hideModals();
                     }
                 } else {
                     resultElement.textContent = "No predictions found.";
