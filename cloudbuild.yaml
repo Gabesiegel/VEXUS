@@ -8,6 +8,8 @@ steps:
         'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA',
         '.'
       ]
+    id: 'build-image'
+    waitFor: ['-']  # Start immediately
 
   # Step 2: Push the image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -16,39 +18,50 @@ steps:
         'push',
         'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA'
       ]
+    id: 'push-image'
+    waitFor: ['build-image']
 
-  # Step 3: Deploy to Cloud Run with 100% traffic to new revision
+  # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
-        'beta',
-        'run',
+        'run',  # Removed 'beta'
         'deploy',
-        '${_SERVICE_NAME}',  # Use the variable
+        '${_SERVICE_NAME}',
         '--image=us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA',
-        '--region=${_DEPLOY_REGION}',  # Use the variable
+        '--region=${_DEPLOY_REGION}',
         '--allow-unauthenticated',
         '--port=3003',
-        '--platform=${_PLATFORM}', # Add platform
+        '--platform=${_PLATFORM}',
 
-        # Environment variables
-        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=8159951878260523008,VERTEX_AI_ENDPOINT=projects/456295042668/locations/${_DEPLOY_REGION}/endpoints/8159951878260523008',
+        # Environment variables - simplified
+        '--set-env-vars=GOOGLE_CLOUD_PROJECT=${_AR_PROJECT_ID},PROJECT_ID=${_AR_PROJECT_ID},LOCATION=${_DEPLOY_REGION},ENDPOINT_ID=8159951878260523008',
 
         # Secrets
         '--update-secrets=KEY=KEY:latest',
 
-        # Cloud Run settings
+        # Cloud Run settings - simplified
         '--min-instances=1',
         '--memory=1Gi',
         '--cpu=1',
-        '--timeout=600',
-        '--execution-environment=gen2',
-        '--concurrency=80',
-        '--cpu-boost'
+        '--timeout=300',
+        '--execution-environment=gen2'
       ]
+    id: 'deploy-service'
+    waitFor: ['push-image']
 
+# Global options
 options:
   logging: CLOUD_LOGGING_ONLY
+  # Add explicit timeout (30 minutes)
+  timeout: 1800s
+
+# Substitution variables with defaults
+substitutions:
+  _SERVICE_NAME: vexus-web
+  _DEPLOY_REGION: us-central1
+  _PLATFORM: managed
+  _AR_PROJECT_ID: plucky-weaver-450819-k7
 
 images:
 - 'us-central1-docker.pkg.dev/plucky-weaver-450819-k7/cloud-run-source-deploy/vexus-web:$SHORT_SHA'
