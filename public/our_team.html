@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>About VExUS ATLAS</title>
+    <title>Our Team - VExUS ATLAS</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
@@ -91,73 +91,80 @@
             letter-spacing: -0.02em;
         }
 
-        .about-section {
+        .team-section {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto 2em;
+            margin: 0 auto 4em;
             padding: 0 20px;
         }
 
-        .about-section p {
+        .team-section p {
             font-size: 1.2em;
             line-height: 1.6;
             color: #555;
             margin-bottom: 1.5em;
         }
 
-        .about-content {
-            display: flex;
-            flex-wrap: wrap;
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            justify-content: center;
-            margin: 0 auto;
+            margin: 40px auto;
             max-width: 1200px;
             padding: 0 20px;
         }
 
-        .about-card {
+        .team-card {
             background: #ffffff;
-            padding: 35px 30px;
+            padding: 35px 25px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            flex: 1;
-            min-width: 300px;
-            max-width: 100%;
-        }
-
-        .about-card h2 {
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
         }
 
-        .about-card p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 1em;
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
         }
 
-        .team-link {
+        .team-member-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 25px;
             display: block;
-            text-align: center;
-            margin: 40px auto;
-            padding: 12px 30px;
-            background-color: #007bff;
-            color: white !important;
-            border-radius: 5px;
-            font-size: 1.2em;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            max-width: 250px;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        .team-link:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+        .team-card:hover .team-member-image {
+            transform: scale(1.05);
+        }
+
+        .team-card h3 {
+            font-size: 1.6em;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .team-card .role {
+            font-size: 1.1em;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .team-card p {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #666;
+            margin: 0;
+            padding: 0 10px;
         }
 
         .user-info {
@@ -170,6 +177,13 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-size: 0.8em;
             color: #888888;
+        }
+
+        @media screen and (max-width: 1200px) {
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
         }
 
         @media screen and (max-width: 980px) {
@@ -195,11 +209,21 @@
         }
 
         @media screen and (max-width: 736px) {
-            .about-card {
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .team-member-image {
+                width: 160px;
+                height: 160px;
+            }
+
+            .team-card {
                 padding: 25px 20px;
             }
 
-            .about-section p {
+            .team-section p {
                 font-size: 1.1em;
             }
         }
@@ -246,36 +270,49 @@
                         <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
                     </div>
 
-                    <div class="about-section">
-                        <h1>About VExUS ATLAS</h1>
+                    <div class="team-section">
+                        <h1>Our Team</h1>
                         <p>
-                            VExUS ATLAS represents a breakthrough in medical imaging analysis, combining advanced artificial intelligence with clinical expertise in venous congestion assessment. Our mission is to enhance patient care through innovative technology and evidence-based medicine.
+                            VExUS ATLAS is developed by a multidisciplinary team of medical professionals dedicated to improving patient care through innovative technology and clinical expertise in venous congestion assessment.
                         </p>
                     </div>
 
-                    <div class="about-content">
-                        <div class="about-card">
-                            <h2>Our Vision</h2>
-                            <p>
-                                VExUS ATLAS aims to revolutionize the way healthcare professionals assess venous congestion by providing cutting-edge AI-powered tools that improve diagnostic accuracy and efficiency. We strive to make advanced venous ultrasound assessment accessible to clinicians worldwide.
-                            </p>
-                            <p>
-                                Our platform integrates state-of-the-art machine learning algorithms with clinical expertise to offer reliable, evidence-based analysis of ultrasound images, helping clinicians make more informed decisions for patient care.
-                            </p>
+                    <div class="team-grid">
+                        <div class="team-card">
+                            <img src="images/gabe siegel.jpg" alt="Gabriel Siegel" class="team-member-image">
+                            <h3>Gabriel Siegel, MD</h3>
+                            <div class="role">Lead Researcher & Ultrasound Fellow</div>
+                            <p>Specializes in machine learning and AI applications in healthcare, focusing on developing innovative solutions for medical imaging analysis and clinical decision support systems.</p>
                         </div>
 
-                        <div class="about-card">
-                            <h2>Our Approach</h2>
-                            <p>
-                                The VExUS (Venous Excess Ultrasound Score) method evaluates venous congestion by examining the inferior vena cava, hepatic veins, portal veins, and renal veins. This comprehensive approach provides a more complete picture of a patient's venous congestion status.
-                            </p>
-                            <p>
-                                Our AI algorithms are trained on extensive datasets of validated ultrasound images, ensuring high accuracy in classifying different venous waveform patterns. This technology helps standardize the assessment process and reduces interobserver variability.
-                            </p>
+                        <div class="team-card">
+                            <img src="images/August Longino.jpg" alt="August Longino" class="team-member-image">
+                            <h3>August Longino, MD</h3>
+                            <div class="role">Clinical Investigator & Project Lead</div>
+                            <p>Expert in critical care medicine and point-of-care ultrasound, focusing on venous congestion assessment and its clinical applications in critical care settings.</p>
+                        </div>
+
+                        <div class="team-card">
+                            <img src="images/Riscinti Matthew D.jpg" alt="Matthew Riscinti" class="team-member-image">
+                            <h3>Matthew Riscinti, MD</h3>
+                            <div class="role">Faculty Clinical Investigator</div>
+                            <p>Cardiovascular medicine specialist with expertise in venous thromboembolism and critical care cardiology, focusing on cardiovascular care and outcomes in critical illness.</p>
+                        </div>
+
+                        <div class="team-card">
+                            <img src="images/EDGILL.jpeg" alt="Ed Gill" class="team-member-image">
+                            <h3>Ed Gill, MD</h3>
+                            <div class="role">Cardiology Professor & Clinical Expert</div>
+                            <p>Distinguished cardiologist with extensive expertise in echocardiography and prosthetic valve evaluation. Graduate of University of Washington School of Medicine (1985) with fellowship training in Cardiology at University of Utah Medical Center (1993).</p>
+                        </div>
+
+                        <div class="team-card">
+                            <img src="images/IVOR.jpg" alt="Ivor Douglas" class="team-member-image">
+                            <h3>Ivor Douglas, MD</h3>
+                            <div class="role">Critical Care Director & Chief of Pulmonary Sciences</div>
+                            <p>Medical Director of the Intensive Care unit at Denver Health Medical Center and Chief of Pulmonary Sciences & Critical Care. Recognized as a Top Doctor in Denver by 5280 Magazine (2008-2019) and named in Best Doctors in America® (2008-2020).</p>
                         </div>
                     </div>
-                    
-                    <a href="our_team.html" class="team-link">Meet Our Team</a>
                 </div>
             </div>
         </div>
@@ -288,10 +325,10 @@
     </div>
 
     <!-- Scripts -->
-   <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
 </body>
-</html>
+</html> 
