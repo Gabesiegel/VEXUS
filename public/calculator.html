@@ -1054,13 +1054,37 @@
                     }
                 };
                 
+                console.log(`${type} classification - received labels:`, displayNames);
+                
                 // Create top 3 predictions with mapped labels
                 const top3 = confidences
                     .map((conf, idx) => {
                         const apiLabel = displayNames[idx] || "Unknown";
-                        const dropdownLabel = labelMapping[type] && labelMapping[type][apiLabel] 
-                            ? labelMapping[type][apiLabel] 
-                            : apiLabel;
+                        // Check if the label belongs to the expected type
+                        const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
+                                               type === 'portal' ? apiLabel.includes('Portal') :
+                                               apiLabel.includes('Renal');
+                        
+                        let dropdownLabel;
+                        if (isExpectedType) {
+                            // Use the type-specific mapping
+                            dropdownLabel = labelMapping[type][apiLabel] || apiLabel;
+                        } else {
+                            // If model returned wrong type of prediction, try to find mapping in any category
+                            for (const veinType in labelMapping) {
+                                if (labelMapping[veinType][apiLabel]) {
+                                    console.log(`Warning: Received ${apiLabel} for ${type} request`);
+                                    // Still use the expected type prefix (HV/PV/RV)
+                                    const severity = apiLabel.includes('Normal') ? 'Normal' : 
+                                                    apiLabel.includes('Mild') ? 'Mild' : 'Severe';
+                                    dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
+                                    break;
+                                }
+                            }
+                            // If no mapping found in any category
+                            if (!dropdownLabel) dropdownLabel = apiLabel;
+                        }
+                        
                         return {
                             apiLabel: apiLabel,
                             label: dropdownLabel,
