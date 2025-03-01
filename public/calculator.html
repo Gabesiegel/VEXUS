@@ -1080,7 +1080,9 @@
                 const payload = {
                     instances: [
                         {
-                            content: base64Content
+                            content: {
+                                b64: base64Content
+                            }
                         }
                     ],
                     parameters: {
