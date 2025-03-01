@@ -337,6 +337,28 @@
             color: #721c24;
             display: none;
         }
+
+        /* Reset button styling */
+        .reset-button {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #495057;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-button:hover {
+            background-color: #e9ecef;
+            border-color: #ced4da;
+        }
+        
+        .reset-button i {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -543,6 +565,10 @@
                             Probability below 50%. Please upload a higher quality image.
                         </div>
                     </div>
+                    
+                    <button id="hepaticResetButton" class="reset-button" onclick="clearImageUpload('hepatic')">
+                        <i class="fas fa-redo-alt"></i> Reset Image
+                    </button>
                 </div>
 
                 <!-- STEP 3: Portal Vein -->
@@ -593,6 +619,10 @@
                             Probability below 50%. Please upload a higher quality image.
                         </div>
                     </div>
+                    
+                    <button id="portalResetButton" class="reset-button" onclick="clearImageUpload('portal')">
+                        <i class="fas fa-redo-alt"></i> Reset Image
+                    </button>
                 </div>
 
                 <!-- STEP 4: Renal Vein -->
@@ -643,6 +673,10 @@
                             Probability below 50%. Please upload a higher quality image.
                         </div>
                     </div>
+                    
+                    <button id="renalResetButton" class="reset-button" onclick="clearImageUpload('renal')">
+                        <i class="fas fa-redo-alt"></i> Reset Image
+                    </button>
                 </div>
 
                 <!-- Calculate & Reset Buttons + Score Display -->
@@ -691,8 +725,19 @@
             initializeModelStatus('portalModelStatus');
             initializeModelStatus('renalModelStatus');
             
+            setupCalculator();
+            
+            // Show warnings once on page load
+            const hipaaModal = document.getElementById('hipaaWarningModal');
+            hipaaModal.style.display = 'block';
+            
             // Setup the warning modal functionality
-            setupModalListeners();
+            setupWarningModals();
+            
+            // Initialize reset buttons as hidden
+            document.getElementById('hepaticResetButton').style.display = 'none';
+            document.getElementById('portalResetButton').style.display = 'none';
+            document.getElementById('renalResetButton').style.display = 'none';
             
             // Setup image upload event handlers
             setupImageUploadListeners();
@@ -704,8 +749,7 @@
             checkApiConnection();
         });
         
-        // Function to set up PHI warning modal listeners
-        function setupModalListeners() {
+        function setupWarningModals() {
             // HIPAA Modal elements
             const hipaaModal = document.getElementById('hipaaWarningModal');
             const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
@@ -781,12 +825,11 @@
             document.getElementById('betaWarningModal').style.display = 'none';
         }
         
-        // Function to initiate image upload with HIPAA warning first
+        // Function to initiate image upload without showing HIPAA warning again
         function initiateImageUpload(type) {
             currentUploadType = type;
-            // First, show the HIPAA warning modal
-            const hipaaModal = document.getElementById('hipaaWarningModal');
-            hipaaModal.style.display = 'block';
+            // Simply click the file input directly
+            document.getElementById(`${type}ImageUpload`).click();
         }
         
         // Function to clear an image upload
@@ -803,6 +846,10 @@
             // Show the upload area again
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
             uploadArea.style.display = 'block';
+            
+            // Hide the reset button
+            const resetButton = document.getElementById(`${type}ResetButton`);
+            resetButton.style.display = 'none';
             
             // Clear the results
             document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
@@ -890,9 +937,9 @@
             const errorContainer = document.getElementById(`${type}ErrorContainer`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            const resetButton = document.getElementById(`${type}ResetButton`);
             
-            // Hide HIPAA and beta warning modals when an image is selected
-            hideModals();
+            // No need to hide modals here since they're only shown once on page load
             
             // Hide preview and clear previous results
             previewImg.style.display = 'none';
@@ -916,6 +963,8 @@
                 previewImg.style.display = 'block';
                 // Hide the upload area and show the image instead
                 uploadArea.style.display = 'none';
+                // Show the reset button
+                resetButton.style.display = 'inline-block';
                 classifyImage(type, file);
             };
             
