@@ -1035,12 +1035,38 @@
                 const confidences = result.confidences;
                 const displayNames = result.displayNames;
                 
-                // Create top 3 predictions
+                // Map API response labels to dropdown values
+                const labelMapping = {
+                    'hepatic': {
+                        'Hepatic_Vein_Normal': 'HV Normal',
+                        'Hepatic_Vein_Mild': 'HV Mild',
+                        'Hepatic_Vein_Severe': 'HV Severe'
+                    },
+                    'portal': {
+                        'Portal_Vein_Normal': 'PV Normal',
+                        'Portal_Vein_Mild': 'PV Mild',
+                        'Portal_Vein_Severe': 'PV Severe'
+                    },
+                    'renal': {
+                        'Renal_Vein_Normal': 'RV Normal',
+                        'Renal_Vein_Mild': 'RV Mild',
+                        'Renal_Vein_Severe': 'RV Severe'
+                    }
+                };
+                
+                // Create top 3 predictions with mapped labels
                 const top3 = confidences
-                    .map((conf, idx) => ({
-                        label: displayNames[idx] || "Unknown",
-                        prob: (conf * 100).toFixed(1)
-                    }))
+                    .map((conf, idx) => {
+                        const apiLabel = displayNames[idx] || "Unknown";
+                        const dropdownLabel = labelMapping[type] && labelMapping[type][apiLabel] 
+                            ? labelMapping[type][apiLabel] 
+                            : apiLabel;
+                        return {
+                            apiLabel: apiLabel,
+                            label: dropdownLabel,
+                            prob: (conf * 100).toFixed(1)
+                        };
+                    })
                     .sort((a, b) => b.prob - a.prob)
                     .slice(0, 3);
 
@@ -1156,18 +1182,18 @@
                 return;
             }
 
-            // Convert choices to numerical scores based on model labels
+            // Convert choices to numerical scores based on actual dropdown values
             let hvScore = 0;
-            if (hvChoice === config.modelLabels.hepatic[1]) hvScore = 1; // HV Mild
-            if (hvChoice === config.modelLabels.hepatic[2]) hvScore = 2; // HV Severe
+            if (hvChoice === "HV Mild") hvScore = 1; // HV Mild
+            if (hvChoice === "HV Severe") hvScore = 2; // HV Severe
 
             let pvScore = 0;
-            if (pvChoice === config.modelLabels.portal[1]) pvScore = 1; // PV Mild
-            if (pvChoice === config.modelLabels.portal[2]) pvScore = 2; // PV Severe
+            if (pvChoice === "PV Mild") pvScore = 1; // PV Mild
+            if (pvChoice === "PV Severe") pvScore = 2; // PV Severe
 
             let rvScore = 0;
-            if (rvChoice === config.modelLabels.renal[1]) rvScore = 1; // RV Mild
-            if (rvChoice === config.modelLabels.renal[2]) rvScore = 2; // RV Severe
+            if (rvChoice === "RV Mild") rvScore = 1; // RV Mild
+            if (rvChoice === "RV Severe") rvScore = 2; // RV Severe
 
             // Count severe cases
             let severityCount = 0;
