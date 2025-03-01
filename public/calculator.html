@@ -805,9 +805,6 @@
             initializeModelStatus('portalModelStatus');
             initializeModelStatus('renalModelStatus');
             
-            // Show HIPAA warning modal on page load
-            document.getElementById('hipaaWarningModal').style.display = 'block';
-            
             // Setup the warning modal functionality
             setupModalListeners();
             
@@ -819,6 +816,9 @@
             
             // Check API connection
             checkApiConnection();
+
+            // Show HIPAA warning on page load
+            document.getElementById('hipaaWarningModal').style.display = 'block';
         });
         
         // Function to set up PHI warning modal listeners
@@ -836,6 +836,8 @@
             // HIPAA Modal listeners
             cancelHipaaBtn.addEventListener('click', function() {
                 hipaaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
             });
             
             confirmHipaaBtn.addEventListener('click', function() {
@@ -847,10 +849,16 @@
             // Beta Software Modal listeners
             cancelBetaBtn.addEventListener('click', function() {
                 betaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
             });
             
             confirmBetaBtn.addEventListener('click', function() {
                 betaModal.style.display = 'none';
+                // Only after confirming both modals, trigger the file input click
+                if (currentUploadType) {
+                    document.getElementById(`${currentUploadType}ImageUpload`).click();
+                }
             });
         }
         
@@ -861,8 +869,9 @@
                 handleImageUpload('hepatic', this.files[0]);
             });
             
-            document.getElementById('hepaticPreviewDelete').addEventListener('click', function() {
-                clearImageUpload('hepatic');
+            document.getElementById('hepaticPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('hepatic');
             });
             
             // Portal vein upload
@@ -870,8 +879,9 @@
                 handleImageUpload('portal', this.files[0]);
             });
             
-            document.getElementById('portalPreviewDelete').addEventListener('click', function() {
-                clearImageUpload('portal');
+            document.getElementById('portalPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('portal');
             });
             
             // Renal vein upload
@@ -879,8 +889,9 @@
                 handleImageUpload('renal', this.files[0]);
             });
             
-            document.getElementById('renalPreviewDelete').addEventListener('click', function() {
-                clearImageUpload('renal');
+            document.getElementById('renalPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('renal');
             });
         }
         
@@ -892,37 +903,80 @@
         
         // Function to initiate image upload with HIPAA warning first
         function initiateImageUpload(type) {
-            // Directly trigger file input click
-            document.getElementById(`${type}ImageUpload`).click();
+            currentUploadType = type;
+            // Directly trigger file input click without showing modals
+            document.getElementById(`${currentUploadType}ImageUpload`).click();
         }
         
-        // Function to clear an image upload
-        function clearImageUpload(type) {
+        // Function to handle image upload and preview
+        function handleImageUpload(type, file) {
+            const previewImg = document.getElementById(`${type}Preview`);
+            const resultElement = document.getElementById(`${type}Result`);
+            const topResultsElement = document.getElementById(`${type}TopResults`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
+            // Keep model status green and update text
+            modelStatus.textContent = "Processing Image...";
+            modelStatus.classList.add('model-ready');
+            
+            // Hide preview and clear previous results
+            previewImg.style.display = 'none';
+            resultElement.textContent = "Processing image...";
+            topResultsElement.innerHTML = "";
+            
+            if (!file) {
+                resetImageUpload(type);
+                return;
+            }
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+                uploadArea.style.display = 'none';
+                classifyImage(type, file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Function to reset image upload (replacing clearImageUpload)
+        function resetImageUpload(type) {
             // Clear the file input
             const fileInput = document.getElementById(`${type}ImageUpload`);
             fileInput.value = '';
             
             // Hide the preview
             const preview = document.getElementById(`${type}Preview`);
-            preview.src = '';
             preview.style.display = 'none';
+            preview.src = '';
             
-            // Show the upload area again
+            // Show the upload area
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
             uploadArea.style.display = 'block';
             
-            // Clear the results
+            // Reset the results
             document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
             document.getElementById(`${type}TopResults`).innerHTML = '';
-            
-            // Hide error container
-            document.getElementById(`${type}ErrorContainer`).style.display = 'none';
             
             // Reset dropdown
             document.getElementById(`${type}Dropdown`).value = '';
             document.getElementById(`${type}ErrorNote`).style.display = 'none';
+            
+            // Reset model status
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            modelStatus.textContent = "Ready for Image";
+            modelStatus.classList.add('model-ready');
+            
+            // Hide loading indicator
+            document.getElementById(`${type}LoadingIndicator`).style.display = 'none';
         }
-        
+
         // Helper function to capitalize first letter
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
@@ -989,57 +1043,6 @@
             }
         }
 
-        // Function to handle image upload and preview
-        function handleImageUpload(type, file) {
-            const previewImg = document.getElementById(`${type}Preview`);
-            const resultElement = document.getElementById(`${type}Result`);
-            const topResultsElement = document.getElementById(`${type}TopResults`);
-            const errorContainer = document.getElementById(`${type}ErrorContainer`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
-            
-            // Hide preview and clear previous results
-            previewImg.style.display = 'none';
-            resultElement.textContent = "Processing image...";
-            topResultsElement.innerHTML = "";
-            errorContainer.style.display = 'none';
-            
-            if (!file) {
-                resultElement.textContent = "No file selected.";
-                return;
-            }
-            
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            
-            // Create preview
-            previewImg.src = URL.createObjectURL(file);
-            
-            // When image is loaded, classify it and hide the upload area
-            previewImg.onload = () => {
-                previewImg.style.display = 'block';
-                // Hide the upload area and show the image instead
-                uploadArea.style.display = 'none';
-                classifyImage(type, file);
-            };
-            
-            // Handle image loading errors
-            previewImg.onerror = () => {
-                loadingIndicator.style.display = 'none';
-                errorContainer.innerHTML = "Error loading image. Please try a different file.";
-                errorContainer.style.display = 'block';
-                
-                const retryButton = document.createElement('button');
-                retryButton.className = 'retry-button';
-                retryButton.textContent = 'Try Again';
-                retryButton.addEventListener('click', () => {
-                    document.getElementById(`${type}ImageUpload`).click();
-                });
-                
-                errorContainer.appendChild(retryButton);
-            };
-        }
-
         // Function to classify image
         async function classifyImage(type, file) {
             const previewImg = document.getElementById(`${type}Preview`);
@@ -1047,18 +1050,18 @@
             const topResultsElement = document.getElementById(`${type}TopResults`);
             const dropdownElement = document.getElementById(`${type}Dropdown`);
             const errorNoteElement = document.getElementById(`${type}ErrorNote`);
-            const errorContainer = document.getElementById(`${type}ErrorContainer`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const modelStatus = document.getElementById(`${type}ModelStatus`);
             
             try {
                 if (!file) {
-                    throw new Error("No file selected.");
+                    resetImageUpload(type);
+                    return;
                 }
 
-                // Update model status
+                // Keep status green during processing
                 modelStatus.textContent = "Processing...";
-                modelStatus.classList.remove('model-ready');
+                modelStatus.classList.add('model-ready');
 
                 // Use FileReader to get base64 data
                 const base64Data = await new Promise((resolve, reject) => {
@@ -1077,9 +1080,7 @@
                 const payload = {
                     instances: [
                         {
-                            content: {
-                                b64: base64Content
-                            }
+                            content: base64Content
                         }
                     ],
                     parameters: {
@@ -1257,8 +1258,8 @@
                 modelStatus.classList.remove('model-ready');
                 
                 // Show error in container
-                errorContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                errorContainer.style.display = 'block';
+                document.getElementById(`${type}ErrorContainer`).innerHTML = `<strong>Error:</strong> ${error.message}`;
+                document.getElementById(`${type}ErrorContainer`).style.display = 'block';
                 
                 // Add retry button
                 const retryButton = document.createElement('button');
@@ -1268,7 +1269,7 @@
                     classifyImage(type, file);
                 });
                 
-                errorContainer.appendChild(retryButton);
+                document.getElementById(`${type}ErrorContainer`).appendChild(retryButton);
                 
                 // Show low confidence note
                 errorNoteElement.style.display = "block";
@@ -1352,7 +1353,7 @@
 
             // Clear all vein type data
             ['hepatic', 'portal', 'renal'].forEach(type => {
-                clearImageUpload(type);
+                resetImageUpload(type);
             });
         }
 
