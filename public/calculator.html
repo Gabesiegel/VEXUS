@@ -872,7 +872,7 @@
         function initializeModelStatus(statusId) {
             const statusElement = document.getElementById(statusId);
             if (statusElement) {
-                statusElement.textContent = "Waiting for image...";
+                statusElement.textContent = "Checking API connection...";
                 statusElement.classList.remove('model-ready');
             }
         }
@@ -894,6 +894,44 @@
                 });
                 
                 // Simple ping to check if server is responsive
+                const response = await fetch('/api/status', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // API is responsive
+                    modelStatuses.forEach(status => {
+                        if (status) {
+                            status.textContent = "API Connected - Ready for Images";
+                            status.classList.add('model-ready');
+                        }
+                    });
+                } else {
+                    throw new Error('API connection failed');
+                }
+            } catch (error) {
+                console.error('API connection error:', error);
+                
+                // Retry connection after a delay
+                setTimeout(() => {
+                    // Try alternative endpoint for auth token
+                    tryAuthTokenEndpoint();
+                }, 1000);
+            }
+        }
+        
+        // Try alternative endpoint for API readiness check
+        async function tryAuthTokenEndpoint() {
+            try {
+                const modelStatuses = [
+                    document.getElementById('hepaticModelStatus'),
+                    document.getElementById('portalModelStatus'),
+                    document.getElementById('renalModelStatus')
+                ];
+                
                 const response = await fetch('/auth/token', {
                     method: 'POST',
                     headers: {
@@ -911,22 +949,26 @@
                         }
                     });
                 } else {
-                    throw new Error('API connection failed');
+                    updateApiStatusFailed();
                 }
             } catch (error) {
-                console.error('API connection error:', error);
-                const modelStatuses = [
-                    document.getElementById('hepaticModelStatus'),
-                    document.getElementById('portalModelStatus'),
-                    document.getElementById('renalModelStatus')
-                ];
-                
-                modelStatuses.forEach(status => {
-                    if (status) {
-                        status.textContent = "API Connection Error - Try Again Later";
-                    }
-                });
+                console.error('Alternative API check failed:', error);
+                updateApiStatusFailed();
             }
+        }
+        
+        function updateApiStatusFailed() {
+            const modelStatuses = [
+                document.getElementById('hepaticModelStatus'),
+                document.getElementById('portalModelStatus'),
+                document.getElementById('renalModelStatus')
+            ];
+            
+            modelStatuses.forEach(status => {
+                if (status) {
+                    status.textContent = "API Connection Error - Try Again Later";
+                }
+            });
         }
 
         // Function to handle image upload and preview
@@ -1022,9 +1064,7 @@
                 const payload = {
                     instances: [
                         {
-                            content: {
-                                b64: base64Content
-                            }
+                            content: base64Content
                         }
                     ],
                     parameters: {
@@ -1038,11 +1078,12 @@
                     }
                 };
 
+                // For logging/debugging 
+                console.log(`Sending ${type} vein image for classification...`);
+                
                 // Send to API endpoint with timeout
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
-                
-                console.log(`Sending ${type} image for classification...`);
                 
                 const response = await fetch('/api/predict', {
                     method: 'POST',
@@ -1315,6 +1356,16 @@
             document.getElementById('renalDropdown').addEventListener('change', function() {
                 hideModals();
             });
+        }
+
+        function setupCalculator() {
+            // Set up any calculator-specific initialization
+            console.log("VExUS Calculator initialized");
+            console.log(`Last Updated: ${config.lastUpdated}`);
+            console.log(`Project ID: ${config.projectId}`);
+            
+            // Add version info for debugging
+            document.querySelector('h1').setAttribute('title', `Version: ${config.lastUpdated}`);
         }
     </script>
 </body>
