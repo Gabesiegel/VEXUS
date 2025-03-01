@@ -107,7 +107,7 @@
 
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             margin: 40px auto;
             max-width: 1200px;
@@ -121,6 +121,10 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .team-card:hover {
@@ -165,6 +169,7 @@
             color: #666;
             margin: 0;
             padding: 0 10px;
+            flex-grow: 1;
         }
 
         .user-info {
@@ -181,8 +186,8 @@
 
         @media screen and (max-width: 1200px) {
             .team-grid {
-                grid-template-columns: repeat(2, 1fr);
                 gap: 25px;
+                padding: 0 15px;
             }
         }
 
@@ -201,6 +206,15 @@
                 font-size: 2.2em;
             }
 
+            .team-card {
+                padding: 25px 20px;
+            }
+
+            .team-member-image {
+                width: 160px;
+                height: 160px;
+            }
+
             .user-info {
                 position: static;
                 margin: 20px auto;
@@ -210,8 +224,36 @@
 
         @media screen and (max-width: 736px) {
             .team-grid {
-                grid-template-columns: 1fr;
                 gap: 20px;
+                padding: 0 10px;
+            }
+
+            .team-member-image {
+                width: 140px;
+                height: 140px;
+            }
+
+            .team-card h3 {
+                font-size: 1.4em;
+            }
+
+            .team-card .role {
+                font-size: 1em;
+            }
+
+            .team-card p {
+                font-size: 0.95em;
+            }
+
+            .team-section p {
+                font-size: 1.1em;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
             }
 
             .team-member-image {
@@ -219,12 +261,16 @@
                 height: 160px;
             }
 
-            .team-card {
-                padding: 25px 20px;
+            .team-card h3 {
+                font-size: 1.5em;
             }
 
-            .team-section p {
+            .team-card .role {
                 font-size: 1.1em;
+            }
+
+            .team-card p {
+                font-size: 1em;
             }
         }
     </style>
@@ -311,23 +357,23 @@
                             <div class="role">Cardiology Professor & Clinical Expert</div>
                             <p>Distinguished cardiologist with extensive expertise in echocardiography and prosthetic valve evaluation. Graduate of University of Washington School of Medicine (1985) with fellowship training in Cardiology at University of Utah Medical Center (1993).</p>
                         </div>
-                    </div>
-
-                    <div class="team-section" style="margin-top: 60px;">
-                        <h2 style="font-size: 2.2em; color: #2c3e50; margin-bottom: 1em;">Contributors</h2>
-                        <p>
-                            Our project benefits from the valuable contributions of these talented professionals who provide expertise and support in various capacities.
-                        </p>
-                    </div>
-
-                    <div class="team-grid">
+                        
                         <div class="team-card">
                             <img src="images/IVOR.jpg" alt="Ivor Douglas" class="team-member-image">
                             <h3>Ivor Douglas, MD</h3>
                             <div class="role">Critical Care Director & Chief of Pulmonary Sciences</div>
                             <p>Medical Director of the Intensive Care unit at Denver Health Medical Center and Chief of Pulmonary Sciences & Critical Care. Recognized as a Top Doctor in Denver by 5280 Magazine (2008-2019) and named in Best Doctors in America® (2008-2020).</p>
                         </div>
-                        
+                    </div>
+
+                    <div class="team-section" style="margin-top: 60px;">
+                        <h2 style="font-size: 2.2em; color: #2c3e50; margin-bottom: 1em; padding: 0 15px; word-break: break-word;">Contributors</h2>
+                        <p>
+                            Our project benefits from the valuable contributions of these talented professionals who provide expertise and support in various capacities.
+                        </p>
+                    </div>
+
+                    <div class="team-grid">
                         <div class="team-card">
                             <img src="images/NN headshot.jpg" alt="Nhu-Nguyen Le" class="team-member-image">
                             <h3>Nhu-Nguyen Le, MD</h3>

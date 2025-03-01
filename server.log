@@ -464,3 +464,57 @@ Requesting: /api/predict
 [2025-02-27T23:53:16.168Z] /api/predict handler invoked
 [2025-02-27T23:53:16.368Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
 Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-02-28T18:02:57.042Z] /api/predict handler invoked
+[2025-02-28T18:02:57.693Z] Uploading image: image_1740765777647.png
+[2025-02-28T18:02:58.587Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740765777647.png
+[2025-02-28T18:02:59.054Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-28T18:03:00.936Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740765777647_results.json
+Requesting: /api/predict
+[2025-02-28T18:03:00.960Z] /api/predict handler invoked
+[2025-02-28T18:03:01.181Z] Uploading image: image_1740765781181.png
+[2025-02-28T18:03:01.897Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740765781181.png
+[2025-02-28T18:03:02.228Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2970410926785691648
+[2025-02-28T18:03:09.850Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740765781181_results.json
+Requesting: /api/predict
+[2025-02-28T18:03:09.870Z] /api/predict handler invoked
+[2025-02-28T18:03:10.097Z] Uploading image: image_1740765790097.png
+[2025-02-28T18:03:10.738Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740765790097.png
+[2025-02-28T18:03:11.136Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
+[2025-02-28T18:03:18.691Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740765790097_results.json
+Requesting: /api/predict
+[2025-02-28T22:16:15.950Z] /api/predict handler invoked
+[2025-02-28T22:16:16.230Z] Uploading image: image_1740780976229.png
+[2025-02-28T22:16:17.136Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740780976229.png
+[2025-02-28T22:16:17.732Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-02-28T22:16:19.517Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740780976229_results.json
+Requesting: /api/predict
+[2025-02-28T22:16:19.559Z] /api/predict handler invoked
+[2025-02-28T22:16:19.825Z] Uploading image: image_1740780979825.png
+[2025-02-28T22:16:20.539Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740780979825.png
+[2025-02-28T22:16:20.803Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2970410926785691648
+[2025-02-28T22:16:22.373Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740780979825_results.json
+Requesting: /api/predict
+[2025-02-28T22:16:22.388Z] /api/predict handler invoked
+[2025-02-28T22:16:23.247Z] Uploading image: image_1740780983247.png
+[2025-02-28T22:16:23.923Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740780983247.png
+[2025-02-28T22:16:24.207Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
+[2025-02-28T22:16:25.565Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740780983247_results.json
+Requesting: /api/predict
+[2025-03-01T03:25:43.884Z] /api/predict handler invoked
+[2025-03-01T03:25:44.011Z] Uploading image: image_1740799544009.png
+[2025-03-01T03:25:44.564Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740799544009.png
+[2025-03-01T03:25:45.460Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-03-01T03:25:46.475Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740799544009_results.json
+Requesting: /api/predict
+[2025-03-01T03:25:46.501Z] /api/predict handler invoked
+[2025-03-01T03:25:46.657Z] Uploading image: image_1740799546657.png
+[2025-03-01T03:25:47.109Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740799546657.png
+[2025-03-01T03:25:47.315Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2970410926785691648
+[2025-03-01T03:25:48.241Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740799546657_results.json
+Requesting: /api/predict
+[2025-03-01T03:25:48.261Z] /api/predict handler invoked
+[2025-03-01T03:25:48.394Z] Uploading image: image_1740799548394.png
+[2025-03-01T03:25:48.773Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740799548394.png
+[2025-03-01T03:25:49.009Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
+[2025-03-01T03:25:49.926Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740799548394_results.json
