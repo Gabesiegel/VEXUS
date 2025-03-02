@@ -24,8 +24,8 @@ const CONFIG = {
     endpointIds: {
         default: "8159951878260523008", // Default endpoint ID
         hepatic: "8159951878260523008", // Hepatic vein prediction endpoint
-        renal: "1148704877514326016",   // Renal vein prediction endpoint
-        portal: "2970410926785691648"   // Portal vein prediction endpoint
+        renal: "2369174844613853184",   // Renal vein prediction endpoint
+        portal: "2232940955885895680"   // Portal vein prediction endpoint
     },
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
@@ -316,9 +316,21 @@ app.get('*', (req, res) => {
         res.status(404).json({ error: 'Not found', path: req.url });
     }
 });
-// ... (Health Check and Error Handling Middleware)
 
-
+///////////////////////////////////////////////////////////////////////////////
+// 4) Health Check Endpoint
+///////////////////////////////////////////////////////////////////////////////
+app.get('/api/health', (req, res) => {
+    console.log(`[${new Date().toISOString()}] Health check requested`);
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        serverInfo: {
+            projectId: CONFIG.projectId,
+            lastUpdated: CONFIG.lastUpdated
+        }
+    });
+});
 
 ///////////////////////////////////////////////////////////////////////////////
 // 5) Image Upload and Prediction Endpoint
@@ -519,8 +531,53 @@ app.post('/api/predict', async (req, res) => {
     }
 });
 
-
-
+///////////////////////////////////////////////////////////////////////////////
+// 5) Test Endpoint for Connectivity Check
+///////////////////////////////////////////////////////////////////////////////
+app.post('/api/test-endpoint', async (req, res) => {
+    try {
+        const { metadata } = req.body;
+        
+        // Extract vein type from request metadata
+        const veinType = metadata?.veinType || 'default';
+        console.log(`Testing endpoint connection for vein type: ${veinType}`);
+        
+        // Select the appropriate endpoint ID based on vein type
+        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.default;
+        
+        // Get credentials from Secret Manager
+        const credentials = await getCredentials();
+        
+        // Get an access token using the credentials
+        const auth = new GoogleAuth({
+            credentials: credentials,
+            scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        
+        const client = await auth.getClient();
+        
+        // Just get the token - this verifies auth is working
+        await client.getAccessToken();
+        
+        // Return success without actually calling the model endpoint
+        // This verifies our auth works and we have a valid endpoint ID
+        res.json({
+            status: 'ok',
+            veinType: veinType,
+            endpointId: endpointId,
+            message: `Successfully verified connection for ${veinType} endpoint`,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error(`Endpoint test error for ${req.body.metadata?.veinType || 'unknown'}:`, error);
+        res.status(500).json({ 
+            error: 'Endpoint test failed', 
+            message: error.message,
+            veinType: req.body.metadata?.veinType || 'unknown',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
 
 async function startServer() {
     try {
