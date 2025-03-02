@@ -22,9 +22,9 @@ const CONFIG = {
     projectNumber: "456295042668",
     location: "us-central1",
     endpointIds: {
-        hepatic: "8159951878260523008",  // Hepatic vein prediction endpoint
-        portal: "2970410926785691648",   // Portal vein prediction endpoint
-        renal: "1148704877514326016"     // Renal vein prediction endpoint
+        hepatic: process.env.HEPATIC_ENDPOINT_ID || "8159951878260523008",  // Hepatic vein prediction endpoint
+        portal: process.env.PORTAL_ENDPOINT_ID || "2970410926785691648",   // Portal vein prediction endpoint
+        renal: process.env.RENAL_ENDPOINT_ID || "1148704877514326016"     // Renal vein prediction endpoint
     },
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
@@ -172,9 +172,17 @@ async function initializeVertexAI() {
         const credentials = await getCredentials();
 
         console.log('Initializing Vertex AI client with Secret Manager credentials');
+        const apiEndpoint = process.env.VERTEX_AI_ENDPOINT || 
+                          `${CONFIG.location}-aiplatform.googleapis.com`;
+        
+        console.log(`Using Vertex AI API endpoint: ${apiEndpoint}`);
+        console.log(`Configured endpoints - Hepatic: ${CONFIG.endpointIds.hepatic}, Portal: ${CONFIG.endpointIds.portal}, Renal: ${CONFIG.endpointIds.renal}`);
+        
         return new v1.PredictionServiceClient({
-            apiEndpoint: process.env.VERTEX_AI_ENDPOINT,
-            credentials: credentials
+            apiEndpoint: apiEndpoint,
+            credentials: credentials,
+            // Add timeout to prevent hanging calls
+            timeout: 120000 // 2 minutes timeout
         });
     } catch (error) {
         console.error('Failed to initialize Vertex AI client:', error);
@@ -417,15 +425,16 @@ app.post('/api/predict', async (req, res) => {
             }
         }
 
+        // Extract image type if metadata is provided
+        const imageType = req.body.metadata?.imageType || 'image/jpeg';
+        // Extract vein type if provided
+        const veinType = req.body.metadata?.veinType || 'hepatic';
+
         // Store the image in Cloud Storage
         let imageInfo = null;
         try {
             // Get the image content from the first instance
             const imageContent = instances[0].content;
-            // Extract image type if metadata is provided
-            const imageType = req.body.metadata?.imageType || 'image/jpeg';
-            // Extract vein type if provided
-            const veinType = req.body.metadata?.veinType || 'hepatic';
             
             // Upload the image to Cloud Storage
             imageInfo = await uploadImage(imageContent, imageType);
@@ -437,6 +446,9 @@ app.post('/api/predict', async (req, res) => {
             console.error('Error storing image in Cloud Storage:', storageError);
             // Continue with prediction even if storage fails
         }
+
+        // Track the selected endpoint ID to include in error details if needed
+        let endpointId = null;
 
         try {
             // Get credentials from Secret Manager
@@ -454,12 +466,8 @@ app.post('/api/predict', async (req, res) => {
             
             console.log('Successfully obtained access token');
             
-            // Extract vein type from request metadata to determine endpoint
-            const veinType = req.body.metadata?.veinType || 'hepatic';
-            console.log(`Vein type from request metadata: ${veinType}`);
-            
             // Use the endpoint IDs from the CONFIG object
-            const endpointId = CONFIG.endpointIds[veinType];
+            endpointId = CONFIG.endpointIds[veinType];
             if (!endpointId) {
                 throw new Error(`Invalid vein type: ${veinType}`);
             }
@@ -492,107 +500,8 @@ app.post('/api/predict', async (req, res) => {
                 }
             };
             
-            // Make the API call using fetch
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-            
-            console.log(`Response status for ${veinType} endpoint (ID: ${endpointId}): ${response.status} ${response.statusText}`);
-            
-            if (!response.ok) {
-                let errorMessage = '';
-                let errorDetails = {};
-                let errorStatusCode = 500;
-                
-                try {
-                    // Try to parse error response as JSON
-                    const errorJson = await response.json();
-                    console.error(`API error response from ${veinType} endpoint:`, errorJson);
-                    
-                    // Log more detailed information about the error
-                    console.error(`Detailed error for ${veinType} endpoint:`, JSON.stringify(errorJson, null, 2));
-                    
-                    // Check if this is a billing or quota issue
-                    if (errorJson.error && errorJson.error.message) {
-                        if (errorJson.error.message.includes('quota') || 
-                            errorJson.error.message.includes('billing') || 
-                            errorJson.error.message.includes('payment')) {
-                            console.error(`Possible billing or quota issue for ${veinType} endpoint`);
-                            errorMessage = `The ${veinType} vein endpoint may have billing or quota issues. Please check your Google Cloud billing status.`;
-                            errorDetails = {
-                                code: 'BILLING_OR_QUOTA_ISSUE',
-                                veinType: veinType,
-                                endpointId: endpointId,
-                                originalError: errorJson.error.message
-                            };
-                        }
-                    }
-                    
-                    // Special handling for 404 (endpoint not found) errors
-                    if (response.status === 404 && errorJson.error && errorJson.error.message.includes('Endpoint') && errorJson.error.message.includes('not found')) {
-                        errorStatusCode = 404;
-                        errorMessage = `The ${veinType} vein endpoint (ID: ${endpointId}) could not be found. The model may have been moved or deleted.`;
-                        errorDetails = {
-                            code: 'ENDPOINT_NOT_FOUND',
-                            veinType: veinType,
-                            endpointId: endpointId,
-                            originalError: errorJson.error.message
-                        };
-                    } else if (response.status === 500 && errorJson.error && errorJson.error.message.includes('Failed to process request')) {
-                        // Special handling for 500 errors from Vertex AI
-                        errorMessage = `The ${veinType} vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.`;
-                        errorDetails = {
-                            code: 'MODEL_UNAVAILABLE',
-                            veinType: veinType,
-                            endpointId: endpointId,
-                            deployedModelId: errorJson.error.message.match(/deployed_model_id: (\d+)/)?.[1] || 'unknown',
-                            originalError: errorJson.error.message
-                        };
-                        
-                        // Log additional troubleshooting information
-                        console.error(`Model unavailable for ${veinType}. Troubleshooting steps:
-                        1. Check if the model is still loading (can take up to 15 minutes)
-                        2. Verify billing status for project ${CONFIG.projectId}
-                        3. Check quota limits for Vertex AI API in Google Cloud Console
-                        4. Verify service account permissions`);
-                    } else {
-                        // Extract the most relevant error information for other errors
-                        errorMessage = errorJson.error ? errorJson.error.message || `Error ${response.status} from ${veinType} endpoint` : `Error ${response.status} from ${veinType} endpoint`;
-                        errorDetails = {
-                            code: errorJson.error ? errorJson.error.code : response.status,
-                            status: errorJson.error ? errorJson.error.status : response.statusText,
-                            details: errorJson.error ? errorJson.error.details : null
-                        };
-                    }
-                } catch (parseError) {
-                    // If can't parse as JSON, use text
-                    const errorText = await response.text();
-                    console.error(`API error text from ${veinType} endpoint:`, errorText);
-                    errorMessage = `${response.status} ${response.statusText} from ${veinType} endpoint: ${errorText.substring(0, 200)}`;
-                    errorDetails = { raw: errorText };
-                }
-                
-                // Log the detailed error
-                await fs.appendFile('server.log', `[${new Date().toISOString()}] Error from ${veinType} endpoint (ID: ${endpointId}): ${errorMessage}\n`);
-                
-                // Return a well-structured error response
-                return res.status(errorStatusCode).json({
-                    error: errorMessage,
-                    details: errorDetails,
-                    timestamp: new Date().toISOString(),
-                    storage: imageInfo ? {
-                        imageUrl: imageInfo.publicUrl,
-                        stored: true
-                    } : {
-                        stored: false
-                    }
-                });
-            }
+            // Make the API call using fetch with retry mechanism
+            const response = await makeApiCallWithRetry(url, payload, token, veinType);
             
             // Process the successful response
             const result = await response.json();
@@ -610,9 +519,6 @@ app.post('/api/predict', async (req, res) => {
             let resultStoragePath = null;
             if (imageInfo) {
                 try {
-                    // Extract vein type from request metadata if available
-                    const veinType = req.body.metadata?.veinType || 'unknown';
-                    
                     resultStoragePath = await storePredictionResults(
                         imageInfo,
                         {
@@ -645,13 +551,58 @@ app.post('/api/predict', async (req, res) => {
             });
         } catch (apiError) {
             // Handle any errors during the API request process
-            console.error(`API request error for ${req.body.metadata?.veinType || 'unknown'} vein:`, apiError);
-            await fs.appendFile('server.log', `[${new Date().toISOString()}] API request error: ${apiError}\n`);
+            console.error(`API request error for ${veinType} vein:`, apiError);
+            await fs.appendFile('server.log', `[${new Date().toISOString()}] API request error: ${JSON.stringify(apiError)}\n`);
+            
+            // Default error message and status
+            let errorMessage = `Error processing ${veinType} vein prediction request`;
+            let errorDetails = { originalError: apiError };
+            let statusCode = 500;
+            
+            // Check for specific error conditions
+            if (apiError.error && apiError.error.message) {
+                if (apiError.error.message.includes('Failed to process request')) {
+                    errorMessage = `The ${veinType} vein model is currently unavailable. This may be due to model loading issues or quota limits.`;
+                    errorDetails = {
+                        code: 'MODEL_UNAVAILABLE',
+                        veinType: veinType,
+                        endpointId: endpointId,
+                        deployedModelId: apiError.error.message.match(/deployed_model_id: (\d+)/)?.[1] || 'unknown',
+                        originalError: apiError.error.message
+                    };
+                    
+                    // Log troubleshooting steps
+                    console.error(`Model unavailable for ${veinType}. Troubleshooting steps:
+                    1. Check if the model is still loading (can take up to 15 minutes)
+                    2. Verify billing status for project ${CONFIG.projectId}
+                    3. Check quota limits for Vertex AI API in Google Cloud Console
+                    4. Verify service account permissions`);
+                } else if (apiError.error.message.includes('quota') || 
+                          apiError.error.message.includes('billing') || 
+                          apiError.error.message.includes('payment')) {
+                    errorMessage = `The ${veinType} vein endpoint may have billing or quota issues. Please check your Google Cloud billing status.`;
+                    errorDetails = {
+                        code: 'BILLING_OR_QUOTA_ISSUE',
+                        veinType: veinType,
+                        endpointId: endpointId,
+                        originalError: apiError.error.message
+                    };
+                } else if (apiError.error.message.includes('Endpoint') && apiError.error.message.includes('not found')) {
+                    statusCode = 404;
+                    errorMessage = `The ${veinType} vein endpoint (ID: ${endpointId}) could not be found. The model may have been moved or deleted.`;
+                    errorDetails = {
+                        code: 'ENDPOINT_NOT_FOUND',
+                        veinType: veinType,
+                        endpointId: endpointId,
+                        originalError: apiError.error.message
+                    };
+                }
+            }
             
             // Return a meaningful error response
-            res.status(500).json({
-                error: `Error processing ${req.body.metadata?.veinType || 'unknown'} vein prediction request`,
-                message: apiError.message,
+            res.status(statusCode).json({
+                error: errorMessage,
+                details: errorDetails,
                 timestamp: new Date().toISOString(),
                 storage: imageInfo ? {
                     imageUrl: imageInfo.publicUrl,
@@ -829,6 +780,86 @@ app.post('/predict', async (req, res) => {
         res.status(500).json({ error: 'Prediction failed', message: error.message, timestamp: new Date().toISOString() });
     }
 });
+
+// Make the API call using fetch with retry mechanism
+const makeApiCallWithRetry = async (url, payload, token, veinType, maxRetries = 2) => {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            console.log(`Attempt ${attempt + 1}/${maxRetries + 1} for ${veinType} endpoint`);
+            
+            // Make the API call using fetch
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            console.log(`Response status for ${veinType} endpoint: ${response.status} ${response.statusText}`);
+            
+            // If successful, return the response
+            if (response.ok) {
+                return response;
+            }
+            
+            // If we got a 5XX error and have retries left, we'll retry
+            const shouldRetry = response.status >= 500 && attempt < maxRetries;
+            
+            // Try to parse error response as JSON
+            let errorJson;
+            try {
+                errorJson = await response.json();
+                console.error(`API error response from ${veinType} endpoint:`, errorJson);
+            } catch (parseError) {
+                const errorText = await response.text();
+                console.error(`API error text from ${veinType} endpoint:`, errorText);
+                
+                // If we can't parse as JSON and should retry, do so
+                if (shouldRetry) {
+                    console.log(`Retrying ${veinType} endpoint due to error: ${response.status}`);
+                    // Add exponential backoff delay
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+                    continue;
+                }
+                
+                // If we can't parse as JSON and should not retry, throw a formatted error
+                throw {
+                    status: response.status,
+                    statusText: response.statusText,
+                    text: errorText
+                };
+            }
+            
+            // Check for specific error conditions
+            if (errorJson.error && errorJson.error.message && 
+                errorJson.error.message.includes('Failed to process request')) {
+                
+                console.log(`Detected model processing error for ${veinType} endpoint`);
+                
+                if (shouldRetry) {
+                    console.log(`Retrying ${veinType} endpoint after model processing error`);
+                    // Add exponential backoff delay
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+                    continue;
+                }
+            }
+            
+            // If we shouldn't retry or are out of retries, throw the error
+            throw errorJson;
+        } catch (error) {
+            // If this is the last attempt, or it's not a network error, rethrow
+            if (attempt === maxRetries || !(error instanceof TypeError)) {
+                throw error;
+            }
+            
+            console.log(`Network error for ${veinType} endpoint, retrying: ${error.message}`);
+            // Add exponential backoff delay
+            await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+        }
+    }
+};
 
 async function startServer() {
     try {

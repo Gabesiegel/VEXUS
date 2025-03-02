@@ -758,3 +758,149 @@ Requesting: /api/predict
 [2025-03-02T18:08:36.592Z] Uploading image: image_1740938916592.png
 [2025-03-02T18:08:36.878Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740938916592.png
 [2025-03-02T18:08:37.365Z] Error from portal endpoint (ID: 2970410926785691648): The portal vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
+Requesting: /api/test-endpoint
+Requesting: /api/predict
+[2025-03-02T18:20:08.050Z] /api/predict handler invoked
+[2025-03-02T18:20:08.051Z] Uploading image: image_1740939608051.png
+[2025-03-02T18:20:08.449Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740939608051.png
+[2025-03-02T18:20:08.947Z] Error from hepatic endpoint (ID: 8159951878260523008): Provided image is not valid.
+Requesting: /api/predict
+[2025-03-02T18:20:39.496Z] /api/predict handler invoked
+[2025-03-02T18:20:39.497Z] Uploading image: image_1740939639497.png
+[2025-03-02T18:20:39.844Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740939639497.png
+[2025-03-02T18:20:40.278Z] Error from portal endpoint (ID: 2970410926785691648): Provided image is not valid.
+Requesting: /api/predict
+[2025-03-02T18:23:03.387Z] /api/predict handler invoked
+[2025-03-02T18:23:03.389Z] Uploading image: image_1740939783387.png
+[2025-03-02T18:23:03.621Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740939783387.png
+[2025-03-02T18:23:03.953Z] Error from renal endpoint (ID: 1148704877514326016): Provided image is not valid.
+Requesting: /api/health?detailed=true
+Requesting: /api/predict
+[2025-03-02T18:27:28.737Z] /api/predict handler invoked
+[2025-03-02T18:27:28.738Z] Uploading image: image_1740940048738.png
+[2025-03-02T18:27:29.093Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940048738.png
+[2025-03-02T18:27:29.549Z] Error from hepatic endpoint (ID: 8159951878260523008): Provided image is not valid.
+Requesting: /api/predict
+[2025-03-02T18:30:38.485Z] /api/predict handler invoked
+[2025-03-02T18:30:38.486Z] Uploading image: image_1740940238485.png
+[2025-03-02T18:30:38.781Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940238485.png
+[2025-03-02T18:30:39.180Z] Error from hepatic endpoint (ID: 8159951878260523008): Provided image is not valid.
+Requesting: /predict
+/predict handler invoked
+[2025-03-02T18:31:17.321Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Requesting: /api/predict
+[2025-03-02T18:31:48.312Z] /api/predict handler invoked
+[2025-03-02T18:31:48.312Z] Uploading image: image_1740940308312.png
+[2025-03-02T18:31:48.573Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940308312.png
+[2025-03-02T18:31:48.973Z] Error from hepatic endpoint (ID: 8159951878260523008): Provided image is not valid.
+Requesting: /api/predict
+[2025-03-02T18:32:36.346Z] /api/predict handler invoked
+Requesting: /api/predict
+[2025-03-02T18:33:30.415Z] /api/predict handler invoked
+[2025-03-02T18:33:30.423Z] Uploading image: image_1740940410419.png
+[2025-03-02T18:33:30.783Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940410419.png
+[2025-03-02T18:33:32.465Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740940410419_results.json
+Requesting: /api/predict
+[2025-03-02T18:33:49.889Z] /api/predict handler invoked
+[2025-03-02T18:33:49.890Z] Uploading image: image_1740940429890.png
+[2025-03-02T18:33:50.238Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940429890.png
+[2025-03-02T18:33:51.622Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740940429890_results.json
+Requesting: /api/predict
+[2025-03-02T18:34:07.756Z] /api/predict handler invoked
+[2025-03-02T18:34:07.757Z] Uploading image: image_1740940447757.png
+[2025-03-02T18:34:08.107Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740940447757.png
+[2025-03-02T18:34:09.575Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740940447757_results.json
+Requesting: /api/predict
+[2025-03-02T19:22:54.769Z] /api/predict handler invoked
+[2025-03-02T19:22:54.771Z] Uploading image: image_1740943374771.png
+[2025-03-02T19:22:55.250Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740943374771.png
+[2025-03-02T19:22:56.748Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740943374771_results.json
+Requesting: /api/predict
+[2025-03-02T19:38:36.805Z] /api/predict handler invoked
+[2025-03-02T19:38:36.808Z] Uploading image: image_1740944316808.png
+[2025-03-02T19:38:37.162Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740944316808.png
+[2025-03-02T19:38:38.411Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740944316808_results.json
+Requesting: /api/predict
+[2025-03-02T20:12:13.183Z] /api/predict handler invoked
+[2025-03-02T20:12:13.188Z] Uploading image: image_1740946333185.png
+[2025-03-02T20:12:13.627Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740946333185.png
+[2025-03-02T20:12:14.922Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740946333185_results.json
+Requesting: /status
+Requesting: /api
+Requesting: /api/health
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T20:34:17.805Z] /api/predict handler invoked
+[2025-03-02T20:34:17.806Z] Uploading image: image_1740947657806.png
+[2025-03-02T20:34:18.046Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947657806.png
+[2025-03-02T20:34:18.471Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/predict
+[2025-03-02T20:34:18.476Z] /api/predict handler invoked
+[2025-03-02T20:34:18.477Z] Uploading image: image_1740947658477.png
+[2025-03-02T20:34:18.773Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947658477.png
+[2025-03-02T20:34:19.013Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/predict
+[2025-03-02T20:34:19.016Z] /api/predict handler invoked
+[2025-03-02T20:34:19.016Z] Uploading image: image_1740947659016.png
+[2025-03-02T20:34:19.240Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947659016.png
+[2025-03-02T20:34:19.488Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/predict
+[2025-03-02T20:35:02.228Z] /api/predict handler invoked
+[2025-03-02T20:35:02.232Z] Uploading image: image_1740947702231.png
+[2025-03-02T20:35:02.633Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947702231.png
+[2025-03-02T20:35:03.903Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740947702231_results.json
+Requesting: /api/predict
+[2025-03-02T20:35:13.162Z] /api/predict handler invoked
+[2025-03-02T20:35:13.166Z] Uploading image: image_1740947713166.png
+[2025-03-02T20:35:13.511Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947713166.png
+[2025-03-02T20:35:14.764Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740947713166_results.json
+Requesting: /api/predict
+[2025-03-02T20:35:22.442Z] /api/predict handler invoked
+[2025-03-02T20:35:22.448Z] Uploading image: image_1740947722447.png
+[2025-03-02T20:35:22.786Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947722447.png
+[2025-03-02T20:35:23.962Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740947722447_results.json
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T20:36:28.028Z] /api/predict handler invoked
+[2025-03-02T20:36:28.029Z] Uploading image: image_1740947788029.png
+[2025-03-02T20:36:28.287Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947788029.png
+[2025-03-02T20:36:28.631Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/predict
+[2025-03-02T20:36:28.635Z] /api/predict handler invoked
+[2025-03-02T20:36:28.636Z] Uploading image: image_1740947788636.png
+[2025-03-02T20:36:28.889Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947788636.png
+[2025-03-02T20:36:29.114Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/predict
+[2025-03-02T20:36:29.117Z] /api/predict handler invoked
+[2025-03-02T20:36:29.117Z] Uploading image: image_1740947789117.png
+[2025-03-02T20:36:29.352Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947789117.png
+[2025-03-02T20:36:29.601Z] Error in /api/predict: ReferenceError: veinType is not defined
