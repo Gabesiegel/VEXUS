@@ -901,21 +901,38 @@
             });
         }
         
-        // Function to set up image upload listeners
+        // Setup image upload listeners
         function setupImageUploadListeners() {
-            // Hepatic vein upload
-            document.getElementById('hepaticImageUpload').addEventListener('change', function() {
-                handleImageUpload('hepatic', this.files[0]);
-            });
+            console.log("Setting up image upload listeners for all vein types");
             
-            // Portal vein upload
-            document.getElementById('portalImageUpload').addEventListener('change', function() {
-                handleImageUpload('portal', this.files[0]);
-            });
+            // Check for required elements before setting up event listeners
+            const veinTypes = ['hepatic', 'portal', 'renal'];
             
-            // Renal vein upload
-            document.getElementById('renalImageUpload').addEventListener('change', function() {
-                handleImageUpload('renal', this.files[0]);
+            veinTypes.forEach(type => {
+                const fileInput = document.getElementById(`${type}ImageUpload`);
+                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+                const previewImg = document.getElementById(`${type}Preview`);
+                const modelStatus = document.getElementById(`${type}ModelStatus`);
+                
+                console.log(`${type} vein elements: `, {
+                    fileInput: fileInput ? true : false,
+                    uploadArea: uploadArea ? true : false,
+                    previewImg: previewImg ? true : false,
+                    modelStatus: modelStatus ? true : false
+                });
+                
+                if (!fileInput) {
+                    console.error(`File input element for ${type} not found, cannot set up listener!`);
+                    return;
+                }
+                
+                // Hepatic vein upload
+                fileInput.addEventListener('change', function() {
+                    console.log(`File selected for ${type} vein, calling handleImageUpload`);
+                    handleImageUpload(type, this.files[0]);
+                });
+                
+                console.log(`Successfully set up listener for ${type} vein upload`);
             });
         }
         
@@ -936,9 +953,11 @@
                     fileInput.click();
                 } else {
                     console.error(`File input element for ${type} not found!`);
+                    alert(`Error: File input element for ${type} not found. Please report this issue.`);
                 }
             } catch (error) {
                 console.error(`Error initiating upload for ${type}:`, error);
+                alert(`Error starting ${type} upload: ${error.message}. Please try again.`);
             }
         }
         
@@ -947,9 +966,13 @@
             console.log(`handleImageUpload called for ${type} with file:`, file ? file.name : 'no file');
             
             try {
+                // Clear any previous errors
+                clearError(type);
+                
                 const previewImg = document.getElementById(`${type}Preview`);
                 if (!previewImg) {
                     console.error(`Preview image element for ${type} not found!`);
+                    displayError(type, `Preview image element not found. Please report this issue.`);
                     return;
                 }
                 
@@ -957,8 +980,21 @@
                 const resultElement = document.getElementById(`${type}Result`);
                 const topResultsElement = document.getElementById(`${type}TopResults`);
                 const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+                const errorContainer = document.getElementById(`${type}ErrorContainer`);
                 const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
                 const modelStatus = document.getElementById(`${type}ModelStatus`);
+                
+                // Log all element IDs to debug
+                console.log(`${type} elements: `, {
+                    previewImg: previewImg ? previewImg.id : null,
+                    previewContainer: previewContainer ? true : false,
+                    resultElement: resultElement ? resultElement.id : null,
+                    topResultsElement: topResultsElement ? topResultsElement.id : null,
+                    loadingIndicator: loadingIndicator ? loadingIndicator.id : null,
+                    errorContainer: errorContainer ? errorContainer.id : null,
+                    uploadArea: uploadArea ? true : false,
+                    modelStatus: modelStatus ? modelStatus.id : null
+                });
                 
                 if (!file) {
                     console.log(`No file selected for ${type}, resetting upload`);
@@ -999,13 +1035,17 @@
                     console.error(`FileReader error for ${type}:`, error);
                     modelStatus.textContent = `Error reading ${type} image file`;
                     loadingIndicator.style.display = 'none';
+                    if (errorContainer) {
+                        errorContainer.style.display = 'block';
+                        errorContainer.innerHTML = `<p>Error: Failed to read image file. Please try again with a different image.</p>`;
+                    }
                 };
                 
                 console.log(`Starting to read ${type} image as data URL`);
                 reader.readAsDataURL(file);
             } catch (error) {
                 console.error(`Error in handleImageUpload for ${type}:`, error);
-                alert(`Error handling ${type} image: ${error.message}`);
+                displayError(type, error.message);
             }
         }
 
@@ -1149,6 +1189,10 @@
         // Function to classify image
         async function classifyImage(type, file) {
             console.log(`Classification started for ${type} vein type`);
+            
+            // Clear any previous errors
+            clearError(type);
+            
             const previewImg = document.getElementById(`${type}Preview`);
             const resultElement = document.getElementById(`${type}Result`);
             const topResultsElement = document.getElementById(`${type}TopResults`);
@@ -1158,9 +1202,23 @@
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const modelStatus = document.getElementById(`${type}ModelStatus`);
             
+            // Log all element IDs to debug
+            console.log(`${type} classification elements: `, {
+                previewImg: previewImg ? previewImg.id : null,
+                resultElement: resultElement ? resultElement.id : null,
+                topResultsElement: topResultsElement ? topResultsElement.id : null,
+                dropdownElement: dropdownElement ? dropdownElement.id : null,
+                errorNoteElement: errorNoteElement ? errorNoteElement.id : null,
+                errorContainer: errorContainer ? errorContainer.id : null,
+                loadingIndicator: loadingIndicator ? loadingIndicator.id : null,
+                modelStatus: modelStatus ? modelStatus.id : null
+            });
+            
             // Hide any previous errors
-            errorContainer.style.display = 'none';
-            errorContainer.innerHTML = '';
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+                errorContainer.innerHTML = '';
+            }
             
             try {
                 if (!file) {
@@ -1176,7 +1234,10 @@
                 const base64Data = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result);
-                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    reader.onerror = (error) => {
+                        console.error(`FileReader error in classifyImage for ${type}:`, error);
+                        reject(new Error('Failed to read file'));
+                    };
                     reader.readAsDataURL(file);
                 });
 
@@ -1214,10 +1275,19 @@
                         timestamp: Date.now()
                     }
                 };
+                
+                console.log(`${type} payload structure:`, JSON.stringify({
+                    hasInstances: !!payload.instances,
+                    hasParameters: !!payload.parameters,
+                    metadata: payload.metadata
+                }));
 
                 // Send to API endpoint with timeout
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                const timeoutId = setTimeout(() => {
+                    console.log(`Timeout triggered for ${type} API request`);
+                    controller.abort();
+                }, 30000);
                 
                 console.log(`Sending ${type} image for classification to /api/predict endpoint...`);
                 
@@ -1258,8 +1328,7 @@
 
                 // Log storage information if available
                 if (result.storage && result.storage.stored) {
-                    console.log(`${type} image stored at: ${result.storage.imageUrl}`);
-                    console.log(`${type} prediction results stored at: ${result.storage.resultsPath}`);
+                    console.log(`${type} image stored at: ${result.storage.path}`);
                 }
 
                 // Process predictions
@@ -1371,34 +1440,22 @@
                 }
 
             } catch (error) {
-                console.error(`${type} classification error:`, error);
+                console.error(`Error classifying ${type} image:`, error);
                 
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
+                // Clean up UI elements
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
                 
-                // Hide modals even in case of error
-                hideModals();
+                // Display error message
+                displayError(type, error.message);
                 
-                // Check if this is a connection error or a different type of error
-                if (error.message.includes('NetworkError') || 
-                    error.message.includes('Failed to fetch') || 
-                    error.message.includes('Server error: 5') ||
-                    error.message.includes('AbortError')) {
-                    // Only if it's a network/connection error, show the API as disconnected
-                    modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Error`;
+                // Optional: update model status
+                if (modelStatus) {
+                    modelStatus.textContent = "Classification Failed";
                     modelStatus.classList.remove('model-ready');
-                } else {
-                    // For other errors (like image processing errors), keep the API status as connected
-                    modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Connected`;
-                    modelStatus.classList.add('model-ready');
                 }
                 
-                // Show error in container
-                errorContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                errorContainer.style.display = 'block';
-                
-                // Show low confidence note
-                errorNoteElement.style.display = "block";
+                // Optional: reset image?
+                // resetImageUpload(type);
             }
         }
 
@@ -1497,6 +1554,51 @@
             document.getElementById('renalDropdown').addEventListener('change', function() {
                 hideModals();
             });
+        }
+
+        // Function to display error in the appropriate container
+        function displayError(type, message) {
+            console.log(`Displaying error for ${type}: ${message}`);
+            const errorContainer = document.getElementById(`${type}ErrorContainer`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
+            // Hide loading indicator
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Update model status
+            if (modelStatus) {
+                modelStatus.textContent = "Error";
+                modelStatus.classList.remove('model-ready');
+            }
+            
+            // Display error message
+            if (errorContainer) {
+                errorContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> ${message}
+                        <p>Please try again or try a different image.</p>
+                    </div>
+                `;
+                errorContainer.style.display = 'block';
+                
+                // Scroll to error container
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Fallback to alert if container not found
+                alert(`Error with ${type} vein: ${message}`);
+            }
+        }
+        
+        // Function to reset error display
+        function clearError(type) {
+            const errorContainer = document.getElementById(`${type}ErrorContainer`);
+            if (errorContainer) {
+                errorContainer.innerHTML = '';
+                errorContainer.style.display = 'none';
+            }
         }
     </script>
 </body>
