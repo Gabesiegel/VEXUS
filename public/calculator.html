@@ -1048,32 +1048,24 @@
         
         // Function to check API connection
         async function checkApiConnection() {
+            const modelStatuses = [
+                document.getElementById('hepaticModelStatus'),
+                document.getElementById('portalModelStatus'),
+                document.getElementById('renalModelStatus')
+            ];
+
+            // Update UI to checking state
+            modelStatuses.forEach(status => {
+                if (status) {
+                    status.textContent = "Checking API connection...";
+                    status.classList.remove('model-ready');
+                }
+            });
+
             try {
-                const modelStatuses = [
-                    document.getElementById('hepaticModelStatus'),
-                    document.getElementById('portalModelStatus'),
-                    document.getElementById('renalModelStatus')
-                ];
-                
-                // Update UI to checking state
-                modelStatuses.forEach(status => {
-                    if (status) {
-                        status.textContent = "Checking API connection...";
-                        status.classList.remove('model-ready');
-                    }
-                });
-                
-                // Simple ping to check if server is responsive
-                const response = await fetch('/auth/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ check: true })
-                });
-                
+                const response = await fetch('/api/health', { method: 'GET' });
+
                 if (response.ok) {
-                    // API is responsive, show green status
                     modelStatuses.forEach(status => {
                         if (status) {
                             status.textContent = "Connected ✓";
@@ -1081,16 +1073,10 @@
                         }
                     });
                 } else {
-                    throw new Error('API connection failed');
+                    throw new Error(`API responded with status: ${response.status}`);
                 }
             } catch (error) {
                 console.error('API connection error:', error);
-                const modelStatuses = [
-                    document.getElementById('hepaticModelStatus'),
-                    document.getElementById('portalModelStatus'),
-                    document.getElementById('renalModelStatus')
-                ];
-                
                 modelStatuses.forEach(status => {
                     if (status) {
                         status.textContent = "API Connection Error - Try Again Later";
