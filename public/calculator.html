@@ -333,20 +333,6 @@
             text-align: center;
         }
 
-        .retry-button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .retry-button:hover {
-            background: #0056b3;
-        }
-
         /* Enhanced loading states */
         .loading-indicator {
             display: none;
@@ -684,6 +670,9 @@
                     
                     <div id="hepaticErrorContainer" class="error-container"></div>
                     
+                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
+                    <div class="top-results" id="hepaticTopResults"></div>
+
                     <div class="input-group">
                         <label for="hepaticDropdown">Hepatic Vein Classification:</label>
                         <select id="hepaticDropdown">
@@ -704,9 +693,6 @@
                     <div class="image-preview-container">
                         <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
                     </div>
-                    
-                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
-                    <div class="top-results" id="hepaticTopResults"></div>
                 </div>
 
                 <!-- STEP 3: Portal Vein -->
@@ -734,6 +720,9 @@
                     
                     <div id="portalErrorContainer" class="error-container"></div>
                     
+                    <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
+                    <div class="top-results" id="portalTopResults"></div>
+
                     <div class="input-group">
                         <label for="portalDropdown">Portal Vein Classification:</label>
                         <select id="portalDropdown">
@@ -754,9 +743,6 @@
                     <div class="image-preview-container">
                         <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
                     </div>
-                    
-                    <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
-                    <div class="top-results" id="portalTopResults"></div>
                 </div>
 
                 <!-- STEP 4: Renal Vein -->
@@ -784,6 +770,9 @@
                     
                     <div id="renalErrorContainer" class="error-container"></div>
                     
+                    <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
+                    <div class="top-results" id="renalTopResults"></div>
+
                     <div class="input-group">
                         <label for="renalDropdown">Renal Vein Classification:</label>
                         <select id="renalDropdown">
@@ -804,9 +793,6 @@
                     <div class="image-preview-container">
                         <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
                     </div>
-                    
-                    <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
-                    <div class="top-results" id="renalTopResults"></div>
                 </div>
 
                 <!-- Calculate & Reset Buttons + Score Display -->
@@ -1073,6 +1059,7 @@
                 modelStatuses.forEach(status => {
                     if (status) {
                         status.textContent = "Checking API connection...";
+                        status.classList.remove('model-ready');
                     }
                 });
                 
@@ -1086,10 +1073,10 @@
                 });
                 
                 if (response.ok) {
-                    // API is responsive
+                    // API is responsive, show green status
                     modelStatuses.forEach(status => {
                         if (status) {
-                            status.textContent = "API Connected - Ready for Images";
+                            status.textContent = "Connected ✓";
                             status.classList.add('model-ready');
                         }
                     });
@@ -1114,55 +1101,153 @@
 
         // Function to classify image
         async function classifyImage(type, file) {
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const previewImg = document.getElementById(`${type}Preview`);
             const resultElement = document.getElementById(`${type}Result`);
             const topResultsElement = document.getElementById(`${type}TopResults`);
             const dropdownElement = document.getElementById(`${type}Dropdown`);
             const errorNoteElement = document.getElementById(`${type}ErrorNote`);
-
+            const errorContainer = document.getElementById(`${type}ErrorContainer`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
             try {
-                // Show loading state
-                modelStatus.textContent = "Processing...";
-                modelStatus.classList.remove('model-ready');
-                loadingIndicator.style.display = 'block';
-
-                // Create FormData and append file
-                const formData = new FormData();
-                formData.append('image', file);
-
-                // Send request to API
-                const response = await fetch('/api/classify', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (!file) {
+                    throw new Error("No file selected.");
                 }
 
-                const data = await response.json();
-                const confidences = data.confidences;
-                const labelSet = data.labels;
+            // Update model status to green "Processing image"
+            modelStatus.textContent = "Processing image...";
+            modelStatus.classList.add('model-ready');
 
-                // Map API labels to dropdown values
-                const labelMapping = {
-                    'Hepatic Vein Normal': 'HV Normal',
-                    'Hepatic Vein Mild': 'HV Mild',
-                    'Hepatic Vein Severe': 'HV Severe',
-                    'Portal Vein Normal': 'PV Normal',
-                    'Portal Vein Mild': 'PV Mild',
-                    'Portal Vein Severe': 'PV Severe',
-                    'Renal Vein Normal': 'RV Normal',
-                    'Renal Vein Mild': 'RV Mild',
-                    'Renal Vein Severe': 'RV Severe'
+                // Use FileReader to get base64 data
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    reader.readAsDataURL(file);
+                });
+
+                // Extract the actual base64 content and mime type
+                const parts = base64Data.split(',');
+                const base64Content = parts[1];
+                const mimeType = parts[0].match(/:(.*?);/)[1];
+
+                // Structure payload for Vertex AI - ensure correct format
+                const payload = {
+                    instances: [
+                        {
+                            content: {
+                                b64: base64Content
+                            }
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: type, // hepatic, portal, or renal
+                        imageType: mimeType,
+                        timestamp: Date.now()
+                    }
                 };
 
-                // Process and sort predictions
+                // Send to API endpoint with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                
+                console.log(`Sending ${type} image for classification...`);
+                
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    let errorMessage = `Server error: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.message || errorMessage;
+                    } catch (e) {
+                        // If parsing fails, use status code
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                // Process response
+                const result = await response.json();
+                
+                // Validate response format
+                if (!result || !result.displayNames || !result.confidences) {
+                    throw new Error('Invalid response format from server');
+                }
+
+                // Log storage information if available
+                if (result.storage && result.storage.stored) {
+                    console.log(`Image stored at: ${result.storage.imageUrl}`);
+                    console.log(`Prediction results stored at: ${result.storage.resultsPath}`);
+                }
+
+                // Process predictions
+                const confidences = result.confidences;
+                const displayNames = result.displayNames;
+                
+                // Map API response labels to dropdown values
+                const labelMapping = {
+                    'hepatic': {
+                        'Hepatic_Vein_Normal': 'HV Normal',
+                        'Hepatic_Vein_Mild': 'HV Mild',
+                        'Hepatic_Vein_Severe': 'HV Severe'
+                    },
+                    'portal': {
+                        'Portal_Vein_Normal': 'PV Normal',
+                        'Portal_Vein_Mild': 'PV Mild',
+                        'Portal_Vein_Severe': 'PV Severe'
+                    },
+                    'renal': {
+                        'Renal_Vein_Normal': 'RV Normal',
+                        'Renal_Vein_Mild': 'RV Mild',
+                        'Renal_Vein_Severe': 'RV Severe'
+                    }
+                };
+                
+                console.log(`${type} classification - received labels:`, displayNames);
+                
+                // Create top 3 predictions with mapped labels
                 const top3 = confidences
                     .map((conf, idx) => {
-                        const apiLabel = labelSet[idx];
-                        const dropdownLabel = labelMapping[apiLabel] || apiLabel;
+                        const apiLabel = displayNames[idx] || "Unknown";
+                        // Check if the label belongs to the expected type
+                        const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
+                                               type === 'portal' ? apiLabel.includes('Portal') :
+                                               apiLabel.includes('Renal');
+                        
+                        let dropdownLabel;
+                        if (isExpectedType) {
+                            // Use the type-specific mapping
+                            dropdownLabel = labelMapping[type][apiLabel] || apiLabel;
+                        } else {
+                            // If model returned wrong type of prediction, try to find mapping in any category
+                            for (const veinType in labelMapping) {
+                                if (labelMapping[veinType][apiLabel]) {
+                                    console.log(`Warning: Received ${apiLabel} for ${type} request`);
+                                    // Still use the expected type prefix (HV/PV/RV)
+                                    const severity = apiLabel.includes('Normal') ? 'Normal' : 
+                                                    apiLabel.includes('Mild') ? 'Mild' : 'Severe';
+                                    dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
+                                    break;
+                                }
+                            }
+                            // If no mapping found in any category
+                            if (!dropdownLabel) dropdownLabel = apiLabel;
+                        }
+                        
                         return {
                             apiLabel: apiLabel,
                             label: dropdownLabel,
@@ -1175,8 +1260,8 @@
                 // Hide loading indicator
                 loadingIndicator.style.display = 'none';
                 
-                // Update model status
-                modelStatus.textContent = "Model Ready";
+                // Update model status back to green connected state
+                modelStatus.textContent = "Connected ✓";
                 modelStatus.classList.add('model-ready');
 
                 // Update results in UI
@@ -1186,12 +1271,21 @@
                     topResultsElement.innerHTML = '<strong>Top 3 Predictions:</strong><br>' + 
                         top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
                     
-                    // Set dropdown value based on top prediction
+                    // Always set dropdown to top prediction regardless of confidence
+                    const matchingOption = Array.from(dropdownElement.options)
+                        .find(opt => opt.value === top1.label);
+                        
+                    if (matchingOption) {
+                        dropdownElement.value = matchingOption.value;
+                    } else if (parseFloat(top1.prob) <= 50) {
+                        // If no matching option and confidence is low, set to the low confidence option
+                        dropdownElement.value = "Confidence of waveform < 50%";
+                    }
+                    
+                    // Show warning if confidence is low
                     if (parseFloat(top1.prob) > 50) {
-                        dropdownElement.value = top1.label;
                         errorNoteElement.style.display = "none";
                     } else {
-                        dropdownElement.value = "Confidence of waveform < 50%";
                         errorNoteElement.style.display = "block";
                     }
                     
@@ -1200,7 +1294,11 @@
                 } else {
                     resultElement.textContent = "No predictions found.";
                     topResultsElement.innerHTML = "";
+                    
+                    // Reset dropdown when no predictions are found
                     dropdownElement.value = "";
+                    
+                    // Hide modals even when no predictions are found
                     hideModals();
                 }
 
@@ -1218,7 +1316,6 @@
                 modelStatus.classList.remove('model-ready');
                 
                 // Show error in container
-                const errorContainer = document.getElementById(`${type}ErrorContainer`);
                 errorContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
                 errorContainer.style.display = 'block';
                 
