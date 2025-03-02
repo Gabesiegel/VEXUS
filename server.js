@@ -22,15 +22,14 @@ const CONFIG = {
     projectNumber: "456295042668",
     location: "us-central1",
     endpointIds: {
-        default: "8159951878260523008", // Default endpoint ID
-        hepatic: "8159951878260523008", // Hepatic vein prediction endpoint
-        renal: "2369174844613853184",   // Renal vein prediction endpoint
-        portal: "2232940955885895680"   // Portal vein prediction endpoint
+        hepatic: "8159951878260523008",  // Hepatic vein prediction endpoint
+        portal: "2970410926785691648",   // Portal vein prediction endpoint
+        renal: "1148704877514326016"     // Renal vein prediction endpoint
     },
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
-}; // Added a comment to force a redeploy
+}; // Each vein type uses its own specific endpoint
 
 // Initialize Cloud Storage client
 const storage = new Storage();
@@ -231,105 +230,136 @@ app.post('/auth/token', async (req, res) => {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 4) Prediction Endpoint
-///////////////////////////////////////////////////////////////////////////////
-let predictionClient = null;
-
-app.post('/predict', async (req, res) => {
-    try {
-        console.log(`[${new Date().toISOString()}] /predict handler invoked`);
-        await fs.appendFile('server.log', `/predict handler invoked\n`);
-
-        const { instances, parameters } = req.body;
-
-        if (!instances || !Array.isArray(instances)) {
-            return res.status(400).json({ error: 'Invalid request format. Expected "instances" array', timestamp: new Date().toISOString() });
-        }
-
-        for (const instance of instances) {
-            if (!instance.content) {
-                return res.status(400).json({ error: 'Each instance must have content data', timestamp: new Date().toISOString() });
-            }
-        }
-
-        if (!predictionClient) {
-            predictionClient = await initializeVertexAI();
-        }
-
-
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointIds.default}`;
-
-        // Create the request object in the format expected by Vertex AI
-        const request = {
-            endpoint: endpointPath,
-            instances: instances,
-            parameters: parameters || {
-                confidenceThreshold: 0.0,
-                maxPredictions: 5
-            }
-        };
-
-        console.log("Sending prediction request to Vertex AI:", JSON.stringify(request, null, 2));
-        const [response] = await predictionClient.predict(request);
-
-        const predictions = (response.predictions || []).map(prediction => {
-            const displayNames = prediction.displayNames || [];
-            const confidences = prediction.confidences || [];
-            const results = displayNames.map((className, idx) => {
-                const conf = confidences[idx] || 0;
-                const percentage = `${(conf * 100).toFixed(0)}%`;
-                return {
-                    label: className,
-                    confidencePerc: percentage,
-                    confidenceVal: conf.toFixed(3)
-                };
-            });
-            return results;
-        });
-
-        res.json({
-          predictions,
-          deployedModelId: response.deployedModelId || null,
-          model: response.model || null,
-          modelDisplayName: response.modelDisplayName || null,
-          modelVersionId: response.modelVersionId || null,
-          timestamp: new Date().toISOString()
-        });
-
-    } catch (error) {
-        console.error('Prediction error:', error); // Keep console logging for local debugging
-        res.status(500).json({ error: 'Prediction failed', message: error.message, timestamp: new Date().toISOString() });
-    }
-});
-
-// Default route (API fallback for React Router)
-app.get('*', (req, res) => {
-    console.log(`[${new Date().toISOString()}] Fallback route handler for: ${req.url}`);
-    
-    // Only serve index.html for browser requests (HTML), not for API calls
-    const acceptHeader = req.get('accept') || '';
-    if (acceptHeader.includes('text/html')) {
-        console.log('Serving index.html as fallback');
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    } else {
-        console.log('Non-HTML request to unknown route, returning 404');
-        res.status(404).json({ error: 'Not found', path: req.url });
-    }
-});
-
-///////////////////////////////////////////////////////////////////////////////
 // 4) Health Check Endpoint
 ///////////////////////////////////////////////////////////////////////////////
-app.get('/api/health', (req, res) => {
-    console.log(`[${new Date().toISOString()}] Health check requested`);
-    res.json({ 
-        status: 'ok', 
-        timestamp: new Date().toISOString(),
-        serverInfo: {
-            projectId: CONFIG.projectId,
-            lastUpdated: CONFIG.lastUpdated
+app.get('/api/health', async (req, res) => {
+    console.log('Health check requested');
+    
+    try {
+        // Basic health check
+        const healthData = {
+            status: 'ok',
+            timestamp: new Date().toISOString(),
+            serverInfo: {
+                projectId: CONFIG.projectId,
+                location: CONFIG.location,
+                endpointConfig: CONFIG.endpointIds,
+                lastUpdated: CONFIG.lastUpdated,
+                bucketName: CONFIG.bucketName
+            }
+        };
+        
+        // Check if we should do a detailed health check
+        const detailed = req.query.detailed === 'true';
+        
+        if (detailed) {
+            console.log('Performing detailed health check including Vertex AI connectivity');
+            
+            // Test Secret Manager access
+            try {
+                const credentials = await getCredentials();
+                healthData.secretManager = { status: 'ok' };
+            } catch (secretError) {
+                console.error('Secret Manager error during health check:', secretError);
+                healthData.secretManager = { 
+                    status: 'error', 
+                    message: secretError.message 
+                };
+            }
+            
+            // Test Cloud Storage access
+            try {
+                const [bucketExists] = await bucket.exists();
+                healthData.storage = { 
+                    status: bucketExists ? 'ok' : 'error',
+                    bucketExists: bucketExists
+                };
+            } catch (storageError) {
+                console.error('Cloud Storage error during health check:', storageError);
+                healthData.storage = { 
+                    status: 'error', 
+                    message: storageError.message 
+                };
+            }
+            
+            // Test Vertex AI endpoints
+            healthData.endpoints = {};
+            
+            // Get credentials for Vertex AI
+            try {
+                const credentials = await getCredentials();
+                const auth = new GoogleAuth({
+                    credentials: credentials,
+                    scopes: ['https://www.googleapis.com/auth/cloud-platform']
+                });
+                
+                const client = await auth.getClient();
+                const token = await client.getAccessToken();
+                
+                // Test each endpoint
+                for (const [veinType, endpointId] of Object.entries(CONFIG.endpointIds)) {
+                    try {
+                        console.log(`Testing ${veinType} endpoint (ID: ${endpointId}) during health check`);
+                        
+                        // Construct the endpoint URL
+                        const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
+                        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
+                        const url = `${baseApiUrl}/${endpointPath}`;
+                        
+                        // Make a GET request to check if the endpoint exists
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token.token}`
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const endpointData = await response.json();
+                            healthData.endpoints[veinType] = {
+                                status: 'ok',
+                                endpointId: endpointId,
+                                displayName: endpointData.displayName,
+                                deployedModels: endpointData.deployedModels ? 
+                                    endpointData.deployedModels.map(m => ({
+                                        id: m.id,
+                                        status: m.status
+                                    })) : []
+                            };
+                        } else {
+                            const errorText = await response.text();
+                            healthData.endpoints[veinType] = {
+                                status: 'error',
+                                statusCode: response.status,
+                                message: errorText
+                            };
+                        }
+                    } catch (endpointError) {
+                        console.error(`Error checking ${veinType} endpoint:`, endpointError);
+                        healthData.endpoints[veinType] = {
+                            status: 'error',
+                            message: endpointError.message
+                        };
+                    }
+                }
+            } catch (authError) {
+                console.error('Authentication error during health check:', authError);
+                healthData.auth = {
+                    status: 'error',
+                    message: authError.message
+                };
+            }
         }
-    });
+        
+        res.json(healthData);
+    } catch (error) {
+        console.error('Health check error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -395,7 +425,7 @@ app.post('/api/predict', async (req, res) => {
             // Extract image type if metadata is provided
             const imageType = req.body.metadata?.imageType || 'image/jpeg';
             // Extract vein type if provided
-            const veinType = req.body.metadata?.veinType || 'unknown';
+            const veinType = req.body.metadata?.veinType || 'hepatic';
             
             // Upload the image to Cloud Storage
             imageInfo = await uploadImage(imageContent, imageType);
@@ -408,122 +438,229 @@ app.post('/api/predict', async (req, res) => {
             // Continue with prediction even if storage fails
         }
 
-        // Get credentials from Secret Manager
-        console.log('Getting credentials from Secret Manager...');
-        const credentials = await getCredentials();
-        
-        // Get an access token using the credentials
-        const auth = new GoogleAuth({
-            credentials: credentials,
-            scopes: ['https://www.googleapis.com/auth/cloud-platform']
-        });
-        
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        
-        console.log('Successfully obtained access token');
-        
-        // Extract vein type from request metadata to determine endpoint
-        const veinType = req.body.metadata?.veinType || 'default';
-        console.log(`Vein type from request metadata: ${veinType}`);
-        
-        // Select the appropriate endpoint ID based on vein type
-        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.default;
-        console.log(`Selected endpoint ID for ${veinType}: ${endpointId}`);
-        
-        // Construct the predict request URL
-        const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
-        const url = `${baseApiUrl}/${endpointPath}:predict`;
-        
-        console.log(`Making prediction request to: ${url}`);
-        
-        // Construct the payload
-        const payload = {
-            instances: instances,
-            parameters: parameters || {
-                confidenceThreshold: 0.0,
-                maxPredictions: 5
+        try {
+            // Get credentials from Secret Manager
+            console.log('Getting credentials from Secret Manager...');
+            const credentials = await getCredentials();
+            
+            // Get an access token using the credentials
+            const auth = new GoogleAuth({
+                credentials: credentials,
+                scopes: ['https://www.googleapis.com/auth/cloud-platform']
+            });
+            
+            const client = await auth.getClient();
+            const token = await client.getAccessToken();
+            
+            console.log('Successfully obtained access token');
+            
+            // Extract vein type from request metadata to determine endpoint
+            const veinType = req.body.metadata?.veinType || 'hepatic';
+            console.log(`Vein type from request metadata: ${veinType}`);
+            
+            // Use the endpoint IDs from the CONFIG object
+            const endpointId = CONFIG.endpointIds[veinType];
+            if (!endpointId) {
+                throw new Error(`Invalid vein type: ${veinType}`);
             }
-        };
-        
-        console.log("Sending prediction request to Vertex AI:", JSON.stringify(payload, (key, value) => {
-            // Don't log the entire content string, just the first 100 chars
-            if (key === 'content' && typeof value === 'string' && value.length > 100) {
-                return value.substring(0, 100) + '... [truncated]';
+            console.log(`Selected endpoint ID for ${veinType}: ${endpointId}`);
+            
+            // Verify endpoint ID matches known values for specific vein types
+            if (veinType === 'renal' && endpointId !== CONFIG.endpointIds.renal) {
+                console.warn(`WARNING: Renal vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.renal}`);
             }
-            return value;
-        }, 2));
-        
-        await fs.appendFile('server.log', `[${new Date().toISOString()}] Sending prediction request to endpoint: ${endpointPath}\n`);
-        
-        // Make the API call using fetch instead of the client library
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        console.log(`Response status: ${response.status} ${response.statusText}`);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('API error response:', errorText);
-            throw new Error(`Vertex AI API error: ${response.status} ${response.statusText}`);
-        }
-        
-        // Process the response
-        const result = await response.json();
-        console.log('Successfully received predictions');
-        
-        // Handle empty predictions
-        if (!result.predictions || result.predictions.length === 0) {
-            return res.status(404).json({ error: 'No predictions returned from the model' });
-        }
-        
-        // Format the prediction response for the frontend
-        const prediction = result.predictions[0];
-        
-        // Store the prediction results if we have image info
-        let resultStoragePath = null;
-        if (imageInfo) {
-            try {
-                // Extract vein type from request metadata if available
-                const veinType = req.body.metadata?.veinType || 'unknown';
+            if (veinType === 'portal' && endpointId !== CONFIG.endpointIds.portal) {
+                console.warn(`WARNING: Portal vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.portal}`);
+            }
+            if (veinType === 'hepatic' && endpointId !== CONFIG.endpointIds.hepatic) {
+                console.warn(`WARNING: Hepatic vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.hepatic}`);
+            }
+            
+            // Construct the predict request URL
+            const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
+            const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
+            const url = `${baseApiUrl}/${endpointPath}:predict`;
+            
+            console.log(`Making prediction request to: ${url}`);
+            
+            // Construct the payload
+            const payload = {
+                instances: instances,
+                parameters: parameters || {
+                    confidenceThreshold: 0.0,
+                    maxPredictions: 5
+                }
+            };
+            
+            // Make the API call using fetch
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            console.log(`Response status for ${veinType} endpoint (ID: ${endpointId}): ${response.status} ${response.statusText}`);
+            
+            if (!response.ok) {
+                let errorMessage = '';
+                let errorDetails = {};
+                let errorStatusCode = 500;
                 
-                resultStoragePath = await storePredictionResults(
-                    imageInfo,
-                    {
-                        displayNames: prediction.displayNames || [],
-                        confidences: prediction.confidences || [],
-                        modelId: result.deployedModelId || null
-                    },
-                    veinType
-                );
-            } catch (resultStorageError) {
-                console.error('Error storing prediction results:', resultStorageError);
-                // Continue even if result storage fails
+                try {
+                    // Try to parse error response as JSON
+                    const errorJson = await response.json();
+                    console.error(`API error response from ${veinType} endpoint:`, errorJson);
+                    
+                    // Log more detailed information about the error
+                    console.error(`Detailed error for ${veinType} endpoint:`, JSON.stringify(errorJson, null, 2));
+                    
+                    // Check if this is a billing or quota issue
+                    if (errorJson.error && errorJson.error.message) {
+                        if (errorJson.error.message.includes('quota') || 
+                            errorJson.error.message.includes('billing') || 
+                            errorJson.error.message.includes('payment')) {
+                            console.error(`Possible billing or quota issue for ${veinType} endpoint`);
+                            errorMessage = `The ${veinType} vein endpoint may have billing or quota issues. Please check your Google Cloud billing status.`;
+                            errorDetails = {
+                                code: 'BILLING_OR_QUOTA_ISSUE',
+                                veinType: veinType,
+                                endpointId: endpointId,
+                                originalError: errorJson.error.message
+                            };
+                        }
+                    }
+                    
+                    // Special handling for 404 (endpoint not found) errors
+                    if (response.status === 404 && errorJson.error && errorJson.error.message.includes('Endpoint') && errorJson.error.message.includes('not found')) {
+                        errorStatusCode = 404;
+                        errorMessage = `The ${veinType} vein endpoint (ID: ${endpointId}) could not be found. The model may have been moved or deleted.`;
+                        errorDetails = {
+                            code: 'ENDPOINT_NOT_FOUND',
+                            veinType: veinType,
+                            endpointId: endpointId,
+                            originalError: errorJson.error.message
+                        };
+                    } else if (response.status === 500 && errorJson.error && errorJson.error.message.includes('Failed to process request')) {
+                        // Special handling for 500 errors from Vertex AI
+                        errorMessage = `The ${veinType} vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.`;
+                        errorDetails = {
+                            code: 'MODEL_UNAVAILABLE',
+                            veinType: veinType,
+                            endpointId: endpointId,
+                            deployedModelId: errorJson.error.message.match(/deployed_model_id: (\d+)/)?.[1] || 'unknown',
+                            originalError: errorJson.error.message
+                        };
+                        
+                        // Log additional troubleshooting information
+                        console.error(`Model unavailable for ${veinType}. Troubleshooting steps:
+                        1. Check if the model is still loading (can take up to 15 minutes)
+                        2. Verify billing status for project ${CONFIG.projectId}
+                        3. Check quota limits for Vertex AI API in Google Cloud Console
+                        4. Verify service account permissions`);
+                    } else {
+                        // Extract the most relevant error information for other errors
+                        errorMessage = errorJson.error ? errorJson.error.message || `Error ${response.status} from ${veinType} endpoint` : `Error ${response.status} from ${veinType} endpoint`;
+                        errorDetails = {
+                            code: errorJson.error ? errorJson.error.code : response.status,
+                            status: errorJson.error ? errorJson.error.status : response.statusText,
+                            details: errorJson.error ? errorJson.error.details : null
+                        };
+                    }
+                } catch (parseError) {
+                    // If can't parse as JSON, use text
+                    const errorText = await response.text();
+                    console.error(`API error text from ${veinType} endpoint:`, errorText);
+                    errorMessage = `${response.status} ${response.statusText} from ${veinType} endpoint: ${errorText.substring(0, 200)}`;
+                    errorDetails = { raw: errorText };
+                }
+                
+                // Log the detailed error
+                await fs.appendFile('server.log', `[${new Date().toISOString()}] Error from ${veinType} endpoint (ID: ${endpointId}): ${errorMessage}\n`);
+                
+                // Return a well-structured error response
+                return res.status(errorStatusCode).json({
+                    error: errorMessage,
+                    details: errorDetails,
+                    timestamp: new Date().toISOString(),
+                    storage: imageInfo ? {
+                        imageUrl: imageInfo.publicUrl,
+                        stored: true
+                    } : {
+                        stored: false
+                    }
+                });
             }
+            
+            // Process the successful response
+            const result = await response.json();
+            console.log('Successfully received predictions');
+            
+            // Handle empty predictions
+            if (!result.predictions || result.predictions.length === 0) {
+                return res.status(404).json({ error: 'No predictions returned from the model' });
+            }
+            
+            // Format the prediction response for the frontend
+            const prediction = result.predictions[0];
+            
+            // Store the prediction results if we have image info
+            let resultStoragePath = null;
+            if (imageInfo) {
+                try {
+                    // Extract vein type from request metadata if available
+                    const veinType = req.body.metadata?.veinType || 'unknown';
+                    
+                    resultStoragePath = await storePredictionResults(
+                        imageInfo,
+                        {
+                            displayNames: prediction.displayNames || [],
+                            confidences: prediction.confidences || [],
+                            modelId: result.deployedModelId || null
+                        },
+                        veinType
+                    );
+                } catch (resultStorageError) {
+                    console.error('Error storing prediction results:', resultStorageError);
+                    // Continue even if result storage fails
+                }
+            }
+            
+            // Return response with additional storage information
+            res.json({
+                displayNames: prediction.displayNames || [],
+                confidences: prediction.confidences || [],
+                modelId: result.deployedModelId || null,
+                timestamp: new Date().toISOString(),
+                storage: imageInfo ? {
+                    imageUrl: imageInfo.publicUrl,
+                    resultsPath: resultStoragePath,
+                    stored: true
+                } : {
+                    stored: false,
+                    reason: 'Image storage failed or was not attempted'
+                }
+            });
+        } catch (apiError) {
+            // Handle any errors during the API request process
+            console.error(`API request error for ${req.body.metadata?.veinType || 'unknown'} vein:`, apiError);
+            await fs.appendFile('server.log', `[${new Date().toISOString()}] API request error: ${apiError}\n`);
+            
+            // Return a meaningful error response
+            res.status(500).json({
+                error: `Error processing ${req.body.metadata?.veinType || 'unknown'} vein prediction request`,
+                message: apiError.message,
+                timestamp: new Date().toISOString(),
+                storage: imageInfo ? {
+                    imageUrl: imageInfo.publicUrl,
+                    stored: true
+                } : {
+                    stored: false
+                }
+            });
         }
-        
-        // Return response with additional storage information
-        res.json({
-            displayNames: prediction.displayNames || [],
-            confidences: prediction.confidences || [],
-            modelId: result.deployedModelId || null,
-            timestamp: new Date().toISOString(),
-            storage: imageInfo ? {
-                imageUrl: imageInfo.publicUrl,
-                resultsPath: resultStoragePath,
-                stored: true
-            } : {
-                stored: false,
-                reason: 'Image storage failed or was not attempted'
-            }
-        });
     } catch (error) {
         console.error('Error in /api/predict:', error);
         await fs.appendFile('server.log', `[${new Date().toISOString()}] Error in /api/predict: ${error}\n`);
@@ -532,18 +669,26 @@ app.post('/api/predict', async (req, res) => {
 });
 
 ///////////////////////////////////////////////////////////////////////////////
-// 5) Test Endpoint for Connectivity Check
+// 6) Test Endpoint for Connectivity Check
 ///////////////////////////////////////////////////////////////////////////////
 app.post('/api/test-endpoint', async (req, res) => {
     try {
         const { metadata } = req.body;
         
         // Extract vein type from request metadata
-        const veinType = metadata?.veinType || 'default';
+        const veinType = metadata?.veinType || 'hepatic';
         console.log(`Testing endpoint connection for vein type: ${veinType}`);
         
         // Select the appropriate endpoint ID based on vein type
-        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.default;
+        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.hepatic;
+        
+        // Get the expected endpoint ID if provided
+        const expectedId = metadata?.expectedIds?.[veinType];
+        
+        // Log if there's a mismatch
+        if (expectedId && expectedId !== endpointId) {
+            console.warn(`Warning: Expected endpoint ID for ${veinType} (${expectedId}) differs from configured ID (${endpointId})`);
+        }
         
         // Get credentials from Secret Manager
         const credentials = await getCredentials();
@@ -565,6 +710,8 @@ app.post('/api/test-endpoint', async (req, res) => {
             status: 'ok',
             veinType: veinType,
             endpointId: endpointId,
+            expectedId: expectedId,
+            match: !expectedId || expectedId === endpointId,
             message: `Successfully verified connection for ${veinType} endpoint`,
             timestamp: new Date().toISOString()
         });
@@ -576,6 +723,110 @@ app.post('/api/test-endpoint', async (req, res) => {
             veinType: req.body.metadata?.veinType || 'unknown',
             timestamp: new Date().toISOString()
         });
+    }
+});
+
+// Here's a simple version of the health endpoint that doesn't require any Google Cloud services
+// This will work even when we can't connect to Google Cloud
+app.get('/api/local-health', (req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        message: 'Local health check endpoint is working',
+        endpointConfig: CONFIG.endpointIds
+    });
+});
+
+// Default route (API fallback for React Router)
+app.get('*', (req, res) => {
+    console.log(`[${new Date().toISOString()}] Fallback route handler for: ${req.url}`);
+    
+    // Only serve index.html for browser requests (HTML), not for API calls
+    const acceptHeader = req.get('accept') || '';
+    if (acceptHeader.includes('text/html')) {
+        console.log('Serving index.html as fallback');
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else {
+        console.log('Non-HTML request to unknown route, returning 404');
+        res.status(404).json({ error: 'Not found', path: req.url });
+    }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// 6) Prediction Endpoint
+///////////////////////////////////////////////////////////////////////////////
+let predictionClient = null;
+
+app.post('/predict', async (req, res) => {
+    try {
+        console.log(`[${new Date().toISOString()}] /predict handler invoked`);
+        await fs.appendFile('server.log', `/predict handler invoked\n`);
+
+        const { instances, parameters } = req.body;
+
+        if (!instances || !Array.isArray(instances)) {
+            return res.status(400).json({ error: 'Invalid request format. Expected "instances" array', timestamp: new Date().toISOString() });
+        }
+
+        for (const instance of instances) {
+            if (!instance.content) {
+                return res.status(400).json({ error: 'Each instance must have content data', timestamp: new Date().toISOString() });
+            }
+        }
+
+        if (!predictionClient) {
+            predictionClient = await initializeVertexAI();
+        }
+
+        // Extract vein type from request metadata
+        const veinType = req.body.metadata?.veinType || 'hepatic';
+        const endpointId = CONFIG.endpointIds[veinType] || CONFIG.endpointIds.hepatic;
+
+        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
+
+        console.log(`[${new Date().toISOString()}] Sending prediction request to endpoint: ${endpointPath}`);
+        await fs.appendFile('server.log', `[${new Date().toISOString()}] Sending prediction request to endpoint: ${endpointPath}\n`);
+
+        // Create the request object in the format expected by Vertex AI
+        const request = {
+            endpoint: endpointPath,
+            instances: instances,
+            parameters: parameters || {
+                confidenceThreshold: 0.0,
+                maxPredictions: 5
+            }
+        };
+
+        console.log("Sending prediction request to Vertex AI:", JSON.stringify(request, null, 2));
+        const [response] = await predictionClient.predict(request);
+
+        const predictions = (response.predictions || []).map(prediction => {
+            const displayNames = prediction.displayNames || [];
+            const confidences = prediction.confidences || [];
+            const results = displayNames.map((className, idx) => {
+                const conf = confidences[idx] || 0;
+                const percentage = `${(conf * 100).toFixed(0)}%`;
+                return {
+                    label: className,
+                    confidencePerc: percentage,
+                    confidenceVal: conf.toFixed(3)
+                };
+            });
+            return results;
+        });
+
+        res.json({
+          predictions,
+          deployedModelId: response.deployedModelId || null,
+          model: response.model || null,
+          modelDisplayName: response.modelDisplayName || null,
+          modelVersionId: response.modelVersionId || null,
+          timestamp: new Date().toISOString()
+        });
+
+    } catch (error) {
+        console.error('Prediction error:', error); // Keep console logging for local debugging
+        res.status(500).json({ error: 'Prediction failed', message: error.message, timestamp: new Date().toISOString() });
     }
 });
 

@@ -132,14 +132,15 @@
         }
         
         .upload-area {
+            width: 90%;
+            max-width: 600px;
+            margin: 15px auto;
             border: 2px dashed #ccc;
             border-radius: 10px;
             padding: 30px 20px;
-            margin: 15px auto;
             background: transparent;
             cursor: pointer;
             transition: all 0.2s ease;
-            max-width: 600px;
         }
         
         .upload-area:hover {
@@ -197,10 +198,14 @@
             border-radius: 5px;
         }
 
-        .model-status {
+        .model-status, .image-preview-container, .input-group, .reset-button {
             width: 90%;
             max-width: 600px;
             margin: 10px auto;
+        }
+
+        .model-status {
+            text-align: center;
             padding: 8px;
             border-radius: 5px;
             background-color: #dc3545;
@@ -230,10 +235,7 @@
         }
 
         .input-group {
-            margin: 15px auto;
             text-align: left;
-            width: 90%;
-            max-width: 600px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -265,7 +267,6 @@
             justify-content: center;
             gap: 8px;
             border-radius: 5px;
-            width: 100%;
             margin-top: 5px;
         }
 
@@ -452,8 +453,6 @@
         
         .image-preview-container {
             position: relative;
-            max-width: 100%;
-            margin: 25px auto;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -657,7 +656,7 @@
                     </p>
 
                     <div id="hepaticModelStatus" class="model-status model-ready">
-                        API Ready
+                        AI MODEL READY
                     </div>
                     
                     <div class="upload-area" onclick="initiateImageUpload('hepatic')">
@@ -707,7 +706,7 @@
                     </p>
                     
                     <div id="portalModelStatus" class="model-status model-ready">
-                        API Ready
+                        AI MODEL READY
                     </div>
 
                     <div class="upload-area" onclick="initiateImageUpload('portal')">
@@ -757,7 +756,7 @@
                     </p>
                     
                     <div id="renalModelStatus" class="model-status model-ready">
-                        API Ready
+                        AI MODEL READY
                     </div>
 
                     <div class="upload-area" onclick="initiateImageUpload('renal')">
@@ -1104,7 +1103,7 @@
         function initializeModelStatus(statusId) {
             const statusElement = document.getElementById(statusId);
             if (statusElement) {
-                statusElement.textContent = "API Ready";
+                statusElement.textContent = "AI MODEL READY";
                 statusElement.classList.add('model-ready'); // Start with green by default
             }
         }
@@ -1119,57 +1118,107 @@
 
             try {
                 // First check general API health
-                const healthResponse = await fetch('/api/health', { method: 'GET' });
+                console.log('Checking API health...');
+                const healthResponse = await fetch('/api/health');
                 
                 if (!healthResponse.ok) {
+                    console.error(`API health check failed with status: ${healthResponse.status}`);
                     throw new Error(`API health check failed: ${healthResponse.status}`);
+                }
+                
+                const healthData = await healthResponse.json();
+                console.log('API health check successful:', healthData);
+                
+                // Log the endpoint IDs from the health check
+                if (healthData.serverInfo && healthData.serverInfo.endpointConfig) {
+                    console.log('Endpoint IDs from server:', healthData.serverInfo.endpointConfig);
                 }
                 
                 // Now check each model endpoint with a lightweight test request
                 for (const status of modelStatuses) {
                     try {
-                        // Update UI to show checking state but keep it green
+                        console.log(`Testing ${status.type} endpoint...`);
+                        
+                        // Update UI to show checking state
                         if (status.element) {
-                            status.element.textContent = `Checking ${status.type} connection...`;
-                            status.element.classList.add('model-ready'); // Keep it green during check
+                            status.element.textContent = `Checking ${status.type} endpoint...`;
+                            status.element.classList.remove('model-ready');
                         }
                         
                         // Create a minimal payload to test the endpoint
                         const testPayload = {
-                            instances: [{ content: "test" }], // Just a minimal test payload
-                            parameters: { confidenceThreshold: 0.0, maxPredictions: 1 },
+                            instances: [
+                                {
+                                    content: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+                                }
+                            ],
+                            parameters: {
+                                confidenceThreshold: 0.0,
+                                maxPredictions: 1
+                            },
                             metadata: { 
                                 veinType: status.type,
-                                isTest: true // Flag for server to identify test requests
+                                imageType: 'image/png',
+                                isTest: true
                             }
                         };
 
-                        // Make request to the test endpoint to verify connection
-                        const response = await fetch('/api/test-endpoint', {
+                        // Make request to the endpoint
+                        console.log(`Sending test request to /api/predict for ${status.type} endpoint`);
+                        const response = await fetch('/api/predict', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(testPayload)
                         });
 
-                        if (response.ok) {
-                            // Get the response to check endpoint details
-                            const result = await response.json();
-                            if (status.element) {
-                                status.element.textContent = `${status.type.charAt(0).toUpperCase() + status.type.slice(1)} API Connected`;
-                                status.element.classList.add('model-ready');
+                        if (!response.ok) {
+                            // Try to get more detailed error information
+                            let errorDetail = '';
+                            let errorObj = null;
+                            try {
+                                const errorData = await response.json();
+                                console.error(`${status.type} endpoint error details:`, errorData);
+                                errorDetail = errorData.error || errorData.message || '';
+                                errorObj = errorData;
+                                
+                                // Log more detailed information if available
+                                if (errorData.details) {
+                                    console.error(`${status.type} endpoint error details:`, JSON.stringify(errorData.details, null, 2));
+                                    
+                                    // Check for specific error codes
+                                    if (errorData.details.code === 'MODEL_UNAVAILABLE') {
+                                        errorDetail = `The ${status.type} model is currently unavailable. This may be due to model loading, quota limits, or billing status.`;
+                                    } else if (errorData.details.code === 'BILLING_OR_QUOTA_ISSUE') {
+                                        errorDetail = `The ${status.type} model has billing or quota issues. Please contact the administrator.`;
+                                    }
+                                }
+                            } catch (parseError) {
+                                console.error(`Could not parse error response for ${status.type}:`, parseError);
+                                try {
+                                    // Try to get the raw text if JSON parsing failed
+                                    const rawText = await response.text();
+                                    console.error(`Raw error response for ${status.type}:`, rawText);
+                                    errorDetail = rawText.substring(0, 100) + (rawText.length > 100 ? '...' : '');
+                                } catch (textError) {
+                                    console.error(`Could not get error text for ${status.type}:`, textError);
+                                }
                             }
-                        } else {
-                            // Only remove model-ready class if there's an error
-                            if (status.element) {
-                                status.element.textContent = `${status.type.charAt(0).toUpperCase() + status.type.slice(1)} API Error`;
-                                status.element.classList.remove('model-ready');
-                            }
+                            
+                            throw new Error(`Endpoint returned ${response.status}${errorDetail ? ': ' + errorDetail : ''}`);
+                        }
+                        
+                        const data = await response.json();
+                        console.log(`${status.type} endpoint test successful:`, data);
+                        
+                        // Update UI to show success
+                        if (status.element) {
+                            status.element.textContent = `AI MODEL READY`;
+                            status.element.classList.add('model-ready');
                         }
                     } catch (modelError) {
                         console.error(`${status.type} model check error:`, modelError);
-                        // Only remove model-ready class if there's an error
                         if (status.element) {
-                            status.element.textContent = `${status.type.charAt(0).toUpperCase() + status.type.slice(1)} API Error`;
+                            status.element.textContent = `Error: ${modelError.message}`;
                             status.element.classList.remove('model-ready');
                         }
                     }
@@ -1179,7 +1228,7 @@
                 // Set all status indicators to error state
                 modelStatuses.forEach(status => {
                     if (status.element) {
-                        status.element.textContent = "API Connection Error - Try Again Later";
+                        status.element.textContent = `Error: ${error.message}`;
                         status.element.classList.remove('model-ready');
                     }
                 });
@@ -1260,9 +1309,7 @@
                 const payload = {
                     instances: [
                         {
-                            content: {
-                                b64: base64Content
-                            }
+                            content: base64Content
                         }
                     ],
                     parameters: {
@@ -1307,8 +1354,20 @@
                     let errorMessage = `Server error: ${response.status}`;
                     try {
                         const errorData = await response.json();
-                        errorMessage = errorData.message || errorMessage;
                         console.error(`API error response for ${type}:`, errorData);
+                        
+                        // Check for specific error codes in the details
+                        if (errorData.details && errorData.details.code) {
+                            if (errorData.details.code === 'MODEL_UNAVAILABLE') {
+                                errorMessage = `The ${type} model is currently unavailable. This may be due to model loading, quota limits, or billing status. Please try again later.`;
+                            } else if (errorData.details.code === 'BILLING_OR_QUOTA_ISSUE') {
+                                errorMessage = `The ${type} model has billing or quota issues. Please contact the administrator.`;
+                            } else {
+                                errorMessage = errorData.error || errorMessage;
+                            }
+                        } else {
+                            errorMessage = errorData.error || errorMessage;
+                        }
                     } catch (e) {
                         console.error(`Failed to parse error response for ${type}:`, e);
                         // If parsing fails, use status code
@@ -1398,7 +1457,7 @@
                 loadingIndicator.style.display = 'none';
                 
                 // Update model status back to green connected state
-                modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Connected`;
+                modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} AI MODEL READY`;
                 modelStatus.classList.add('model-ready');
 
                 // Update results in UI
@@ -1450,7 +1509,7 @@
                 
                 // Optional: update model status
                 if (modelStatus) {
-                    modelStatus.textContent = "Classification Failed";
+                    modelStatus.textContent = "AI MODEL ERROR";
                     modelStatus.classList.remove('model-ready');
                 }
                 
@@ -1570,7 +1629,7 @@
             
             // Update model status
             if (modelStatus) {
-                modelStatus.textContent = "Error";
+                modelStatus.textContent = "AI MODEL ERROR";
                 modelStatus.classList.remove('model-ready');
             }
             

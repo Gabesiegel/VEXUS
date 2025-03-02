@@ -518,3 +518,226 @@ Requesting: /api/predict
 [2025-03-01T03:25:48.773Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740799548394.png
 [2025-03-01T03:25:49.009Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
 [2025-03-01T03:25:49.926Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740799548394_results.json
+Requesting: /api/health
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/predict
+[2025-03-02T12:05:15.175Z] /api/predict handler invoked
+[2025-03-02T12:05:15.180Z] Uploading image: image_1740917115178.png
+[2025-03-02T12:05:15.531Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740917115178.png
+[2025-03-02T12:05:15.737Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-03-02T12:05:22.287Z] Response from hepatic endpoint (ID: 8159951878260523008): 200 OK
+[2025-03-02T12:05:22.572Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740917115178_results.json
+Requesting: /api/predict
+[2025-03-02T12:05:26.035Z] /api/predict handler invoked
+[2025-03-02T12:05:26.404Z] Uploading image: image_1740917126404.png
+[2025-03-02T12:05:27.595Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740917126404.png
+[2025-03-02T12:05:27.769Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2232940955885895680
+[2025-03-02T12:05:28.552Z] Response from portal endpoint (ID: 2232940955885895680): 404 Not Found
+[2025-03-02T12:05:28.555Z] Error from portal endpoint (ID: 2232940955885895680): Endpoint `projects/456295042668/locations/us-central1/endpoints/2232940955885895680` not found.
+[2025-03-02T12:05:28.557Z] Error in /api/predict: Error: Vertex AI API error for portal vein: Endpoint `projects/456295042668/locations/us-central1/endpoints/2232940955885895680` not found.
+Requesting: /api/health
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/predict
+[2025-03-02T14:24:41.305Z] /api/predict handler invoked
+[2025-03-02T14:24:41.649Z] Uploading image: image_1740925481649.jpeg
+[2025-03-02T14:24:44.598Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740925481649.jpeg
+[2025-03-02T14:24:44.965Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+[2025-03-02T14:24:49.582Z] Response from hepatic endpoint (ID: 8159951878260523008): 200 OK
+[2025-03-02T14:24:49.917Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740925481649_results.json
+Requesting: /api/predict
+[2025-03-02T14:25:08.410Z] /api/predict handler invoked
+[2025-03-02T14:25:08.689Z] Uploading image: image_1740925508689.png
+[2025-03-02T14:25:10.344Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740925508689.png
+[2025-03-02T14:25:10.531Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2232940955885895680
+[2025-03-02T14:25:13.218Z] Response from portal endpoint (ID: 2232940955885895680): 404 Not Found
+[2025-03-02T14:25:13.224Z] Error from portal endpoint (ID: 2232940955885895680): Endpoint `projects/456295042668/locations/us-central1/endpoints/2232940955885895680` not found.
+[2025-03-02T14:25:13.226Z] Error in /api/predict: Error: Vertex AI API error for portal vein: Endpoint `projects/456295042668/locations/us-central1/endpoints/2232940955885895680` not found.
+Requesting: /api/predict
+[2025-03-02T14:25:51.501Z] /api/predict handler invoked
+[2025-03-02T14:25:51.711Z] Uploading image: image_1740925551710.png
+[2025-03-02T14:25:53.561Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740925551710.png
+[2025-03-02T14:25:53.793Z] Sending prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2369174844613853184
+[2025-03-02T14:25:56.945Z] Response from renal endpoint (ID: 2369174844613853184): 404 Not Found
+[2025-03-02T14:25:56.947Z] Error from renal endpoint (ID: 2369174844613853184): Endpoint `projects/456295042668/locations/us-central1/endpoints/2369174844613853184` not found.
+[2025-03-02T14:25:56.948Z] Error in /api/predict: Error: Vertex AI API error for renal vein: Endpoint `projects/456295042668/locations/us-central1/endpoints/2369174844613853184` not found.
+Requesting: /api/health
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/health
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/test-endpoint
+Requesting: /api/predict
+[2025-03-02T15:49:42.468Z] /api/predict handler invoked
+[2025-03-02T15:49:42.747Z] Uploading image: image_1740930582747.png
+[2025-03-02T15:49:43.149Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740930582747.png
+Requesting: /api/predict
+[2025-03-02T15:50:05.304Z] /api/predict handler invoked
+[2025-03-02T15:50:05.632Z] Uploading image: image_1740930605632.png
+[2025-03-02T15:50:05.634Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740930582747_results.json
+[2025-03-02T15:50:06.905Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740930605632.png
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T15:58:33.471Z] /api/predict handler invoked
+[2025-03-02T15:58:33.472Z] Uploading image: image_1740931113471.png
+[2025-03-02T15:58:33.719Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931113471.png
+[2025-03-02T15:58:34.139Z] Error from hepatic endpoint (ID: 8159951878260523008): Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.
+Requesting: /api/predict
+[2025-03-02T15:58:34.143Z] /api/predict handler invoked
+[2025-03-02T15:58:34.144Z] Uploading image: image_1740931114143.png
+[2025-03-02T15:58:34.390Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931114143.png
+[2025-03-02T15:58:34.644Z] Error from portal endpoint (ID: 2970410926785691648): Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.
+Requesting: /api/predict
+[2025-03-02T15:58:34.649Z] /api/predict handler invoked
+[2025-03-02T15:58:34.649Z] Uploading image: image_1740931114649.png
+[2025-03-02T15:58:34.936Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931114649.png
+[2025-03-02T15:58:41.565Z] Error from renal endpoint (ID: 1148704877514326016): Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T15:58:42.188Z] /api/predict handler invoked
+[2025-03-02T15:58:42.189Z] Uploading image: image_1740931122189.png
+[2025-03-02T15:58:42.792Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931122189.png
+[2025-03-02T15:58:43.303Z] Error from hepatic endpoint (ID: 8159951878260523008): Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.
+Requesting: /api/predict
+[2025-03-02T15:58:43.314Z] /api/predict handler invoked
+[2025-03-02T15:58:43.315Z] Uploading image: image_1740931123315.png
+[2025-03-02T15:58:43.709Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931123315.png
+[2025-03-02T15:58:43.943Z] Error from portal endpoint (ID: 2970410926785691648): Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.
+Requesting: /api/predict
+[2025-03-02T15:58:43.947Z] /api/predict handler invoked
+[2025-03-02T15:58:43.948Z] Uploading image: image_1740931123948.png
+[2025-03-02T15:58:44.210Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931123948.png
+[2025-03-02T15:58:44.428Z] Error from renal endpoint (ID: 1148704877514326016): Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T16:08:34.321Z] /api/predict handler invoked
+[2025-03-02T16:08:34.322Z] Uploading image: image_1740931714322.png
+[2025-03-02T16:08:34.586Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931714322.png
+[2025-03-02T16:08:35.018Z] Error from hepatic endpoint (ID: 8159951878260523008): Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.
+Requesting: /api/predict
+[2025-03-02T16:08:35.026Z] /api/predict handler invoked
+[2025-03-02T16:08:35.027Z] Uploading image: image_1740931715027.png
+[2025-03-02T16:08:35.288Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931715027.png
+[2025-03-02T16:08:35.596Z] Error from portal endpoint (ID: 2970410926785691648): Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.
+Requesting: /api/predict
+[2025-03-02T16:08:35.600Z] /api/predict handler invoked
+[2025-03-02T16:08:35.601Z] Uploading image: image_1740931715601.png
+[2025-03-02T16:08:35.844Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740931715601.png
+[2025-03-02T16:08:36.116Z] Error from renal endpoint (ID: 1148704877514326016): Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.
+Requesting: /api/health?detailed=true
+Requesting: /api/predict
+[2025-03-02T17:09:16.253Z] /api/predict handler invoked
+[2025-03-02T17:09:16.253Z] Uploading image: image_1740935356253.png
+[2025-03-02T17:09:16.621Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740935356253.png
+[2025-03-02T17:09:16.976Z] Error from hepatic endpoint (ID: 8159951878260523008): The hepatic vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
