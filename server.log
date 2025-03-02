@@ -741,3 +741,20 @@ Requesting: /api/predict
 [2025-03-02T17:09:16.253Z] Uploading image: image_1740935356253.png
 [2025-03-02T17:09:16.621Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740935356253.png
 [2025-03-02T17:09:16.976Z] Error from hepatic endpoint (ID: 8159951878260523008): The hepatic vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
+Requesting: /api/local-health
+Requesting: /api/health?detailed=true
+Requesting: /api/predict
+[2025-03-02T17:49:34.239Z] /api/predict handler invoked
+[2025-03-02T17:49:34.241Z] Uploading image: image_1740937774240.png
+[2025-03-02T17:49:34.586Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740937774240.png
+[2025-03-02T17:49:34.932Z] Error from hepatic endpoint (ID: 8159951878260523008): The hepatic vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
+Requesting: /api/predict
+[2025-03-02T17:52:18.993Z] /api/predict handler invoked
+[2025-03-02T17:52:18.993Z] Uploading image: image_1740937938993.png
+[2025-03-02T17:52:19.245Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740937938993.png
+[2025-03-02T17:52:19.612Z] Error from renal endpoint (ID: 1148704877514326016): The renal vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
+Requesting: /api/predict
+[2025-03-02T18:08:36.591Z] /api/predict handler invoked
+[2025-03-02T18:08:36.592Z] Uploading image: image_1740938916592.png
+[2025-03-02T18:08:36.878Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740938916592.png
+[2025-03-02T18:08:37.365Z] Error from portal endpoint (ID: 2970410926785691648): The portal vein model is currently unavailable. This may be due to model loading issues, quota limits, or billing status.
