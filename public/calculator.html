@@ -908,29 +908,14 @@
                 handleImageUpload('hepatic', this.files[0]);
             });
             
-            document.getElementById('hepaticPreviewDelete').addEventListener('click', function(e) {
-                e.stopPropagation();
-                resetImageUpload('hepatic');
-            });
-            
             // Portal vein upload
             document.getElementById('portalImageUpload').addEventListener('change', function() {
                 handleImageUpload('portal', this.files[0]);
             });
             
-            document.getElementById('portalPreviewDelete').addEventListener('click', function(e) {
-                e.stopPropagation();
-                resetImageUpload('portal');
-            });
-            
             // Renal vein upload
             document.getElementById('renalImageUpload').addEventListener('change', function() {
                 handleImageUpload('renal', this.files[0]);
-            });
-            
-            document.getElementById('renalPreviewDelete').addEventListener('click', function(e) {
-                e.stopPropagation();
-                resetImageUpload('renal');
             });
         }
         
@@ -942,51 +927,86 @@
         
         // Function to initiate image upload with HIPAA warning first
         function initiateImageUpload(type) {
+            console.log(`Initiating image upload for ${type} vein type`);
             currentUploadType = type;
-            // Directly trigger file input click without showing modals
-            document.getElementById(`${currentUploadType}ImageUpload`).click();
+            try {
+                // Directly trigger file input click without showing modals
+                const fileInput = document.getElementById(`${type}ImageUpload`);
+                if (fileInput) {
+                    fileInput.click();
+                } else {
+                    console.error(`File input element for ${type} not found!`);
+                }
+            } catch (error) {
+                console.error(`Error initiating upload for ${type}:`, error);
+            }
         }
         
         // Function to handle image upload and preview
         function handleImageUpload(type, file) {
-            const previewImg = document.getElementById(`${type}Preview`);
-            const previewContainer = previewImg.parentElement;
-            const resultElement = document.getElementById(`${type}Result`);
-            const topResultsElement = document.getElementById(`${type}TopResults`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            console.log(`handleImageUpload called for ${type} with file:`, file ? file.name : 'no file');
             
-            if (!file) {
-                resetImageUpload(type);
-                return;
+            try {
+                const previewImg = document.getElementById(`${type}Preview`);
+                if (!previewImg) {
+                    console.error(`Preview image element for ${type} not found!`);
+                    return;
+                }
+                
+                const previewContainer = previewImg.parentElement;
+                const resultElement = document.getElementById(`${type}Result`);
+                const topResultsElement = document.getElementById(`${type}TopResults`);
+                const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+                const modelStatus = document.getElementById(`${type}ModelStatus`);
+                
+                if (!file) {
+                    console.log(`No file selected for ${type}, resetting upload`);
+                    resetImageUpload(type);
+                    return;
+                }
+                
+                // Update status to show processing
+                console.log(`Setting model status for ${type} to processing`);
+                modelStatus.textContent = `Processing ${type.charAt(0).toUpperCase() + type.slice(1)} Image...`;
+                modelStatus.classList.add('model-ready');
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                
+                // Create preview with fade-in animation
+                console.log(`Creating FileReader for ${type} image preview`);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log(`FileReader onload triggered for ${type}`);
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    previewContainer.style.opacity = '0';
+                    previewImg.style.display = 'block';
+                    uploadArea.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        previewContainer.style.opacity = '1';
+                        uploadArea.style.display = 'none';
+                        uploadArea.style.opacity = '1';
+                    }, 50);
+                    
+                    console.log(`Calling classifyImage for ${type}`);
+                    classifyImage(type, file);
+                };
+                
+                reader.onerror = function(error) {
+                    console.error(`FileReader error for ${type}:`, error);
+                    modelStatus.textContent = `Error reading ${type} image file`;
+                    loadingIndicator.style.display = 'none';
+                };
+                
+                console.log(`Starting to read ${type} image as data URL`);
+                reader.readAsDataURL(file);
+            } catch (error) {
+                console.error(`Error in handleImageUpload for ${type}:`, error);
+                alert(`Error handling ${type} image: ${error.message}`);
             }
-            
-            // Update status to show processing
-            modelStatus.textContent = `Processing ${type.charAt(0).toUpperCase() + type.slice(1)} Image...`;
-            modelStatus.classList.add('model-ready');
-            
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            
-            // Create preview with fade-in animation
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImg.src = e.target.result;
-                previewContainer.style.display = 'block';
-                previewContainer.style.opacity = '0';
-                previewImg.style.display = 'block';
-                uploadArea.style.opacity = '0';
-                
-                setTimeout(() => {
-                    previewContainer.style.opacity = '1';
-                    uploadArea.style.display = 'none';
-                    uploadArea.style.opacity = '1';
-                }, 50);
-                
-                classifyImage(type, file);
-            };
-            reader.readAsDataURL(file);
         }
 
         // Function to reset image upload (replacing clearImageUpload)
@@ -1128,6 +1148,7 @@
 
         // Function to classify image
         async function classifyImage(type, file) {
+            console.log(`Classification started for ${type} vein type`);
             const previewImg = document.getElementById(`${type}Preview`);
             const resultElement = document.getElementById(`${type}Result`);
             const topResultsElement = document.getElementById(`${type}TopResults`);
@@ -1137,16 +1158,21 @@
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const modelStatus = document.getElementById(`${type}ModelStatus`);
             
+            // Hide any previous errors
+            errorContainer.style.display = 'none';
+            errorContainer.innerHTML = '';
+            
             try {
                 if (!file) {
                     throw new Error("No file selected.");
                 }
 
-            // Update model status to green "Processing image"
-            modelStatus.textContent = "Processing image...";
-            modelStatus.classList.add('model-ready');
+                // Update model status to green "Processing image"
+                modelStatus.textContent = "Processing image...";
+                modelStatus.classList.add('model-ready');
 
                 // Use FileReader to get base64 data
+                console.log(`Reading ${type} file as Data URL`);
                 const base64Data = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result);
@@ -1155,11 +1181,21 @@
                 });
 
                 // Extract the actual base64 content and mime type
+                console.log(`Extracting base64 content for ${type}`);
                 const parts = base64Data.split(',');
+                if (parts.length !== 2) {
+                    throw new Error('Invalid base64 data format');
+                }
+                
                 const base64Content = parts[1];
-                const mimeType = parts[0].match(/:(.*?);/)[1];
+                const mimeTypeMatch = parts[0].match(/:(.*?);/);
+                if (!mimeTypeMatch) {
+                    throw new Error('Could not determine image mime type');
+                }
+                const mimeType = mimeTypeMatch[1];
 
                 // Structure payload for Vertex AI - ensure correct format
+                console.log(`Creating payload for ${type} API request`);
                 const payload = {
                     instances: [
                         {
@@ -1183,7 +1219,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
                 
-                console.log(`Sending ${type} image for classification...`);
+                console.log(`Sending ${type} image for classification to /api/predict endpoint...`);
                 
                 const response = await fetch('/api/predict', {
                     method: 'POST',
@@ -1195,20 +1231,25 @@
                 });
                 
                 clearTimeout(timeoutId);
+                console.log(`Received response for ${type} with status: ${response.status}`);
 
                 if (!response.ok) {
                     let errorMessage = `Server error: ${response.status}`;
                     try {
                         const errorData = await response.json();
                         errorMessage = errorData.message || errorMessage;
+                        console.error(`API error response for ${type}:`, errorData);
                     } catch (e) {
+                        console.error(`Failed to parse error response for ${type}:`, e);
                         // If parsing fails, use status code
                     }
                     throw new Error(errorMessage);
                 }
 
                 // Process response
+                console.log(`Processing successful response for ${type}`);
                 const result = await response.json();
+                console.log(`${type} response data:`, result);
                 
                 // Validate response format
                 if (!result || !result.displayNames || !result.confidences) {
@@ -1217,8 +1258,8 @@
 
                 // Log storage information if available
                 if (result.storage && result.storage.stored) {
-                    console.log(`Image stored at: ${result.storage.imageUrl}`);
-                    console.log(`Prediction results stored at: ${result.storage.resultsPath}`);
+                    console.log(`${type} image stored at: ${result.storage.imageUrl}`);
+                    console.log(`${type} prediction results stored at: ${result.storage.resultsPath}`);
                 }
 
                 // Process predictions
