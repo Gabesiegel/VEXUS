@@ -163,16 +163,17 @@
             color: #666666;
             font-size: 1.1em;
             cursor: pointer;
-            padding: 5px 10px;
-            margin-left: 10px;
-            transition: color 0.2s ease;
+            padding: 8px 15px;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            border-radius: 5px;
         }
 
         .reset-button:hover {
             color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
         }
 
         .reset-button i {
@@ -233,6 +234,9 @@
             text-align: left;
             width: 90%;
             max-width: 600px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
         }
 
         .input-group label {
@@ -245,6 +249,14 @@
             margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
+        }
+
+        .input-group .select-container {
+            flex: 1;
+        }
+
+        .input-group .reset-button {
+            margin-bottom: 5px;
         }
 
         .cannot-calc-note {
@@ -405,25 +417,50 @@
         }
         
         /* Enhanced image preview */
+        .image-preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-controls:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .image-preview-delete {
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
         .image-preview-container {
             position: relative;
             max-width: 100%;
             margin: 15px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         
-        .image-preview-controls {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: rgba(255,255,255,0.7);
-            padding: 5px;
-            border-radius: 5px;
-        }
-        
-        .image-preview-delete {
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 5px;
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 0;
+            display: none;
+            border: none;
+            border-radius: 8px;
         }
         
         /* Enhanced error handling */
@@ -435,6 +472,14 @@
             border: 1px solid #f5c6cb;
             color: #721c24;
             display: none;
+        }
+
+        .reset-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
         }
     </style>
 </head>
@@ -610,11 +655,6 @@
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload or drop a Hepatic Vein image</p>
                         <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
-                        <div class="upload-controls">
-                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('hepatic')">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                        </div>
                     </div>
                     
                     <div id="hepaticLoadingIndicator" class="loading-indicator">
@@ -624,29 +664,31 @@
                     
                     <div id="hepaticErrorContainer" class="error-container"></div>
                     
+                    <div class="input-group">
+                        <div class="select-container">
+                            <label for="hepaticDropdown">Hepatic Vein Classification:</label>
+                            <select id="hepaticDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="HV Normal">HV Normal</option>
+                                <option value="HV Mild">HV Mild</option>
+                                <option value="HV Severe">HV Severe</option>
+                                <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                            </select>
+                            <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image.
+                            </div>
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('hepatic')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                    
                     <div class="image-preview-container">
                         <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
-                        <div class="image-preview-controls">
-                            <span id="hepaticPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
-                        </div>
                     </div>
                     
                     <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
                     <div class="top-results" id="hepaticTopResults"></div>
-
-                    <div class="input-group">
-                        <label for="hepaticDropdown">Hepatic Vein Classification:</label>
-                        <select id="hepaticDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="HV Normal">HV Normal</option>
-                            <option value="HV Mild">HV Mild</option>
-                            <option value="HV Severe">HV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
-                        </select>
-                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
                 </div>
 
                 <!-- STEP 3: Portal Vein -->
@@ -665,11 +707,6 @@
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload or drop a Portal Vein image</p>
                         <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
-                        <div class="upload-controls">
-                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('portal')">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                        </div>
                     </div>
                     
                     <div id="portalLoadingIndicator" class="loading-indicator">
@@ -679,29 +716,31 @@
                     
                     <div id="portalErrorContainer" class="error-container"></div>
                     
+                    <div class="input-group">
+                        <div class="select-container">
+                            <label for="portalDropdown">Portal Vein Classification:</label>
+                            <select id="portalDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="PV Normal">PV Normal</option>
+                                <option value="PV Mild">PV Mild</option>
+                                <option value="PV Severe">PV Severe</option>
+                                <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
+                            </select>
+                            <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image.
+                            </div>
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('portal')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                    
                     <div class="image-preview-container">
                         <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
-                        <div class="image-preview-controls">
-                            <span id="portalPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
-                        </div>
                     </div>
                     
                     <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
                     <div class="top-results" id="portalTopResults"></div>
-                    
-                    <div class="input-group">
-                        <label for="portalDropdown">Portal Vein Classification:</label>
-                        <select id="portalDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="PV Normal">PV Normal</option>
-                            <option value="PV Mild">PV Mild</option>
-                            <option value="PV Severe">PV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                        </select>
-                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
                 </div>
 
                 <!-- STEP 4: Renal Vein -->
@@ -720,11 +759,6 @@
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Click to upload or drop a Renal Vein image</p>
                         <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
-                        <div class="upload-controls">
-                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('renal')">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                        </div>
                     </div>
                     
                     <div id="renalLoadingIndicator" class="loading-indicator">
@@ -734,29 +768,31 @@
                     
                     <div id="renalErrorContainer" class="error-container"></div>
                     
+                    <div class="input-group">
+                        <div class="select-container">
+                            <label for="renalDropdown">Renal Vein Classification:</label>
+                            <select id="renalDropdown">
+                                <option value="">-- Select --</option>
+                                <option value="RV Normal">RV Normal</option>
+                                <option value="RV Mild">RV Mild</option>
+                                <option value="RV Severe">RV Severe</option>
+                                <option value="Confidence of waveform &lt; 50%">Confidence of waveform &lt; 50%</option>
+                            </select>
+                            <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                                Probability below 50%. Please upload a higher quality image.
+                            </div>
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('renal')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                    
                     <div class="image-preview-container">
                         <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
-                        <div class="image-preview-controls">
-                            <span id="renalPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
-                        </div>
                     </div>
                     
                     <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
                     <div class="top-results" id="renalTopResults"></div>
-                    
-                    <div class="input-group">
-                        <label for="renalDropdown">Renal Vein Classification:</label>
-                        <select id="renalDropdown">
-                            <option value="">-- Select --</option>
-                            <option value="RV Normal">RV Normal</option>
-                            <option value="RV Mild">RV Mild</option>
-                            <option value="RV Severe">RV Severe</option>
-                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                        </select>
-                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
-                            Probability below 50%. Please upload a higher quality image.
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Calculate & Reset Buttons + Score Display -->
@@ -911,35 +947,40 @@
         // Function to handle image upload and preview
         function handleImageUpload(type, file) {
             const previewImg = document.getElementById(`${type}Preview`);
+            const previewContainer = previewImg.parentElement;
             const resultElement = document.getElementById(`${type}Result`);
             const topResultsElement = document.getElementById(`${type}TopResults`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
             const modelStatus = document.getElementById(`${type}ModelStatus`);
             
-            // Keep model status green and update text
-            modelStatus.textContent = "Processing Image...";
-            modelStatus.classList.add('model-ready');
-            
-            // Hide preview and clear previous results
-            previewImg.style.display = 'none';
-            resultElement.textContent = "Processing image...";
-            topResultsElement.innerHTML = "";
-            
             if (!file) {
                 resetImageUpload(type);
                 return;
             }
             
+            // Keep model status green and update text
+            modelStatus.textContent = "Processing Image...";
+            modelStatus.classList.add('model-ready');
+            
             // Show loading indicator
             loadingIndicator.style.display = 'block';
             
-            // Create preview
+            // Create preview with fade-in animation
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+                previewContainer.style.opacity = '0';
                 previewImg.style.display = 'block';
-                uploadArea.style.display = 'none';
+                uploadArea.style.opacity = '0';
+                
+                setTimeout(() => {
+                    previewContainer.style.opacity = '1';
+                    uploadArea.style.display = 'none';
+                    uploadArea.style.opacity = '1';
+                }, 50);
+                
                 classifyImage(type, file);
             };
             reader.readAsDataURL(file);
@@ -951,14 +992,27 @@
             const fileInput = document.getElementById(`${type}ImageUpload`);
             fileInput.value = '';
             
-            // Hide the preview
+            // Fade out preview with animation
             const preview = document.getElementById(`${type}Preview`);
-            preview.style.display = 'none';
-            preview.src = '';
+            const previewContainer = preview.parentElement;
+            previewContainer.style.opacity = '0';
             
-            // Show the upload area
-            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
-            uploadArea.style.display = 'block';
+            setTimeout(() => {
+                // Hide the preview
+                preview.style.display = 'none';
+                preview.src = '';
+                previewContainer.style.display = 'none';
+                
+                // Show the upload area with fade-in animation
+                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+                uploadArea.style.opacity = '0';
+                uploadArea.style.display = 'block';
+                
+                setTimeout(() => {
+                    uploadArea.style.opacity = '1';
+                    previewContainer.style.opacity = '1';
+                }, 50);
+            }, 300);
             
             // Reset the results
             document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
@@ -968,13 +1022,14 @@
             document.getElementById(`${type}Dropdown`).value = '';
             document.getElementById(`${type}ErrorNote`).style.display = 'none';
             
-            // Reset model status
+            // Reset model status to ready state
             const modelStatus = document.getElementById(`${type}ModelStatus`);
             modelStatus.textContent = "Ready for Image";
             modelStatus.classList.add('model-ready');
             
-            // Hide loading indicator
+            // Hide loading indicator and error container
             document.getElementById(`${type}LoadingIndicator`).style.display = 'none';
+            document.getElementById(`${type}ErrorContainer`).style.display = 'none';
         }
 
         // Helper function to capitalize first letter
