@@ -672,6 +672,10 @@
                     
                     <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
                     <div class="top-results" id="hepaticTopResults"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
+                    </div>
 
                     <div class="input-group">
                         <label for="hepaticDropdown">Hepatic Vein Classification:</label>
@@ -688,10 +692,6 @@
                         <button class="reset-button" onclick="resetImageUpload('hepatic')">
                             <i class="fas fa-undo"></i> Reset
                         </button>
-                    </div>
-                    
-                    <div class="image-preview-container">
-                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
                     </div>
                 </div>
 
@@ -722,6 +722,10 @@
                     
                     <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
                     <div class="top-results" id="portalTopResults"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
+                    </div>
 
                     <div class="input-group">
                         <label for="portalDropdown">Portal Vein Classification:</label>
@@ -738,10 +742,6 @@
                         <button class="reset-button" onclick="resetImageUpload('portal')">
                             <i class="fas fa-undo"></i> Reset
                         </button>
-                    </div>
-                    
-                    <div class="image-preview-container">
-                        <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
                     </div>
                 </div>
 
@@ -772,6 +772,10 @@
                     
                     <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
                     <div class="top-results" id="renalTopResults"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
+                    </div>
 
                     <div class="input-group">
                         <label for="renalDropdown">Renal Vein Classification:</label>
@@ -788,10 +792,6 @@
                         <button class="reset-button" onclick="resetImageUpload('renal')">
                             <i class="fas fa-undo"></i> Reset
                         </button>
-                    </div>
-                    
-                    <div class="image-preview-container">
-                        <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
                     </div>
                 </div>
 
@@ -1041,7 +1041,7 @@
         function initializeModelStatus(statusId) {
             const statusElement = document.getElementById(statusId);
             if (statusElement) {
-                statusElement.textContent = "Waiting for image...";
+                statusElement.textContent = "Checking API...";
                 statusElement.classList.remove('model-ready');
             }
         }
