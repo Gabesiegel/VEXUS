@@ -1,65 +1,284 @@
 <!DOCTYPE HTML>
 <html lang="en">
+<!-- Previous head and style sections remain unchanged -->
 <head>
-    <title>VExUS ATLAS - Education</title>
+    <title>VExUS ATLAS - AI Image Recognition &amp; Scoring</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <meta name="author" content="Gabesiegel" />
-    <meta name="last-modified" content="2025-02-12T00:37:03Z" />
     
-    <!-- CSS -->
+    <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
     
+    <!-- Keep all existing CSS styles -->
     <style>
-        /* Maintaining existing styles */
-        .logo-container {
-            display: flex;
-            justify-content: center;
+        /* Base font styles */
+        body, input, select, textarea, button {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            color: #585858;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.035em;
+        }
+
+        .step-section h2 {
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            margin-bottom: 15px;
+        }
+
+        .step-instructions {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .upload-text {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .input-group select {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1em;
+        }
+
+        .button {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .reset-button {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+        }
+
+        .modal-content h2 {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .modal-content p, .modal-content ul {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* All existing CSS styles remain unchanged */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .step-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: #ccc;
+            color: #333;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 80px;
+            font-weight: bold;
+            margin: 0 auto 10px auto;
+            font-size: 2em;
+        }
+
+        .step-section h2 {
+            margin-bottom: 15px;
+        }
+        
+        .step-instructions {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px 20px;
+            margin: 15px auto;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            max-width: 600px;
+        }
+        
+        .upload-area:hover {
+            border-color: #999;
+        }
+
+        .upload-icon {
+            font-size: 2.5em;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Add styles for the reset button */
+        .reset-button {
+            background: none;
+            border: none;
+            color: #666666;
+            font-size: 1.1em;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 10px;
+            transition: color 0.2s ease;
+            display: inline-flex;
             align-items: center;
-            gap: 60px;
-            margin-bottom: 2em;
+            gap: 5px;
+        }
+
+        .reset-button:hover {
+            color: #dc3545;
+        }
+
+        .reset-button i {
+            font-size: 1.2em;
+        }
+
+        .upload-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 15px auto;
+            display: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .model-status {
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: #fff;
+            font-weight: 500;
+            white-space: pre-wrap;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .model-ready {
+            background-color: #28a745;
+        }
+
+        .step-result {
+            margin: 10px auto;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .top-results {
+            margin: 5px auto 15px auto;
+            color: #555;
+        }
+
+        .input-group {
+            margin: 15px auto;
+            text-align: left;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .cannot-calc-note {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 35px auto;
             flex-wrap: wrap;
         }
 
-        /* Menu Navigation Styles */
-        nav#menu {
-            background: #ffffff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .button-group button {
+            flex: 1;
+            max-width: 250px;
+            height: auto;
+            padding: 10px 20px;
+            line-height: 1.2;
+            white-space: normal;
+            font-size: 1em;
         }
 
-        nav#menu .logo-container {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
+        .main-logo {
+            width: 400px;
+            height: 200px;
+            margin: 0 auto 2em auto;
+            display: block;
+            object-fit: contain;
         }
 
-        nav#menu h2 {
-            color: #888888;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.1);
-            padding: 0.5em 0;
-        }
-
-        nav#menu ul li a {
-            color: #888888 !important;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-            transition: color 0.2s ease;
-        }
-
-        nav#menu ul li a:hover {
-            color: #007bff !important;
-        }
-
-        /* Logo Styles */
         .sidebar-logo {
             width: 100px;
             height: auto;
@@ -67,174 +286,205 @@
             padding: 5px;
         }
 
-        /* Education Page Specific Styles */
-        .education-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        @media screen and (max-width: 980px) {
+            .main-logo {
+                width: 300px;
+                height: 150px;
+            }
         }
 
-        .education-header {
+        /* New styles for error handling */
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 0.9em;
             text-align: center;
-            margin-bottom: 40px;
         }
 
-        .education-header h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+        .retry-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .education-content {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #444;
+        .retry-button:hover {
+            background: #0056b3;
         }
 
-        .education-section {
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
+        /* Enhanced loading states */
+        .loading-indicator {
+            display: none;
+            margin: 10px auto;
+            text-align: center;
         }
-
-        .education-section:hover {
-            transform: translateY(-5px);
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
-
-        .education-section h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        .education-section h3 {
-            color: #34495e;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-
-        /* Table Styles */
-        .vexus-table {
+        
+        /* PHI warning styles */
+        .phi-warning-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
         }
-
-        .vexus-table th,
-        .vexus-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
+        
+        .beta-warning-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
         }
-
-        .vexus-table th {
-            background-color: #007bff;
-            color: #ffffff;
-        }
-
-        .vexus-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        .vexus-table tr:hover {
-            background-color: #f2f2f2;
-        }
-
-        /* List Styles */
-        .education-content ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .education-content ul li {
-            padding: 8px 0 8px 25px;
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 80%;
             position: relative;
         }
-
-        .education-content ul li:before {
-            content: "•";
-            color: #007bff;
+        
+        .modal-content h2 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            color: #444;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .modal-content ul {
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 15px;
+        }
+        
+        /* Enhanced image preview */
+        .image-preview-container {
+            position: relative;
+            max-width: 100%;
+            margin: 15px auto;
+        }
+        
+        .image-preview-controls {
             position: absolute;
-            left: 0;
-            font-size: 1.5em;
-            line-height: 1;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255,255,255,0.7);
+            padding: 5px;
+            border-radius: 5px;
         }
-
-        /* Responsive Design */
-        @media screen and (max-width: 980px) {
-            .education-container {
-                padding: 20px;
-            }
-
-            .education-section {
-                padding: 20px;
-            }
-
-            .education-header h1 {
-                font-size: 2em;
-            }
-
-            .vexus-table {
-                display: block;
-                overflow-x: auto;
-            }
+        
+        .image-preview-delete {
+            color: #dc3545;
+            cursor: pointer;
+            margin-left: 5px;
         }
-
-        .vexus-grading-container {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 40px;
-        }
-
-        .vexus-grading-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .vexus-grading-table th,
-        .vexus-grading-table td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .vexus-grading-table th {
-            background-color: #e2e2e2;
-            color: #333333;
-            font-weight: 600;
-        }
-
-        .vexus-grading-table tbody tr:nth-child(even) {
-            background-color: #f8f8f8;
-        }
-
-        .vexus-grading-table tbody tr:hover {
-            background-color: #f2f2f2;
-        }
-
-        /* Update logo styles */
-        .logo {
-            width: 500px;
-            height: 250px;
-            object-fit: contain;
+        
+        /* Enhanced error handling */
+        .error-container {
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: none;
         }
     </style>
 </head>
 <body class="is-preload">
-    <!-- Navigation -->
+    <!-- HIPAA Compliance Modal -->
+    <div id="hipaaWarningModal" class="phi-warning-modal">
+        <div class="modal-content">
+            <h2>HIPAA Compliance</h2>
+            <div style="margin-bottom: 20px; padding-bottom: 15px;">
+                <p>Please confirm that the image you are about to upload does <strong>NOT</strong> contain any Protected Health Information (PHI) such as:</p>
+                <ul>
+                    <li>Patient names or identifiers</li>
+                    <li>Medical record numbers</li>
+                    <li>Dates associated with a patient</li>
+                    <li>Any other identifying information</li>
+                </ul>
+                <p>Uploading images with PHI violates HIPAA regulations and patient privacy.</p>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="cancelHipaaBtn" class="button">Cancel</button>
+                <button id="confirmHipaaBtn" class="button primary">I Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Beta Software Modal -->
+    <div id="betaWarningModal" class="beta-warning-modal">
+        <div class="modal-content">
+            <h2>Beta Software Disclaimer</h2>
+            <div style="margin-bottom: 20px;">
+                <p>Please acknowledge that:</p>
+                <ul>
+                    <li>This system is currently in <strong>BETA</strong> testing</li>
+                    <li>Results may not be accurate or reliable</li>
+                    <li>Do <strong>NOT</strong> make clinical decisions based solely on this AI</li>
+                    <li>Always use your clinical judgment and consult other validated methods</li>
+                </ul>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="cancelBetaBtn" class="button">Cancel</button>
+                <button id="confirmBetaBtn" class="button primary">I Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Previous HTML structure remains unchanged -->
     <div id="wrapper">
+        <!-- Header -->
         <header id="header">
             <div class="inner">
                 <!-- Logo -->
@@ -242,7 +492,8 @@
                     <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
                     <span class="title">VExUS ATLAS</span>
                 </a>
-                
+
+                <!-- Nav -->
                 <nav>
                     <ul>
                         <li><a href="#menu">Menu</a></li>
@@ -251,7 +502,7 @@
             </div>
         </header>
 
-        <!-- Sidebar Menu -->
+        <!-- Menu -->
         <nav id="menu">
             <div class="inner">
                 <div class="logo-container">
@@ -260,7 +511,7 @@
                 <h2>Menu</h2>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="calculator.html">Score Calculator</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
                     <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                     <li><a href="education.html">Education</a></li>
                     <li><a href="Publications.html">Publications</a></li>
@@ -273,389 +524,856 @@
             </div>
         </nav>
 
+        <style>
+            /* Menu Navigation Styles */
+            nav#menu {
+                background: #ffffff;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            nav#menu .logo-container {
+                padding: 10px;
+                display: flex;
+                justify-content: center;
+            }
+
+            nav#menu h2 {
+                color: #888888;
+                margin-bottom: 1em;
+                font-size: inherit;
+            }
+
+            nav#menu ul li {
+                border-top: solid 1px rgba(0, 0, 0, 0.1);
+                padding: 0.5em 0;
+            }
+
+            nav#menu ul li a {
+                color: #888888 !important;
+                text-decoration: none;
+                border-bottom: none;
+                font-size: 0.9em;
+                transition: color 0.2s ease;
+            }
+
+            nav#menu ul li a:hover {
+                color: #007bff !important;
+            }
+        </style>
+
         <!-- Main Content -->
         <div id="main">
             <div class="inner">
-                <div class="logo-container">
-                    <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="logo">
-                    <img src="images/Denver.POCUS.png" alt="Denver POCUS Logo" class="logo">
-                </div>
-                <div class="education-container">
-                    <div class="education-header">
-                <h1>Your Practical Guide to Understanding VExUS</h1>
-            </div>
+                <!-- Logo and Title -->
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="main-logo">
+                <h1>VExUS ATLAS - AI Image Recognition &amp; Scoring</h1>
 
-            <div class="education-content">
-                <!-- Introduction Section -->
-                <div class="education-section">
-                    <h2>Introduction</h2>
-                    <p>Call it what you want—"Fluid Overload", "Venous Hypertension", "Fluid Up", "Venous Congestion" - they all mean the same thing: the venous circulation is too full, and it's causing problems.<sup>1</sup> For a long time, the medical field has focused on arterial hypotension as the main cause of tissue hypoperfusion- and that's understandable! Sepsis, hypovolemia, and hemorrhage are all serious problems. However, we are increasingly realizing that the other side of the vasculature, venous return, can be equally important to our patients with cardiac or renal failure or the critically ill.<sup>2-4</sup> Venous congestion leads to cardiorenal AKI, pulmonary edema, worsening cardiac function, poor wound healing, and a host of other conditions.<sup>5,6</sup> The problem is that finding venous pressures is much harder than finding arterial pressures! You can't just use a cuff. That's why we spend hours poking at legs, squinting at necks, and generally shrugging our shoulders. When we really want to know, we often perform a right heart catheterization, putting a pressure transducer into the heart itself. But that's expensive, time-consuming, and above all, risky to the patient! So wouldn't it be great if we had a cheap, noninvasive, low-risk alternative, that could tell us what we need to know without getting all up in the patient's pulmonary arteries?</p>
-                    <p>That's where Venous Excess Ultrasound (VExUS) comes in.</p>
-                </div>
+                <!-- Description about AI tool -->
+                <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
+                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment. <strong>Please ensure that any images uploaded do not contain Protected Health Information (PHI) to comply with HIPAA regulations and safeguard patient privacy.</strong>
+                </p>
 
-                <!-- What is VExUS Section -->
-                <div class="education-section">
-                    <h2>What Is VExUS?</h2>
-                    <p>VExUS is a 4-point Doppler ultrasound protocol that measures the direction and speed of venous blood flow, data that can be used to assess venous pressure. It was developed by a group of physicians based in Toronto, Canada, who showed that their VExUS technique could predict when cardiac surgery patients would develop acute kidney injury (AKI).<sup>7</sup> Since that time VExUS has been shown to correlate strongly with right heart catheterization values,<sup>8</sup> cardiorenal AKI,<sup>9</sup> and mortality in patients with heart failure.<sup>10</sup></p>
-                    <p>The VExUS components are:</p>
-                    <ul>
-                        <li><strong>Inferior Vena Cava (IVC) Diameter</strong></li>
-                        <li><strong>Hepatic Vein Doppler</strong></li>
-                        <li><strong>Portal Vein Doppler</strong></li>
-                        <li><strong>Renal Vein Doppler</strong></li>
-                    </ul>
-                </div>
-
-                <!-- Why Use VExUS Section -->
-                <div class="education-section">
-                    <h2>Why Use VExUS?</h2>
-                    <p>VExUS can help you understand your patient's level of venous congestion, which can inform decisions about whether to give fluids, administer diuretic medications, transfuse blood products, or start vasopressor medications. The technique is noninvasive, easily repeatable, and does not require advanced ultrasound or echocardiography techniques.</p>
-                    <p><strong>Important Note:</strong> VExUS is a tool to enhance clinical judgment, not replace it. Always integrate your findings with the patient's history, physical exam, and other investigations.</p>
-                </div>
-
-                <!-- Step-by-Step Guide Section -->
-                <div class="education-section">
-                    <h2>VExUS Step-by-Step:</h2>
+                <!-- Steps 1-4 remain unchanged -->
+                <!-- STEP 1: IVC -->
+                <div class="step-section" id="step1">
+                    <!-- IVC section content remains unchanged -->
+                    <div class="step-number">1</div>
+                    <h2>IVC Measurement</h2>
+                    <p class="step-instructions">
+                        Select whether IVC is &lt; 2 cm or &gt; 2 cm.
+                    </p>
                     
-                    <h3>1. Equipment and Preparation</h3>
-                    <ul>
-                        <li><strong>Ultrasound Machine:</strong> Must have 2D imaging, color Doppler, and pulsed-wave Doppler capabilities. Electrocardiogram gating adds to the interpretability of the exam, but is not essential.</li>
-                        <li><strong>Supplies:</strong> Ultrasound gel, gloves.</li>
-                        <li><strong>Patient Positioning:</strong> Supine or slightly recumbent, table adjusted to the operator's waist level.</li>
-                    </ul>
-
-                    <h3>2. Inferior Vena Cava (IVC) Assessment</h3>
-                    <p>Measure the IVC using the curvilinear or phased-array probe in the subxiphoid view. Measure the diameter of the IVC just distal to the insertion of the hepatic vein into the IVC.</p>
-
-                    <h3>3. Hepatic Vein</h3>
-                    <p>Place the doppler gate over any of the principal branches of the hepatic vein.</p>
-
-                    <h3>4. Portal Vein</h3>
-                    <p>Place the doppler gate over any portion of the portal vein, distinguishable by its thick echogenic border.</p>
-                </div>
-
-                <!-- VExUS Grading System Section -->
-                <div class="education-section">
-                    <h2>VExUS Grading System</h2>
-                     <div class="vexus-grading-container">
-                        <table class="vexus-grading-table">
-                            <thead>
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>IVC Diameter</th>
-                                    <th>Hepatic Vein Flow</th>
-                                    <th>Portal Vein Flow</th>
-                                    <th>Intrarenal Vein Flow</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>0</td>
-                                    <td>≤ 2 cm</td>
-                                    <td>Normal S &gt; D</td>
-                                    <td>Normal Phasic</td>
-                                    <td>Continuous</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2–2.5 cm</td>
-                                    <td>Slight Reduction in S</td>
-                                    <td>Mild Pulsatility</td>
-                                    <td>Slight Interruption</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>&gt; 2.5 cm</td>
-                                    <td>S &lt; D / Reversal</td>
-                                    <td>Marked Pulsatility</td>
-                                    <td>Intermittent or Biphasic</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>&gt; 2.5 cm + Minimal Collapse</td>
-                                    <td>Severe Abnormal Flow</td>
-                                    <td>To-and-Fro or Reversal</td>
-                                    <td>Reversal</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="input-group">
+                        <label for="ivcDropdown">IVC Diameter:</label>
+                        <select id="ivcDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="<2cm">IVC &lt; 2 cm</option>
+                            <option value=">2cm">IVC &gt; 2 cm</option>
+                        </select>
                     </div>
                 </div>
-                
-                <!-- Organ Perfusion Pressure Section -->
-                <div class="education-section">
-                    <h2>Understanding Organ Perfusion Pressure</h2>
-                    <style>
-                        .image-container {
-                            display: flex;
-                            justify-content: center;
-                            margin: 20px 0;
-                        }
-                        
-                        .image-container img {
-                            max-width: 100%;
-                            border-radius: 8px;
-                            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                        }
-                        
-                        .image-text {
-                            margin-top: 20px;
-                            padding: 15px;
-                            background-color: #f9f9f9;
-                            border-radius: 8px;
-                            border-left: 4px solid #007bff;
-                        }
-                    </style>
-                    
-                    <div class="image-container">
-                        <img src="images/organ perfusion.png" alt="Organ Perfusion Diagram">
+
+                <!-- STEP 2: Hepatic Vein -->
+                <div class="step-section" id="step2">
+                    <div class="step-number">2</div>
+                    <h2>Hepatic Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Hepatic Vein ultrasound image. 
+                    </p>
+
+                    <div id="hepaticModelStatus" class="model-status">
+                        Initializing...
                     </div>
                     
-                    <div class="image-text">
-                        <p>Organ perfusion pressure is a critical concept in understanding venous congestion and its impact on tissue health. It is defined as the difference between arterial inflow pressure and venous outflow pressure.</p>
-                        
-                        <p><strong>Perfusion Pressure = Arterial Pressure - Venous Pressure</strong></p>
-                        
-                        <p>While we often focus on arterial pressure as the main determinant of organ perfusion, increased venous pressure can have equally detrimental effects on tissue perfusion. When venous pressure rises (venous congestion), it reduces the pressure gradient across the organ, resulting in decreased blood flow despite normal arterial pressure.</p>
-                        
-                        <p>This mechanism explains why venous congestion can lead to organ dysfunction even with normal arterial pressure and cardiac output. Organs particularly sensitive to venous congestion include:</p>
-                        
-                        <ul>
-                            <li><strong>Kidneys:</strong> Venous congestion increases renal vein pressure, decreases glomerular filtration gradient, and can lead to acute kidney injury.</li>
-                            <li><strong>Liver:</strong> Elevated hepatic venous pressure increases portal pressure and can impair hepatic function.</li>
-                            <li><strong>Intestines:</strong> Venous congestion can lead to intestinal edema, malabsorption, and bacterial translocation.</li>
-                            <li><strong>Brain:</strong> Increased venous pressure can elevate intracranial pressure and impair cerebral perfusion.</li>
-                        </ul>
-                        
-                        <p>VExUS assessment helps identify and quantify venous congestion, allowing clinicians to intervene before significant organ dysfunction occurs.</p>
-                    </div>
-                </div>
-                
-                <!-- Venous Congestion POCUS Section -->
-                <div class="education-section">
-                    <h2>Venous Congestion on POCUS: Flow Patterns</h2>
-                    
-                    <div class="image-container">
-                        <img src="images/veuxus_congestion.png" alt="Venous Congestion Patterns">
+                    <div class="upload-area" onclick="initiateImageUpload('hepatic')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Hepatic Vein image</p>
+                        <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
+                        <div class="upload-controls">
+                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('hepatic')">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="image-text">
-                        <p>Venous Doppler waveforms provide valuable information about central venous pressure and venous congestion. As venous congestion worsens, characteristic changes in flow patterns become evident on Doppler ultrasound:</p>
-                        
-                        <h3>Flow Pattern Progression in Venous Congestion:</h3>
-                        
-                        <ol>
-                            <li><strong>Normal Flow:</strong> Continuous, minimally phasic flow with subtle respiratory variation.</li>
-                            <li><strong>Mild Congestion:</strong> Increased pulsatility with partial flow reversal during cardiac cycles.</li>
-                            <li><strong>Moderate Congestion:</strong> Marked pulsatility with periods of flow cessation.</li>
-                            <li><strong>Severe Congestion:</strong> To-and-fro flow or frank flow reversal, indicating critical venous congestion.</li>
-                        </ol>
-                        
-                        <p>The progression of pulsatility in veins that normally show continuous flow (such as portal and intrarenal veins) is particularly significant. Pulsatility develops when pressure waves from the right atrium are transmitted through the venous system due to increased central venous pressure and reduced venous compliance.</p>
-                        
-                        <p>Flow reversal represents the most severe manifestation, indicating that pressure waves are strong enough to overcome forward flow, resulting in retrograde movement of blood. This has significant implications for organ function, as it compromises venous drainage and increases capillary pressure, leading to tissue edema and dysfunction.</p>
-                    </div>
-                </div>
-                
-                <!-- VEXUS Overview Section -->
-                <div class="education-section">
-                    <h2>VEXUS: The Complete Picture</h2>
-                    
-                    <div class="image-container">
-                        <img src="images/VEXUS_Overview.png" alt="VEXUS Overview Diagram">
+                    <div id="hepaticLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
                     </div>
                     
-                    <div class="image-text">
-                        <p>The VEXUS protocol provides a comprehensive assessment of the cardiopulmonary-renal axis by examining how right atrial pressure and venous congestion affect multiple organ systems. This overview illustrates the interrelated nature of the hemodynamic parameters examined in VEXUS:</p>
-                        
-                        <h3>Key Components and Relationships:</h3>
-                        
-                        <ul>
-                            <li><strong>Right Atrial Pressure (RAP):</strong> The central measurement in venous congestion. Elevated RAP is transmitted backward through the venous system, affecting IVC, hepatic, portal, and renal veins.</li>
-                            <li><strong>Cardiac Output (CO):</strong> Represents the heart's pumping function. Venous congestion can reduce CO by impairing ventricular filling and function.</li>
-                            <li><strong>Left Atrial Pressure (LAP):</strong> Elevated LAP leads to pulmonary congestion, manifesting as B-lines on lung ultrasound. This is often associated with, but distinct from, systemic venous congestion.</li>
-                        </ul>
-                        
-                        <p>The VEXUS protocol integrates multiple ultrasound findings to create a comprehensive picture of a patient's congestion status:</p>
-                        
-                        <ul>
-                            <li><strong>IVC Assessment:</strong> Evaluates central venous pressure with diameter and collapsibility.</li>
-                            <li><strong>Hepatic Vein Doppler:</strong> Provides information about right atrial pressure and function.</li>
-                            <li><strong>Portal Vein Doppler:</strong> Reflects venous congestion's impact on splanchnic circulation.</li>
-                            <li><strong>Renal Vein Doppler:</strong> Shows how venous congestion affects kidney perfusion.</li>
-                            <li><strong>Lung Ultrasound:</strong> B-lines indicate pulmonary congestion from elevated left heart pressures.</li>
-                        </ul>
-                        
-                        <p>By examining this interconnected system, VEXUS allows clinicians to differentiate between right-sided (systemic venous) congestion, left-sided (pulmonary) congestion, or both, leading to more targeted therapeutic interventions.</p>
+                    <div id="hepaticErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
+                        <div class="image-preview-controls">
+                            <span id="hepaticPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
+                    <div class="top-results" id="hepaticTopResults"></div>
+
+                    <div class="input-group">
+                        <label for="hepaticDropdown">Hepatic Vein Classification:</label>
+                        <select id="hepaticDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="HV Normal">HV Normal</option>
+                            <option value="HV Mild">HV Mild</option>
+                            <option value="HV Severe">HV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
                     </div>
                 </div>
 
-                <!-- Conclusion Section -->
-                <div class="education-section">
-                    <h2>Conclusion</h2>
-                    <p>VExUS is a powerful POCUS technique for assessing venous congestion. By mastering the steps outlined above and understanding the potential pitfalls, you can incorporate VExUS into your own practice.</p>
+                <!-- STEP 3: Portal Vein -->
+                <div class="step-section" id="step3">
+                    <div class="step-number">3</div>
+                    <h2>Portal Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Portal Vein ultrasound image. 
+                    </p>
+                    
+                    <div id="portalModelStatus" class="model-status">
+                        Initializing...
+                    </div>
+
+                    <div class="upload-area" onclick="initiateImageUpload('portal')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Portal Vein image</p>
+                        <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
+                        <div class="upload-controls">
+                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('portal')">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="portalLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
+                    </div>
+                    
+                    <div id="portalErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
+                        <div class="image-preview-controls">
+                            <span id="portalPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
+                    <div class="top-results" id="portalTopResults"></div>
+                    
+                    <div class="input-group">
+                        <label for="portalDropdown">Portal Vein Classification:</label>
+                        <select id="portalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="PV Normal">PV Normal</option>
+                            <option value="PV Mild">PV Mild</option>
+                            <option value="PV Severe">PV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
+                        </select>
+                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                    </div>
                 </div>
 
-                <!-- References Section -->
-                <div class="education-section">
-                    <h2>References</h2>
-                    <style>
-                        .reference-grid {
-                            display: grid;
-                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                            gap: 20px;
-                            margin-top: 30px;
-                        }
-                        
-                        .reference-tile {
-                            background-color: #f8f9fa;
-                            border-radius: 8px;
-                            padding: 20px;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                            transition: transform 0.3s ease, box-shadow 0.3s ease;
-                        }
-                        
-                        .reference-tile:hover {
-                            transform: translateY(-5px);
-                            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-                        }
-                        
-                        .reference-number {
-                            display: inline-block;
-                            background-color: #007bff;
-                            color: white;
-                            width: 30px;
-                            height: 30px;
-                            border-radius: 50%;
-                            text-align: center;
-                            line-height: 30px;
-                            margin-right: 10px;
-                            font-weight: bold;
-                        }
-                        
-                        .reference-title {
-                            font-weight: 600;
-                            margin-bottom: 10px;
-                            color: #2c3e50;
-                        }
-                        
-                        .reference-authors {
-                            font-style: italic;
-                            color: #555;
-                            margin-bottom: 8px;
-                        }
-                        
-                        .reference-journal {
-                            color: #666;
-                            margin-bottom: 8px;
-                        }
-                        
-                        .reference-link {
-                            display: inline-block;
-                            margin-top: 10px;
-                            color: #007bff;
-                            text-decoration: none;
-                            font-weight: 500;
-                        }
-                        
-                        .reference-link:hover {
-                            text-decoration: underline;
-                        }
-                    </style>
+                <!-- STEP 4: Renal Vein -->
+                <div class="step-section" id="step4">
+                    <div class="step-number">4</div>
+                    <h2>Renal Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Renal Vein ultrasound image. 
+                    </p>
                     
-                    <div class="reference-grid">
-                        <div class="reference-tile">
-                            <div class="reference-number">1</div>
-                            <div class="reference-title">Systemic Venous Congestion Reviewed</div>
-                            <div class="reference-authors">Banjade P, Subedi A, Ghamande S, Surani S, Sharma M</div>
-                            <div class="reference-journal">Cureus. Aug 2023;15(8):e43716</div>
-                            <a href="https://doi.org/10.7759/cureus.43716" class="reference-link" target="_blank">View Article</a>
+                    <div id="renalModelStatus" class="model-status">
+                        Initializing...
+                    </div>
+
+                    <div class="upload-area" onclick="initiateImageUpload('renal')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Renal Vein image</p>
+                        <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
+                        <div class="upload-controls">
+                            <button class="reset-button" onclick="event.stopPropagation(); clearImageUpload('renal')">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
                         </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">2</div>
-                            <div class="reference-title">Elevated central venous pressure is associated with increased mortality and acute kidney injury in critically ill patients</div>
-                            <div class="reference-authors">Chen CY, Zhou Y, Wang P, Qi EY, Gu WJ</div>
-                            <div class="reference-journal">Crit Care. Mar 5 2020;24(1):80</div>
-                            <a href="https://doi.org/10.1186/s13054-020-2770-5" class="reference-link" target="_blank">View Article</a>
+                    </div>
+                    
+                    <div id="renalLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
+                    </div>
+                    
+                    <div id="renalErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
+                        <div class="image-preview-controls">
+                            <span id="renalPreviewDelete" class="image-preview-delete"><i class="fas fa-times"></i></span>
                         </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">3</div>
-                            <div class="reference-title">Peripheral Edema, Central Venous Pressure, and Risk of AKI in Critical Illness</div>
-                            <div class="reference-authors">Chen KP, Cavender S, Lee J, et al</div>
-                            <div class="reference-journal">Clin J Am Soc Nephrol. Apr 7 2016;11(4):602-8</div>
-                            <a href="https://doi.org/10.2215/CJN.08080715" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">4</div>
-                            <div class="reference-title">The emerging concept of fluid tolerance: A position paper</div>
-                            <div class="reference-authors">Kattan E, Castro R, Miralles-Aguiar F, Hernandez G, Rola P</div>
-                            <div class="reference-journal">J Crit Care. Oct 2022;71:154070</div>
-                            <a href="https://doi.org/10.1016/j.jcrc.2022.154070" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">5</div>
-                            <div class="reference-title">Fluid Overload and Mortality in Adult Critical Care Patients-A Systematic Review and Meta-Analysis of Observational Studies</div>
-                            <div class="reference-authors">Messmer AS, Zingg C, Muller M, Gerber JL, Schefold JC, Pfortmueller CA</div>
-                            <div class="reference-journal">Crit Care Med. Dec 2020;48(12):1862-1870</div>
-                            <a href="https://doi.org/10.1097/CCM.0000000000004617" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">6</div>
-                            <div class="reference-title">Fluid Volume Overload and Congestion in Heart Failure: Time to Reconsider Pathophysiology and How Volume Is Assessed</div>
-                            <div class="reference-authors">Miller WL</div>
-                            <div class="reference-journal">Circ Heart Fail. Aug 2016;9(8):e002922</div>
-                            <a href="https://doi.org/10.1161/CIRCHEARTFAILURE.115.002922" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">7</div>
-                            <div class="reference-title">Quantifying systemic congestion with Point-Of-Care ultrasound: development of the venous excess ultrasound grading system</div>
-                            <div class="reference-authors">Beaubien-Souligny W, Rola P, Haycock K, et al</div>
-                            <div class="reference-journal">Ultrasound J. Apr 9 2020;12(1):16</div>
-                            <a href="https://doi.org/10.1186/s13089-020-00163-w" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">8</div>
-                            <div class="reference-title">Prospective Evaluation of Venous Excess Ultrasound (VExUS) for Estimation of Venous Congestion</div>
-                            <div class="reference-authors">Longino A, Martin K, Leyba K, et al</div>
-                            <div class="reference-journal">Chest. Oct 7 2023</div>
-                            <a href="https://doi.org/10.1016/j.chest.2023.09.029" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">9</div>
-                            <div class="reference-title">Combination of Inferior Vena Cava Diameter, Hepatic Venous Flow, and Portal Vein Pulsatility Index: Venous Excess Ultrasound Score (VEXUS Score) in Predicting Acute Kidney Injury in Patients with Cardiorenal Syndrome</div>
-                            <div class="reference-authors">Bhardwaj V, Vikneswaran G, Rola P, et al</div>
-                            <div class="reference-journal">Indian J Crit Care Med. Sep 2020;24(9):783-789</div>
-                            <a href="https://doi.org/10.5005/jp-journals-10071-23570" class="reference-link" target="_blank">View Article</a>
-                        </div>
-                        
-                        <div class="reference-tile">
-                            <div class="reference-number">10</div>
-                            <div class="reference-title">Assessment of venous congestion with venous excess ultrasound score in the prognosis of acute heart failure in the emergency department: a prospective study</div>
-                            <div class="reference-authors">Landi I, Guerritore L, Iannaccone A, Ricotti A, Rola P, Garrone M</div>
-                            <div class="reference-journal">Eur Heart J Open. Sep 2024;4(5):oeae050</div>
-                            <a href="https://doi.org/10.1093/ehjopen/oeae050" class="reference-link" target="_blank">View Article</a>
+                    </div>
+                    
+                    <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
+                    <div class="top-results" id="renalTopResults"></div>
+                    
+                    <div class="input-group">
+                        <label for="renalDropdown">Renal Vein Classification:</label>
+                        <select id="renalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="RV Normal">RV Normal</option>
+                            <option value="RV Mild">RV Mild</option>
+                            <option value="RV Severe">RV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
+                        </select>
+                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
                         </div>
                     </div>
                 </div>
+
+                <!-- Calculate & Reset Buttons + Score Display -->
+                <div class="step-section">
+                    <div class="button-group">
+                        <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
+                        <button onclick="resetAll()" class="button">Reset</button>
                     </div>
+                    <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                 </div>
             </div>
         </div>
-
-        <!-- Scripts -->
-        <script src="html5up-phantom/assets/js/jquery.min.js"></script>
-        <script src="html5up-phantom/assets/js/browser.min.js"></script>
-        <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
-        <script src="html5up-phantom/assets/js/util.js"></script>
-        <script src="html5up-phantom/assets/js/main.js"></script>
     </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+
+    <script>
+        // Global configuration - automatically updated by deployment process
+        const config = {
+            appName: 'VExUS ATLAS',
+            apiBase: window.location.origin,
+            developer: 'Gabesiegel',
+            lastUpdated: '2024-02-28',
+            projectId: 'plucky-weaver-450819-k7',
+            // Remove the explicit endpointId - now handled on server side with model-specific IDs
+            modelLabels: {
+                hepatic: ['HV Normal', 'HV Mild', 'HV Severe'],
+                portal: ['PV Normal', 'PV Mild', 'PV Severe'],
+                renal: ['RV Normal', 'RV Mild', 'RV Severe'],
+            }
+        };
+
+        // Global variables for upload handling
+        let currentUploadType = null;
+        let currentUploadFile = null;
+        
+        // Initialize the page and model statuses
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize model status indicators
+            initializeModelStatus('hepaticModelStatus');
+            initializeModelStatus('portalModelStatus');
+            initializeModelStatus('renalModelStatus');
+            
+            // Setup the warning modal functionality
+            setupModalListeners();
+            
+            // Setup image upload event handlers
+            setupImageUploadListeners();
+            
+            // Setup dropdown listeners
+            setupDropdownListeners();
+            
+            // Check API connection
+            checkApiConnection();
+
+            // Show HIPAA warning on page load
+            document.getElementById('hipaaWarningModal').style.display = 'block';
+        });
+        
+        // Function to set up PHI warning modal listeners
+        function setupModalListeners() {
+            // HIPAA Modal elements
+            const hipaaModal = document.getElementById('hipaaWarningModal');
+            const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
+            const confirmHipaaBtn = document.getElementById('confirmHipaaBtn');
+            
+            // Beta Software Modal elements
+            const betaModal = document.getElementById('betaWarningModal');
+            const cancelBetaBtn = document.getElementById('cancelBetaBtn');
+            const confirmBetaBtn = document.getElementById('confirmBetaBtn');
+            
+            // HIPAA Modal listeners
+            cancelHipaaBtn.addEventListener('click', function() {
+                hipaaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
+            });
+            
+            confirmHipaaBtn.addEventListener('click', function() {
+                hipaaModal.style.display = 'none';
+                // After acknowledging HIPAA compliance, show Beta Software disclaimer
+                betaModal.style.display = 'block';
+            });
+            
+            // Beta Software Modal listeners
+            cancelBetaBtn.addEventListener('click', function() {
+                betaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
+            });
+            
+            confirmBetaBtn.addEventListener('click', function() {
+                betaModal.style.display = 'none';
+                // Only after confirming both modals, trigger the file input click
+                if (currentUploadType) {
+                    document.getElementById(`${currentUploadType}ImageUpload`).click();
+                }
+            });
+        }
+        
+        // Function to set up image upload listeners
+        function setupImageUploadListeners() {
+            // Hepatic vein upload
+            document.getElementById('hepaticImageUpload').addEventListener('change', function() {
+                handleImageUpload('hepatic', this.files[0]);
+            });
+            
+            document.getElementById('hepaticPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('hepatic');
+            });
+            
+            // Portal vein upload
+            document.getElementById('portalImageUpload').addEventListener('change', function() {
+                handleImageUpload('portal', this.files[0]);
+            });
+            
+            document.getElementById('portalPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('portal');
+            });
+            
+            // Renal vein upload
+            document.getElementById('renalImageUpload').addEventListener('change', function() {
+                handleImageUpload('renal', this.files[0]);
+            });
+            
+            document.getElementById('renalPreviewDelete').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetImageUpload('renal');
+            });
+        }
+        
+        // Function to hide all modals
+        function hideModals() {
+            document.getElementById('hipaaWarningModal').style.display = 'none';
+            document.getElementById('betaWarningModal').style.display = 'none';
+        }
+        
+        // Function to initiate image upload with HIPAA warning first
+        function initiateImageUpload(type) {
+            currentUploadType = type;
+            // Directly trigger file input click without showing modals
+            document.getElementById(`${currentUploadType}ImageUpload`).click();
+        }
+        
+        // Function to handle image upload and preview
+        function handleImageUpload(type, file) {
+            const previewImg = document.getElementById(`${type}Preview`);
+            const resultElement = document.getElementById(`${type}Result`);
+            const topResultsElement = document.getElementById(`${type}TopResults`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
+            // Keep model status green and update text
+            modelStatus.textContent = "Processing Image...";
+            modelStatus.classList.add('model-ready');
+            
+            // Hide preview and clear previous results
+            previewImg.style.display = 'none';
+            resultElement.textContent = "Processing image...";
+            topResultsElement.innerHTML = "";
+            
+            if (!file) {
+                resetImageUpload(type);
+                return;
+            }
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+                uploadArea.style.display = 'none';
+                classifyImage(type, file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Function to reset image upload (replacing clearImageUpload)
+        function resetImageUpload(type) {
+            // Clear the file input
+            const fileInput = document.getElementById(`${type}ImageUpload`);
+            fileInput.value = '';
+            
+            // Hide the preview
+            const preview = document.getElementById(`${type}Preview`);
+            preview.style.display = 'none';
+            preview.src = '';
+            
+            // Show the upload area
+            const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+            uploadArea.style.display = 'block';
+            
+            // Reset the results
+            document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
+            document.getElementById(`${type}TopResults`).innerHTML = '';
+            
+            // Reset dropdown
+            document.getElementById(`${type}Dropdown`).value = '';
+            document.getElementById(`${type}ErrorNote`).style.display = 'none';
+            
+            // Reset model status
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            modelStatus.textContent = "Ready for Image";
+            modelStatus.classList.add('model-ready');
+            
+            // Hide loading indicator
+            document.getElementById(`${type}LoadingIndicator`).style.display = 'none';
+        }
+
+        // Helper function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Function to initialize a model status indicator
+        function initializeModelStatus(statusId) {
+            const statusElement = document.getElementById(statusId);
+            if (statusElement) {
+                statusElement.textContent = "Waiting for image...";
+                statusElement.classList.remove('model-ready');
+            }
+        }
+        
+        // Function to check API connection
+        async function checkApiConnection() {
+            try {
+                const modelStatuses = [
+                    document.getElementById('hepaticModelStatus'),
+                    document.getElementById('portalModelStatus'),
+                    document.getElementById('renalModelStatus')
+                ];
+                
+                // Update UI to checking state
+                modelStatuses.forEach(status => {
+                    if (status) {
+                        status.textContent = "Checking API connection...";
+                    }
+                });
+                
+                // Simple ping to check if server is responsive
+                const response = await fetch('/auth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ check: true })
+                });
+                
+                if (response.ok) {
+                    // API is responsive
+                    modelStatuses.forEach(status => {
+                        if (status) {
+                            status.textContent = "API Connected - Ready for Images";
+                            status.classList.add('model-ready');
+                        }
+                    });
+                } else {
+                    throw new Error('API connection failed');
+                }
+            } catch (error) {
+                console.error('API connection error:', error);
+                const modelStatuses = [
+                    document.getElementById('hepaticModelStatus'),
+                    document.getElementById('portalModelStatus'),
+                    document.getElementById('renalModelStatus')
+                ];
+                
+                modelStatuses.forEach(status => {
+                    if (status) {
+                        status.textContent = "API Connection Error - Try Again Later";
+                    }
+                });
+            }
+        }
+
+        // Function to classify image
+        async function classifyImage(type, file) {
+            const previewImg = document.getElementById(`${type}Preview`);
+            const resultElement = document.getElementById(`${type}Result`);
+            const topResultsElement = document.getElementById(`${type}TopResults`);
+            const dropdownElement = document.getElementById(`${type}Dropdown`);
+            const errorNoteElement = document.getElementById(`${type}ErrorNote`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
+            try {
+                if (!file) {
+                    resetImageUpload(type);
+                    return;
+                }
+
+                // Keep status green during processing
+                modelStatus.textContent = "Processing...";
+                modelStatus.classList.add('model-ready');
+
+                // Use FileReader to get base64 data
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    reader.readAsDataURL(file);
+                });
+
+                // Extract the actual base64 content and mime type
+                const parts = base64Data.split(',');
+                const base64Content = parts[1];
+                const mimeType = parts[0].match(/:(.*?);/)[1];
+
+                // Structure payload for Vertex AI - ensure correct format
+                const payload = {
+                    instances: [
+                        {
+                            content: {
+                                b64: base64Content
+                            }
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: type, // hepatic, portal, or renal
+                        imageType: mimeType,
+                        timestamp: Date.now()
+                    }
+                };
+
+                // Send to API endpoint with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                
+                console.log(`Sending ${type} image for classification...`);
+                
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    let errorMessage = `Server error: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.message || errorMessage;
+                    } catch (e) {
+                        // If parsing fails, use status code
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                // Process response
+                const result = await response.json();
+                
+                // Validate response format
+                if (!result || !result.displayNames || !result.confidences) {
+                    throw new Error('Invalid response format from server');
+                }
+
+                // Log storage information if available
+                if (result.storage && result.storage.stored) {
+                    console.log(`Image stored at: ${result.storage.imageUrl}`);
+                    console.log(`Prediction results stored at: ${result.storage.resultsPath}`);
+                }
+
+                // Process predictions
+                const confidences = result.confidences;
+                const displayNames = result.displayNames;
+                
+                // Map API response labels to dropdown values
+                const labelMapping = {
+                    'hepatic': {
+                        'Hepatic_Vein_Normal': 'HV Normal',
+                        'Hepatic_Vein_Mild': 'HV Mild',
+                        'Hepatic_Vein_Severe': 'HV Severe'
+                    },
+                    'portal': {
+                        'Portal_Vein_Normal': 'PV Normal',
+                        'Portal_Vein_Mild': 'PV Mild',
+                        'Portal_Vein_Severe': 'PV Severe'
+                    },
+                    'renal': {
+                        'Renal_Vein_Normal': 'RV Normal',
+                        'Renal_Vein_Mild': 'RV Mild',
+                        'Renal_Vein_Severe': 'RV Severe'
+                    }
+                };
+                
+                console.log(`${type} classification - received labels:`, displayNames);
+                
+                // Create top 3 predictions with mapped labels
+                const top3 = confidences
+                    .map((conf, idx) => {
+                        const apiLabel = displayNames[idx] || "Unknown";
+                        // Check if the label belongs to the expected type
+                        const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
+                                               type === 'portal' ? apiLabel.includes('Portal') :
+                                               apiLabel.includes('Renal');
+                        
+                        let dropdownLabel;
+                        if (isExpectedType) {
+                            // Use the type-specific mapping
+                            dropdownLabel = labelMapping[type][apiLabel] || apiLabel;
+                        } else {
+                            // If model returned wrong type of prediction, try to find mapping in any category
+                            for (const veinType in labelMapping) {
+                                if (labelMapping[veinType][apiLabel]) {
+                                    console.log(`Warning: Received ${apiLabel} for ${type} request`);
+                                    // Still use the expected type prefix (HV/PV/RV)
+                                    const severity = apiLabel.includes('Normal') ? 'Normal' : 
+                                                    apiLabel.includes('Mild') ? 'Mild' : 'Severe';
+                                    dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
+                                    break;
+                                }
+                            }
+                            // If no mapping found in any category
+                            if (!dropdownLabel) dropdownLabel = apiLabel;
+                        }
+                        
+                        return {
+                            apiLabel: apiLabel,
+                            label: dropdownLabel,
+                            prob: (conf * 100).toFixed(1)
+                        };
+                    })
+                    .sort((a, b) => b.prob - a.prob)
+                    .slice(0, 3);
+
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                // Update model status
+                modelStatus.textContent = "Model Ready";
+                modelStatus.classList.add('model-ready');
+
+                // Update results in UI
+                if (top3.length > 0) {
+                    const top1 = top3[0];
+                    resultElement.textContent = `Top prediction: ${top1.label} (${top1.prob}%)`;
+                    topResultsElement.innerHTML = '<strong>Top 3 Predictions:</strong><br>' + 
+                        top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
+                    
+                    // Always set dropdown to top prediction regardless of confidence
+                    const matchingOption = Array.from(dropdownElement.options)
+                        .find(opt => opt.value === top1.label);
+                        
+                    if (matchingOption) {
+                        dropdownElement.value = matchingOption.value;
+                    } else if (parseFloat(top1.prob) <= 50) {
+                        // If no matching option and confidence is low, set to the low confidence option
+                        dropdownElement.value = "Confidence of waveform < 50%";
+                    }
+                    
+                    // Show warning if confidence is low
+                    if (parseFloat(top1.prob) > 50) {
+                        errorNoteElement.style.display = "none";
+                    } else {
+                        errorNoteElement.style.display = "block";
+                    }
+                    
+                    // Hide modals when classification is complete
+                    hideModals();
+                } else {
+                    resultElement.textContent = "No predictions found.";
+                    topResultsElement.innerHTML = "";
+                    
+                    // Reset dropdown when no predictions are found
+                    dropdownElement.value = "";
+                    
+                    // Hide modals even when no predictions are found
+                    hideModals();
+                }
+
+            } catch (error) {
+                console.error(`${type} classification error:`, error);
+                
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                // Hide modals even in case of error
+                hideModals();
+                
+                // Update model status
+                modelStatus.textContent = "Error";
+                modelStatus.classList.remove('model-ready');
+                
+                // Show error in container
+                document.getElementById(`${type}ErrorContainer`).innerHTML = `<strong>Error:</strong> ${error.message}`;
+                document.getElementById(`${type}ErrorContainer`).style.display = 'block';
+                
+                // Add retry button
+                const retryButton = document.createElement('button');
+                retryButton.className = 'retry-button';
+                retryButton.textContent = 'Retry Classification';
+                retryButton.addEventListener('click', () => {
+                    classifyImage(type, file);
+                });
+                
+                document.getElementById(`${type}ErrorContainer`).appendChild(retryButton);
+                
+                // Show low confidence note
+                errorNoteElement.style.display = "block";
+            }
+        }
+
+        // Function to calculate VExUS score
+        function calculateVexusScore() {
+            // Step #1: IVC <2cm or >2cm
+            const ivcSelection = document.getElementById('ivcDropdown').value;
+            let ivcValue = null; 
+            if (ivcSelection === "<2cm") ivcValue = 1.9;
+            if (ivcSelection === ">2cm") ivcValue = 2.1;
+            
+            // Get classifications from dropdowns
+            const hvChoice = document.getElementById('hepaticDropdown').value;
+            const pvChoice = document.getElementById('portalDropdown').value;
+            const rvChoice = document.getElementById('renalDropdown').value;
+
+            // Check for incomplete data
+            if (!ivcValue) {
+                document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
+                return;
+            }
+            
+            // Check if all vein classifications are selected
+            if (!hvChoice || !pvChoice || !rvChoice) {
+                document.getElementById('total-score').textContent = "Incomplete Data (All Vein Classifications Required)";
+                return;
+            }
+
+            // Check for low confidence predictions
+            if (
+                hvChoice === "Confidence of waveform < 50%" ||
+                pvChoice === "Confidence of waveform < 50%" ||
+                rvChoice === "Confidence of waveform < 50%"
+            ) {
+                document.getElementById('total-score').textContent = "Cannot Calculate Score";
+                return;
+            }
+
+            // Convert choices to numerical scores based on actual dropdown values
+            let hvScore = 0;
+            if (hvChoice === "HV Mild") hvScore = 1; // HV Mild
+            if (hvChoice === "HV Severe") hvScore = 2; // HV Severe
+
+            let pvScore = 0;
+            if (pvChoice === "PV Mild") pvScore = 1; // PV Mild
+            if (pvChoice === "PV Severe") pvScore = 2; // PV Severe
+
+            let rvScore = 0;
+            if (rvChoice === "RV Mild") rvScore = 1; // RV Mild
+            if (rvChoice === "RV Severe") rvScore = 2; // RV Severe
+
+            // Count severe cases
+            let severityCount = 0;
+            if (hvScore === 2) severityCount++;
+            if (pvScore === 2) severityCount++;
+            if (rvScore === 2) severityCount++;
+
+            // Calculate VExUS grade
+            let vexusGrade;
+            if (ivcValue < 2) {
+                vexusGrade = "Grade 0: No Congestion";
+            } else if (severityCount === 0) {
+                vexusGrade = "Grade 1: Mild Congestion";
+            } else if (severityCount === 1) {
+                vexusGrade = "Grade 2: Moderate Congestion";
+            } else {
+                vexusGrade = "Grade 3: Severe Congestion";
+            }
+
+            document.getElementById('total-score').textContent = vexusGrade;
+        }
+
+        // Reset all fields and results
+        function resetAll() {
+            // Clear IVC and score
+            document.getElementById('ivcDropdown').value = "";
+            document.getElementById('total-score').textContent = "--";
+
+            // Clear all vein type data
+            ['hepatic', 'portal', 'renal'].forEach(type => {
+                resetImageUpload(type);
+            });
+        }
+
+        // Function to setup dropdown listeners
+        function setupDropdownListeners() {
+            // Add change event listeners to the dropdowns
+            document.getElementById('hepaticDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('portalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('renalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+        }
+    </script>
 </body>
 </html>

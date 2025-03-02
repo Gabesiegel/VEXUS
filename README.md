@@ -5,7 +5,7 @@ AI-based image recognition tool designed to assist in Venous Excess Ultrasound S
 ## Features
 
 - Automatic classification of ultrasound images for hepatic, portal, and renal veins
-- Interactive VExUS score calculator based on vein waveform patterns
+- Interactive VExUS AI Image Recognition based on vein waveform patterns
 - HIPAA compliant image handling with PHI warnings
 - Responsive web interface with mobile support
 - Real-time feedback on classification confidence

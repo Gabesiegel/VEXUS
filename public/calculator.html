@@ -235,28 +235,48 @@
             width: 90%;
             max-width: 600px;
             display: flex;
-            align-items: flex-end;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .input-group label {
             font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .input-group select {
             width: 100%;
             padding: 8px;
-            margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            font-size: 0.9em;
         }
 
-        .input-group .select-container {
-            flex: 1;
+        .reset-button {
+            background: none;
+            border: 1px solid #ccc;
+            color: #666666;
+            font-size: 0.9em;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 5px;
+            width: 100%;
+            margin-top: 5px;
         }
 
-        .input-group .reset-button {
-            margin-bottom: 5px;
+        .reset-button:hover {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: #dc3545;
+        }
+
+        .reset-button i {
+            font-size: 1em;
         }
 
         .cannot-calc-note {
@@ -556,7 +576,7 @@
                 <h2>Menu</h2>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="calculator.html">Score Calculator</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
                     <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                     <li><a href="education.html">Education</a></li>
                     <li><a href="Publications.html">Publications</a></li>
@@ -665,18 +685,16 @@
                     <div id="hepaticErrorContainer" class="error-container"></div>
                     
                     <div class="input-group">
-                        <div class="select-container">
-                            <label for="hepaticDropdown">Hepatic Vein Classification:</label>
-                            <select id="hepaticDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="HV Normal">HV Normal</option>
-                                <option value="HV Mild">HV Mild</option>
-                                <option value="HV Severe">HV Severe</option>
-                                <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
-                            </select>
-                            <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image.
-                            </div>
+                        <label for="hepaticDropdown">Hepatic Vein Classification:</label>
+                        <select id="hepaticDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="HV Normal">HV Normal</option>
+                            <option value="HV Mild">HV Mild</option>
+                            <option value="HV Severe">HV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
                         </div>
                         <button class="reset-button" onclick="resetImageUpload('hepatic')">
                             <i class="fas fa-undo"></i> Reset
@@ -717,18 +735,16 @@
                     <div id="portalErrorContainer" class="error-container"></div>
                     
                     <div class="input-group">
-                        <div class="select-container">
-                            <label for="portalDropdown">Portal Vein Classification:</label>
-                            <select id="portalDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="PV Normal">PV Normal</option>
-                                <option value="PV Mild">PV Mild</option>
-                                <option value="PV Severe">PV Severe</option>
-                                <option value="Confidence of waveform < 50%">Confidence of waveform &lt; 50%</option>
-                            </select>
-                            <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image.
-                            </div>
+                        <label for="portalDropdown">Portal Vein Classification:</label>
+                        <select id="portalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="PV Normal">PV Normal</option>
+                            <option value="PV Mild">PV Mild</option>
+                            <option value="PV Severe">PV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
                         </div>
                         <button class="reset-button" onclick="resetImageUpload('portal')">
                             <i class="fas fa-undo"></i> Reset
@@ -769,18 +785,16 @@
                     <div id="renalErrorContainer" class="error-container"></div>
                     
                     <div class="input-group">
-                        <div class="select-container">
-                            <label for="renalDropdown">Renal Vein Classification:</label>
-                            <select id="renalDropdown">
-                                <option value="">-- Select --</option>
-                                <option value="RV Normal">RV Normal</option>
-                                <option value="RV Mild">RV Mild</option>
-                                <option value="RV Severe">RV Severe</option>
-                                <option value="Confidence of waveform &lt; 50%">Confidence of waveform &lt; 50%</option>
-                            </select>
-                            <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
-                                Probability below 50%. Please upload a higher quality image.
-                            </div>
+                        <label for="renalDropdown">Renal Vein Classification:</label>
+                        <select id="renalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="RV Normal">RV Normal</option>
+                            <option value="RV Mild">RV Mild</option>
+                            <option value="RV Severe">RV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
                         </div>
                         <button class="reset-button" onclick="resetImageUpload('renal')">
                             <i class="fas fa-undo"></i> Reset
@@ -1100,153 +1114,55 @@
 
         // Function to classify image
         async function classifyImage(type, file) {
-            const previewImg = document.getElementById(`${type}Preview`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const resultElement = document.getElementById(`${type}Result`);
             const topResultsElement = document.getElementById(`${type}TopResults`);
             const dropdownElement = document.getElementById(`${type}Dropdown`);
             const errorNoteElement = document.getElementById(`${type}ErrorNote`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
-            
+
             try {
-                if (!file) {
-                    resetImageUpload(type);
-                    return;
-                }
-
-                // Keep status green during processing
+                // Show loading state
                 modelStatus.textContent = "Processing...";
-                modelStatus.classList.add('model-ready');
+                modelStatus.classList.remove('model-ready');
+                loadingIndicator.style.display = 'block';
 
-                // Use FileReader to get base64 data
-                const base64Data = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = () => reject(new Error('Failed to read file'));
-                    reader.readAsDataURL(file);
-                });
+                // Create FormData and append file
+                const formData = new FormData();
+                formData.append('image', file);
 
-                // Extract the actual base64 content and mime type
-                const parts = base64Data.split(',');
-                const base64Content = parts[1];
-                const mimeType = parts[0].match(/:(.*?);/)[1];
-
-                // Structure payload for Vertex AI - ensure correct format
-                const payload = {
-                    instances: [
-                        {
-                            content: {
-                                b64: base64Content
-                            }
-                        }
-                    ],
-                    parameters: {
-                        confidenceThreshold: 0.0,
-                        maxPredictions: 5
-                    },
-                    metadata: {
-                        veinType: type, // hepatic, portal, or renal
-                        imageType: mimeType,
-                        timestamp: Date.now()
-                    }
-                };
-
-                // Send to API endpoint with timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
-                
-                console.log(`Sending ${type} image for classification...`);
-                
-                const response = await fetch('/api/predict', {
+                // Send request to API
+                const response = await fetch('/api/classify', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
+                    body: formData
                 });
-                
-                clearTimeout(timeoutId);
 
                 if (!response.ok) {
-                    let errorMessage = `Server error: ${response.status}`;
-                    try {
-                        const errorData = await response.json();
-                        errorMessage = errorData.message || errorMessage;
-                    } catch (e) {
-                        // If parsing fails, use status code
-                    }
-                    throw new Error(errorMessage);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                // Process response
-                const result = await response.json();
-                
-                // Validate response format
-                if (!result || !result.displayNames || !result.confidences) {
-                    throw new Error('Invalid response format from server');
-                }
+                const data = await response.json();
+                const confidences = data.confidences;
+                const labelSet = data.labels;
 
-                // Log storage information if available
-                if (result.storage && result.storage.stored) {
-                    console.log(`Image stored at: ${result.storage.imageUrl}`);
-                    console.log(`Prediction results stored at: ${result.storage.resultsPath}`);
-                }
-
-                // Process predictions
-                const confidences = result.confidences;
-                const displayNames = result.displayNames;
-                
-                // Map API response labels to dropdown values
+                // Map API labels to dropdown values
                 const labelMapping = {
-                    'hepatic': {
-                        'Hepatic_Vein_Normal': 'HV Normal',
-                        'Hepatic_Vein_Mild': 'HV Mild',
-                        'Hepatic_Vein_Severe': 'HV Severe'
-                    },
-                    'portal': {
-                        'Portal_Vein_Normal': 'PV Normal',
-                        'Portal_Vein_Mild': 'PV Mild',
-                        'Portal_Vein_Severe': 'PV Severe'
-                    },
-                    'renal': {
-                        'Renal_Vein_Normal': 'RV Normal',
-                        'Renal_Vein_Mild': 'RV Mild',
-                        'Renal_Vein_Severe': 'RV Severe'
-                    }
+                    'Hepatic Vein Normal': 'HV Normal',
+                    'Hepatic Vein Mild': 'HV Mild',
+                    'Hepatic Vein Severe': 'HV Severe',
+                    'Portal Vein Normal': 'PV Normal',
+                    'Portal Vein Mild': 'PV Mild',
+                    'Portal Vein Severe': 'PV Severe',
+                    'Renal Vein Normal': 'RV Normal',
+                    'Renal Vein Mild': 'RV Mild',
+                    'Renal Vein Severe': 'RV Severe'
                 };
-                
-                console.log(`${type} classification - received labels:`, displayNames);
-                
-                // Create top 3 predictions with mapped labels
+
+                // Process and sort predictions
                 const top3 = confidences
                     .map((conf, idx) => {
-                        const apiLabel = displayNames[idx] || "Unknown";
-                        // Check if the label belongs to the expected type
-                        const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
-                                               type === 'portal' ? apiLabel.includes('Portal') :
-                                               apiLabel.includes('Renal');
-                        
-                        let dropdownLabel;
-                        if (isExpectedType) {
-                            // Use the type-specific mapping
-                            dropdownLabel = labelMapping[type][apiLabel] || apiLabel;
-                        } else {
-                            // If model returned wrong type of prediction, try to find mapping in any category
-                            for (const veinType in labelMapping) {
-                                if (labelMapping[veinType][apiLabel]) {
-                                    console.log(`Warning: Received ${apiLabel} for ${type} request`);
-                                    // Still use the expected type prefix (HV/PV/RV)
-                                    const severity = apiLabel.includes('Normal') ? 'Normal' : 
-                                                    apiLabel.includes('Mild') ? 'Mild' : 'Severe';
-                                    dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
-                                    break;
-                                }
-                            }
-                            // If no mapping found in any category
-                            if (!dropdownLabel) dropdownLabel = apiLabel;
-                        }
-                        
+                        const apiLabel = labelSet[idx];
+                        const dropdownLabel = labelMapping[apiLabel] || apiLabel;
                         return {
                             apiLabel: apiLabel,
                             label: dropdownLabel,
@@ -1270,21 +1186,12 @@
                     topResultsElement.innerHTML = '<strong>Top 3 Predictions:</strong><br>' + 
                         top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
                     
-                    // Always set dropdown to top prediction regardless of confidence
-                    const matchingOption = Array.from(dropdownElement.options)
-                        .find(opt => opt.value === top1.label);
-                        
-                    if (matchingOption) {
-                        dropdownElement.value = matchingOption.value;
-                    } else if (parseFloat(top1.prob) <= 50) {
-                        // If no matching option and confidence is low, set to the low confidence option
-                        dropdownElement.value = "Confidence of waveform < 50%";
-                    }
-                    
-                    // Show warning if confidence is low
+                    // Set dropdown value based on top prediction
                     if (parseFloat(top1.prob) > 50) {
+                        dropdownElement.value = top1.label;
                         errorNoteElement.style.display = "none";
                     } else {
+                        dropdownElement.value = "Confidence of waveform < 50%";
                         errorNoteElement.style.display = "block";
                     }
                     
@@ -1293,11 +1200,7 @@
                 } else {
                     resultElement.textContent = "No predictions found.";
                     topResultsElement.innerHTML = "";
-                    
-                    // Reset dropdown when no predictions are found
                     dropdownElement.value = "";
-                    
-                    // Hide modals even when no predictions are found
                     hideModals();
                 }
 
@@ -1315,8 +1218,9 @@
                 modelStatus.classList.remove('model-ready');
                 
                 // Show error in container
-                document.getElementById(`${type}ErrorContainer`).innerHTML = `<strong>Error:</strong> ${error.message}`;
-                document.getElementById(`${type}ErrorContainer`).style.display = 'block';
+                const errorContainer = document.getElementById(`${type}ErrorContainer`);
+                errorContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                errorContainer.style.display = 'block';
                 
                 // Add retry button
                 const retryButton = document.createElement('button');
@@ -1326,7 +1230,7 @@
                     classifyImage(type, file);
                 });
                 
-                document.getElementById(`${type}ErrorContainer`).appendChild(retryButton);
+                errorContainer.appendChild(retryButton);
                 
                 // Show low confidence note
                 errorNoteElement.style.display = "block";
