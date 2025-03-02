@@ -656,8 +656,8 @@
                         Upload your Hepatic Vein ultrasound image. 
                     </p>
 
-                    <div id="hepaticModelStatus" class="model-status">
-                        Initializing...
+                    <div id="hepaticModelStatus" class="model-status model-ready">
+                        API Ready
                     </div>
                     
                     <div class="upload-area" onclick="initiateImageUpload('hepatic')">
@@ -706,8 +706,8 @@
                         Upload your Portal Vein ultrasound image. 
                     </p>
                     
-                    <div id="portalModelStatus" class="model-status">
-                        Initializing...
+                    <div id="portalModelStatus" class="model-status model-ready">
+                        API Ready
                     </div>
 
                     <div class="upload-area" onclick="initiateImageUpload('portal')">
@@ -756,8 +756,8 @@
                         Upload your Renal Vein ultrasound image. 
                     </p>
                     
-                    <div id="renalModelStatus" class="model-status">
-                        Initializing...
+                    <div id="renalModelStatus" class="model-status model-ready">
+                        API Ready
                     </div>
 
                     <div class="upload-area" onclick="initiateImageUpload('renal')">
@@ -1044,8 +1044,8 @@
         function initializeModelStatus(statusId) {
             const statusElement = document.getElementById(statusId);
             if (statusElement) {
-                statusElement.textContent = "Checking API...";
-                statusElement.classList.remove('model-ready');
+                statusElement.textContent = "API Ready";
+                statusElement.classList.add('model-ready'); // Start with green by default
             }
         }
         
@@ -1056,14 +1056,6 @@
                 { element: document.getElementById('portalModelStatus'), type: 'portal' },
                 { element: document.getElementById('renalModelStatus'), type: 'renal' }
             ];
-
-            // Update UI to checking state
-            modelStatuses.forEach(status => {
-                if (status.element) {
-                    status.element.textContent = "Checking API connection...";
-                    status.element.classList.remove('model-ready');
-                }
-            });
 
             try {
                 // First check general API health
@@ -1076,6 +1068,12 @@
                 // Now check each model endpoint with a lightweight test request
                 for (const status of modelStatuses) {
                     try {
+                        // Update UI to show checking state but keep it green
+                        if (status.element) {
+                            status.element.textContent = `Checking ${status.type} connection...`;
+                            status.element.classList.add('model-ready'); // Keep it green during check
+                        }
+                        
                         // Create a minimal payload to test the endpoint
                         const testPayload = {
                             instances: [{ content: "test" }], // Just a minimal test payload
@@ -1086,8 +1084,7 @@
                             }
                         };
 
-                        // We'll make a HEAD request to a special test endpoint that doesn't actually process images
-                        // but just verifies the endpoint connection
+                        // Make request to the test endpoint to verify connection
                         const response = await fetch('/api/test-endpoint', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -1102,22 +1099,28 @@
                                 status.element.classList.add('model-ready');
                             }
                         } else {
+                            // Only remove model-ready class if there's an error
                             if (status.element) {
                                 status.element.textContent = `${status.type.charAt(0).toUpperCase() + status.type.slice(1)} API Error`;
+                                status.element.classList.remove('model-ready');
                             }
                         }
                     } catch (modelError) {
                         console.error(`${status.type} model check error:`, modelError);
+                        // Only remove model-ready class if there's an error
                         if (status.element) {
                             status.element.textContent = `${status.type.charAt(0).toUpperCase() + status.type.slice(1)} API Error`;
+                            status.element.classList.remove('model-ready');
                         }
                     }
                 }
             } catch (error) {
                 console.error('API connection error:', error);
+                // Set all status indicators to error state
                 modelStatuses.forEach(status => {
                     if (status.element) {
                         status.element.textContent = "API Connection Error - Try Again Later";
+                        status.element.classList.remove('model-ready');
                     }
                 });
             }
@@ -1335,9 +1338,19 @@
                 // Hide modals even in case of error
                 hideModals();
                 
-                // Update model status
-                modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Error`;
-                modelStatus.classList.remove('model-ready');
+                // Check if this is a connection error or a different type of error
+                if (error.message.includes('NetworkError') || 
+                    error.message.includes('Failed to fetch') || 
+                    error.message.includes('Server error: 5') ||
+                    error.message.includes('AbortError')) {
+                    // Only if it's a network/connection error, show the API as disconnected
+                    modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Error`;
+                    modelStatus.classList.remove('model-ready');
+                } else {
+                    // For other errors (like image processing errors), keep the API status as connected
+                    modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} API Connected`;
+                    modelStatus.classList.add('model-ready');
+                }
                 
                 // Show error in container
                 errorContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
