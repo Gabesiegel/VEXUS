@@ -1,6 +1,8 @@
 /* Header Logo Styles */
 #header {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     position: fixed;
     top: 0;
     left: 0;
@@ -14,13 +16,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.3em 1.5em; /* Reduced padding */
+    padding: 0.1em 1.5em; /* Reduced top/bottom padding */
     height: 100%;
 }
 
 /* Add margin to main content to prevent it from being hidden behind fixed header */
 #main {
-    margin-top: 3.5em; /* Matches header height */
+    padding-top: 3.8em; /* Slightly reduced to account for new header spacing */
+    margin-top: 0;
+}
+
+#main .inner {
+    padding-top: 2em; /* Additional padding for the inner content */
+}
+
+/* Remove margin from logo container */
+.logo-container {
+    margin-top: 0;
 }
 
 #header .logo {
@@ -44,6 +56,7 @@
     color: #585858;
     font-size: 1.1em; /* Reduced size */
     font-weight: 700;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8); /* Help text readability */
 }
 
 /* Responsive adjustments */
@@ -53,11 +66,15 @@
     }
 
     #header .inner {
-        padding: 0.2em 1em;
+        padding: 0.1em 1em; /* Reduced padding */
     }
     
     #main {
-        margin-top: 3em;
+        padding-top: 3.5em;
+    }
+    
+    #main .inner {
+        padding-top: 1.5em;
     }
     
     #header .logo .symbol img {
@@ -73,14 +90,19 @@
 @media screen and (max-width: 480px) {
     #header {
         height: 2.8em;
+        background: rgba(255, 255, 255, 0.98); /* Slightly more opaque on mobile */
     }
 
     #header .inner {
-        padding: 0.2em 0.8em;
+        padding: 0.1em 0.8em; /* Reduced padding */
     }
     
     #main {
-        margin-top: 2.8em;
+        padding-top: 3.2em;
+    }
+    
+    #main .inner {
+        padding-top: 1em;
     }
     
     #header .logo .symbol img {
