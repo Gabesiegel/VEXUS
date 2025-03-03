@@ -1,12 +1,26 @@
 /* Header Logo Styles */
 #header {
     background: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    height: 3.5em; /* Reduced height */
 }
 
 #header .inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.3em 1.5em; /* Reduced padding */
+    height: 100%;
+}
+
+/* Add margin to main content to prevent it from being hidden behind fixed header */
+#main {
+    margin-top: 3.5em; /* Matches header height */
 }
 
 #header .logo {
@@ -17,42 +31,64 @@
 }
 
 #header .logo .symbol {
-    margin-right: 1em;
+    margin-right: 0.5em; /* Reduced margin */
 }
 
 #header .logo .symbol img {
-    width: 4.5em;
-    height: 4.5em;
+    width: 2.8em; /* Reduced size */
+    height: 2.8em;
     object-fit: contain;
 }
 
 #header .logo .title {
     color: #585858;
-    font-size: 1.4em;
+    font-size: 1.1em; /* Reduced size */
     font-weight: 700;
 }
 
 /* Responsive adjustments */
 @media screen and (max-width: 736px) {
+    #header {
+        height: 3em;
+    }
+
+    #header .inner {
+        padding: 0.2em 1em;
+    }
+    
+    #main {
+        margin-top: 3em;
+    }
+    
     #header .logo .symbol img {
-        width: 4em;
-        height: 4em;
+        width: 2.5em;
+        height: 2.5em;
     }
     
     #header .logo .title {
-        font-size: 1.3em;
-        font-weight: 700;
+        font-size: 1em;
     }
 }
 
 @media screen and (max-width: 480px) {
+    #header {
+        height: 2.8em;
+    }
+
+    #header .inner {
+        padding: 0.2em 0.8em;
+    }
+    
+    #main {
+        margin-top: 2.8em;
+    }
+    
     #header .logo .symbol img {
-        width: 3.5em;
-        height: 3.5em;
+        width: 2.2em;
+        height: 2.2em;
     }
     
     #header .logo .title {
-        font-size: 1.2em;
-        font-weight: 700;
+        font-size: 0.9em;
     }
 } 
