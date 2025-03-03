@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>VExUS ATLAS - Education</title>
+    <title>Education - VExUS ATLAS</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="author" content="Gabesiegel" />
     <meta name="last-modified" content="2025-02-12T00:37:03Z" />
     
@@ -18,9 +18,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 60px;
+            gap: 30px;
             margin-bottom: 2em;
             flex-wrap: wrap;
+            padding: 0 15px;
         }
 
         /* Menu Navigation Styles */
@@ -192,6 +193,7 @@
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 40px;
+            overflow-x: auto;
         }
 
         .vexus-grading-table {
@@ -201,6 +203,7 @@
             background-color: #ffffff;
             border-radius: 8px;
             overflow: hidden;
+            min-width: 600px; /* Ensures table doesn't get too squeezed */
         }
 
         .vexus-grading-table th,
@@ -208,12 +211,17 @@
             padding: 16px;
             text-align: left;
             border-bottom: 1px solid #e9ecef;
+            white-space: normal; /* Allows text to wrap */
+            vertical-align: top;
         }
 
         .vexus-grading-table th {
             background-color: #e2e2e2;
             color: #333333;
             font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .vexus-grading-table tbody tr:nth-child(even) {
@@ -226,9 +234,11 @@
 
         /* Update logo styles */
         .logo {
-            width: 500px;
-            height: 250px;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
             object-fit: contain;
+            margin: 10px;
         }
 
         .education-tab.active {
@@ -270,6 +280,99 @@
         .reference-link:hover {
             text-decoration: underline;
         }
+
+        /* Responsive Design Updates */
+        @media screen and (max-width: 1200px) {
+            .logo {
+                max-width: 350px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+            }
+        }
+
+        @media screen and (max-width: 980px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .logo {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .education-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .education-card {
+                padding: 20px 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 1em;
+            }
+            
+            .education-card h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Enhanced mobile scrolling experience */
+        .vexus-grading-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Add new citation styles */
+        .citation {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            border-radius: 10px;
+            font-size: 0.8em;
+            padding: 0 6px;
+            margin: 0 2px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            vertical-align: super;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .citation:hover {
+            background-color: #777777;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -300,7 +403,7 @@
                 <h2>Menu</h2>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="calculator.html">Score Calculator</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
                     <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                     <li><a href="education.html">Education</a></li>
                     <li><a href="Publications.html">Publications</a></li>
@@ -329,14 +432,14 @@
                 <!-- Introduction Section -->
                 <div class="education-section">
                     <h2>Introduction</h2>
-                    <p>Call it what you want—"Fluid Overload", "Venous Hypertension", "Fluid Up", "Venous Congestion" - they all mean the same thing: the venous circulation is too full, and it's causing problems.<sup>1</sup> For a long time, the medical field has focused on arterial hypotension as the main cause of tissue hypoperfusion- and that's understandable! Sepsis, hypovolemia, and hemorrhage are all serious problems. However, we are increasingly realizing that the other side of the vasculature, venous return, can be equally important to our patients with cardiac or renal failure or the critically ill.<sup>2-4</sup> Venous congestion leads to cardiorenal AKI, pulmonary edema, worsening cardiac function, poor wound healing, and a host of other conditions.<sup>5,6</sup> The problem is that finding venous pressures is much harder than finding arterial pressures! You can't just use a cuff. That's why we spend hours poking at legs, squinting at necks, and generally shrugging our shoulders. When we really want to know, we often perform a right heart catheterization, putting a pressure transducer into the heart itself. But that's expensive, time-consuming, and above all, risky to the patient! So wouldn't it be great if we had a cheap, noninvasive, low-risk alternative, that could tell us what we need to know without getting all up in the patient's pulmonary arteries?</p>
+                    <p>Call it what you want—"Fluid Overload", "Venous Hypertension", "Fluid Up", "Venous Congestion" - they all mean the same thing: the venous circulation is too full, and it's causing problems.<a href="#ref1" class="citation">1</a> For a long time, the medical field has focused on arterial hypotension as the main cause of tissue hypoperfusion- and that's understandable! Sepsis, hypovolemia, and hemorrhage are all serious problems. However, we are increasingly realizing that the other side of the vasculature, venous return, can be equally important to our patients with cardiac or renal failure or the critically ill.<a href="#ref2" class="citation">2</a><a href="#ref3" class="citation">3</a><a href="#ref4" class="citation">4</a> Venous congestion leads to cardiorenal AKI, pulmonary edema, worsening cardiac function, poor wound healing, and a host of other conditions.<a href="#ref5" class="citation">5</a><a href="#ref6" class="citation">6</a> The problem is that finding venous pressures is much harder than finding arterial pressures! You can't just use a cuff. That's why we spend hours poking at legs, squinting at necks, and generally shrugging our shoulders. When we really want to know, we often perform a right heart catheterization, putting a pressure transducer into the heart itself. But that's expensive, time-consuming, and above all, risky to the patient! So wouldn't it be great if we had a cheap, noninvasive, low-risk alternative, that could tell us what we need to know without getting all up in the patient's pulmonary arteries?</p>
                     <p>That's where Venous Excess Ultrasound (VExUS) comes in.</p>
                 </div>
 
                 <!-- What is VExUS Section -->
                 <div class="education-section">
                     <h2>What Is VExUS?</h2>
-                    <p>VExUS is a 4-point Doppler ultrasound protocol that measures the direction and speed of venous blood flow, data that can be used to assess venous pressure. It was developed by a group of physicians based in Toronto, Canada, who showed that their VExUS technique could predict when cardiac surgery patients would develop acute kidney injury (AKI).<sup>7</sup> Since that time VExUS has been shown to correlate strongly with right heart catheterization values,<sup>8</sup> cardiorenal AKI,<sup>9</sup> and mortality in patients with heart failure.<sup>10</sup></p>
+                    <p>VExUS is a 4-point Doppler ultrasound protocol that measures the direction and speed of venous blood flow, data that can be used to assess venous pressure. It was developed by a group of physicians based in Toronto, Canada, who showed that their VExUS technique could predict when cardiac surgery patients would develop acute kidney injury (AKI).<a href="#ref7" class="citation">7</a> Since that time VExUS has been shown to correlate strongly with right heart catheterization values,<a href="#ref8" class="citation">8</a> cardiorenal AKI,<a href="#ref9" class="citation">9</a> and mortality in patients with heart failure.<a href="#ref10" class="citation">10</a></p>
                     <p>The VExUS components are:</p>
                     <ul>
                         <li><strong>Inferior Vena Cava (IVC) Diameter</strong></li>
@@ -372,6 +475,9 @@
 
                     <h3>4. Portal Vein</h3>
                     <p>Place the doppler gate over any portion of the portal vein, distinguishable by its thick echogenic border.</p>
+
+                    <h3>5. Renal Vein</h3>
+                    <p>Place the doppler gate over distal portion of the renal interlobularvein</p>
                 </div>
 
                 <!-- VExUS Grading System Section -->
