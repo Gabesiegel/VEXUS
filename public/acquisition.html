@@ -274,163 +274,249 @@
                 <div class="acquisition-container">
                     <div class="acquisition-header">
                         <h1>VExUS Image Acquisition Guide</h1>
+                        <p>This guide provides detailed instructions for acquiring high-quality ultrasound images for VExUS assessment.</p>
                     </div>
 
-                    <div class="acquisition-content">
-                        <!-- Overview Section -->
-                        <div class="technique-container">
-                            <h2>Overview</h2>
-                            <h3>Why Use VExUS?</h3>
-                            <ul>
-                                <li>Non-invasive quantification of venous congestion</li>
-                                <li>Real-time hemodynamic insight for immediate assessment</li>
-                                <li>Guide therapeutic interventions and monitor treatment response</li>
-                                <li>Early detection of organ dysfunction risk</li>
-                            </ul>
-                            
-                            <h3>Image Acquisition</h3>
-                            <p>
-                                Below are infographics depicting the recommended ultrasound views 
-                                for each venous waveform assessment. Each view can be obtained using 
-                                pulsed wave Doppler to capture the venous flow patterns crucial for 
-                                calculating VExUS scores.
-                            </p>
-                        </div>
-
-                        <!-- IVC Section -->
-                        <div class="technique-container">
-                            <h2>IVC Assessment</h2>
+                    <!-- IVC Section -->
+                    <div class="technique-container">
+                        <h2>IVC Assessment</h2>
+                        <div class="view-section">
                             <div class="image-section">
-                                <img src="images/IVC.png" alt="IVC Assessment Technique" onclick="expandImage(this)">
+                                <img src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
                             </div>
-                            <div class="text-section">
-                                <h3>Key Points:</h3>
-                                <ul>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Place probe in subxiphoid or subcostal position to obtain a longitudinal view of the IVC.</p>
+
+                                <h4>Key Points:</h4>
+                                <ul class="technique-list">
                                     <li>Place patient in supine position</li>
                                     <li>Use a low frequency (curvilinear) probe</li>
-                                    <li>Obtain subxiphoid or subcostal view to visualize IVC</li>
                                     <li>Measure IVC diameter 2-3 cm from right atrial junction</li>
                                     <li>Assess for inspiratory collapse (if applicable)</li>
                                     <li>Record maximum diameter for VExUS classification</li>
                                 </ul>
+
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Inferior Vena Cava (IVC)</li>
+                                    <li>Right atrial junction</li>
+                                    <li>Hepatic vein confluence</li>
+                                    <li>Liver</li>
+                                </ul>
+
+                                <h4>Special Notes:</h4>
+                                <ul class="technique-list">
+                                    <li>Ensure measurement is taken during normal respiration</li>
+                                    <li>Document both maximum and minimum diameters if significant respiratory variation</li>
+                                    <li>Consider patient's volume status and positioning when interpreting measurements</li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Hepatic Vein Section -->
-                        <div class="technique-container">
-                            <h2>Hepatic Vein Assessment</h2>
+                    <!-- Hepatic Vein Views -->
+                    <div class="technique-container">
+                        <h2>Hepatic Vein Assessment</h2>
+                        
+                        <div class="view-section">
+                            <h3>Long Axis View</h3>
                             <div class="image-section">
-                                <img src="images/hepatic_long.png" alt="Hepatic Vein Assessment Technique" onclick="expandImage(this)">
+                                <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
                             </div>
-                            <div class="text-section">
-                                <h3>Key Points:</h3>
-                                <ul>
-                                    <li>Locate hepatic vein using right intercostal view</li>
-                                    <li>Use color Doppler to identify vein</li>
-                                    <li>Place pulsed wave gate in the hepatic vein branch</li>
-                                    <li>Ensure gate is 1-2 cm away from IVC junction</li>
-                                    <li>Use low wall filter settings</li>
-                                    <li>Observe for triphasic normal waveform (S &gt; D)</li>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Place the probe in the right intercostal space, angled towards the right shoulder.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Hepatic vein</li>
+                                    <li>IVC junction</li>
+                                    <li>Liver parenchyma</li>
                                 </ul>
                                 
-                                <h4>Normal Waveform:</h4>
-                                <p>Triphasic with dominant systolic (S) wave, smaller diastolic (D) wave, and small retrograde A wave during atrial contraction.</p>
-                                
-                                <h4>Abnormal Patterns:</h4>
-                                <ul>
-                                    <li><strong>Mild:</strong> S wave &lt; D wave, preserved direction</li>
-                                    <li><strong>Severe:</strong> Loss of phasicity, retrograde flow, or monophasic pattern</li>
+                                <h4>Doppler Waveforms:</h4>
+                                <ul class="technique-list">
+                                    <li>Triphasic: Normal venous return</li>
+                                    <li>Biphasic: Mild congestion</li>
+                                    <li>Monophasic: Severe congestion</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <!-- Portal Vein Section -->
-                        <div class="technique-container">
-                            <h2>Portal Vein Assessment</h2>
+                        <div class="view-section">
+                            <h3>Short Axis View</h3>
                             <div class="image-section">
-                                <img src="images/Portal_long_axis.png" alt="Portal Vein Assessment Technique" onclick="expandImage(this)">
+                                <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
                             </div>
-                            <div class="text-section">
-                                <h3>Key Points:</h3>
-                                <ul>
-                                    <li>Use intercostal or subxiphoid approach</li>
-                                    <li>Identify portal vein at liver hilum</li>
-                                    <li>Distinguished by echogenic walls and hepatic artery nearby</li>
-                                    <li>Use color Doppler to confirm flow direction</li>
-                                    <li>Place pulsed wave gate in main portal vein</li>
-                                    <li>Ensure low wall filter settings</li>
-                                </ul>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head. Probe rotated 90 degrees counterclockwise from long-axis position.</p>
                                 
-                                <h4>Normal Waveform:</h4>
-                                <p>Continuous, mildly pulsatile antegrade flow toward the liver.</p>
-                                
-                                <h4>Abnormal Patterns:</h4>
-                                <ul>
-                                    <li><strong>Mild:</strong> Increased pulsatility but preserved antegrade flow</li>
-                                    <li><strong>Severe:</strong> Bidirectional ("to-and-fro") flow or reversal of flow</li>
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Hepatic veins</li>
+                                    <li>Portal vein</li>
+                                    <li>IVC</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <!-- Renal Vein Section -->
-                        <div class="technique-container">
-                            <h2>Renal Vein Assessment</h2>
+                        <div class="view-section">
+                            <h3>Subxiphoid View</h3>
                             <div class="image-section">
-                                <img src="images/Renal_vein_long.png" alt="Renal Vein Assessment Technique" onclick="expandImage(this)">
+                                <img src="images/hepatic_sub.png" alt="Hepatic Vein - Subxiphoid View" class="acquisition-image">
                             </div>
-                            <div class="text-section">
-                                <h3>Key Points:</h3>
-                                <ul>
-                                    <li>Use intercostal or flank approach to kidney</li>
-                                    <li>Identify renal vein at the renal hilum</li>
-                                    <li>Use color Doppler to confirm location</li>
-                                    <li>Place pulsed wave gate in the interlobar veins</li>
-                                    <li>For better accuracy, assess both kidneys if possible</li>
-                                    <li>Right kidney offers easier technical access</li>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Left hepatic vein</li>
+                                    <li>Middle hepatic vein</li>
+                                    <li>Liver</li>
+                                    <li>Right atrium</li>
+                                    <li>IVC</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portal Vein Views -->
+                    <div class="technique-container">
+                        <h2>Portal Vein Assessment</h2>
+                        
+                        <div class="view-section">
+                            <h3>Long Axis View</h3>
+                            <div class="image-section">
+                                <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Place probe in the right intercostal space, angled slightly cephalad.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Portal vein main trunk</li>
+                                    <li>Hepatic artery</li>
+                                    <li>Liver parenchyma</li>
                                 </ul>
                                 
-                                <h4>Normal Waveform:</h4>
-                                <p>Continuous, monophasic antegrade flow toward the IVC.</p>
-                                
-                                <h4>Abnormal Patterns:</h4>
-                                <ul>
-                                    <li><strong>Mild:</strong> Biphasic pattern with preserved antegrade flow</li>
-                                    <li><strong>Severe:</strong> Pulsatile or discontinuous flow pattern</li>
+                                <h4>Doppler Waveforms:</h4>
+                                <ul class="technique-list">
+                                    <li>Normal: Continuous flow with minimal pulsatility</li>
+                                    <li>Pulsatile: Mild congestion</li>
+                                    <li>Highly pulsatile: Severe congestion</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <!-- Tips and Tricks Section -->
-                        <div class="technique-container">
-                            <h2>Tips and Troubleshooting</h2>
-                            <div class="text-section">
-                                <h3>General Tips:</h3>
-                                <ul>
-                                    <li>Use proper patient positioning (slight right side tilt can help visualize hepatic and portal veins)</li>
-                                    <li>Adjust Doppler angle to &lt;60° for accurate velocity measurements</li>
-                                    <li>Use low wall filter settings to capture low-velocity venous flow</li>
-                                    <li>Hold the probe steady and ask patient to hold breath briefly for clearer images</li>
-                                </ul>
+                        <div class="view-section">
+                            <h3>Short Axis View</h3>
+                            <div class="image-section">
+                                <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Probe in mid-axillary line, below the xiphoid process, angled slightly toward patient's right shoulder, rotated 90 degrees counterclockwise from long axis view.</p>
                                 
-                                <h3>Challenges and Solutions:</h3>
-                                <ul>
-                                    <li><strong>Poor acoustic window:</strong> Try different probe positions or patient positions</li>
-                                    <li><strong>Respiratory variations:</strong> Time measurements with respiration or ask for breath hold</li>
-                                    <li><strong>Arrhythmias:</strong> Take multiple measurements over several cardiac cycles</li>
-                                    <li><strong>Technical artifacts:</strong> Adjust gain, depth, and focus settings</li>
+                                <h4>Special Note:</h4>
+                                <p>This view can be helpful for distinguishing portal vein pulsations from those originating from the nearby hepatic artery.</p>
+                            </div>
+                        </div>
+
+                        <div class="view-section">
+                            <h3>Subxiphoid View</h3>
+                            <div class="image-section">
+                                <img src="images/Portal_sub.png" alt="Portal Vein - Subxiphoid View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Portal vein</li>
+                                    <li>Liver</li>
+                                    <li>IVC</li>
                                 </ul>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Renal Vein Views -->
+                    <div class="technique-container">
+                        <h2>Renal Vein Assessment</h2>
+                        
+                        <div class="view-section">
+                            <h3>Long Axis View</h3>
+                            <div class="image-section">
+                                <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Place probe in the posterior axillary line, angled towards the spine to visualize the long axis of the kidney.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Renal vein</li>
+                                    <li>Renal artery</li>
+                                    <li>Kidney hilum</li>
+                                </ul>
+                                
+                                <h4>Doppler Waveforms:</h4>
+                                <ul class="technique-list">
+                                    <li>Normal: Continuous flow</li>
+                                    <li>Pulsatile: Mild congestion</li>
+                                    <li>Highly pulsatile: Severe congestion</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="view-section">
+                            <h3>Short Axis View</h3>
+                            <div class="image-section">
+                                <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Probe in coronal plane over the right kidney, between mid-axillary and posterior axillary lines, angled slightly towards patient's head.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Kidney</li>
+                                    <li>Interlobar artery</li>
+                                    <li>Interlobar vein</li>
+                                </ul>
+                                
+                                <h4>Special Note:</h4>
+                                <p>This view may be helpful to distinguish between venous and arterial flow, as an artery and a vein are usually seen together in this orientation.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Tips Section -->
+                    <div class="technique-container">
+                        <h2>General Acquisition Tips</h2>
+                        <ul class="technique-list">
+                            <li>Ensure proper patient positioning for optimal image quality</li>
+                            <li>Adjust Doppler settings appropriately for each vessel</li>
+                            <li>Maintain a consistent angle of insonation</li>
+                            <li>Document both 2D images and Doppler waveforms</li>
+                            <li>Consider patient's breathing cycle during image acquisition</li>
+                            <li>Optimize gain and depth settings for each view</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Image Expansion -->
+    <!-- Image Modal -->
     <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="expandedImage">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <!-- Scripts -->
@@ -440,44 +526,34 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
     
-    <!-- Image Modal JavaScript -->
     <script>
-        var modal = document.getElementById("imageModal");
-        var modalImg = document.getElementById("expandedImage");
-        var body = document.body;
-
-        function expandImage(img) {
-            modal.style.display = "block";
-            modalImg.src = img.src;
-            body.style.overflow = 'hidden';
-            
-            modal.onclick = function(e) {
-                if (e.target === modal || e.target === modalImg) {
-                    closeModal();
-                }
-            };
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === "Escape") {
-                    closeModal();
-                }
-            });
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-            body.style.overflow = 'auto';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Make the .image-section images clickable for modal expansion
-            const images = document.querySelectorAll('.image-section img');
-            images.forEach(img => {
-                img.onclick = function() {
-                    expandImage(this);
-                };
-            });
+        // Modal functionality for images
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        
+        // Get all images with class 'acquisition-image'
+        const images = document.getElementsByClassName("acquisition-image");
+        
+        // Add click event to all images
+        Array.from(images).forEach(img => {
+            img.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+            }
         });
+        
+        // Close modal when clicking the × button
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        // Close modal when clicking outside the image
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>
