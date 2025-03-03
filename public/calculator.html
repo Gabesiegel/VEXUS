@@ -65,15 +65,120 @@
         }
 
         .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 15px;
+            background: #999999;
+            color: white !important;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9em;
             font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 700;
-            letter-spacing: 0.05em;
+            font-weight: 300;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+        }
+
+        .button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button.primary {
+            background: #999999;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button.primary:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .upload-button {
+            background: #999999;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+            box-shadow: none;
+        }
+
+        .upload-button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .action-button {
+            background: #999999;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: none;
+        }
+
+        .action-button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
         }
 
         .reset-button {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
+            background: transparent;
+            color: #777777 !important;
             font-size: 1.1em;
+            cursor: pointer;
+            padding: 8px 15px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button:hover {
+            background: rgba(119, 119, 119, 0.1);
+            color: #555555 !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button i {
+            font-size: 1.2em;
+            color: #777777;
+        }
+
+        .reset-button:hover i {
+            color: #555555;
         }
 
         .modal-content h2 {
@@ -160,26 +265,32 @@
 
         /* Add styles for the reset button */
         .reset-button {
-            background: none;
-            border: none;
-            color: #666666;
-            font-size: 1.1em;
+            background: #999999;
+            color: white !important;
+            font-size: 0.9em;
             cursor: pointer;
-            padding: 8px 15px;
+            padding: 8px;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             border-radius: 5px;
+            margin-top: 5px;
+            border: none;
+            box-shadow: none;
         }
 
         .reset-button:hover {
-            color: #dc3545;
-            background-color: rgba(220, 53, 69, 0.1);
+            background: #777777;
+            color: white !important;
+            border: none;
+            box-shadow: none;
         }
 
         .reset-button i {
-            font-size: 1.2em;
+            font-size: 1em;
+            color: white;
         }
 
         .upload-controls {
@@ -262,30 +373,41 @@
             font-size: 0.9em;
         }
 
-        .reset-button {
-            background: none;
-            border: 1px solid #ccc;
-            color: #666666;
-            font-size: 0.9em;
-            cursor: pointer;
-            padding: 8px;
-            transition: all 0.2s ease;
+        .input-group .reset-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            padding: 8px 15px;
+            background: transparent;
+            color: #777777 !important;
             border-radius: 5px;
-            margin-top: 5px;
+            text-decoration: none;
+            border: 1px solid #777777;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+            gap: 8px;
         }
 
-        .reset-button:hover {
-            color: #dc3545;
-            background-color: rgba(220, 53, 69, 0.1);
-            border-color: #dc3545;
+        .input-group .reset-button:hover {
+            background: rgba(119, 119, 119, 0.1);
+            color: #555555 !important;
+            border: 1px solid #555555;
+            box-shadow: none;
         }
 
-        .reset-button i {
+        .input-group .reset-button i {
             font-size: 1em;
+            color: #777777;
+        }
+
+        .input-group .reset-button:hover i {
+            color: #555555;
         }
 
         .cannot-calc-note {
@@ -310,6 +432,20 @@
             line-height: 1.2;
             white-space: normal;
             font-size: 1em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #999999;
+            color: white !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button-group button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
         }
 
         .main-logo {
@@ -429,6 +565,22 @@
             flex: 1;
             min-width: 120px;
             padding: 10px 15px;
+            background: #999999;
+            color: white !important;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .modal-buttons button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
         }
         
         /* Enhanced image preview */
@@ -809,7 +961,7 @@
                 <div class="step-section">
                     <div class="button-group">
                         <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
-                        <button onclick="resetAll()" class="button">Reset</button>
+                        <button onclick="resetAll()" class="button"><i class="fas fa-undo"></i> Reset</button>
                     </div>
                     <h3>Total VExUS Score: <span id="total-score">--</span></h3>
                 </div>
