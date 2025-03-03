@@ -223,24 +223,32 @@
         .close {
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 40px; /* Move to left side with good padding */
+            right: auto; /* Remove right positioning */
             width: 40px;
             height: 40px;
-            background: rgba(255,255,255,0.9);
+            background: transparent; /* Much more transparent */
+            border: none; /* Subtle border */
+            backdrop-filter: blur(4px); /* Modern blur effect */
+            -webkit-backdrop-filter: blur(4px); /* For Safari support */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #333;
+            transition: all 0.3s ease;
+            color: #777; /* Changed from white to grey */
             font-size: 24px;
             z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
         }
 
         .close:hover {
-            background: #fff;
-            transform: rotate(90deg);
+            background: transparent;
+            transform: rotate(90deg) scale(1.1);
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: #777; /* Keep grey on hover instead of white */
         }
 
         .prev, .next {
@@ -419,7 +427,7 @@
             width: 100%;
             margin: 20px 0;
         }
-
+        
         .slideshow-content img {
             max-width: 100%;
             max-height: 70vh;
@@ -465,8 +473,8 @@
             }
 
             .severity-tag {
-                top: 10px;
-                right: 10px;
+            top: 10px;
+            right: 10px;
                 padding: 4px 8px;
             }
 
@@ -830,45 +838,46 @@
         #renalNormalModal .close,
         #renalMildModal .close,
         #renalSevereModal .close {
-            right: 20px; /* Keep on right side */
-            left: auto; /* Remove left positioning */
-            top: 80px; /* Move down from the top edge */
+            left: 40px; /* Move to left side with consistent 40px padding */
+            right: auto; /* Remove right positioning */
+            top: 80px; /* Keep the same vertical position */
         }
         
         /* Position the close button lower for Portal vein modals specifically */
         #portalNormalModal .close,
         #portalMildModal .close,
         #portalSevereModal .close {
-            right: 20px;
-            left: auto;
-            top: 120px; /* Move even further down for Portal modals */
+            left: 40px; /* Move to left side with consistent 40px padding */
+            right: auto; /* Remove right positioning */
+            top: 120px; /* Keep the same vertical position */
         }
+        
         
         /* Position the close button lower for Portal vein modals specifically */
         #portalNormalModal .close,
         #portalMildModal .close,
         #portalSevereModal .close {
-            right: 20px;
-            left: auto;
-            top: 120px; /* Move even further down for Portal modals */
+            left: 20px; /* Move to left side */
+            right: auto; /* Remove right positioning */
+            top: 120px; /* Keep the same vertical position */
         }
         
         /* Make the close button in main vein modals match their respective sub-modals */
         #hepaticModal .close {
-            right: 20px;
-            left: auto;
+            left: 40px; /* Move to left side with consistent 40px padding */
+            right: auto; /* Remove right positioning */
             top: 80px;
         }
         
         #renalModal .close {
-            right: 20px;
-            left: auto;
+            left: 40px; /* Move to left side with consistent 40px padding */
+            right: auto; /* Remove right positioning */
             top: 80px;
         }
         
         #portalModal .close {
-            right: 20px;
-            left: auto;
+            left: 40px; /* Move to left side with consistent 40px padding */
+            right: auto; /* Remove right positioning */
             top: 120px;
         }
     </style>
@@ -1027,7 +1036,7 @@
                     <!-- Gallery Submission Section -->
                     <div class="container" style="margin-top: 40px;">
                         <header>
-                            <h2>Want Your VExUS Image Featured in the Gallery?</h2>
+                        <h2>Want Your VExUS Image Featured in the Gallery?</h2>
                             <p>Share your high-quality VExUS ultrasound images with the community. Selected images will be featured in our gallery to help educate others.</p>
                         </header>
 
@@ -1047,17 +1056,17 @@
                                         <textarea id="gallery_description" name="description" placeholder="Please provide details about the image, including the VExUS grade, clinical context, and any interesting findings." rows="6" required></textarea>
                                     </div>
                                     <div class="field">
-                                        <div class="upload-area" id="galleryUploadArea">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <p class="upload-text">Click or drag and drop your VExUS image here</p>
-                                            <input type="file" id="galleryImageInput" class="file-input" accept="image/*" />
-                                        </div>
-                                        <div class="image-preview-container" style="display: none;">
-                                            <img id="galleryImagePreview" class="image-preview" alt="Image preview" />
-                                            <div class="image-preview-controls">
-                                                <span class="image-preview-delete" onclick="resetGalleryImageUpload()">×</span>
-                                            </div>
-                                        </div>
+                                <div class="upload-area" id="galleryUploadArea">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p class="upload-text">Click or drag and drop your VExUS image here</p>
+                                    <input type="file" id="galleryImageInput" class="file-input" accept="image/*" />
+                                </div>
+                                <div class="image-preview-container" style="display: none;">
+                                    <img id="galleryImagePreview" class="image-preview" alt="Image preview" />
+                                    <div class="image-preview-controls">
+                                        <span class="image-preview-delete" onclick="resetGalleryImageUpload()">×</span>
+                                    </div>
+                                </div>
                                     </div>
                                 </div>
                                 <div class="actions">
@@ -1187,9 +1196,9 @@
                     <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
                 </div>
                 <div class="slideshow-content hepaticNormalSlides">
-                    <img src="images/image_gallery/Hepatic/Normal/01.02.4.HV.NL.png" alt="Hepatic Normal Image" />
+                <img src="images/image_gallery/Hepatic/Normal/01.02.4.HV.NL.png" alt="Hepatic Normal Image" />
                     <div class="image-description">Normal hepatic vein waveform showing typical triphasic pattern with clear systolic and diastolic waves.</div>
-                    <img src="images/image_gallery/Hepatic/Normal/05.02.02.HV.NL.png" alt="Hepatic Normal Image 2" />
+                <img src="images/image_gallery/Hepatic/Normal/05.02.02.HV.NL.png" alt="Hepatic Normal Image 2" />
                     <div class="image-description">Another example of normal hepatic vein flow demonstrating consistent triphasic pattern.</div>
                 </div>
                 <span class="prev" onclick="plusSlides(-1, 'hepaticNormalSlides')">&#10094;</span>
@@ -1209,9 +1218,9 @@
                     <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
                 </div>
                 <div class="slideshow-content hepaticMildSlides">
-                    <img src="images/image_gallery/Hepatic/Mild/02.0.2.HV.MD.png" alt="Hepatic Mild Image" />
+                <img src="images/image_gallery/Hepatic/Mild/02.0.2.HV.MD.png" alt="Hepatic Mild Image" />
                     <div class="image-description">Mild hepatic vein abnormality showing decreased pulsatility with dampened systolic wave.</div>
-                    <img src="images/image_gallery/Hepatic/Mild/06.03.01.HV.MD.png" alt="Hepatic Mild Image 2" />
+                <img src="images/image_gallery/Hepatic/Mild/06.03.01.HV.MD.png" alt="Hepatic Mild Image 2" />
                     <div class="image-description">Mild congestion pattern with reduced but still present phasic flow.</div>
                 </div>
                 <span class="prev" onclick="plusSlides(-1, 'hepaticMildSlides')">&#10094;</span>
@@ -1226,16 +1235,16 @@
                     <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
                     <span class="separator">/</span>
                     <span>Severe</span>
-                </div>
+                    </div>
                 <div class="back-button" onclick="openModal('hepaticModal')">
                     <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
-                </div>
+                    </div>
                 <div class="slideshow-content hepaticSevereSlides">
                     <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image" />
                     <div class="image-description">Severe hepatic congestion showing monophasic waveform with loss of normal triphasic pattern.</div>
                     <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image 2" />
                     <div class="image-description">Another example of severe hepatic congestion with continuous monophasic flow.</div>
-                </div>
+                    </div>
                 <span class="prev" onclick="plusSlides(-1, 'hepaticSevereSlides')">&#10094;</span>
                 <span class="next" onclick="plusSlides(1, 'hepaticSevereSlides')">&#10095;</span>
             </div>
@@ -1290,8 +1299,8 @@
                     <img src="images/image_gallery/Renal/Normal/01.03.1.RV.NL.png" alt="Renal Normal Image" />
                     <div class="image-description">Normal renal vein flow pattern showing continuous flow with minimal phasicity.</div>
                 </div>
-                <span class="prev" onclick="plusSlides(-1, 'renalNormalSlides')">&#10094;</span>
-                <span class="next" onclick="plusSlides(1, 'renalNormalSlides')">&#10095;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalNormalSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalNormalSlides')">&#10095;</span>
             </div>
         </div>
 
@@ -1310,8 +1319,8 @@
                     <img src="images/image_gallery/Renal/Mild/02.0.01.RV.MD.png" alt="Renal Mild Image" />
                     <div class="image-description">Mild renal congestion with early signs of pulsatility in the normally continuous flow.</div>
                 </div>
-                <span class="prev" onclick="plusSlides(-1, 'renalMildSlides')">&#10094;</span>
-                <span class="next" onclick="plusSlides(1, 'renalMildSlides')">&#10095;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalMildSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalMildSlides')">&#10095;</span>
             </div>
         </div>
 
@@ -1330,8 +1339,8 @@
                     <img src="images/image_gallery/Renal/Severe/61.0.2.RV.SR.png" alt="Renal Severe Image" />
                     <div class="image-description">Severe renal congestion demonstrating marked pulsatility and flow reversal.</div>
                 </div>
-                <span class="prev" onclick="plusSlides(-1, 'renalSevereSlides')">&#10094;</span>
-                <span class="next" onclick="plusSlides(1, 'renalSevereSlides')">&#10095;</span>
+            <span class="prev" onclick="plusSlides(-1, 'renalSevereSlides')">&#10094;</span>
+            <span class="next" onclick="plusSlides(1, 'renalSevereSlides')">&#10095;</span>
             </div>
         </div>
 
@@ -1701,7 +1710,7 @@
                     
                     // Show the first image
                     if (imgs[0]) {
-                        imgs[0].style.display = "block";
+                    imgs[0].style.display = "block";
                         if (descriptions[0]) {
                             descriptions[0].style.display = "block";
                         }
@@ -1722,7 +1731,7 @@
             }
             
             // Hide the modal
-            modal.style.display = "none";
+                modal.style.display = "none";
             modal.style.opacity = "0";
             modal.classList.remove("show");
             
@@ -1938,77 +1947,77 @@
 
         // Setup gallery image upload functionality
         function setupGalleryUpload() {
-            const galleryUploadArea = document.getElementById('galleryUploadArea');
-            const galleryImageInput = document.getElementById('galleryImageInput');
+        const galleryUploadArea = document.getElementById('galleryUploadArea');
+        const galleryImageInput = document.getElementById('galleryImageInput');
             
             if (!galleryUploadArea || !galleryImageInput) return;
 
-            galleryUploadArea.addEventListener('click', () => galleryImageInput.click());
-            galleryImageInput.addEventListener('change', handleGalleryImageUpload);
+        galleryUploadArea.addEventListener('click', () => galleryImageInput.click());
+        galleryImageInput.addEventListener('change', handleGalleryImageUpload);
 
-            galleryUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                galleryUploadArea.style.borderColor = '#28a745';
-                galleryUploadArea.style.backgroundColor = 'rgba(40, 167, 69, 0.05)';
-            });
+        galleryUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            galleryUploadArea.style.borderColor = '#28a745';
+            galleryUploadArea.style.backgroundColor = 'rgba(40, 167, 69, 0.05)';
+        });
 
-            galleryUploadArea.addEventListener('dragleave', () => {
-                galleryUploadArea.style.borderColor = '#ccc';
-                galleryUploadArea.style.backgroundColor = 'transparent';
-            });
+        galleryUploadArea.addEventListener('dragleave', () => {
+            galleryUploadArea.style.borderColor = '#ccc';
+            galleryUploadArea.style.backgroundColor = 'transparent';
+        });
 
-            galleryUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                galleryUploadArea.style.borderColor = '#ccc';
-                galleryUploadArea.style.backgroundColor = 'transparent';
-                if (e.dataTransfer.files.length) {
-                    galleryImageInput.files = e.dataTransfer.files;
-                    handleGalleryImageUpload({ target: { files: e.dataTransfer.files } });
-                }
-            });
+        galleryUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            galleryUploadArea.style.borderColor = '#ccc';
+            galleryUploadArea.style.backgroundColor = 'transparent';
+            if (e.dataTransfer.files.length) {
+                galleryImageInput.files = e.dataTransfer.files;
+                handleGalleryImageUpload({ target: { files: e.dataTransfer.files } });
+            }
+        });
 
-            // Handle gallery submission
+        // Handle gallery submission
             document.getElementById('gallerySubmissionForm')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const formData = new FormData();
-                const imageFile = document.getElementById('galleryImageInput').files[0];
-                
-                if (!imageFile) {
-                    document.querySelector('#gallerySubmissionForm .error-message').textContent = 'Please upload an image.';
-                    document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
-                    document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
-                    return;
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const imageFile = document.getElementById('galleryImageInput').files[0];
+            
+            if (!imageFile) {
+                document.querySelector('#gallerySubmissionForm .error-message').textContent = 'Please upload an image.';
+                document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
+                document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
+                return;
+            }
+
+            formData.append('image', imageFile);
+            formData.append('email', document.getElementById('gallery_email').value);
+            formData.append('title', document.getElementById('gallery_title').value);
+            formData.append('institution', document.getElementById('gallery_institution').value);
+            formData.append('description', document.getElementById('gallery_description').value);
+
+            try {
+                const response = await fetch('/api/gallery-submission', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.querySelector('#gallerySubmissionForm .success-message').style.display = 'block';
+                    document.querySelector('#gallerySubmissionForm .error-message').style.display = 'none';
+                    document.getElementById('gallerySubmissionForm').reset();
+                    resetGalleryImageUpload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to submit image');
                 }
-
-                formData.append('image', imageFile);
-                formData.append('email', document.getElementById('gallery_email').value);
-                formData.append('title', document.getElementById('gallery_title').value);
-                formData.append('institution', document.getElementById('gallery_institution').value);
-                formData.append('description', document.getElementById('gallery_description').value);
-
-                try {
-                    const response = await fetch('/api/gallery-submission', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        document.querySelector('#gallerySubmissionForm .success-message').style.display = 'block';
-                        document.querySelector('#gallerySubmissionForm .error-message').style.display = 'none';
-                        document.getElementById('gallerySubmissionForm').reset();
-                        resetGalleryImageUpload();
-                    } else {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Failed to submit image');
-                    }
-                } catch (error) {
-                    document.querySelector('#gallerySubmissionForm .error-message').textContent = 
-                        error.message || 'Sorry, there was an error submitting your image. Please try again.';
-                    document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
-                    document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
-                }
-            });
+            } catch (error) {
+                document.querySelector('#gallerySubmissionForm .error-message').textContent = 
+                    error.message || 'Sorry, there was an error submitting your image. Please try again.';
+                document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
+                document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
+            }
+        });
         }
 
         function handleGalleryImageUpload(event) {
@@ -2036,4 +2045,3 @@
     </script>
 </body>
 </html>
-
