@@ -22,17 +22,17 @@
 
 /* Add margin to main content to prevent it from being hidden behind fixed header */
 #main {
-    padding-top: 3.8em; /* Slightly reduced to account for new header spacing */
+    padding-top: 5.5em; /* Increased padding from 4.5em */
     margin-top: 0;
 }
 
 #main .inner {
-    padding-top: 2em; /* Additional padding for the inner content */
+    padding-top: 3em; /* Increased padding from 2em */
 }
 
 /* Remove margin from logo container */
 .logo-container {
-    margin-top: 0;
+    margin-top: 2em; /* Increased margin from 1em */
 }
 
 #header .logo {
@@ -66,15 +66,15 @@
     }
 
     #header .inner {
-        padding: 0.1em 1em; /* Reduced padding */
+        padding: 0.2em 1em;
     }
     
     #main {
-        padding-top: 3.5em;
+        padding-top: 4.5em; /* Adjusted for mobile */
     }
     
     #main .inner {
-        padding-top: 1.5em;
+        padding-top: 2em;
     }
     
     #header .logo .symbol img {
@@ -98,11 +98,11 @@
     }
     
     #main {
-        padding-top: 3.2em;
+        padding-top: 4em; /* Adjusted for smaller screens */
     }
     
     #main .inner {
-        padding-top: 1em;
+        padding-top: 1.5em;
     }
     
     #header .logo .symbol img {
