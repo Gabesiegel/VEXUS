@@ -117,21 +117,33 @@
 
         button[type="submit"] {
             display: inline-block;
-            padding: 8px 15px;
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 20px;
             background: transparent;
             color: #777777;
             border: 1px solid #777777;
             border-radius: 5px;
             text-decoration: none;
             transition: all 0.3s ease;
-            font-size: 0.9em;
+            font-size: 1em;
             cursor: pointer;
             font-family: "Source Sans Pro", Helvetica, sans-serif;
+            margin: 10px 0;
         }
 
         button[type="submit"]:hover {
             background: rgba(119, 119, 119, 0.1);
             transform: translateY(-2px);
+        }
+
+        @media screen and (max-width: 480px) {
+            button[type="submit"] {
+                width: 100%;
+                max-width: none;
+                padding: 15px 20px;
+                font-size: 1.1em;
+            }
         }
 
         .form-container {

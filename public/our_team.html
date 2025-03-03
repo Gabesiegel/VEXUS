@@ -107,7 +107,7 @@
 
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin: 40px auto;
             max-width: 1200px;
@@ -125,6 +125,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: 0 auto;
+            max-width: 450px;
+            width: 100%;
         }
 
         .team-card:hover {
@@ -188,37 +191,65 @@
             .team-grid {
                 gap: 25px;
                 padding: 0 15px;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+
+            .container {
+                padding: 30px;
+                margin: 10px;
+            }
+
+            .logo {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                margin: 10px 0;
+            }
+
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 2em;
             }
         }
 
         @media screen and (max-width: 980px) {
             .container {
-                padding: 30px;
-                max-width: 95%;
+                padding: 20px;
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
             }
 
-            .logo {
-                width: 350px;
-                height: 175px;
+            .team-section {
+                padding: 0 15px;
             }
 
             h1 {
-                font-size: 2.2em;
+                font-size: 2em;
+                margin-bottom: 1.5em;
             }
 
             .team-card {
-                padding: 25px 20px;
+                padding: 25px 15px;
             }
 
             .team-member-image {
-                width: 160px;
-                height: 160px;
+                width: 150px;
+                height: 150px;
             }
 
-            .user-info {
-                position: static;
-                margin: 20px auto;
-                text-align: center;
+            .team-card h3 {
+                font-size: 1.4em;
+            }
+
+            .team-card .role {
+                font-size: 1em;
+                margin-bottom: 15px;
+            }
+
+            .team-card p {
+                font-size: 0.95em;
+                line-height: 1.5;
             }
         }
 
@@ -251,26 +282,50 @@
         }
 
         @media screen and (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+
             .team-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
+                gap: 20px;
+                padding: 0 10px;
+                margin: 20px auto;
             }
 
             .team-member-image {
-                width: 160px;
-                height: 160px;
+                width: 140px;
+                height: 140px;
+                margin-bottom: 20px;
             }
 
-            .team-card h3 {
-                font-size: 1.5em;
+            .team-card {
+                padding: 20px 15px;
+                margin-bottom: 15px;
             }
 
-            .team-card .role {
-                font-size: 1.1em;
+            h1 {
+                font-size: 1.8em;
+                padding: 0 10px;
             }
 
-            .team-card p {
+            .team-section h2 {
+                font-size: 1.6em !important;
+                margin-bottom: 0.8em !important;
+            }
+
+            .team-section p {
                 font-size: 1em;
+                line-height: 1.5;
+                padding: 0 10px;
+            }
+
+            .logo-container {
+                padding: 0 10px;
+                margin-bottom: 1.5em;
+            }
+
+            .logo {
+                max-width: 300px;
             }
         }
 
@@ -280,6 +335,21 @@
             font-size: 1.1em;
             transition: opacity 0.3s ease;
         }
+
+        /* Smooth Loading Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .team-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .team-card:nth-child(2) { animation-delay: 0.1s; }
+        .team-card:nth-child(3) { animation-delay: 0.2s; }
+        .team-card:nth-child(4) { animation-delay: 0.3s; }
+        .team-card:nth-child(5) { animation-delay: 0.4s; }
     </style>
 </head>
 <body class="is-preload">
@@ -347,8 +417,8 @@
                         <div class="team-card">
                             <img src="images/gabe siegel.jpg" alt="Gabriel Siegel" class="team-member-image">
                             <h3>Gabriel Siegel, MD</h3>
-                            <div class="role">Lead Researcher & Ultrasound Fellow</div>
-                            <p>Specializes in machine learning and AI applications in healthcare, focusing on developing innovative solutions for medical imaging analysis and clinical decision support systems.</p>
+                            <div class="role">VExUS ATLAS Creator & Ultrasound Fellow</div>
+                            <p>Created the VExUS ATLAS tool and specializes in machine learning and AI applications in healthcare, focusing on developing innovative solutions for medical imaging analysis and clinical decision support systems.</p>
                         </div>
 
                         <div class="team-card">
@@ -401,16 +471,24 @@
                             <div class="role">Ultrasound Fellow</div>
                             <p>Emergency ultrasound fellow from Rutgers specializing in point-of-care ultrasound applications and advancing diagnostic capabilities in critical care settings.</p>
                         </div>
+
+                        <div class="team-card">
+                            <img src="images/Luke McCormack.jpg" alt="Luke McCormack" class="team-member-image">
+                            <h3>Luke McCormack, MD</h3>
+                            <div class="role">Research Contributor</div>
+                            <p>Internal Medicine resident at the University of Colorado with a strong interest in critical care medicine. His work focuses on advancing the understanding and application of critical care diagnostics and interventions.</p>
+                        </div>
+
+                        <div class="team-card">
+                            <img src="images/kthayapran ERAS photo (1).png" alt="Kisha Thayapran" class="team-member-image">
+                            <h3>Kisha Thayapran, MD, MPH</h3>
+                            <div class="role">Medical Research Contributor</div>
+                            <p>Dr. Thayapran received her MD from the University of Colorado School of Medicine and her MPH from the Colorado School of Public Health. With a background in Biology from the California Institute of Technology, she brings a unique perspective to the intersection of diagnostic imaging and public health. Her research interests focus on advancing medical imaging accessibility and its applications in population health.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- User Info -->
-        <div class="user-info">
-            <p>User: Gabesiegel</p>
-            <p>Date: 2025-02-11 09:26:36 UTC</p>
-        </div>
+        </div
     </div>
 
     <!-- Scripts -->

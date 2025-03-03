@@ -76,6 +76,72 @@
             margin-bottom: 0.2em;
         }
 
+        /* Mobile-specific styles */
+        @media screen and (max-width: 768px) {
+            .title-container h1 {
+                font-size: 2em;
+            }
+            
+            .modal {
+                padding-top: 20px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                margin: 10px;
+                max-width: 95%;
+            }
+
+            .close {
+                top: 10px;
+                left: 10px;
+                font-size: 30px;
+            }
+
+            .prev, .next {
+                font-size: 30px;
+                padding: 0 10px;
+            }
+
+            .sub-tiles {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .sub-tile {
+                width: 100%;
+            }
+
+            .gallery-item {
+                padding: 15px;
+            }
+
+            .gallery-item img {
+                height: 120px;
+            }
+
+            .gallery-item h3 {
+                font-size: 1em;
+            }
+
+            .gallery-item .caption {
+                font-size: 0.8em;
+            }
+        }
+
+        /* Touch-specific improvements */
+        @media (hover: none) {
+            .gallery-item:hover {
+                transform: none;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .close, .prev, .next {
+                padding: 15px;  /* Larger touch target */
+            }
+        }
+
         /* Gallery Grid Styles */
         .gallery-grid {
             display: grid;
