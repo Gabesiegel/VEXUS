@@ -82,6 +82,15 @@
                 font-size: 2em;
             }
             
+            .gallery-item-tags {
+                gap: 4px;
+            }
+            
+            .gallery-tag {
+                font-size: 0.7em;
+                padding: 2px 6px;
+            }
+
             .modal {
                 padding-top: 20px;
             }
@@ -158,6 +167,9 @@
             text-align: center;
             padding: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 280px; /* Increased fixed height */
         }
         .gallery-item img {
             width: 100%;
@@ -165,20 +177,98 @@
             object-fit: cover;
             border-radius: 5px;
         }
+        .gallery-item-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+            width: 100%;
+            padding-top: 15px;
+        }
         .gallery-item h3 {
-            margin-top: 1em;
+            margin: 0 0 15px 0;
             font-size: 1.1em;
             color: #333;
+            flex-shrink: 0;
         }
-        .gallery-item .caption {
-            margin-top: 0.5em;
-            font-size: 0.9em;
+        .gallery-item-tags {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            height: 24px; /* Fixed height for tag container */
+        }
+        .gallery-tag {
+            font-size: 0.7em;
+            padding: 4px 8px;
+            border-radius: 12px;
+            white-space: nowrap;
+            font-weight: 500;
+            line-height: 1;
+            height: 24px; /* Fixed height for tags */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-tag.quality {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .gallery-tag.vein {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .gallery-tag.waveform {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* Upload area styles */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 2em auto;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2em;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            width: 100%;
+        }
+        .upload-area:hover {
+            border-color: #4a4a4a;
+            background: #fff;
+        }
+        .upload-icon {
+            font-size: 2em;
             color: #666;
-            min-height: 1.2em;
+            margin-bottom: 0.5em;
         }
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .upload-text {
+            color: #666;
+            margin: 0;
+        }
+        .file-input {
+            display: none;
+        }
+        .image-preview-container {
+            width: 100%;
+            margin-top: 1em;
+            text-align: center;
+        }
+        .image-preview {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         /* Modal */
@@ -316,6 +406,20 @@
                 height: 200px;
             }
         }
+
+        @media screen and (max-width: 768px) {
+            .gallery-item {
+                height: 240px; /* Smaller height for mobile */
+            }
+            .gallery-item-tags {
+                height: 22px; /* Slightly smaller height for mobile */
+                gap: 4px;
+            }
+            .gallery-tag {
+                height: 22px; /* Slightly smaller height for mobile */
+                padding: 3px 6px;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -370,26 +474,61 @@
                         <!-- IVC Tile -->
                         <div class="gallery-item" onclick="openModal('ivcModal')">
                             <img src="images/IVC_icon.jpeg" alt="IVC Thumbnail">
-                            <h3>IVC</h3>
-                            <p class="caption">Tap to view details</p>
+                            <div class="gallery-item-content">
+                                <h3>IVC</h3>
+                                <div class="gallery-item-tags">
+                                    <span class="gallery-tag quality">High Quality</span>
+                                    <span class="gallery-tag vein">IVC</span>
+                                    <span class="gallery-tag waveform">Normal</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Hepatic Vein Tile -->
                         <div class="gallery-item" onclick="openModal('hepaticModal')">
                             <img src="images/hepatic_icon.jpeg" alt="Hepatic Vein Thumbnail">
-                            <h3>Hepatic Vein</h3>
-                            <p class="caption">Tap to view Mild/Normal/Severe</p>
+                            <div class="gallery-item-content">
+                                <h3>Hepatic Vein</h3>
+                                <div class="gallery-item-tags">
+                                    <span class="gallery-tag quality">High Quality</span>
+                                    <span class="gallery-tag vein">Hepatic</span>
+                                    <span class="gallery-tag waveform">All Types</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Portal Vein Tile -->
                         <div class="gallery-item" onclick="openModal('portalModal')">
                             <img src="images/portal_icon.png" alt="Portal Vein Thumbnail">
-                            <h3>Portal Vein</h3>
-                            <p class="caption">Tap to view Mild/Normal/Severe</p>
+                            <div class="gallery-item-content">
+                                <h3>Portal Vein</h3>
+                                <div class="gallery-item-tags">
+                                    <span class="gallery-tag quality">High Quality</span>
+                                    <span class="gallery-tag vein">Portal</span>
+                                    <span class="gallery-tag waveform">All Types</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Renal Vein Tile -->
                         <div class="gallery-item" onclick="openModal('renalModal')">
                             <img src="images/renal_icon.png" alt="Renal Vein Thumbnail">
-                            <h3>Renal Vein</h3>
-                            <p class="caption">Tap to view Mild/Normal/Severe</p>
+                            <div class="gallery-item-content">
+                                <h3>Renal Vein</h3>
+                                <div class="gallery-item-tags">
+                                    <span class="gallery-tag quality">High Quality</span>
+                                    <span class="gallery-tag vein">Renal</span>
+                                    <span class="gallery-tag waveform">All Types</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Upload Section -->
+                    <div class="form-container">
+                        <div class="upload-area" id="dropZone">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Drag & Drop your image here or click to select</p>
+                            <input type="file" class="file-input" id="fileInput" accept="image/*">
+                        </div>
+                        <div class="image-preview-container">
+                            <img id="imagePreview" class="image-preview" style="display: none;">
                         </div>
                     </div>
                 </div>
