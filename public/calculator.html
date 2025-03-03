@@ -5,10 +5,14 @@
     <title>VExUS ATLAS - AI Image Recognition &amp; Scoring</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/mobile.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
@@ -648,6 +652,95 @@
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid #eee;
+        }
+
+        /* Mobile-specific calculator styles */
+        @media screen and (max-width: 980px) {
+            .upload-container {
+                padding: 15px;
+            }
+
+            .result-container {
+                flex-direction: column;
+            }
+
+            .image-preview {
+                max-width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .analysis-results {
+                width: 100%;
+            }
+
+            .upload-button {
+                width: 100%;
+                max-width: none;
+                padding: 15px;
+                margin: 10px 0;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .upload-area {
+                min-height: 150px;
+                padding: 10px;
+            }
+
+            .result-card {
+                padding: 15px;
+                margin: 10px 0;
+            }
+
+            .confidence-meter {
+                height: 15px;
+            }
+
+            .upload-instructions {
+                font-size: 0.9em;
+            }
+
+            .result-label {
+                font-size: 1.2em;
+            }
+
+            .confidence-value {
+                font-size: 1em;
+            }
+        }
+
+        /* Touch-specific improvements */
+        @media (hover: none) {
+            .upload-area {
+                cursor: pointer;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+
+            .upload-area:active {
+                background-color: rgba(0,0,0,0.05);
+            }
+
+            .button:active {
+                transform: translateY(1px);
+            }
+        }
+
+        /* Loading state improvements for mobile */
+        @media screen and (max-width: 980px) {
+            .loading-overlay {
+                background-color: rgba(255,255,255,0.9);
+            }
+
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+            }
+
+            .loading-text {
+                font-size: 1em;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>

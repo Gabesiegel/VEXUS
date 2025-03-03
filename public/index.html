@@ -3,9 +3,13 @@
 <head>
     <title>VExUS ATLAS</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/mobile.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
 
     <style>
@@ -208,16 +212,38 @@
             .feature-card p {
                 font-size: 1em;
             }
+
+            .feature-card {
+                margin: 10px 0;
+                padding: 15px;
+            }
+
+            .feature-card h3 {
+                font-size: 1.3em;
+                margin-bottom: 8px;
+            }
+
+            .feature-card p {
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+
+            .feature-card i {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
         }
 
-        /* Add touch optimization for mobile */
+        /* Improve touch targets for mobile */
         @media (hover: none) {
-            .feature-card {
-                cursor: default;
-            }
-            
+            .feature-card,
             nav#menu ul li a {
-                padding: 12px 0;  /* Larger touch target */
+                cursor: default;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+
+            nav#menu ul li a {
+                padding: 15px 0;
             }
         }
     </style>
