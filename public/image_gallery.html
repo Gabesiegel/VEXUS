@@ -257,6 +257,168 @@
                 height: 200px;
             }
         }
+
+        /* Gallery Submission Form Styles */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .upload-area {
+            width: 90%;
+            max-width: 600px;
+            margin: 15px auto;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px 20px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .upload-area:hover {
+            border-color: #999;
+        }
+
+        .upload-icon {
+            font-size: 2.5em;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .image-preview-container {
+            position: relative;
+            max-width: 100%;
+            margin: 25px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 0 auto;
+            display: none;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .image-preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-controls:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .image-preview-delete {
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .error-message {
+            display: none;
+            text-align: center;
+            color: #f44336;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 8px 15px;
+            margin-bottom: 1em;
+            border: 1px solid #777777;
+            border-radius: 5px;
+            background-color: transparent;
+            color: #777777;
+            transition: all 0.3s ease;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-size: 1em;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            background-color: rgba(119, 119, 119, 0.1);
+            outline: none;
+        }
+
+        button[type="submit"] {
+            display: inline-block;
+            padding: 8px 15px;
+            background: transparent;
+            color: #777777;
+            border: 1px solid #777777;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+        }
+
+        button[type="submit"]:hover {
+            background: rgba(119, 119, 119, 0.1);
+            transform: translateY(-2px);
+        }
+
+        form label {
+            display: block;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -311,9 +473,10 @@
                     </div>
                     <!-- Title -->
                     <div class="title-container">
-                        <h1>Image Gallery</h1>
-                        <p>Explore ultrasound images for VExUS assessment</p>
+                        <h1>VExUS Image Gallery</h1>
+                        <p>A collection of VExUS ultrasound images showcasing various grades and findings.</p>
                     </div>
+
                     <!-- Gallery Grid -->
                     <div class="gallery-grid">
                         <!-- IVC Tile -->
@@ -339,6 +502,46 @@
                             <img src="images/renal_icon.png" alt="Renal Vein Thumbnail">
                             <h3>Renal Vein</h3>
                             <p class="caption">Tap to view Mild/Normal/Severe</p>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Submission Section -->
+                    <div class="container" style="margin-top: 40px;">
+                        <h2>Want Your VExUS Image Featured in the Gallery?</h2>
+                        <p class="thank-you">Share your high-quality VExUS ultrasound images with the community. Selected images will be featured in our gallery to help educate others.</p>
+
+                        <div class="form-container">
+                            <form id="gallerySubmissionForm">
+                                <div class="upload-area" id="galleryUploadArea">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p class="upload-text">Click or drag and drop your VExUS image here</p>
+                                    <input type="file" id="galleryImageInput" class="file-input" accept="image/*" />
+                                </div>
+                                <div class="image-preview-container" style="display: none;">
+                                    <img id="galleryImagePreview" class="image-preview" alt="Image preview" />
+                                    <div class="image-preview-controls">
+                                        <span class="image-preview-delete" onclick="resetGalleryImageUpload()">×</span>
+                                    </div>
+                                </div>
+
+                                <label for="gallery_email">Email:</label>
+                                <input type="email" id="gallery_email" name="email" required />
+
+                                <label for="gallery_title">Title:</label>
+                                <input type="text" id="gallery_title" name="title" required />
+
+                                <label for="gallery_institution">Institution:</label>
+                                <input type="text" id="gallery_institution" name="institution" required />
+
+                                <label for="gallery_description">Image Description:</label>
+                                <textarea id="gallery_description" name="description" rows="6" required placeholder="Please provide details about the image, including the VExUS grade, clinical context, and any interesting findings."></textarea>
+
+                                <div style="text-align: center; margin-top: 2em;">
+                                    <button type="submit">Submit for Gallery</button>
+                                </div>
+                            </form>
+                            <div class="success-message">Thank you! Your image has been submitted for review.</div>
+                            <div class="error-message">Sorry, there was an error submitting your image. Please try again.</div>
                         </div>
                     </div>
                 </div>
@@ -577,6 +780,101 @@
             imgs[currentIndex].style.display = "block";
             slideIndex[className] = currentIndex;
         }
+
+        // Gallery image upload functionality
+        function handleGalleryImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('galleryImagePreview');
+                    const container = document.querySelector('#gallerySubmissionForm .image-preview-container');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    container.style.display = 'block';
+                    document.querySelector('#galleryUploadArea').style.borderColor = '#28a745';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetGalleryImageUpload() {
+            document.getElementById('galleryImageInput').value = '';
+            document.getElementById('galleryImagePreview').style.display = 'none';
+            document.querySelector('#gallerySubmissionForm .image-preview-container').style.display = 'none';
+            document.querySelector('#galleryUploadArea').style.borderColor = '#ccc';
+        }
+
+        // Set up gallery drag and drop
+        const galleryUploadArea = document.getElementById('galleryUploadArea');
+        const galleryImageInput = document.getElementById('galleryImageInput');
+
+        galleryUploadArea.addEventListener('click', () => galleryImageInput.click());
+        galleryImageInput.addEventListener('change', handleGalleryImageUpload);
+
+        galleryUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            galleryUploadArea.style.borderColor = '#28a745';
+            galleryUploadArea.style.backgroundColor = 'rgba(40, 167, 69, 0.05)';
+        });
+
+        galleryUploadArea.addEventListener('dragleave', () => {
+            galleryUploadArea.style.borderColor = '#ccc';
+            galleryUploadArea.style.backgroundColor = 'transparent';
+        });
+
+        galleryUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            galleryUploadArea.style.borderColor = '#ccc';
+            galleryUploadArea.style.backgroundColor = 'transparent';
+            if (e.dataTransfer.files.length) {
+                galleryImageInput.files = e.dataTransfer.files;
+                handleGalleryImageUpload({ target: { files: e.dataTransfer.files } });
+            }
+        });
+
+        // Handle gallery submission
+        document.getElementById('gallerySubmissionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const imageFile = document.getElementById('galleryImageInput').files[0];
+            
+            if (!imageFile) {
+                document.querySelector('#gallerySubmissionForm .error-message').textContent = 'Please upload an image.';
+                document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
+                document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
+                return;
+            }
+
+            formData.append('image', imageFile);
+            formData.append('email', document.getElementById('gallery_email').value);
+            formData.append('title', document.getElementById('gallery_title').value);
+            formData.append('institution', document.getElementById('gallery_institution').value);
+            formData.append('description', document.getElementById('gallery_description').value);
+
+            try {
+                const response = await fetch('/api/gallery-submission', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.querySelector('#gallerySubmissionForm .success-message').style.display = 'block';
+                    document.querySelector('#gallerySubmissionForm .error-message').style.display = 'none';
+                    document.getElementById('gallerySubmissionForm').reset();
+                    resetGalleryImageUpload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to submit image');
+                }
+            } catch (error) {
+                document.querySelector('#gallerySubmissionForm .error-message').textContent = 
+                    error.message || 'Sorry, there was an error submitting your image. Please try again.';
+                document.querySelector('#gallerySubmissionForm .error-message').style.display = 'block';
+                document.querySelector('#gallerySubmissionForm .success-message').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>

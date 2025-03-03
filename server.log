@@ -1101,3 +1101,26 @@ Requesting: /api/predict
 [2025-03-03T03:54:25.793Z] Uploading image: image_1740974065793.png
 [2025-03-03T03:54:26.666Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740974065793.png
 [2025-03-03T03:54:31.101Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740974065793_results.json
+Requesting: /
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /contact.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/contact
+Requesting: /api/contact

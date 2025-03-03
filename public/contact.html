@@ -97,40 +97,69 @@
         input[type="email"],
         textarea {
             width: 100%;
-            padding: 0.7em;
+            padding: 8px 15px;
             margin-bottom: 1em;
-            border: 1px solid #dedede;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+            border: 1px solid #777777;
+            border-radius: 5px;
+            background-color: transparent;
+            color: #777777;
             transition: all 0.3s ease;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-size: 1em;
         }
 
         input[type="text"]:focus,
         input[type="email"]:focus,
         textarea:focus {
-            background-color: #ffffff;
-            border-color: #2c3e50;
-            box-shadow: 0 0 5px rgba(44, 62, 80, 0.1);
+            background-color: rgba(119, 119, 119, 0.1);
+            outline: none;
         }
 
         button[type="submit"] {
-            background-color: #f0f0f0;
-            color: #2c3e50;
-            padding: 1em 2em;
-            border: 1px solid #dedede;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
+            display: inline-block;
+            padding: 8px 15px;
+            background: transparent;
+            color: #777777;
+            border: 1px solid #777777;
+            border-radius: 5px;
+            text-decoration: none;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
         }
 
         button[type="submit"]:hover {
-            background-color: #e4e4e4;
+            background: rgba(119, 119, 119, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .error-message {
+            display: none;
+            text-align: center;
+            color: #f44336;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: rgba(244, 67, 54, 0.1);
         }
 
         @media screen and (max-width: 980px) {
@@ -142,6 +171,102 @@
                 width: 400px;
                 height: 200px;
             }
+        }
+
+        .upload-area {
+            width: 90%;
+            max-width: 600px;
+            margin: 15px auto;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px 20px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .upload-area:hover {
+            border-color: #999;
+        }
+
+        .upload-icon {
+            font-size: 2.5em;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Enhanced image preview */
+        .image-preview-container {
+            position: relative;
+            max-width: 100%;
+            margin: 25px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 0 auto;
+            display: none;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .image-preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-controls:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .image-preview-delete {
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* Enhanced error handling */
+        .error-container {
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: none;
         }
     </style>
 </head>
@@ -196,21 +321,71 @@
                         <p>Thank you for visiting VExUS ATLAS. We welcome collaboration opportunities and look forward to hearing from you!</p>
                     </div>
 
-                    <h1>Contact Us</h1>
-                    <form id="contactForm" method="POST" action="/submitContact">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required />
+                    <div class="form-container">
+                        <h1>Contact Us</h1>
+                        <form id="contactForm">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required />
 
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required />
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" required />
 
-                        <label for="message">Message:</label>
-                        <textarea id="message" name="message" rows="6" required></textarea>
+                            <label for="institution">Institution:</label>
+                            <input type="text" id="institution" name="institution" required />
 
-                        <div style="text-align: center; margin-top: 2em;">
-                            <button type="submit">Send Message</button>
-                        </div>
-                    </form>
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required />
+
+                            <label for="message">Message:</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+
+                            <div style="text-align: center; margin-top: 2em;">
+                                <button type="submit">Send Message</button>
+                            </div>
+                        </form>
+                        <div class="success-message">Thank you for your message! We'll get back to you soon.</div>
+                        <div class="error-message">Sorry, there was an error sending your message. Please try again.</div>
+                    </div>
+                </div>
+
+                <!-- VExUS Image Interpretation Help Section -->
+                <div class="container" style="margin-top: 40px;">
+                    <h2>Need Help Interpreting a VExUS Image?</h2>
+                    <p class="thank-you">Our team of experts can help you interpret your VExUS ultrasound images. Please upload your image and provide your contact information below.</p>
+
+                    <div class="form-container">
+                        <form id="interpretationForm">
+                            <div class="upload-area" id="uploadArea">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <p class="upload-text">Click or drag and drop your VExUS image here</p>
+                                <input type="file" id="imageInput" class="file-input" accept="image/*" />
+                            </div>
+                            <div class="image-preview-container" style="display: none;">
+                                <img id="imagePreview" class="image-preview" alt="Image preview" />
+                                <div class="image-preview-controls">
+                                    <span class="image-preview-delete" onclick="resetImageUpload()">×</span>
+                                </div>
+                            </div>
+
+                            <label for="interp_email">Email:</label>
+                            <input type="email" id="interp_email" name="email" required />
+
+                            <label for="interp_title">Title:</label>
+                            <input type="text" id="interp_title" name="title" required />
+
+                            <label for="interp_institution">Institution:</label>
+                            <input type="text" id="interp_institution" name="institution" required />
+
+                            <label for="interp_comments">Additional Comments:</label>
+                            <textarea id="interp_comments" name="comments" rows="6" required></textarea>
+
+                            <div style="text-align: center; margin-top: 2em;">
+                                <button type="submit">Submit for Interpretation</button>
+                            </div>
+                        </form>
+                        <div class="success-message">Thank you! We'll review your image and get back to you soon.</div>
+                        <div class="error-message">Sorry, there was an error submitting your request. Please try again.</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -222,5 +397,137 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                title: document.getElementById('title').value,
+                institution: document.getElementById('institution').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    document.querySelector('.success-message').style.display = 'block';
+                    document.querySelector('.error-message').style.display = 'none';
+                    document.getElementById('contactForm').reset();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                document.querySelector('.error-message').style.display = 'block';
+                document.querySelector('.success-message').style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
+        // Image upload preview functionality
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    const container = document.querySelector('.image-preview-container');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    container.style.display = 'block';
+                    document.querySelector('.upload-area').style.borderColor = '#28a745';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetImageUpload() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.querySelector('.image-preview-container').style.display = 'none';
+            document.querySelector('.upload-area').style.borderColor = '#ccc';
+        }
+
+        // Set up drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+
+        uploadArea.addEventListener('click', () => imageInput.click());
+        imageInput.addEventListener('change', handleImageUpload);
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#28a745';
+            uploadArea.style.backgroundColor = 'rgba(40, 167, 69, 0.05)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+            if (e.dataTransfer.files.length) {
+                imageInput.files = e.dataTransfer.files;
+                handleImageUpload({ target: { files: e.dataTransfer.files } });
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('interpretationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const imageFile = document.getElementById('imageInput').files[0];
+            
+            if (!imageFile) {
+                document.querySelector('#interpretationForm .error-message').textContent = 'Please upload an image.';
+                document.querySelector('#interpretationForm .error-message').style.display = 'block';
+                document.querySelector('#interpretationForm .success-message').style.display = 'none';
+                return;
+            }
+
+            formData.append('image', imageFile);
+            formData.append('email', document.getElementById('interp_email').value);
+            formData.append('title', document.getElementById('interp_title').value);
+            formData.append('institution', document.getElementById('interp_institution').value);
+            formData.append('comments', document.getElementById('interp_comments').value);
+
+            try {
+                const response = await fetch('/api/interpretation-request', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.querySelector('#interpretationForm .success-message').style.display = 'block';
+                    document.querySelector('#interpretationForm .error-message').style.display = 'none';
+                    document.getElementById('interpretationForm').reset();
+                    resetImageUpload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to submit request');
+                }
+            } catch (error) {
+                document.querySelector('#interpretationForm .error-message').textContent = 
+                    error.message || 'Sorry, there was an error submitting your request. Please try again.';
+                document.querySelector('#interpretationForm .error-message').style.display = 'block';
+                document.querySelector('#interpretationForm .success-message').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

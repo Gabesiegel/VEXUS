@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
 import {spawn} from 'child_process';
 import cors from 'cors';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import { Firestore } from '@google-cloud/firestore';
 
 // ES modules dirname setup
 const __filename = fileURLToPath(import.meta.url);
@@ -34,6 +37,11 @@ const CONFIG = {
 // Initialize Cloud Storage client
 const storage = new Storage();
 const bucket = storage.bucket(CONFIG.bucketName);
+
+// Initialize Firestore
+const firestore = new Firestore({
+    projectId: CONFIG.projectId,
+});
 
 // Function to ensure required directories exist in the bucket
 async function ensureStorageDirectories() {
@@ -867,6 +875,173 @@ const makeApiCallWithRetry = async (url, payload, token, veinType, maxRetries = 
         }
     }
 };
+
+// Contact form endpoint
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { name, email, message, title, institution } = req.body;
+
+        // Validate input
+        if (!name || !email || !message || !title || !institution) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Create a new document in the 'contacts' collection
+        const contactsRef = firestore.collection('contacts');
+        await contactsRef.add({
+            name,
+            email,
+            message,
+            title,
+            institution,
+            timestamp: new Date().toISOString()
+        });
+
+        res.status(200).json({
+            message: 'Contact form submitted successfully',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error saving contact form:', error);
+        res.status(500).json({
+            error: 'Failed to submit contact form',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// VExUS Image Interpretation Request endpoint
+app.post('/api/interpretation-request', async (req, res) => {
+    try {
+        const { email, title, institution, comments } = req.body;
+        const imageFile = req.files?.image;
+
+        // Validate input
+        if (!email || !title || !institution || !comments || !imageFile) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Upload image to Cloud Storage
+        const imageInfo = await uploadImage(imageFile.data.toString('base64'), imageFile.mimetype);
+
+        // Create a new document in the 'interpretation_requests' collection
+        const requestsRef = firestore.collection('interpretation_requests');
+        await requestsRef.add({
+            email,
+            title,
+            institution,
+            comments,
+            imageUrl: imageInfo.publicUrl,
+            gcsPath: imageInfo.gcsPath,
+            status: 'pending',
+            timestamp: new Date().toISOString()
+        });
+
+        res.status(200).json({
+            message: 'Interpretation request submitted successfully',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error saving interpretation request:', error);
+        res.status(500).json({
+            error: 'Failed to submit interpretation request',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Gallery submission endpoint
+app.post('/api/gallery-submission', async (req, res) => {
+    try {
+        const { email, title, institution, description } = req.body;
+        const imageFile = req.files?.image;
+
+        // Validate input
+        if (!email || !title || !institution || !description || !imageFile) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Upload image to Cloud Storage
+        const imageInfo = await uploadImage(imageFile.data.toString('base64'), imageFile.mimetype);
+
+        // Create a new document in the 'gallery_submissions' collection
+        const submissionsRef = firestore.collection('gallery_submissions');
+        await submissionsRef.add({
+            email,
+            title,
+            institution,
+            description,
+            imageUrl: imageInfo.publicUrl,
+            gcsPath: imageInfo.gcsPath,
+            status: 'pending',
+            submittedAt: new Date().toISOString(),
+            approved: false,
+            featured: false
+        });
+
+        res.status(200).json({
+            message: 'Gallery submission received successfully',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error saving gallery submission:', error);
+        res.status(500).json({
+            error: 'Failed to submit image to gallery',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Test Firestore endpoint
+app.post('/api/test-firestore', async (req, res) => {
+    try {
+        // Create a test document
+        const testData = {
+            test: true,
+            timestamp: new Date().toISOString(),
+            message: 'Test document'
+        };
+
+        // Add the test document to a test collection
+        const testCollection = firestore.collection('test_collection');
+        const docRef = await testCollection.add(testData);
+
+        // Retrieve the document to verify it was stored
+        const doc = await docRef.get();
+        const data = doc.data();
+
+        // Clean up by deleting the test document
+        await docRef.delete();
+
+        res.status(200).json({
+            success: true,
+            message: 'Firestore test successful',
+            documentId: docRef.id,
+            data: data,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Firestore test error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Firestore test failed',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
 
 async function startServer() {
     try {
