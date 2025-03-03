@@ -136,7 +136,7 @@
 
         .article-title {
             font-size: 1.4em;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             color: #333;
             font-weight: bold;
             line-height: 1.3;
@@ -145,12 +145,12 @@
         .article-reference {
             font-size: 0.95em;
             color: #666;
-            margin-bottom: 12px;
+            margin-bottom: 5px;
             font-style: italic;
         }
 
         .article-key-points {
-            margin-top: 15px;
+            margin-top: 0;
             flex-grow: 1;
             font-size: 0.95em;
             line-height: 1.5;
@@ -158,25 +158,36 @@
         }
 
         .key-point {
+            position: relative;
+            padding-left: 20px;
             margin-bottom: 8px;
             font-size: 0.95em;
             line-height: 1.5;
             color: #444;
-            position: relative;
-            padding-left: 15px;
+        }
+
+        .key-point:before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: #777777;
         }
 
         .article-link {
             display: inline-block;
             padding: 8px 15px;
-            background: #777777;
+            background: #999999;
             color: white !important;
             border-radius: 5px;
             text-decoration: none;
-            margin-top: auto;
+            margin-top: 10px;
             transition: background 0.2s;
             font-size: 0.9em;
             align-self: flex-start;
+        }
+
+        .article-link:hover {
+            background: #777777;
         }
 
         @media screen and (max-width: 980px) {
@@ -303,8 +314,8 @@
                     <div class="article-card">
                         <div class="article-title">Quantifying systemic congestion with Point-Of-Care ultrasound: development of the venous excess ultrasound grading system</div>
                         <div class="article-reference">Beaubien-Souligny W, Rola P, Haycock K, Bouchard J, Lamarche Y, Spiegel R, Denault AY. Ultrasound J. 2020 Apr 9;12(1):16. doi: 10.1186/s13089-020-00163-w.</div>
-                        <p>This seminal paper presents the original derivation of the VExUS grading system, establishing a robust methodology for systematic venous congestion assessment.</p>
                         <div class="article-key-points">
+                            <div class="key-point">This seminal paper presents the original derivation of the VExUS grading system, establishing a robust methodology for systematic venous congestion assessment.</div>
                             <div class="key-point">Exemplifies methodologically sound clinical scoring tool development, utilizing both training and validation datasets, a model for diagnostic tool development broadly applicable to various clinical domains.</div>
                             <div class="key-point">Notes limitations regarding narrow inclusion criteria that may impact generalizability of findings to broader patient populations.</div>
                             <div class="key-point">Demonstrates VExUS grade 3 (severe congestion) as a significant predictor of cardiorenal acute kidney injury.</div>
@@ -315,8 +326,8 @@
                     <div class="article-card">
                         <div class="article-title">Prospective Evaluation of Venous Excess Ultrasound for Estimation of Venous Congestion</div>
                         <div class="article-reference">Longino A, Martin K, Leyba K, Siegel G, Thai TN, Riscinti M, Douglas IS, Gill E, Burke J. Chest. 2024 Mar;165(3):590-600. doi: 10.1016/j.chest.2023.09.029.</div>
-                        <p>This validation study evaluates VExUS against right heart catheterization in a diverse hospital cohort, providing strong evidence for its clinical utility.</p>
                         <div class="article-key-points">
+                            <div class="key-point">This validation study evaluates VExUS against right heart catheterization in a diverse hospital cohort, providing strong evidence for its clinical utility.</div>
                             <div class="key-point">Establishes robust correlations between VExUS scores and key hemodynamic parameters including right atrial pressure, pulmonary capillary wedge pressure, and mean pulmonary artery pressure.</div>
                             <div class="key-point">Documents significant association between VExUS scoring and acute kidney injury incidence.</div>
                             <div class="key-point">Demonstrates correlation between VExUS assessment and diuretic response during hospitalization, suggesting potential utility in guiding fluid management strategies.</div>
@@ -327,8 +338,8 @@
                     <div class="article-card">
                         <div class="article-title">Reliability and reproducibility of the venous excess ultrasound (VExUS) score, a multi-site prospective study: validating a novel ultrasound technique for comprehensive assessment of venous congestion</div>
                         <div class="article-reference">Longino AA, Martin KC, Leyba KR, McCormack L, Siegel G, Sharma VM, Riscinti M, Lopez CO, Douglas IS, Gill EA. Crit Care. 2024 Jun 11;28(1):197. doi: 10.1186/s13054-024-04961-9.</div>
-                        <p>This multi-site study provides critical validation of VExUS scoring reproducibility and inter-rater reliability, addressing fundamental questions about the clinical utility of ultrasound waveform interpretation.</p>
                         <div class="article-key-points">
+                            <div class="key-point">This multi-site study provides critical validation of VExUS scoring reproducibility and inter-rater reliability, addressing fundamental questions about the clinical utility of ultrasound waveform interpretation.</div>
                             <div class="key-point">Demonstrates high inter-rater reliability for the overall VExUS score, exceeding the reliability of its individual component measurements.</div>
                             <div class="key-point">Documents improved reproducibility with electrocardiogram synchronization during assessment.</div>
                         </div>
@@ -338,8 +349,8 @@
                     <div class="article-card">
                         <div class="article-title">Clinical applications of the venous excess ultrasound (VExUS) score: conceptual review and case series</div>
                         <div class="article-reference">Rola P, Miralles-Aguiar F, Argaiz E, Beaubien-Souligny W, Haycock K, López-Izquierdo A, Gardellin R, Spiegel R, Cebotari D, Reidt S, Denault AY. Ultrasound J. 2021 Sep 8;13(1):39. doi: 10.1186/s13089-021-00232-8.</div>
-                        <p>This comprehensive review by Rola et al. provides an in-depth analysis of VExUS methodology and clinical applications through illustrative case studies.</p>
                         <div class="article-key-points">
+                            <div class="key-point">This comprehensive review by Rola et al. provides an in-depth analysis of VExUS methodology and clinical applications through illustrative case studies.</div>
                             <div class="key-point">Presents a detailed examination of the design rationale and pathophysiological basis for VExUS assessment.</div>
                             <div class="key-point">Utilizes case-based learning to illustrate practical clinical applications across various patient scenarios.</div>
                         </div>
@@ -351,7 +362,6 @@
                     <div class="article-card">
                         <div class="article-title">Combination of Inferior Vena Cava Diameter, Hepatic Venous Flow, and Portal Vein Pulsatility Index: Venous Excess Ultrasound Score (VEXUS Score) in Predicting Acute Kidney Injury in Patients with Cardiorenal Syndrome: A Prospective Cohort Study</div>
                         <div class="article-reference">Bhardwaj V, Vikneswaran G, Rola P, Singh GR, Thakral A, Bhasin D, Singhal A, Shah H, Gupta M, Dalal S, Gupta A. Indian Journal of Critical Care Medicine (2020): 10.5005/jp-journals-10071-23570</div>
-                        <p>This prospective study examines the temporal evolution of Doppler waveforms in patients with cardiorenal syndrome, offering insights into the dynamic nature of venous congestion.</p>
                         <div class="article-key-points">
                             <div class="key-point">Documents progressive normalization of Doppler waveforms corresponding with resolution of cardiorenal acute kidney injury.</div>
                             <div class="key-point">Provides evidence for serial VExUS assessments as potential markers of clinical improvement.</div>
@@ -362,7 +372,6 @@
                     <div class="article-card">
                         <div class="article-title">Assessment of venous congestion with venous excess ultrasound score in the prognosis of acute heart failure in the emergency department: a prospective study</div>
                         <div class="article-reference">Landi I, Guerritore L, Iannaccone A, Ricotti A, Rola P, Garrone M. Eur Heart J Open. 2024 Jul 10;4(5):oeae050. doi: 10.1093/ehjopen/oeae050.</div>
-                        <p>This emergency department-based study evaluates VExUS for prognostication in acute decompensated heart failure patients.</p>
                         <div class="article-key-points">
                             <div class="key-point">Demonstrates association between severe congestion (grade 3) and clinically significant outcomes including mortality, hospital readmission, and acute kidney injury.</div>
                             <div class="key-point">Although limited by sample size, provides foundational evidence for larger investigations to develop more nuanced risk stratification models.</div>
@@ -375,7 +384,6 @@
                     <div class="article-card">
                         <div class="article-title">Early Trajectory of Venous Excess Ultrasound Score is Associated with Clinical Outcomes of General ICU Patients</div>
                         <div class="article-reference">Trigkidis KK, Siempos II, Kotanidou A, Zakynthinos S, Routsi C, Kokkoris S. Shock. 2024 Mar 1;61(3):400-405. doi: 10.1097/SHK.0000000000002321.</div>
-                        <p>This ICU-based study (n=89) investigates both absolute VExUS values and temporal trends as predictors of major adverse kidney events at 30 days (MAKE30).</p>
                         <div class="article-key-points">
                             <div class="key-point">Identifies trends in VExUS scores, rather than static measurements, as significant predictors of major adverse kidney events.</div>
                             <div class="key-point">Suggests the dynamic nature of venous congestion in critical illness aligns with the proposed pathophysiological mechanisms underlying VExUS assessment.</div>
@@ -387,7 +395,6 @@
                     <div class="article-card">
                         <div class="article-title">Prevalence of systemic venous congestion assessed by Venous Excess Ultrasound Grading System (VExUS) and association with acute kidney injury in a general ICU cohort: a prospective multicentric study</div>
                         <div class="article-reference">Andrei S, Bahr PA, Nguyen M, Bouhemad B, Guinot PG. Crit Care. 2023 Jun 8;27(1):224. doi: 10.1186/s13054-023-04524-4.</div>
-                        <p>This larger multicenter ICU study (n=145) provides important epidemiological data on venous congestion prevalence in a general critical care population.</p>
                         <div class="article-key-points">
                             <div class="key-point">Documents relatively low prevalence of VExUS-detected congestion in a general ICU cohort.</div>
                             <div class="key-point">Failed to demonstrate association between VExUS scores and acute kidney injury in this heterogeneous population.</div>
@@ -401,7 +408,6 @@
                     <div class="article-card">
                         <div class="article-title">VExUS Nexus: Bedside Assessment of Venous Congestion</div>
                         <div class="article-reference">Argaiz ER. Adv Chronic Kidney Dis. 2021 May;28(3):252-261. doi: 10.1053/j.ackd.2021.03.004.</div>
-                        <p>This comprehensive review focuses on practical VExUS implementation in clinical settings.</p>
                         <div class="article-key-points">
                             <div class="key-point">Provides detailed guidance on optimizing VExUS assessment technique and interpretation.</div>
                             <div class="key-point">Discusses integration of VExUS into broader clinical assessment workflows.</div>
@@ -412,7 +418,6 @@
                     <div class="article-card">
                         <div class="article-title">Monitoring the venous circulation: novel techniques and applications</div>
                         <div class="article-reference">Longino AA, Martin KC, Douglas IS. Curr Opin Crit Care. 2024 Jun 1;30(3):260-267. doi: 10.1097/MCC.0000000000001155.</div>
-                        <p>This contemporary review contextualizes VExUS among available venous pressure assessment methodologies and evaluates its limitations.</p>
                         <div class="article-key-points">
                             <div class="key-point">Provides critical analysis of VExUS limitations and potential areas for methodological refinement.</div>
                             <div class="key-point">Positions VExUS within the broader framework of venous hemodynamic assessment techniques.</div>
@@ -425,7 +430,6 @@
                     <div class="article-card">
                         <div class="article-title">Unlocking the Potential of VExUS in Assessing Venous Congestion: The Art of Doing It Right</div>
                         <div class="article-reference">Koratala A, Romero-González G, Soliman-Aboumarie H, Kazory A. Cardiorenal Med. 2024;14(1):350-374. doi: 10.1159/000539469.</div>
-                        <p>This detailed instructional resource provides comprehensive guidance on optimizing VExUS technique for clinical implementation.</p>
                         <div class="article-key-points">
                             <div class="key-point">Offers detailed technical protocols for standardized VExUS assessment.</div>
                             <div class="key-point">Includes troubleshooting guidance for common technical challenges.</div>
@@ -436,7 +440,6 @@
                     <div class="article-card">
                         <div class="article-title">Decoding VExUS: a practical guide for excelling in point-of-care ultrasound assessment of venous congestion</div>
                         <div class="article-reference">Assavapokee, T., Rola, P., Assavapokee, N. et al. Ultrasound J 16, 48 (2024). https://doi.org/10.1186/s13089-024-00396-z</div>
-                        <p>This practical guide provides step-by-step instruction for clinicians implementing VExUS assessment in their practice.</p>
                         <div class="article-key-points">
                             <div class="key-point">Features comprehensive acquisition and interpretation protocols.</div>
                             <div class="key-point">Addresses common performance challenges and quality improvement strategies.</div>
