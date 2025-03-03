@@ -188,15 +188,14 @@
         }
 
         .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 40px;
             background: #fff;
             border-radius: 20px;
-            padding: 25px;
-            max-width: 1000px;
-            margin: 40px auto;
-            position: relative;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 1200px;
         }
 
         .modal.show .modal-content {
@@ -204,13 +203,16 @@
             opacity: 1;
         }
 
-        .modal-header {
+        .modal-header-container {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .modal-left-section {
+            flex: 1;
         }
 
         .modal-title {
@@ -240,7 +242,6 @@
             color: #777; /* Changed from white to grey */
             font-size: 24px;
             z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
         }
 
         .close:hover {
@@ -355,7 +356,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
             padding: 8px 15px;
             background: #f5f5f5;
             border-radius: 8px;
@@ -363,15 +363,17 @@
             font-size: 0.9em;
             transition: all 0.2s ease;
             color: #555;
+            flex-direction: row-reverse; /* Reverse icon and text order */
         }
 
         .back-button:hover {
             background: #eee;
-            transform: translateX(-2px);
+            transform: translateX(2px); /* Change direction of hover animation */
         }
 
         .back-button i {
             font-size: 0.9em;
+            transform: rotate(180deg); /* Flip the arrow to point right */
         }
 
         /* Severity tags */
@@ -1085,14 +1087,18 @@
         <div id="ivcModal" class="modal">
             <span class="close">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span>IVC</span>
-                </div>
-                <div class="back-button">
-                    <i class="fas fa-arrow-left"></i> Back to Gallery
-                </div>
-                <div class="modal-header">
-                    <h2 class="modal-title">IVC Ultrasound</h2>
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span>IVC</span>
+                        </div>
+                        <div class="modal-header">
+                            <h2 class="modal-title">IVC Ultrasound</h2>
+                        </div>
+                    </div>
+                    <div class="back-button">
+                        <i class="fas fa-arrow-left"></i> Back to Gallery
+                    </div>
                 </div>
                 <div class="sub-tiles">
                     <div class="sub-tile" data-target-modal="ivcLessModal" data-severity="less">
@@ -1113,13 +1119,17 @@
         <div id="ivcLessModal" class="modal">
             <span class="close">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span data-target-modal="ivcModal">IVC</span>
-                    <span class="separator">/</span>
-                    <span>< 2cm</span>
-                </div>
-                <div class="back-button" data-parent-modal="ivcModal">
-                    <i class="fas fa-arrow-left"></i> Back to IVC
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span data-target-modal="ivcModal">IVC</span>
+                            <span class="separator">/</span>
+                            <span>< 2cm</span>
+                        </div>
+                    </div>
+                    <div class="back-button" data-parent-modal="ivcModal">
+                        <i class="fas fa-arrow-left"></i> Back to IVC
+                    </div>
                 </div>
                 <div class="slideshow-content ivcLessSlides">
                     <img src="images/image_gallery/IVC/Less/01.01.1.IVC.NL.png" alt="IVC Less than 2cm Image" />
@@ -1133,13 +1143,17 @@
         <div id="ivcMoreModal" class="modal">
             <span class="close">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span data-target-modal="ivcModal">IVC</span>
-                    <span class="separator">/</span>
-                    <span>> 2cm</span>
-                </div>
-                <div class="back-button" data-parent-modal="ivcModal">
-                    <i class="fas fa-arrow-left"></i> Back to IVC
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span data-target-modal="ivcModal">IVC</span>
+                            <span class="separator">/</span>
+                            <span>> 2cm</span>
+                        </div>
+                    </div>
+                    <div class="back-button" data-parent-modal="ivcModal">
+                        <i class="fas fa-arrow-left"></i> Back to IVC
+                    </div>
                 </div>
                 <div class="slideshow-content ivcMoreSlides">
                     <img src="images/image_gallery/IVC/More/02.01.1.IVC.MD.png" alt="IVC More than 2cm Image" />
@@ -1154,14 +1168,15 @@
         <div id="hepaticModal" class="modal">
             <span class="close" onclick="closeModal('hepaticModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
-                </div>
-                <div class="back-button" onclick="closeModal('hepaticModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Gallery
-                </div>
-                <div class="modal-header">
-                    <h2 class="modal-title">Hepatic Vein Ultrasound</h2>
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="closeModal('hepaticModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Gallery
+                    </div>
                 </div>
                 <div class="sub-tiles">
                     <div class="sub-tile" data-target-modal="hepaticNormalModal" data-severity="normal">
@@ -1187,13 +1202,17 @@
         <div id="hepaticNormalModal" class="modal">
             <span class="close" onclick="closeModal('hepaticNormalModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
-                    <span class="separator">/</span>
-                    <span>Normal</span>
-                </div>
-                <div class="back-button" onclick="openModal('hepaticModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
+                            <span class="separator">/</span>
+                            <span>Normal</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('hepaticModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
+                    </div>
                 </div>
                 <div class="slideshow-content hepaticNormalSlides">
                 <img src="images/image_gallery/Hepatic/Normal/01.02.4.HV.NL.png" alt="Hepatic Normal Image" />
@@ -1209,13 +1228,17 @@
         <div id="hepaticMildModal" class="modal">
             <span class="close" onclick="closeModal('hepaticMildModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
-                    <span class="separator">/</span>
-                    <span>Mild</span>
-                </div>
-                <div class="back-button" onclick="openModal('hepaticModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
+                            <span class="separator">/</span>
+                            <span>Mild</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('hepaticModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
+                    </div>
                 </div>
                 <div class="slideshow-content hepaticMildSlides">
                 <img src="images/image_gallery/Hepatic/Mild/02.0.2.HV.MD.png" alt="Hepatic Mild Image" />
@@ -1231,20 +1254,24 @@
         <div id="hepaticSevereModal" class="modal">
             <span class="close" onclick="closeModal('hepaticSevereModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
-                    <span class="separator">/</span>
-                    <span>Severe</span>
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('hepaticModal')">Hepatic Vein</span>
+                            <span class="separator">/</span>
+                            <span>Severe</span>
+                        </div>
                     </div>
-                <div class="back-button" onclick="openModal('hepaticModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
+                    <div class="back-button" onclick="openModal('hepaticModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Hepatic Vein
                     </div>
+                </div>
                 <div class="slideshow-content hepaticSevereSlides">
                     <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image" />
                     <div class="image-description">Severe hepatic congestion showing monophasic waveform with loss of normal triphasic pattern.</div>
                     <img src="images/image_gallery/Hepatic/Severe/18.03.01.HV.SR.png" alt="Hepatic Severe Image 2" />
                     <div class="image-description">Another example of severe hepatic congestion with continuous monophasic flow.</div>
-                    </div>
+                </div>
                 <span class="prev" onclick="plusSlides(-1, 'hepaticSevereSlides')">&#10094;</span>
                 <span class="next" onclick="plusSlides(1, 'hepaticSevereSlides')">&#10095;</span>
             </div>
@@ -1254,14 +1281,15 @@
         <div id="renalModal" class="modal">
             <span class="close" onclick="closeModal('renalModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('renalModal')">Renal Vein</span>
-                </div>
-                <div class="back-button" onclick="closeModal('renalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Gallery
-                </div>
-                <div class="modal-header">
-                    <h2 class="modal-title">Renal Vein Ultrasound</h2>
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('renalModal')">Renal Vein</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="closeModal('renalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Gallery
+                    </div>
                 </div>
                 <div class="sub-tiles">
                     <div class="sub-tile" data-target-modal="renalNormalModal" data-severity="normal">
@@ -1287,13 +1315,17 @@
         <div id="renalNormalModal" class="modal">
             <span class="close" onclick="closeModal('renalNormalModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('renalModal')">Renal Vein</span>
-                    <span class="separator">/</span>
-                    <span>Normal</span>
-                </div>
-                <div class="back-button" onclick="openModal('renalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('renalModal')">Renal Vein</span>
+                            <span class="separator">/</span>
+                            <span>Normal</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('renalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                    </div>
                 </div>
                 <div class="slideshow-content renalNormalSlides">
                     <img src="images/image_gallery/Renal/Normal/01.03.1.RV.NL.png" alt="Renal Normal Image" />
@@ -1307,13 +1339,17 @@
         <div id="renalMildModal" class="modal">
             <span class="close" onclick="closeModal('renalMildModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('renalModal')">Renal Vein</span>
-                    <span class="separator">/</span>
-                    <span>Mild</span>
-                </div>
-                <div class="back-button" onclick="openModal('renalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('renalModal')">Renal Vein</span>
+                            <span class="separator">/</span>
+                            <span>Mild</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('renalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                    </div>
                 </div>
                 <div class="slideshow-content renalMildSlides">
                     <img src="images/image_gallery/Renal/Mild/02.0.01.RV.MD.png" alt="Renal Mild Image" />
@@ -1327,13 +1363,17 @@
         <div id="renalSevereModal" class="modal">
             <span class="close" onclick="closeModal('renalSevereModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('renalModal')">Renal Vein</span>
-                    <span class="separator">/</span>
-                    <span>Severe</span>
-                </div>
-                <div class="back-button" onclick="openModal('renalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('renalModal')">Renal Vein</span>
+                            <span class="separator">/</span>
+                            <span>Severe</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('renalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Renal Vein
+                    </div>
                 </div>
                 <div class="slideshow-content renalSevereSlides">
                     <img src="images/image_gallery/Renal/Severe/61.0.2.RV.SR.png" alt="Renal Severe Image" />
@@ -1348,14 +1388,15 @@
         <div id="portalModal" class="modal">
             <span class="close" onclick="closeModal('portalModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('portalModal')">Portal Vein</span>
-                </div>
-                <div class="back-button" onclick="closeModal('portalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Gallery
-                </div>
-                <div class="modal-header">
-                    <h2 class="modal-title">Portal Vein Ultrasound</h2>
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('portalModal')">Portal Vein</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="closeModal('portalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Gallery
+                    </div>
                 </div>
                 <div class="sub-tiles">
                     <div class="sub-tile" data-target-modal="portalNormalModal" data-severity="normal">
@@ -1381,36 +1422,19 @@
         <div id="portalNormalModal" class="modal">
             <span class="close" onclick="closeModal('portalNormalModal')">&times;</span>
             <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('portalModal')">Portal Vein</span>
-                    <span class="separator">/</span>
-                    <span>Normal</span>
-                </div>
-                <div class="back-button" onclick="openModal('portalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Portal Vein
+                <div class="modal-header-container">
+                    <div class="modal-left-section">
+                        <div class="modal-breadcrumb">
+                            <span onclick="openModal('portalModal')">Portal Vein</span>
+                            <span class="separator">/</span>
+                            <span>Normal</span>
+                        </div>
+                    </div>
+                    <div class="back-button" onclick="openModal('portalModal')">
+                        <i class="fas fa-arrow-left"></i> Back to Portal Vein
+                    </div>
                 </div>
                 <div class="slideshow-content portalNormalSlides">
-                    <img src="images/image_gallery/Portal_Vein/Normal/01.1.2.PV.NL.png" alt="Portal Normal Image" />
-                </div>
-                <span class="prev" onclick="plusSlides(-1, 'portalNormalSlides')">&#10094;</span>
-                <span class="next" onclick="plusSlides(1, 'portalNormalSlides')">&#10095;</span>
-            </div>
-        </div>
-
-        <div id="portalMildModal" class="modal">
-            <span class="close" onclick="closeModal('portalMildModal')">&times;</span>
-            <div class="modal-content">
-                <div class="modal-breadcrumb">
-                    <span onclick="openModal('portalModal')">Portal Vein</span>
-                    <span class="separator">/</span>
-                    <span>Mild</span>
-                </div>
-                <div class="back-button" onclick="openModal('portalModal')">
-                    <i class="fas fa-arrow-left"></i> Back to Portal Vein
-                </div>
-                <div class="slideshow-content portalMildSlides">
-                    <img src="images/image_gallery/Portal_Vein/Mild/01.0.1.PV.MD.png" alt="Portal Mild Image" />
-                </div>
                 <span class="prev" onclick="plusSlides(-1, 'portalMildSlides')">&#10094;</span>
                 <span class="next" onclick="plusSlides(1, 'portalMildSlides')">&#10095;</span>
             </div>
