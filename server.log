@@ -904,3 +904,200 @@ Requesting: /api/predict
 [2025-03-02T20:36:29.117Z] Uploading image: image_1740947789117.png
 [2025-03-02T20:36:29.352Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740947789117.png
 [2025-03-02T20:36:29.601Z] Error in /api/predict: ReferenceError: veinType is not defined
+Requesting: /api/health
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T21:45:13.334Z] /api/predict handler invoked
+[2025-03-02T21:45:13.336Z] Uploading image: image_1740951913335.png
+[2025-03-02T21:45:13.643Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740951913335.png
+[2025-03-02T21:45:14.914Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740951913335_results.json
+Requesting: /api/predict
+[2025-03-02T21:45:30.256Z] /api/predict handler invoked
+[2025-03-02T21:45:30.258Z] Uploading image: image_1740951930257.png
+[2025-03-02T21:45:30.582Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740951930257.png
+[2025-03-02T21:45:31.786Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740951930257_results.json
+Requesting: /api/predict
+[2025-03-02T21:45:42.943Z] /api/predict handler invoked
+[2025-03-02T21:45:42.944Z] Uploading image: image_1740951942944.png
+[2025-03-02T21:45:43.275Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740951942944.png
+[2025-03-02T21:45:44.494Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740951942944_results.json
+Requesting: /calculator.html
+Requesting: /api/test-endpoint
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-02T21:49:46.984Z] /api/predict handler invoked
+[2025-03-02T21:49:46.986Z] Uploading image: image_1740952186985.png
+[2025-03-02T21:49:47.271Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952186985.png
+[2025-03-02T21:49:50.792Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-02T21:49:50.796Z] /api/predict handler invoked
+[2025-03-02T21:49:50.797Z] Uploading image: image_1740952190796.png
+[2025-03-02T21:49:51.016Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952190796.png
+[2025-03-02T21:49:54.551Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-02T21:49:54.555Z] /api/predict handler invoked
+[2025-03-02T21:49:54.556Z] Uploading image: image_1740952194556.png
+[2025-03-02T21:49:54.781Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952194556.png
+[2025-03-02T21:49:58.219Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-02T21:52:00.420Z] /api/predict handler invoked
+[2025-03-02T21:52:00.425Z] Uploading image: image_1740952320424.png
+[2025-03-02T21:52:00.833Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952320424.png
+[2025-03-02T21:52:02.088Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740952320424_results.json
+Requesting: /api/predict
+[2025-03-02T21:52:09.799Z] /api/predict handler invoked
+[2025-03-02T21:52:09.803Z] Uploading image: image_1740952329803.png
+[2025-03-02T21:52:10.124Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952329803.png
+[2025-03-02T21:52:11.348Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740952329803_results.json
+Requesting: /api/predict
+[2025-03-02T21:52:17.917Z] /api/predict handler invoked
+[2025-03-02T21:52:17.921Z] Uploading image: image_1740952337921.png
+[2025-03-02T21:52:18.251Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740952337921.png
+[2025-03-02T21:52:19.428Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740952337921_results.json
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-03T03:36:14.286Z] /api/predict handler invoked
+[2025-03-03T03:36:14.287Z] Uploading image: image_1740972974286.png
+[2025-03-03T03:36:14.727Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740972974286.png
+[2025-03-03T03:36:18.786Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-03T03:36:19.223Z] /api/predict handler invoked
+[2025-03-03T03:36:19.224Z] Uploading image: image_1740972979223.png
+[2025-03-03T03:36:19.560Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740972979223.png
+Requesting: /api/predict
+[2025-03-03T03:36:21.667Z] /api/predict handler invoked
+[2025-03-03T03:36:21.670Z] Uploading image: image_1740972981670.png
+[2025-03-03T03:36:22.002Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740972981670.png
+[2025-03-03T03:36:23.337Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-03T03:36:23.343Z] /api/predict handler invoked
+[2025-03-03T03:36:23.344Z] Uploading image: image_1740972983344.png
+[2025-03-03T03:36:23.570Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740972981670_results.json
+[2025-03-03T03:36:23.577Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740972983344.png
+[2025-03-03T03:36:27.098Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.","status":"INTERNAL"}}
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-03T03:36:42.272Z] /api/predict handler invoked
+[2025-03-03T03:36:42.273Z] Uploading image: image_1740973002272.png
+[2025-03-03T03:36:42.542Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973002272.png
+[2025-03-03T03:36:46.139Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-03T03:36:46.144Z] /api/predict handler invoked
+[2025-03-03T03:36:46.144Z] Uploading image: image_1740973006144.png
+[2025-03-03T03:36:46.392Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973006144.png
+[2025-03-03T03:36:49.961Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-03T03:36:49.966Z] /api/predict handler invoked
+[2025-03-03T03:36:49.966Z] Uploading image: image_1740973009966.png
+[2025-03-03T03:36:50.251Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973009966.png
+Requesting: /api/predict
+[2025-03-03T03:36:50.345Z] /api/predict handler invoked
+[2025-03-03T03:36:50.346Z] Uploading image: image_1740973010346.png
+[2025-03-03T03:36:50.611Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973010346.png
+[2025-03-03T03:36:51.465Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740973010346_results.json
+[2025-03-03T03:36:53.856Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.","status":"INTERNAL"}}
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+Requesting: /api/predict
+Requesting: /api/predict
+[2025-03-03T03:40:39.040Z] /api/predict handler invoked
+[2025-03-03T03:40:39.040Z] /api/predict handler invoked
+[2025-03-03T03:40:39.040Z] /api/predict handler invoked
+[2025-03-03T03:40:39.041Z] Uploading image: image_1740973239040.png
+[2025-03-03T03:40:39.041Z] Uploading image: image_1740973239041.png
+[2025-03-03T03:40:39.041Z] Uploading image: image_1740973239041.png
+[2025-03-03T03:40:39.274Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973239040.png
+[2025-03-03T03:40:39.286Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973239041.png
+[2025-03-03T03:40:39.322Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973239041.png
+[2025-03-03T03:40:42.922Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 1148704877514326016, deployed_model_id: 5648900416885227520.","status":"INTERNAL"}}
+[2025-03-03T03:40:42.937Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 2970410926785691648, deployed_model_id: 2856668647915520000.","status":"INTERNAL"}}
+[2025-03-03T03:40:42.941Z] API request error: {"error":{"code":500,"message":"Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.","status":"INTERNAL"}}
+Requesting: /api/predict
+[2025-03-03T03:40:51.168Z] /api/predict handler invoked
+[2025-03-03T03:40:51.172Z] Uploading image: image_1740973251172.png
+[2025-03-03T03:40:51.548Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740973251172.png
+[2025-03-03T03:40:53.101Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740973251172_results.json
+Requesting: /
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/Denver.POCUS.png
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /html5up-phantom/assets/webfonts/fa-solid-900.woff2
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-03T03:54:25.790Z] /api/predict handler invoked
+[2025-03-03T03:54:25.793Z] Uploading image: image_1740974065793.png
+[2025-03-03T03:54:26.666Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1740974065793.png
+[2025-03-03T03:54:31.101Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1740974065793_results.json

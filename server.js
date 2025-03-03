@@ -374,6 +374,9 @@ app.get('/api/health', async (req, res) => {
 // 5) Image Upload and Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
 app.post('/api/predict', async (req, res) => {
+    // Define veinType outside the try block to make it accessible in the catch block
+    let veinType = 'unknown';
+    
     try {
         console.log(`[${new Date().toISOString()}] /api/predict handler invoked`);
         await fs.appendFile('server.log', `[${new Date().toISOString()}] /api/predict handler invoked\n`);
@@ -428,7 +431,7 @@ app.post('/api/predict', async (req, res) => {
         // Extract image type if metadata is provided
         const imageType = req.body.metadata?.imageType || 'image/jpeg';
         // Extract vein type if provided
-        const veinType = req.body.metadata?.veinType || 'hepatic';
+        veinType = req.body.metadata?.veinType || 'hepatic';
 
         // Store the image in Cloud Storage
         let imageInfo = null;
@@ -613,9 +616,13 @@ app.post('/api/predict', async (req, res) => {
             });
         }
     } catch (error) {
-        console.error('Error in /api/predict:', error);
+        console.error(`Error in /api/predict for ${veinType} vein:`, error);
         await fs.appendFile('server.log', `[${new Date().toISOString()}] Error in /api/predict: ${error}\n`);
-        res.status(500).json({ error: 'Prediction failed', message: error.message });
+        res.status(500).json({ 
+            error: 'Prediction failed', 
+            message: error.message,
+            veinType: veinType 
+        });
     }
 });
 
