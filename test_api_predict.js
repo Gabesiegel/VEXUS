@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import fs from 'fs/promises';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import sharp from 'sharp';
 
 const execAsync = promisify(exec);
 
@@ -27,31 +28,43 @@ async function getMimeType(filePath) {
   }
 }
 
+async function resizeImage(buffer) {
+    return await sharp(buffer)
+        .resize(800, 800, {
+            fit: 'inside',
+            withoutEnlargement: true
+        })
+        .jpeg({ quality: 80 })
+        .toBuffer();
+}
+
 // Function to test the API endpoint with a specific format
-async function testApiEndpoint(imagePath, testName, useDataUrlPrefix = false) {
+async function testApiEndpoint(imageFile, veinType, useDataUrlPrefix = false) {
   const formatName = useDataUrlPrefix ? "with data URL prefix" : "without data URL prefix";
-  console.log(`\n----- Testing ${testName} (${formatName}) -----`);
+  console.log(`\n----- Testing ${veinType} (${formatName}) -----`);
   
   try {
-    console.log(`Reading image from: ${imagePath}`);
-    const base64Content = await imageToBase64(imagePath);
-    console.log(`Image read successfully, Base64 length: ${base64Content.length}`);
+    console.log(`Reading image from: ${imageFile}`);
+    const imageBuffer = await fs.readFile(imageFile);
     
-    // Get MIME type
-    const mimeType = await getMimeType(imagePath);
+    // Resize image before converting to base64
+    const resizedBuffer = await resizeImage(imageBuffer);
+    const base64Image = resizedBuffer.toString('base64');
     
-    let contentValue;
+    console.log(`Image read successfully, Base64 length: ${base64Image.length}`);
+    
+    let content;
     if (useDataUrlPrefix) {
-      contentValue = `data:${mimeType};base64,${base64Content}`;
+        content = `data:image/jpeg;base64,${base64Image}`;
     } else {
-      contentValue = base64Content;
+        content = base64Image;
     }
     
     // Create payload
     const payload = {
       instances: [
         {
-          content: contentValue
+          content: content
         }
       ],
       parameters: {
@@ -60,7 +73,7 @@ async function testApiEndpoint(imagePath, testName, useDataUrlPrefix = false) {
       }
     };
 
-    console.log(`Sending request to /api/predict endpoint for ${testName} (${formatName})...`);
+    console.log(`Sending request to /api/predict endpoint for ${veinType} (${formatName})...`);
     
     const response = await fetch('http://localhost:3003/api/predict', {
       method: 'POST',
@@ -76,11 +89,11 @@ async function testApiEndpoint(imagePath, testName, useDataUrlPrefix = false) {
     }
 
     const result = await response.json();
-    console.log(`${testName} (${formatName}) API Response:`, JSON.stringify(result, null, 2));
-    console.log(`${testName} (${formatName}) test completed successfully!`);
+    console.log(`${veinType} (${formatName}) API Response:`, JSON.stringify(result, null, 2));
+    console.log(`${veinType} (${formatName}) test completed successfully!`);
     return true;
   } catch (error) {
-    console.error(`${testName} (${formatName}) test failed:`, error);
+    console.error(`${veinType} (${formatName}) test failed:`, error);
     return false;
   }
 }

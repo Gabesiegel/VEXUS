@@ -879,7 +879,8 @@
 
                 <!-- Description about AI tool -->
                 <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
-                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment. <strong>Please ensure that any images uploaded do not contain Protected Health Information (PHI) to comply with HIPAA regulations</strong>
+                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment.
+                </strong>
                 </p>
 
                 <!-- Steps 1-4 remain unchanged -->
@@ -1473,17 +1474,26 @@
                 }
                 const mimeType = mimeTypeMatch[1];
 
+                // Resize image before sending
+                const resizedBase64 = await resizeImage(base64Content, 800); // Resize to max 800px width/height
+                console.log(`Original image size: ${base64Content.length}, Resized: ${resizedBase64.length}`);
+
                 // Structure payload for Vertex AI - ensure correct format
-                // Structure payload for Vertex AI
                 const payload = {
                     instances: [
                         {
-                            content: base64Content
+                            content: {
+                                b64: resizedBase64
+                            }
                         }
                     ],
                     parameters: {
                         confidenceThreshold: 0.0,
                         maxPredictions: 5
+                    },
+                    metadata: {
+                        imageType: mimeType,
+                        veinType: type
                     }
                 };
 
@@ -1492,6 +1502,11 @@
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
 
                 console.log(`Sending ${type} image for classification...`);
+                console.log('Payload format:', {
+                    contentLength: resizedBase64.length,
+                    mimeType: mimeType,
+                    veinType: type
+                });
 
                 const response = await fetch('/api/predict', {
                     method: 'POST',
@@ -1822,6 +1837,49 @@
                 errorContainer.innerHTML = '';
                 errorContainer.style.display = 'none';
             }
+        }
+
+        // Add the image resizing function
+        async function resizeImage(base64String, maxDimension) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = function() {
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Calculate new dimensions
+                    if (width > height) {
+                        if (width > maxDimension) {
+                            height *= maxDimension / width;
+                            width = maxDimension;
+                        }
+                    } else {
+                        if (height > maxDimension) {
+                            width *= maxDimension / height;
+                            height = maxDimension;
+                        }
+                    }
+                    
+                    // Create canvas and resize
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Draw and get resized base64
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const resizedBase64 = canvas.toDataURL('image/jpeg', 0.8)
+                        .split(',')[1];
+                    
+                    resolve(resizedBase64);
+                };
+                
+                img.onerror = function() {
+                    reject(new Error('Failed to load image for resizing'));
+                };
+                
+                img.src = 'data:image/jpeg;base64,' + base64String;
+            });
         }
     </script>
 </body>
