@@ -1474,6 +1474,7 @@
                 const mimeType = mimeTypeMatch[1];
 
                 // Structure payload for Vertex AI - ensure correct format
+                // Structure payload for Vertex AI
                 const payload = {
                     instances: [
                         {
@@ -1483,20 +1484,15 @@
                     parameters: {
                         confidenceThreshold: 0.0,
                         maxPredictions: 5
-                    },
-                    metadata: {
-                        veinType: type, // hepatic, portal, or renal
-                        imageType: mimeType,
-                        timestamp: Date.now()
                     }
                 };
 
                 // Send to API endpoint with timeout
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
-                
+
                 console.log(`Sending ${type} image for classification...`);
-                
+
                 const response = await fetch('/api/predict', {
                     method: 'POST',
                     headers: {
@@ -1505,23 +1501,25 @@
                     body: JSON.stringify(payload),
                     signal: controller.signal
                 });
-                
+
                 clearTimeout(timeoutId);
 
-                if (!response.ok) {
+              if (!response.ok) {
                     let errorMessage = `Server error: ${response.status}`;
+                    let errorDetails = {};
                     try {
                         const errorData = await response.json();
-                        errorMessage = errorData.message || errorMessage;
+                        errorMessage = errorData.error || errorMessage;
+                        errorDetails = errorData.details || {};
                     } catch (e) {
                         // If parsing fails, use status code
                     }
-                    throw new Error(errorMessage);
+                    throw { message: errorMessage, details: errorDetails };
                 }
 
                 // Process response
                 const result = await response.json();
-                
+
                 // Validate response format
                 if (!result || !result.displayNames || !result.confidences) {
                     throw new Error('Invalid response format from server');
@@ -1666,150 +1664,157 @@
                 // Display error message
                 displayError(type, error.message);
                 
-                // Optional: update model status
+                // Optional: update model status based on error details
                 if (modelStatus) {
-                    modelStatus.textContent = "AI MODEL ERROR";
-                    modelStatus.classList.remove('model-ready');
+                    if (error.details.code === 'MODEL_UNAVAILABLE') {
+                        modelStatus.textContent = "Model Unavailable";
+                        modelStatus.classList.remove('model-ready');
+                    } else if (error.details.code === 'BILLING_OR_QUOTA_ISSUE') {
+                        modelStatus.textContent = "Billing/Quota Issue";
+                        modelStatus.classList.remove('model-ready');
+                    } else if (error.details.code === 'ENDPOINT_NOT_FOUND') {
+                        modelStatus.textContent = "Endpoint Not Found";
+                        modelStatus.classList.remove('model-ready');
+                    } else {
+                        modelStatus.textContent = "AI MODEL ERROR";
+                        modelStatus.classList.remove('model-ready');
+                    }
                 }
-                
-                // Optional: reset image?
-                // resetImageUpload(type);
             }
         }
-
-        // Function to calculate VExUS score
+                // Function to calculate VExUS score
         function calculateVexusScore() {
             // Step #1: IVC <2cm or >2cm
             const ivcSelection = document.getElementById('ivcDropdown').value;
-            let ivcValue = null; 
-            if (ivcSelection === "<2cm") ivcValue = 1.9;
-            if (ivcSelection === ">2cm") ivcValue = 2.1;
-            
+            let ivcValue = null;
+            if (ivcSelection === "<2cm")
+                ivcValue = 1.9;
+            if (ivcSelection === ">2cm")
+                ivcValue = 2.1;
             // Get classifications from dropdowns
             const hvChoice = document.getElementById('hepaticDropdown').value;
             const pvChoice = document.getElementById('portalDropdown').value;
             const rvChoice = document.getElementById('renalDropdown').value;
-
             // Check for incomplete data
             if (!ivcValue) {
                 document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
                 return;
             }
-            
             // Check if all vein classifications are selected
             if (!hvChoice || !pvChoice || !rvChoice) {
                 document.getElementById('total-score').textContent = "Incomplete Data (All Vein Classifications Required)";
                 return;
             }
-
             // Check for low confidence predictions
-            if (
-                hvChoice === "Confidence of waveform < 50%" ||
+            if (hvChoice === "Confidence of waveform < 50%" ||
                 pvChoice === "Confidence of waveform < 50%" ||
-                rvChoice === "Confidence of waveform < 50%"
-            ) {
+                rvChoice === "Confidence of waveform < 50%") {
                 document.getElementById('total-score').textContent = "Cannot Calculate Score";
                 return;
             }
-
             // Convert choices to numerical scores based on actual dropdown values
             let hvScore = 0;
-            if (hvChoice === "HV Mild") hvScore = 1; // HV Mild
-            if (hvChoice === "HV Severe") hvScore = 2; // HV Severe
-
+            if (hvChoice === "HV Mild")
+                hvScore = 1; // HV Mild
+            if (hvChoice === "HV Severe")
+                hvScore = 2; // HV Severe
             let pvScore = 0;
-            if (pvChoice === "PV Mild") pvScore = 1; // PV Mild
-            if (pvChoice === "PV Severe") pvScore = 2; // PV Severe
-
+            if (pvChoice === "PV Mild")
+                pvScore = 1; // PV Mild
+            if (pvChoice === "PV Severe")
+                pvScore = 2; // PV Severe
             let rvScore = 0;
-            if (rvChoice === "RV Mild") rvScore = 1; // RV Mild
-            if (rvChoice === "RV Severe") rvScore = 2; // RV Severe
-
+            if (rvChoice === "RV Mild")
+                rvScore = 1; // RV Mild
+            if (rvChoice === "RV Severe")
+                rvScore = 2; // RV Severe
             // Count severe cases
             let severityCount = 0;
-            if (hvScore === 2) severityCount++;
-            if (pvScore === 2) severityCount++;
-            if (rvScore === 2) severityCount++;
-
+            if (hvScore === 2)
+                severityCount++;
+            if (pvScore === 2)
+                severityCount++;
+            if (rvScore === 2)
+                severityCount++;
             // Calculate VExUS grade
             let vexusGrade;
             if (ivcValue < 2) {
                 vexusGrade = "Grade 0: No Congestion";
-            } else if (severityCount === 0) {
+            }
+            else if (severityCount === 0) {
                 vexusGrade = "Grade 1: Mild Congestion";
-            } else if (severityCount === 1) {
+            }
+            else if (severityCount === 1) {
                 vexusGrade = "Grade 2: Moderate Congestion";
-            } else {
+            }
+            else {
                 vexusGrade = "Grade 3: Severe Congestion";
             }
-
             document.getElementById('total-score').textContent = vexusGrade;
         }
-
         // Reset all fields and results
         function resetAll() {
             // Clear IVC and score
             document.getElementById('ivcDropdown').value = "";
             document.getElementById('total-score').textContent = "--";
-
             // Clear all vein type data
             ['hepatic', 'portal', 'renal'].forEach(type => {
                 resetImageUpload(type);
             });
         }
-
         // Function to setup dropdown listeners
         function setupDropdownListeners() {
             // Add change event listeners to the dropdowns
-            document.getElementById('hepaticDropdown').addEventListener('change', function() {
+            document.getElementById('hepaticDropdown').addEventListener('change', function () {
                 hideModals();
             });
-
-            document.getElementById('portalDropdown').addEventListener('change', function() {
+            document.getElementById('portalDropdown').addEventListener('change', function () {
                 hideModals();
             });
-
-            document.getElementById('renalDropdown').addEventListener('change', function() {
+            document.getElementById('renalDropdown').addEventListener('change', function () {
                 hideModals();
             });
         }
-
         // Function to display error in the appropriate container
         function displayError(type, message) {
             console.log(`Displaying error for ${type}: ${message}`);
             const errorContainer = document.getElementById(`${type}ErrorContainer`);
             const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
             const modelStatus = document.getElementById(`${type}ModelStatus`);
-            
             // Hide loading indicator
             if (loadingIndicator) {
                 loadingIndicator.style.display = 'none';
             }
-            
-            // Update model status
+            // Update model status and error message
             if (modelStatus) {
                 modelStatus.textContent = "AI MODEL ERROR";
                 modelStatus.classList.remove('model-ready');
             }
-            
-            // Display error message
             if (errorContainer) {
+                // Check if the message is an object (from updated error handling)
+                let displayMessage = message;
+                if (typeof message === 'object' && message !== null) {
+                    displayMessage = message.message; // Use the 'message' property
+                    // Optionally include details if available
+                    if (message.details && message.details.originalError) {
+                        displayMessage += ` Details: ${message.details.originalError}`;
+                    }
+                }
                 errorContainer.innerHTML = `
-                    <div class="alert alert-danger">
-                        <strong>Error:</strong> ${message}
-                        <p>Please try again or try a different image.</p>
-                    </div>
-                `;
+        <div class="alert alert-danger">
+          <strong>Error:</strong> ${displayMessage}
+          <p>Please try again or try a different image.</p>
+        </div>
+      `;
                 errorContainer.style.display = 'block';
-                
                 // Scroll to error container
                 errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                // Fallback to alert if container not found
-                alert(`Error with ${type} vein: ${message}`);
+            }
+            else {
+                // Fallback to alert if container not found, using the correct message
+                alert(`Error with ${type} vein: ${typeof message === 'object' && message !== null ? message.message : message}`);
             }
         }
-        
         // Function to reset error display
         function clearError(type) {
             const errorContainer = document.getElementById(`${type}ErrorContainer`);

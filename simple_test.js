@@ -1,22 +1,20 @@
 import fs from 'fs/promises';
 
-async function testUpload() {
-    try {
-        // Read image file
-        const imageBuffer = await fs.readFile('public/test_image.png');
-        const base64Image = imageBuffer.toString('base64');
-        
-        // Log file size and first few characters of base64
-        console.log('Image size:', imageBuffer.length, 'bytes');
-        console.log('Base64 preview:', base64Image.substring(0, 50) + '...');
-        
-        // Write base64 to file for verification
-        await fs.writeFile('image_base64.txt', base64Image);
-        console.log('Base64 data written to image_base64.txt for verification');
-        
-    } catch (error) {
-        console.error('Error:', error);
-    }
+async function createAndSaveBase64Image() {
+  try {
+    // Create a 1x1 black pixel image (PNG format)
+    const base64Image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+
+    // Log base64
+    console.log('Base64 image:', base64Image);
+
+    // Write base64 to file for verification
+    await fs.writeFile('test_minimal.png', Buffer.from(base64Image, 'base64'));
+    console.log('Base64 data written to test_minimal.png for verification');
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
-testUpload();
+createAndSaveBase64Image();

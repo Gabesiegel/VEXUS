@@ -1,175 +1,68 @@
-import { GoogleAuth } from 'google-auth-library';
-import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import fetch from 'node-fetch';
+import fs from 'fs/promises';
 
-// Configuration
-const CONFIG = {
-    projectId: "plucky-weaver-450819-k7",
-    projectNumber: "456295042668",
-    location: "us-central1",
-    endpointIds: {
-        hepatic: "8159951878260523008",
-        portal: "2970410926785691648",
-        renal: "1148704877514326016"
-    }
-};
+async function testEndpoint(veinType, base64Image) {
+  try {
+    const payload = {
+      instances: [{ content: base64Image }],
+      parameters: { confidenceThreshold: 0.0, maxPredictions: 5 },
+    };
 
-// Function to get credentials from Secret Manager
-async function getCredentials() {
-    try {
-        const secretName = `projects/${CONFIG.projectId}/secrets/KEY/versions/latest`;
-        console.log(`Getting credentials from Secret Manager: ${secretName}`);
-        
-        const client = new SecretManagerServiceClient();
-        const [version] = await client.accessSecretVersion({ name: secretName });
-        const payload = version.payload.data.toString('utf8');
-        
-        return JSON.parse(payload);
-    } catch (error) {
-        console.error('Error getting credentials from Secret Manager:', error);
-        throw error;
+    const response = await fetch(`/api/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Server error: ${response.status}`;
+      let errorDetails = {};
+      try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+          errorDetails = errorData.details || {};
+      } catch (e) {
+          // If parsing fails, use status code
+      }
+      console.error(`Error testing ${veinType} endpoint:`, errorMessage, errorDetails);
+      return { success: false, veinType, errorMessage, errorDetails };
     }
+
+    const result = await response.json();
+    console.log(`Result for ${veinType}:`, result);
+    return { success: true, veinType, result };
+
+  } catch (error) {
+    console.error(`Error testing ${veinType} endpoint:`, error);
+    return { success: false, veinType, errorMessage: error.message || 'Unknown error', errorDetails: error.details || {} };
+  }
 }
 
-// Function to test an endpoint
-async function testEndpoint(veinType) {
-    try {
-        console.log(`Testing ${veinType} endpoint...`);
-        
-        // Get credentials from Secret Manager
-        const credentials = await getCredentials();
-        
-        // Get an access token using the credentials
-        const auth = new GoogleAuth({
-            credentials: credentials,
-            scopes: ['https://www.googleapis.com/auth/cloud-platform']
-        });
-        
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        
-        console.log('Successfully obtained access token');
-        
-        // Get the endpoint ID for the vein type
-        const endpointId = CONFIG.endpointIds[veinType];
-        if (!endpointId) {
-            throw new Error(`Invalid vein type: ${veinType}`);
+async function runTests() {
+  try {
+    // Use a simple 1x1 black pixel PNG image for testing
+    const base64Image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+
+    const results = [];
+    results.push(await testEndpoint('hepatic', base64Image));
+    results.push(await testEndpoint('portal', base64Image));
+    results.push(await testEndpoint('renal', base64Image));
+
+    console.log('\n--- Test Results ---');
+    results.forEach(result => {
+      if (result.success) {
+        console.log(`✅ ${result.veinType}: Success`);
+      } else {
+        console.log(`❌ ${result.veinType}: Failed - ${result.errorMessage}`);
+        if (result.errorDetails) {
+            console.log(`   Details:`, result.errorDetails)
         }
-        
-        console.log(`Selected endpoint ID for ${veinType}: ${endpointId}`);
-        
-        // Construct the predict request URL
-        const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
-        
-        // First, check if the endpoint exists
-        const endpointUrl = `${baseApiUrl}/${endpointPath}`;
-        console.log(`Checking if endpoint exists: ${endpointUrl}`);
-        
-        const endpointResponse = await fetch(endpointUrl, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token.token}`
-            }
-        });
-        
-        if (!endpointResponse.ok) {
-            const errorText = await endpointResponse.text();
-            console.error(`Error checking endpoint: ${errorText}`);
-            return {
-                status: 'error',
-                message: `Endpoint check failed: ${endpointResponse.status} ${endpointResponse.statusText}`,
-                details: errorText
-            };
-        }
-        
-        const endpointData = await endpointResponse.json();
-        console.log(`Endpoint exists: ${endpointData.displayName}`);
-        
-        // Now try to make a prediction
-        const predictUrl = `${baseApiUrl}/${endpointPath}:predict`;
-        console.log(`Making prediction request to: ${predictUrl}`);
-        
-        // Create a minimal payload with a 1x1 transparent PNG
-        const payload = {
-            instances: [
-                {
-                    content: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-                }
-            ],
-            parameters: {
-                confidenceThreshold: 0.0,
-                maxPredictions: 1
-            }
-        };
-        
-        const predictResponse = await fetch(predictUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        console.log(`Response status: ${predictResponse.status} ${predictResponse.statusText}`);
-        
-        if (!predictResponse.ok) {
-            let errorMessage = '';
-            try {
-                const errorJson = await predictResponse.json();
-                console.error(`API error response:`, JSON.stringify(errorJson, null, 2));
-                errorMessage = errorJson.error ? errorJson.error.message : 'Unknown error';
-            } catch (parseError) {
-                const errorText = await predictResponse.text();
-                console.error(`API error text:`, errorText);
-                errorMessage = errorText;
-            }
-            
-            return {
-                status: 'error',
-                statusCode: predictResponse.status,
-                message: errorMessage
-            };
-        }
-        
-        const result = await predictResponse.json();
-        console.log(`Prediction successful:`, JSON.stringify(result, null, 2));
-        
-        return {
-            status: 'success',
-            result: result
-        };
-    } catch (error) {
-        console.error(`Error testing ${veinType} endpoint:`, error);
-        return {
-            status: 'error',
-            message: error.message
-        };
-    }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error during tests:', error);
+  }
 }
 
-// Main function to test all endpoints
-async function testAllEndpoints() {
-    console.log('Testing all Vertex AI endpoints...');
-    
-    const results = {};
-    
-    for (const veinType of Object.keys(CONFIG.endpointIds)) {
-        console.log(`\n=== Testing ${veinType} endpoint ===`);
-        results[veinType] = await testEndpoint(veinType);
-    }
-    
-    console.log('\n=== Test Results ===');
-    for (const [veinType, result] of Object.entries(results)) {
-        console.log(`${veinType}: ${result.status}`);
-        if (result.status === 'error') {
-            console.log(`  Error: ${result.message}`);
-        }
-    }
-}
-
-// Run the tests
-testAllEndpoints().catch(error => {
-    console.error('Error running tests:', error);
-}); 
+runTests();
