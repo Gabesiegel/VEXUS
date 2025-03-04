@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <style>
@@ -24,50 +25,6 @@
             margin-bottom: 2em;
             flex-wrap: wrap;
             padding: 0 15px;
-        }
-
-        /* Menu Navigation Styles */
-        nav#menu {
-            background: #ffffff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        nav#menu .logo-container {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav#menu h2 {
-            color: #888888;
-            margin-bottom: 1em;
-            font-size: inherit;
-        }
-
-        nav#menu ul li {
-            border-top: solid 1px rgba(0, 0, 0, 0.1);
-            padding: 0.5em 0;
-        }
-
-        nav#menu ul li a {
-            color: #888888 !important;
-            text-decoration: none;
-            border-bottom: none;
-            font-size: 0.9em;
-            transition: color 0.2s ease;
-        }
-
-        nav#menu ul li a:hover {
-            color: #777777 !important;
-        }
-
-        /* Logo Styles */
-        .sidebar-logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 0;
-            padding: 5px;
         }
 
         /* Education Page Specific Styles */
@@ -136,7 +93,7 @@
         }
 
         .vexus-table th {
-            background-color: #777777;
+            background-color: #fcfcfc;
             color: #ffffff;
         }
 
@@ -161,7 +118,7 @@
 
         .education-content ul li:before {
             content: "•";
-            color: #777777;
+            color: #fcfcfc;
             position: absolute;
             left: 0;
             font-size: 1.5em;
@@ -210,13 +167,13 @@
         .vexus-grading-table td {
             padding: 16px;
             text-align: left;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #fcfcfc;
             white-space: normal;
             vertical-align: top;
         }
 
         .vexus-grading-table th {
-            background-color: #e2e2e2;
+            background-color: #fcfcfc;
             color: #333333;
             font-weight: 600;
             position: sticky;
@@ -242,7 +199,7 @@
         }
 
         .education-tab.active {
-            background-color: #777777;
+            background-color: #fcfcfc;
             color: white;
         }
 
@@ -251,19 +208,19 @@
             display: block;
             width: 50px;
             height: 3px;
-            background-color: #777777;
+            background-color: #fcfcfc;
             margin: 10px 0 20px;
         }
 
         .callout {
-            border-left: 4px solid #777777;
+            border-left: 4px solid #fcfcfc;
             padding-left: 20px;
             margin: 20px 0;
-            color: #555;
+            color: #333;
         }
 
         .highlight {
-            background-color: #777777;
+            background-color: #fcfcfc;
             padding: 2px 5px;
             color: white;
             border-radius: 3px;
@@ -272,7 +229,7 @@
         .reference-link {
             display: inline-block;
             margin-top: 10px;
-            color: #777777;
+            color: #fcfcfc;
             text-decoration: none;
             font-weight: 500;
         }
@@ -397,6 +354,45 @@
             transform: translateY(-5px);
         }
     </style>
+    <!-- Critical styles for menu visibility -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+            position: fixed !important;
+            top: 0 !important;
+            height: 100% !important;
+            width: 300px !important;
+            max-width: 80% !important;
+            right: -300px !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
 </head>
 <body class="is-preload">
     <!-- Navigation -->
@@ -412,7 +408,6 @@
                 <nav>
                     <ul>
                         <li><a href="#menu">Menu</a></li>
-                    </ul>
                 </nav>
             </div>
         </header>
@@ -436,8 +431,12 @@
                     <li><a href="image_gallery.html">Image Gallery</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
+                <a href="#menu" class="close" style="position: absolute; top: 20px; right: 20px; display: block; width: 40px; height: 40px; text-align: center; line-height: 40px; color: #777; border: 1px solid #ddd; border-radius: 50%;">✕</a>
             </div>
         </nav>
+
+        <!-- Menu Overlay -->
+        <div class="menu-overlay"></div>
 
         <!-- Main Content -->
         <div id="main">
@@ -468,8 +467,6 @@
                         <li><strong>Hepatic Vein Doppler</strong></li>
                         <li><strong>Portal Vein Doppler</strong></li>
                         <li><strong>Renal Vein Doppler</strong></li>
-                    </ul>
-                </div>
 
                 <!-- Why Use VExUS Section -->
                 <div class="education-section">
@@ -487,7 +484,6 @@
                         <li><strong>Ultrasound Machine:</strong> Must have 2D imaging, color Doppler, and pulsed-wave Doppler capabilities. Electrocardiogram gating adds to the interpretability of the exam, but is not essential.</li>
                         <li><strong>Supplies:</strong> Ultrasound gel, gloves.</li>
                         <li><strong>Patient Positioning:</strong> Supine or slightly recumbent, table adjusted to the operator's waist level.</li>
-                    </ul>
 
                     <h3>2. Inferior Vena Cava (IVC) Assessment</h3>
                     <p>Measure the IVC using the curvilinear or phased-array probe in the subxiphoid view. Measure the diameter of the IVC just distal to the insertion of the hepatic vein into the IVC.</p>
@@ -570,12 +566,12 @@
                             padding: 15px;
                             background-color: #fcfcfc;
                             border-radius: 8px;
-                            border-left: 4px solid #777777;
+                            border-left: 4px solid #fcfcfc;
                         }
                     </style>
                     
                     <div class="image-container">
-                        <img src="/public/images/organ perfusion.png" alt="Organ Perfusion Diagram">
+                        <img src="images/organ perfusion.png" alt="Organ Perfusion Diagram">
                     </div>
                     
                     <div class="image-text">
@@ -592,7 +588,6 @@
                             <li><strong>Liver:</strong> Elevated hepatic venous pressure increases portal pressure and can impair hepatic function.</li>
                             <li><strong>Intestines:</strong> Venous congestion can lead to intestinal edema, malabsorption, and bacterial translocation.</li>
                             <li><strong>Brain:</strong> Increased venous pressure can elevate intracranial pressure and impair cerebral perfusion.</li>
-                        </ul>
                         
                         <p>VExUS assessment helps identify and quantify venous congestion, allowing clinicians to intervene before significant organ dysfunction occurs.</p>
                     </div>
@@ -603,7 +598,7 @@
                     <h2>Venous Congestion on POCUS: Flow Patterns</h2>
                     
                     <div class="image-container">
-                        <img src="/public/images/veuxus_congestion.png" alt="Venous Congestion Patterns">
+                        <img src="images/veuxus_congestion.png" alt="Venous Congestion Patterns">
                     </div>
                     
                     <div class="image-text">
@@ -629,7 +624,7 @@
                     <h2>VEXUS: The Complete Picture</h2>
                     
                     <div class="image-container">
-                        <img src="/public/images/VEXUS_Overview.png" alt="VEXUS Overview Diagram">
+                        <img src="images/VEXUS_Overview.png" alt="VEXUS Overview Diagram">
                     </div>
                     
                     <div class="image-text">
@@ -641,7 +636,6 @@
                             <li><strong>Right Atrial Pressure (RAP):</strong> The central measurement in venous congestion. Elevated RAP is transmitted backward through the venous system, affecting IVC, hepatic, portal, and renal veins.</li>
                             <li><strong>Cardiac Output (CO):</strong> Represents the heart's pumping function. Venous congestion can reduce CO by impairing ventricular filling and function.</li>
                             <li><strong>Left Atrial Pressure (LAP):</strong> Elevated LAP leads to pulmonary congestion, manifesting as B-lines on lung ultrasound. This is often associated with, but distinct from, systemic venous congestion.</li>
-                        </ul>
                         
                         <p>The VEXUS protocol integrates multiple ultrasound findings to create a comprehensive picture of a patient's congestion status:</p>
                         
@@ -651,7 +645,6 @@
                             <li><strong>Portal Vein Doppler:</strong> Reflects venous congestion's impact on splanchnic circulation.</li>
                             <li><strong>Renal Vein Doppler:</strong> Shows how venous congestion affects kidney perfusion.</li>
                             <li><strong>Lung Ultrasound:</strong> B-lines indicate pulmonary congestion from elevated left heart pressures.</li>
-                        </ul>
                         
                         <p>By examining this interconnected system, VEXUS allows clinicians to differentiate between right-sided (systemic venous) congestion, left-sided (pulmonary) congestion, or both, leading to more targeted therapeutic interventions.</p>
                     </div>
@@ -821,6 +814,42 @@
         <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
         <script src="html5up-phantom/assets/js/util.js"></script>
         <script src="html5up-phantom/assets/js/main.js"></script>
+        
+        <script>
+            // Menu functionality
+            const menuButton = document.querySelector('a[href="#menu"]');
+            const menu = document.getElementById('menu');
+            const overlay = document.querySelector('.menu-overlay');
+            const menuLinks = menu.querySelectorAll('a');
+
+            function toggleMenu() {
+                menu.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+            }
+
+            menuButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMenu();
+            });
+
+            overlay.addEventListener('click', toggleMenu);
+
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (menu.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Close menu on window resize if open
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 980 && menu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        </script>
     </div>
 </body>
 </html>

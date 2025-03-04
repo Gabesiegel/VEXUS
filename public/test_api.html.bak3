@@ -199,45 +199,6 @@
             z-index: 10000 !important;
         }
     </style>
-    <!-- Critical styles for menu visibility -->
-    <style>
-        /* Critical styles for menu visibility */
-        body.is-menu-visible #menu {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-            z-index: 10000 !important;
-        }
-        
-        #menu {
-            transition: all 0.5s ease;
-            position: fixed !important;
-            top: 0 !important;
-            height: 100% !important;
-            width: 300px !important;
-            max-width: 80% !important;
-            right: -300px !important;
-            z-index: 10000 !important;
-            overflow-y: auto !important;
-        }
-        
-        #menu.visible {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-        }
-        
-        /* Increase z-index for menu toggle button */
-        a[href="#menu"] {
-            z-index: 9000 !important;
-            position: relative !important;
-        }
-        
-        /* Ensure menu appears above other elements */
-        nav#menu {
-            z-index: 10000 !important;
-        }
-    </style>
 </head>
 <body>
     <div id="wrapper">
