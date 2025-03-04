@@ -1,6 +1,8 @@
 import fetch from 'node-fetch';
 import fs from 'fs/promises';
 
+const BASE_URL = 'http://localhost:3002';
+
 async function testEndpoint(veinType, base64Image) {
   try {
     const payload = {
@@ -8,7 +10,7 @@ async function testEndpoint(veinType, base64Image) {
       parameters: { confidenceThreshold: 0.0, maxPredictions: 5 },
     };
 
-    const response = await fetch(`/api/predict`, {
+    const response = await fetch(`${BASE_URL}/api/predict`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
