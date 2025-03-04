@@ -30,12 +30,15 @@
             gap: 60px;
             margin-bottom: 2em;
             flex-wrap: wrap;
+            width: 100%;
+            padding: 0 20px;
         }
 
         .logo {
             width: 500px;
             height: 250px;
             object-fit: contain;
+            max-width: 100%;
         }
 
         .sidebar-logo {
@@ -198,8 +201,16 @@
             }
 
             .logo {
-                width: 400px;
-                height: 200px;
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                margin: 0 auto;
+            }
+
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 2em;
+                padding: 0 10px;
             }
 
             .article-card {
@@ -222,6 +233,18 @@
         }
 
         @media screen and (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .logo-container {
+                padding: 0 5px;
+            }
+
+            .logo {
+                max-width: 300px;
+            }
+
             .article-grid {
                 grid-template-columns: 1fr;
             }
