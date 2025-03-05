@@ -1222,12 +1222,19 @@
         // Function to resize image if needed before API submission
         function resizeImageIfNeeded(file, dataUrl, type) {
             // Set size thresholds and target dimensions
-            const MAX_FILE_SIZE_MB = 4; // MB
+            const MAX_FILE_SIZE_MB = 1.5; // MB - reduced from 4MB to match server limit
             const MAX_WIDTH = 1200; // px
             const MAX_HEIGHT = 1200; // px
-            const QUALITY = 0.8; // JPEG quality (0.0 to 1.0)
+            const QUALITY = 0.7; // JPEG quality (0.0 to 1.0) - reduced from 0.8 for better compression
             
-            // Check if file exceeds size threshold (4MB)
+            // DIAGNOSTICS: Log original file details
+            console.log(`===== RESIZE DIAGNOSTICS =====`);
+            console.log(`Original file: ${file.name}`);
+            console.log(`Original size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+            console.log(`Original type: ${file.type}`);
+            console.log(`Max allowed size: ${MAX_FILE_SIZE_MB} MB`);
+            
+            // Check if file exceeds size threshold (1.5MB)
             if (file.size <= MAX_FILE_SIZE_MB * 1024 * 1024) {
                 console.log(`Image is under size threshold (${MAX_FILE_SIZE_MB}MB), no resize needed`);
                 classifyImage(type, file, dataUrl); // Proceed with original file
@@ -1239,6 +1246,9 @@
             // Create an image element to load the file
             const img = new Image();
             img.onload = function() {
+                // Log original dimensions
+                console.log(`Original dimensions: ${img.width}x${img.height}`);
+                
                 // Calculate new dimensions while maintaining aspect ratio
                 let newWidth = img.width;
                 let newHeight = img.height;
@@ -1257,6 +1267,8 @@
                     newWidth = Math.round(newWidth * scaleFactor);
                 }
                 
+                console.log(`New dimensions after resize: ${newWidth}x${newHeight}`);
+                
                 // Create canvas for resizing
                 const canvas = document.createElement('canvas');
                 canvas.width = newWidth;
@@ -1268,12 +1280,77 @@
                 
                 // Convert to data URL (JPEG format with quality setting)
                 const resizedDataUrl = canvas.toDataURL('image/jpeg', QUALITY);
+                console.log(`Applied initial compression quality: ${QUALITY}`);
                 
-                // Convert data URL to Blob for size comparison
-                fetch(resizedDataUrl)
-                    .then(res => res.blob())
-                    .then(resizedBlob => {
-                        console.log(`Resized image: ${(resizedBlob.size / (1024 * 1024)).toFixed(2)} MB, dimensions: ${newWidth}x${newHeight}`);
+                // More efficient approach: Convert dataURL to Blob directly without fetch
+                try {
+                    // Parse the base64 string
+                    const base64 = resizedDataUrl.split(',')[1];
+                    const mime = resizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
+                    
+                    // Convert to binary
+                    const binaryStr = atob(base64);
+                    const len = binaryStr.length;
+                    const arr = new Uint8Array(len);
+                    
+                    for (let i = 0; i < len; i++) {
+                        arr[i] = binaryStr.charCodeAt(i);
+                    }
+                    
+                    // Create blob from binary data
+                    const resizedBlob = new Blob([arr], { type: mime });
+                    
+                    const resizedSizeMB = (resizedBlob.size / (1024 * 1024)).toFixed(2);
+                    console.log(`Resized image: ${resizedSizeMB} MB, dimensions: ${newWidth}x${newHeight}`);
+                    console.log(`Size reduction: ${((1 - (resizedBlob.size / file.size)) * 100).toFixed(1)}%`);
+                    
+                    // If the resized image is still too large, reduce quality further
+                    if (resizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                        console.log(`Image still exceeds ${MAX_FILE_SIZE_MB}MB after initial resize, reducing quality further...`);
+                        // Try with lower quality
+                        const lowerQuality = 0.5;
+                        console.log(`Applying secondary compression with quality: ${lowerQuality}`);
+                        const furtherResizedDataUrl = canvas.toDataURL('image/jpeg', lowerQuality);
+                        
+                        // Parse the base64 string again
+                        const base64Lower = furtherResizedDataUrl.split(',')[1];
+                        const mimeLower = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
+                        
+                        // Convert to binary
+                        const binaryStrLower = atob(base64Lower);
+                        const lenLower = binaryStrLower.length;
+                        const arrLower = new Uint8Array(lenLower);
+                        
+                        for (let i = 0; i < lenLower; i++) {
+                            arrLower[i] = binaryStrLower.charCodeAt(i);
+                        }
+                        
+                        // Create blob from binary data with lower quality
+                        const furtherResizedBlob = new Blob([arrLower], { type: mimeLower });
+                        
+                        const furtherResizedSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
+                        console.log(`Further resized image: ${furtherResizedSizeMB} MB with quality ${lowerQuality}`);
+                        console.log(`Total size reduction: ${((1 - (furtherResizedBlob.size / file.size)) * 100).toFixed(1)}%`);
+                        
+                        if (furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                            console.log(`WARNING: Image still exceeds ${MAX_FILE_SIZE_MB}MB after second resize attempt`);
+                        } else {
+                            console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit`);
+                        }
+                        
+                        // Create a new File object
+                        const resizedFile = new File([furtherResizedBlob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: new Date().getTime()
+                        });
+                        
+                        console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
+                        console.log(`===== END RESIZE DIAGNOSTICS =====`);
+                        
+                        // Process the further resized image
+                        classifyImage(type, resizedFile, furtherResizedDataUrl);
+                    } else {
+                        console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit`);
                         
                         // Create a new File object from the resized Blob
                         const resizedFile = new File([resizedBlob], file.name, {
@@ -1281,18 +1358,25 @@
                             lastModified: new Date().getTime()
                         });
                         
+                        console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
+                        console.log(`===== END RESIZE DIAGNOSTICS =====`);
+                        
                         // Process the resized image
                         classifyImage(type, resizedFile, resizedDataUrl);
-                    })
-                    .catch(error => {
-                        console.error('Error processing resized image:', error);
-                        // Fall back to original if resize fails
-                        classifyImage(type, file, dataUrl);
-                    });
+                    }
+                } catch (error) {
+                    console.error('Error converting resized image:', error);
+                    console.log(`RESIZE FAILED: ${error.message}`);
+                    console.log(`===== END RESIZE DIAGNOSTICS WITH ERROR =====`);
+                    // Fall back to original if conversion fails
+                    classifyImage(type, file, dataUrl);
+                }
             };
             
             img.onerror = function() {
                 console.error('Error loading image for resizing');
+                console.log(`RESIZE FAILED: Error loading image`);
+                console.log(`===== END RESIZE DIAGNOSTICS WITH ERROR =====`);
                 // Fall back to original if resize fails
                 classifyImage(type, file, dataUrl);
             };

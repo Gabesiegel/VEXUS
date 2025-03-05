@@ -91,6 +91,7 @@
             margin: 20px 0;
             cursor: pointer;
             transition: transform 0.3s ease;
+            display: block; /* Ensure images don't have inline spacing */
         }
 
         .image-section img:hover {
@@ -128,6 +129,8 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(5px);
+            touch-action: manipulation; /* Improve touch experience */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
 
         .modal-content {
@@ -136,25 +139,69 @@
             left: 50%;
             transform: translate(-50%, -50%);
             max-width: 95%;
-            max-height: 95vh;
+            max-height: 90vh;
             object-fit: contain;
             border-radius: 8px;
+            touch-action: manipulation; /* Improve touch response */
+        }
+
+        /* Controls for mobile image zooming */
+        .modal-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 12px 16px;
+            border-radius: 50px;
+            z-index: 1001;
+        }
+
+        .modal-controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .modal-controls button:hover,
+        .modal-controls button:focus {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         .close {
             position: absolute;
             top: 15px;
-            right: 35px;
+            right: 20px;
             color: #f1f1f1;
             font-size: 40px;
             font-weight: bold;
             transition: 0.3s;
             cursor: pointer;
+            width: 44px;   /* Larger touch target */
+            height: 44px;  /* Larger touch target */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
         .close:hover,
         .close:focus {
-            color: #bbb;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
             text-decoration: none;
         }
 
@@ -163,6 +210,32 @@
             width: 500px;
             height: 250px;
             object-fit: contain;
+        }
+
+        /* Loading indicator for images */
+        .image-loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -182,6 +255,57 @@
             .logo {
                 width: 300px;
                 height: 150px;
+            }
+            
+            /* Modal adjustments for mobile */
+            .modal-content {
+                max-width: 95%;
+                max-height: 80vh;
+            }
+            
+            .close {
+                top: 10px;
+                right: 10px;
+            }
+            
+            /* Mobile image sections */
+            .image-section {
+                position: relative;
+                overflow: hidden;
+                margin: 10px 0;
+            }
+            
+            .image-section img {
+                transition: transform 0.3s ease;
+                margin: 10px 0;
+            }
+        }
+        
+        /* Optimize for very small screens */
+        @media screen and (max-width: 480px) {
+            .technique-container {
+                padding: 15px;
+            }
+            
+            .acquisition-header h1 {
+                font-size: 1.8em;
+            }
+            
+            .modal-controls {
+                bottom: 10px;
+                padding: 8px 12px;
+            }
+            
+            .modal-controls button {
+                font-size: 20px;
+                width: 36px;
+                height: 36px;
+            }
+            
+            .close {
+                font-size: 32px;
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -248,7 +372,7 @@
                         <h2>IVC Assessment</h2>
                         <div class="view-section">
                             <div class="image-section">
-                                <img src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -274,6 +398,7 @@
                                     <li>Ensure measurement is taken during normal respiration</li>
                                     <li>Document both maximum and minimum diameters if significant respiratory variation</li>
                                     <li>Consider patient's volume status and positioning when interpreting measurements</li>
+                            </div>
                         </div>
                     </div>
 
@@ -284,7 +409,7 @@
                         <div class="view-section">
                             <h3>Long Axis View</h3>
                             <div class="image-section">
-                                <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -301,12 +426,13 @@
                                     <li>Triphasic: Normal venous return</li>
                                     <li>Biphasic: Mild congestion</li>
                                     <li>Monophasic: Severe congestion</li>
+                            </div>
                         </div>
 
                         <div class="view-section">
                             <h3>Short Axis View</h3>
                             <div class="image-section">
-                                <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -317,12 +443,13 @@
                                     <li>Hepatic veins</li>
                                     <li>Portal vein</li>
                                     <li>IVC</li>
+                            </div>
                         </div>
 
                         <div class="view-section">
                             <h3>Subxiphoid View</h3>
                             <div class="image-section">
-                                <img src="images/hepatic_sub.png" alt="Hepatic Vein - Subxiphoid View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/hepatic_sub.png" alt="Hepatic Vein - Subxiphoid View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -335,6 +462,7 @@
                                     <li>Liver</li>
                                     <li>Right atrium</li>
                                     <li>IVC</li>
+                            </div>
                         </div>
                     </div>
 
@@ -345,7 +473,7 @@
                         <div class="view-section">
                             <h3>Long Axis View</h3>
                             <div class="image-section">
-                                <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -362,12 +490,13 @@
                                     <li>Normal: Continuous flow with minimal pulsatility</li>
                                     <li>Pulsatile: Mild congestion</li>
                                     <li>Highly pulsatile: Severe congestion</li>
+                            </div>
                         </div>
 
                         <div class="view-section">
                             <h3>Short Axis View</h3>
                             <div class="image-section">
-                                <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -381,7 +510,7 @@
                         <div class="view-section">
                             <h3>Subxiphoid View</h3>
                             <div class="image-section">
-                                <img src="images/Portal_sub.png" alt="Portal Vein - Subxiphoid View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/Portal_sub.png" alt="Portal Vein - Subxiphoid View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
@@ -392,6 +521,7 @@
                                     <li>Portal vein</li>
                                     <li>Liver</li>
                                     <li>IVC</li>
+                            </div>
                         </div>
                     </div>
 
@@ -402,11 +532,35 @@
                         <div class="view-section">
                             <h3>Long Axis View</h3>
                             <div class="image-section">
-                                <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
                             </div>
                             <div class="technique-description">
                                 <h4>Probe Position:</h4>
-                                <p>Place probe in the posterior axillary line, angled towards the spine to visualize the long axis of the kidney.</p>
+                                <p>Position the probe in the right flank, posterior to the mid-axillary line.</p>
+                                
+                                <h4>Key Structures:</h4>
+                                <ul class="technique-list">
+                                    <li>Renal vein</li>
+                                    <li>IVC junction</li>
+                                    <li>Kidney</li>
+                                    <li>Right renal artery</li>
+                                
+                                <h4>Doppler Waveforms:</h4>
+                                <ul class="technique-list">
+                                    <li>Continuous: Normal venous return</li>
+                                    <li>Pulsatile: Mild congestion</li>
+                                    <li>Discontinuous/phasic reversal: Severe congestion</li>
+                            </div>
+                        </div>
+
+                        <div class="view-section">
+                            <h3>Short Axis View</h3>
+                            <div class="image-section">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                            </div>
+                            <div class="technique-description">
+                                <h4>Probe Position:</h4>
+                                <p>Position probe in transverse orientation at right flank, looking for the kidney in cross-section.</p>
                                 
                                 <h4>Key Structures:</h4>
                                 <ul class="technique-list">
@@ -414,30 +568,8 @@
                                     <li>Renal artery</li>
                                     <li>Kidney hilum</li>
                                 
-                                <h4>Doppler Waveforms:</h4>
-                                <ul class="technique-list">
-                                    <li>Normal: Continuous flow</li>
-                                    <li>Pulsatile: Mild congestion</li>
-                                    <li>Highly pulsatile: Severe congestion</li>
-                        </div>
-
-                        <div class="view-section">
-                            <h3>Short Axis View</h3>
-                            <div class="image-section">
-                                <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
-                            </div>
-                            <div class="technique-description">
-                                <h4>Probe Position:</h4>
-                                <p>Probe in coronal plane over the right kidney, between mid-axillary and posterior axillary lines, angled slightly towards patient's head.</p>
-                                
-                                <h4>Key Structures:</h4>
-                                <ul class="technique-list">
-                                    <li>Kidney</li>
-                                    <li>Interlobar artery</li>
-                                    <li>Interlobar vein</li>
-                                
-                                <h4>Special Note:</h4>
-                                <p>This view may be helpful to distinguish between venous and arterial flow, as an artery and a vein are usually seen together in this orientation.</p>
+                                <h4>Special Notes:</h4>
+                                <p>In this view, the renal vein is typically found anterior to the renal artery.</p>
                             </div>
                         </div>
                     </div>
@@ -452,6 +584,7 @@
                             <li>Document both 2D images and Doppler waveforms</li>
                             <li>Consider patient's breathing cycle during image acquisition</li>
                             <li>Optimize gain and depth settings for each view</li>
+                    </div>
                 </div>
             </div>
         </div>
@@ -461,6 +594,15 @@
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImage">
+        <div class="image-loading" id="imageLoading">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+        <div class="modal-controls">
+            <button id="zoomInBtn" title="Zoom in"><i class="fas fa-search-plus"></i></button>
+            <button id="zoomOutBtn" title="Zoom out"><i class="fas fa-search-minus"></i></button>
+            <button id="resetZoomBtn" title="Reset view"><i class="fas fa-undo"></i></button>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -524,27 +666,236 @@
         // Existing modal functionality
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImage");
+        const loading = document.getElementById("imageLoading");
+        
+        // Mobile-friendly image controls
+        const zoomInBtn = document.getElementById("zoomInBtn");
+        const zoomOutBtn = document.getElementById("zoomOutBtn");
+        const resetZoomBtn = document.getElementById("resetZoomBtn");
         
         const images = document.getElementsByClassName("acquisition-image");
         
+        // Zooming variables
+        let currentZoom = 1;
+        let startX = 0;
+        let startY = 0;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        
+        // Show modal with loading indicator
         Array.from(images).forEach(img => {
             img.onclick = function() {
                 modal.style.display = "block";
+                loading.style.display = "block";
+                modalImg.style.display = "none";
+                
+                // Reset zoom state
+                currentZoom = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                
+                // Load new image
                 modalImg.src = this.src;
+                
+                // When image loads, hide loading indicator
+                modalImg.onload = function() {
+                    loading.style.display = "none";
+                    modalImg.style.display = "block";
+                };
+                
+                // If loading takes too long, show anyway
+                setTimeout(() => {
+                    loading.style.display = "none";
+                    modalImg.style.display = "block";
+                }, 2000);
             }
         });
         
+        // Close the modal
         const closeBtn = document.getElementsByClassName("close")[0];
-        
         closeBtn.onclick = function() {
             modal.style.display = "none";
         }
         
+        // Close modal when clicked outside the image
         modal.onclick = function(event) {
             if (event.target === modal) {
                 modal.style.display = "none";
             }
         }
+        
+        // Prevent modal from closing when controls are clicked
+        document.querySelector('.modal-controls').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Zoom in
+        zoomInBtn.addEventListener('click', function() {
+            if (currentZoom < 3) { // Limit max zoom
+                currentZoom += 0.25;
+                updateTransform();
+            }
+        });
+        
+        // Zoom out
+        zoomOutBtn.addEventListener('click', function() {
+            if (currentZoom > 0.5) { // Limit min zoom
+                currentZoom -= 0.25;
+                updateTransform();
+            }
+        });
+        
+        // Reset zoom
+        resetZoomBtn.addEventListener('click', function() {
+            currentZoom = 1;
+            translateX = 0;
+            translateY = 0;
+            updateTransform();
+        });
+        
+        // Apply transform to image
+        function updateTransform() {
+            modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+        }
+        
+        // Image panning with touch/mouse
+        modalImg.addEventListener('mousedown', startDrag);
+        modalImg.addEventListener('touchstart', startDrag);
+        
+        function startDrag(e) {
+            e.preventDefault();
+            if (currentZoom <= 1) return; // Only allow dragging when zoomed in
+            
+            const event = e.type === 'touchstart' ? e.touches[0] : e;
+            startX = event.clientX - translateX;
+            startY = event.clientY - translateY;
+            isDragging = true;
+        }
+        
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('touchmove', drag);
+        
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const event = e.type === 'touchmove' ? e.touches[0] : e;
+            translateX = event.clientX - startX;
+            translateY = event.clientY - startY;
+            updateTransform();
+        }
+        
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+        
+        function endDrag() {
+            isDragging = false;
+        }
+        
+        // Handle pinch zooming on mobile
+        let initialDistance = 0;
+        
+        modalImg.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 2) {
+                initialDistance = getDistance(e.touches[0], e.touches[1]);
+            }
+        });
+        
+        modalImg.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 2) {
+                const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                
+                if (initialDistance > 0) {
+                    const deltaDistance = currentDistance - initialDistance;
+                    const zoomChange = deltaDistance * 0.01;
+                    
+                    // Apply zoom with limits
+                    const newZoom = Math.max(0.5, Math.min(3, currentZoom + zoomChange));
+                    
+                    if (newZoom !== currentZoom) {
+                        currentZoom = newZoom;
+                        updateTransform();
+                    }
+                }
+                
+                initialDistance = currentDistance;
+                e.preventDefault(); // Prevent screen zooming
+            }
+        });
+        
+        function getDistance(touch1, touch2) {
+            const dx = touch1.clientX - touch2.clientX;
+            const dy = touch1.clientY - touch2.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        
+        // Add keyboard shortcuts for accessibility
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "block") {
+                switch(e.key) {
+                    case "Escape": 
+                        modal.style.display = "none"; 
+                        break;
+                    case "+": 
+                    case "=": 
+                        if (currentZoom < 3) {
+                            currentZoom += 0.25;
+                            updateTransform();
+                        }
+                        break;
+                    case "-": 
+                        if (currentZoom > 0.5) {
+                            currentZoom -= 0.25;
+                            updateTransform();
+                        }
+                        break;
+                    case "0": 
+                        currentZoom = 1;
+                        translateX = 0;
+                        translateY = 0;
+                        updateTransform();
+                        break;
+                }
+            }
+        });
+        
+        // Handle window resize to keep image centered
+        window.addEventListener('resize', function() {
+            if (modal.style.display === "block") {
+                // Reset position when window is resized
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            }
+        });
+        
+        // Lazy load images
+        document.addEventListener('DOMContentLoaded', function() {
+            const lazyImages = document.querySelectorAll('.acquisition-image');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(img) {
+                    // Store original src in data-src
+                    if (!img.dataset.src) {
+                        img.dataset.src = img.src;
+                        img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+                        imageObserver.observe(img);
+                    }
+                });
+            }
+        });
     </script>
     <!-- Menu Toggle Script -->
     <script>
