@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a7aff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #4a7aff;
+            border-radius: 4px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .failed {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+<link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
+</head>
+<body>
+    <h1>Menu Functionality Test</h1>
+    
+    <div class="test-links">
+        <a href="../education.html" target="_blank" class="test-button">Test Education Page Menu</a>
+        <a href="../acquisition.html" target="_blank" class="test-button">Test Acquisition Page Menu</a>
+    </div>
+    
+    <div class="instructions">
+        <h2>Testing Instructions:</h2>
+        <ol>
+            <li>Click each test button above to open the page in a new tab</li>
+            <li>On each page, click the menu button (hamburger icon or "Menu" link)</li>
+            <li>Verify that the sidebar menu appears correctly from the right side</li>
+            <li>Click outside the menu or the close button to close it</li>
+            <li>Test on mobile view (resize browser window)</li>
+        </ol>
+        
+        <h3>Results:</h3>
+        <ul>
+            <li>Education Page: <span class="result">Not tested yet</span></li>
+            <li>Acquisition Page: <span class="result">Not tested yet</span></li>
+        </ul>
+        
+        <p>If everything works correctly, the menu should open and close smoothly without any issues, confirming that the centralized CSS is working properly.</p>
+    </div>
+    
+    <script>
+        // Simple script to mark test results
+        const resultSpans = document.querySelectorAll('.result');
+        
+        resultSpans.forEach(span => {
+            span.addEventListener('click', function() {
+                if (this.textContent === 'Not tested yet') {
+                    this.textContent = 'Working ✓';
+                    this.className = 'result success';
+                } else if (this.textContent === 'Working ✓') {
+                    this.textContent = 'Failed ✗';
+                    this.className = 'result failed';
+                } else {
+                    this.textContent = 'Not tested yet';
+                    this.className = 'result';
+                }
+            });
+        });
+    </script>
+<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+</body>
+</html> 

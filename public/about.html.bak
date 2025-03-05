@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Our Team - VExUS ATLAS</title>
+    <title>About VExUS ATLAS</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
@@ -16,17 +16,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px;
-            margin-bottom: 3em;
+            gap: 30px;
+            margin-bottom: 2em;
             flex-wrap: wrap;
-            padding: 0 20px;
+            padding: 0 15px;
         }
 
         .logo {
-            width: 550px;
-            height: 250px;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
             object-fit: contain;
-            transition: transform 0.3s ease;
+            margin: 10px;
         }
 
         .logo:hover {
@@ -59,88 +60,73 @@
             letter-spacing: -0.02em;
         }
 
-        .team-section {
+        .about-section {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto 4em;
+            margin: 0 auto 2em;
             padding: 0 20px;
         }
 
-        .team-section p {
+        .about-section p {
             font-size: 1.2em;
             line-height: 1.6;
             color: #555;
             margin-bottom: 1.5em;
         }
 
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
             gap: 30px;
-            margin: 40px auto;
+            justify-content: center;
+            margin: 0 auto;
             max-width: 1200px;
             padding: 0 20px;
         }
 
-        .team-card {
+        .about-card {
             background: #ffffff;
-            padding: 35px 25px;
+            padding: 35px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0 auto;
-            max-width: 450px;
-            width: 100%;
+            flex: 1;
+            min-width: 300px;
+            max-width: 100%;
         }
 
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
-        }
-
-        .team-member-image {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            margin: 0 auto 25px;
-            display: block;
-            object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .team-card:hover .team-member-image {
-            transform: scale(1.05);
-        }
-
-        .team-card h3 {
-            font-size: 1.6em;
+        .about-card h2 {
+            font-size: 1.8em;
             color: #2c3e50;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .team-card .role {
-            font-size: 1.1em;
-            color: #777777;
             margin-bottom: 20px;
-            font-weight: 500;
-            letter-spacing: 0.02em;
+            font-weight: 600;
+            text-align: center;
         }
 
-        .team-card p {
-            font-size: 1.05em;
+        .about-card p {
+            font-size: 1.1em;
             line-height: 1.6;
-            color: #666;
-            margin: 0;
-            padding: 0 10px;
-            flex-grow: 1;
+            color: #555;
+            margin-bottom: 1em;
+        }
+
+        .team-link {
+            display: block;
+            text-align: center;
+            margin: 40px auto;
+            padding: 12px 30px;
+            background-color: #777777;
+            color: white !important;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            max-width: 250px;
+        }
+
+        .team-link:hover {
+            background-color: #777777;
+            transform: translateY(-2px);
         }
 
         .user-info {
@@ -156,168 +142,45 @@
         }
 
         @media screen and (max-width: 1200px) {
-            .team-grid {
-                gap: 25px;
-                padding: 0 15px;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-
-            .container {
-                padding: 30px;
-                margin: 10px;
-            }
-
             .logo {
-                width: 100%;
-                max-width: 400px;
-                height: auto;
-                margin: 10px 0;
+                max-width: 350px;
             }
-
+            
             .logo-container {
                 gap: 20px;
-                margin-bottom: 2em;
             }
         }
 
         @media screen and (max-width: 980px) {
-            .container {
-                padding: 20px;
-                max-width: 100%;
-                margin: 0;
-                border-radius: 0;
-            }
-
-            .team-section {
-                padding: 0 15px;
-            }
-
-            h1 {
-                font-size: 2em;
-                margin-bottom: 1.5em;
-            }
-
-            .team-card {
-                padding: 25px 15px;
-            }
-
-            .team-member-image {
-                width: 150px;
-                height: 150px;
-            }
-
-            .team-card h3 {
-                font-size: 1.4em;
-            }
-
-            .team-card .role {
-                font-size: 1em;
-                margin-bottom: 15px;
-            }
-
-            .team-card p {
-                font-size: 0.95em;
-                line-height: 1.5;
-            }
-        }
-
-        @media screen and (max-width: 736px) {
-            .team-grid {
-                gap: 20px;
-                padding: 0 10px;
-            }
-
-            .team-member-image {
-                width: 140px;
-                height: 140px;
-            }
-
-            .team-card h3 {
-                font-size: 1.4em;
-            }
-
-            .team-card .role {
-                font-size: 1em;
-            }
-
-            .team-card p {
-                font-size: 0.95em;
-            }
-
-            .team-section p {
-                font-size: 1.1em;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .container {
-                padding: 15px 10px;
-            }
-
-            .team-grid {
-                gap: 20px;
-                padding: 0 10px;
-                margin: 20px auto;
-            }
-
-            .team-member-image {
-                width: 140px;
-                height: 140px;
-                margin-bottom: 20px;
-            }
-
-            .team-card {
-                padding: 20px 15px;
-                margin-bottom: 15px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-                padding: 0 10px;
-            }
-
-            .team-section h2 {
-                font-size: 1.6em !important;
-                margin-bottom: 0.8em !important;
-            }
-
-            .team-section p {
-                font-size: 1em;
-                line-height: 1.5;
-                padding: 0 10px;
-            }
-
             .logo-container {
-                padding: 0 10px;
-                margin-bottom: 1.5em;
+                flex-direction: column;
+                gap: 30px;
             }
 
             .logo {
                 max-width: 300px;
+                margin: 0 auto;
             }
         }
 
-        .team-member-social a {
-            color: #777777;
-            margin-right: 10px;
-            font-size: 1.1em;
-            transition: opacity 0.3s ease;
+        @media screen and (max-width: 480px) {
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 1em;
+            }
         }
 
-        /* Smooth Loading Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .highlight-box {
+            background-color: #777777;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
         }
-
-        .team-card {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        .team-card:nth-child(2) { animation-delay: 0.1s; }
-        .team-card:nth-child(3) { animation-delay: 0.2s; }
-        .team-card:nth-child(4) { animation-delay: 0.3s; }
-        .team-card:nth-child(5) { animation-delay: 0.4s; }
     </style>
     <!-- Additional styles for menu functionality -->
     <style>
@@ -396,7 +259,7 @@
             <div class="inner">
                 <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <span class="symbol"><img src="./images/VEXUS.ATLAS.png" alt="" /></span>
+                    <span class="symbol"><img src="./images/vexus-ai-logo.png" alt="VEXUS ATLAS" /></span>
                     <span class="title">VExUS ATLAS</span>
                 </a>
                 
@@ -410,7 +273,7 @@
         <nav id="menu">
             <div class="inner">
                 <div class="logo-container">
-                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                    <img src="./images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
                 </div>
                 <h2>Menu</h2>
                 <ul>
@@ -433,108 +296,69 @@
             <div class="inner">
                 <div class="container">
                     <div class="logo-container">
-                        <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
+                        <img src="./images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="logo">
                     </div>
 
-                    <div class="team-section">
-                        <h1>Our Team</h1>
+                    <div class="about-section">
+                        <h1>About VExUS ATLAS</h1>
                         <p>
-                            VExUS ATLAS is developed by a multidisciplinary team of medical professionals dedicated to improving patient care through innovative technology and clinical expertise in venous congestion assessment.
+                            VExUS ATLAS represents a breakthrough in medical imaging analysis, combining advanced artificial intelligence with clinical expertise in venous congestion assessment. Our mission is to enhance patient care through innovative technology and evidence-based medicine.
                         </p>
                     </div>
 
-                    <div class="team-grid">
-                        <div class="team-card">
-                            <img src="images/August Longino.jpg" alt="August Longino" class="team-member-image">
-                            <h3>August Longino, MD</h3>
-                            <div class="role">Clinical Investigator & Project Lead</div>
-                            <p>Expert in critical care medicine and point-of-care ultrasound, focusing on venous congestion assessment and its clinical applications in critical care settings.</p>
+                    <div class="about-content">
+                        <div class="about-card">
+                            <h2>Our Vision</h2>
+                            <p>
+                                VExUS ATLAS aims to revolutionize the way healthcare professionals assess venous congestion by providing cutting-edge AI-powered tools that improve diagnostic accuracy and efficiency. We strive to make advanced venous ultrasound assessment accessible to clinicians worldwide.
+                            </p>
+                            <p>
+                                Our platform integrates state-of-the-art machine learning algorithms with clinical expertise to offer reliable, evidence-based analysis of ultrasound images, helping clinicians make more informed decisions for patient care.
+                            </p>
                         </div>
 
-                        <div class="team-card">
-                            <img src="images/gabe siegel.jpg" alt="Gabriel Siegel" class="team-member-image">
-                            <h3>Gabriel Siegel, MD</h3>
-                            <div class="role">VExUS ATLAS Creator & Ultrasound Fellow</div>
-                            <p>Created the VExUS ATLAS tool and specializes in machine learning and AI applications in healthcare, focusing on developing innovative solutions for medical imaging analysis and clinical decision support systems.</p>
-                        </div>
-
-                        <div class="team-card">
-                            <img src="images/Riscinti Matthew D.jpg" alt="Matthew Riscinti" class="team-member-image">
-                            <h3>Matthew Riscinti, MD</h3>
-                            <div class="role">Faculty Clinical Investigator</div>
-                            <p>Cardiovascular medicine specialist with expertise in venous thromboembolism and critical care cardiology, focusing on cardiovascular care and outcomes in critical illness.</p>
-                        </div>
-
-                        <div class="team-card">
-                            <img src="images/ED Gill.jpg" alt="Ed Gill" class="team-member-image">
-                            <h3>Ed Gill, MD</h3>
-                            <div class="role">Cardiology Professor & Clinical Expert</div>
-                            <p>Distinguished cardiologist with extensive expertise in echocardiography and prosthetic valve evaluation. Graduate of University of Washington School of Medicine (1985) with fellowship training in Cardiology at University of Utah Medical Center (1993).</p>
-                        </div>
-                        
-                        <div class="team-card">
-                            <img src="images/IVOR.jpg" alt="Ivor Douglas" class="team-member-image">
-                            <h3>Ivor Douglas, MD</h3>
-                            <div class="role">Critical Care Director & Chief of Pulmonary Sciences</div>
-                            <p>Medical Director of the Intensive Care unit at Denver Health Medical Center and Chief of Pulmonary Sciences & Critical Care. Recognized as a Top Doctor in Denver by 5280 Magazine (2008-2019) and named in Best Doctors in America® (2008-2020).</p>
-                        </div>
-
-                    </div>
-
-                    <div class="team-section" style="margin-top: 60px;">
-                        <h2 style="font-size: 2.2em; color: #2c3e50; margin-bottom: 1em; padding: 0 15px; word-break: break-word;">Contributors</h2>
-                        <p>
-                            Our project benefits from the valuable contributions of these talented professionals who provide expertise and support in various capacities.
-                        </p>
-                    </div>
-
-                    <div class="team-grid">
-                        <div class="team-card">
-                            <img src="images/NN headshot.jpg" alt="Nhu-Nguyen Le" class="team-member-image">
-                            <h3>Nhu-Nguyen Le, MD</h3>
-                            <div class="role">Assistant Fellowship Director</div>
-                            <p>Emergency Medicine physician at Denver Health Medical Center with fellowship in Ultrasound Medicine. Specializes in point-of-care ultrasound education and clinical applications in emergency settings.</p>
-                        </div>
-                        
-                        <div class="team-card">
-                            <img src="images/Milgrim headshot.jpg" alt="Fred N. Milgrim" class="team-member-image">
-                            <h3>Fred N. Milgrim, MD</h3>
-                            <div class="role">Director of Residency Ultrasound Education</div>
-                            <p>Emergency Medicine physician at Denver Health Medical Center with expertise in ultrasound education. Focuses on developing curriculum for residents and integration of POCUS in emergency care.</p>
-                        </div>
-                        
-                        <div class="team-card">
-                            <img src="images/Alsharif headshot.jpg" alt="Peter Alsharif" class="team-member-image">
-                            <h3>Peter Alsharif, MD</h3>
-                            <div class="role">Ultrasound Fellow</div>
-                            <p>Emergency ultrasound fellow from Rutgers specializing in point-of-care ultrasound applications and advancing diagnostic capabilities in critical care settings.</p>
-                        </div>
-
-                        <div class="team-card">
-                            <img src="images/luke-mccormack-headshot.jpg" alt="Luke McCormack" class="team-member-image">
-                            <h3>Luke McCormack, MD</h3>
-                            <div class="role">Research Contributor</div>
-                            <p>Internal Medicine resident at the University of Colorado with a strong interest in critical care medicine. His work focuses on advancing the understanding and application of critical care diagnostics and interventions.</p>
-                        </div>
-
-                        <div class="team-card">
-                            <img src="images/kthayapran-headshot.png" alt="Kisha Thayapran" class="team-member-image">
-                            <h3>Kisha Thayapran, MD, MPH</h3>
-                            <div class="role">Medical Research Contributor</div>
-                            <p>Dr. Thayapran received her MD from the University of Colorado School of Medicine and her MPH from the Colorado School of Public Health. With a background in Biology from the California Institute of Technology, she brings a unique perspective to the intersection of diagnostic imaging and public health. Her research interests focus on advancing medical imaging accessibility and its applications in population health.</p>
+                        <div class="about-card">
+                            <h2>Our Approach</h2>
+                            <p>
+                                The VExUS (Venous Excess Ultrasound Score) method evaluates venous congestion by examining the inferior vena cava, hepatic veins, portal veins, and renal veins. This comprehensive approach provides a more complete picture of a patient's venous congestion status.
+                            </p>
+                            <p>
+                                Our AI algorithms are trained on extensive datasets of validated ultrasound images, ensuring high accuracy in classifying different venous waveform patterns. This technology helps standardize the assessment process and reduces interobserver variability.
+                            </p>
                         </div>
                     </div>
+                    
+                    <a href="our_team.html" class="team-link">Meet Our Team</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+   <script src="html5up-phantom/assets/js/jquery.min.js"></script>
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+    
+    <script>
+        // Menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu toggle
+            document.querySelector('a[href="#menu"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('menu').style.display = 'block';
+            });
+            
+            // Add click event listener to the body to close menu when clicking outside
+            document.body.addEventListener('click', function(e) {
+                // If the click is not inside the menu and not on the menu toggle button
+                if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
+                    document.getElementById('menu').style.display = 'none';
+                }
+            });
+        });
+    </script>
     <!-- Menu Toggle Script -->
     <script>
         // Function to initialize menu toggle
@@ -654,4 +478,4 @@
     </script>
 <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
-</html> 
+</html>

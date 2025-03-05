@@ -785,7 +785,7 @@
             <div class="inner">
                 <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <span class="symbol"><img src="images/VEXUS.ATLAS.png" alt="" /></span>
+                    <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
                     <span class="title">VExUS ATLAS</span>
                 </a>
 
@@ -801,7 +801,7 @@
         <nav id="menu">
             <div class="inner">
                 <div class="logo-container">
-                    <img src="images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
                 </div>
                 <h2>Menu</h2>
                 <ul>
@@ -825,7 +825,7 @@
         <div id="main">
             <div class="inner">
                 <!-- Logo and Title -->
-                <img src="images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="main-logo">
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="main-logo">
                 <h1>VExUS ATLAS - Image Gallery Upload</h1>
 
                 <!-- Description about Upload Tool -->

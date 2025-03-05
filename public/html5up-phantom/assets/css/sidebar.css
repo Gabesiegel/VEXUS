@@ -9,14 +9,17 @@ nav#menu {
     width: 300px;
     height: 100vh;
     overflow-y: auto;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease;
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    transform: translateX(100%);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 nav#menu.active {
     right: 0;
+    transform: translateX(0);
     box-shadow: -5px 0 35px rgba(0, 0, 0, 0.12);
 }
 
@@ -49,7 +52,7 @@ nav#menu .sidebar-logo {
     height: auto;
     margin-bottom: 0;
     padding: 5px;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
 }
 
@@ -79,7 +82,8 @@ nav#menu ul li {
     margin: 2px 0;
     opacity: 0;
     transform: translateX(20px);
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    will-change: opacity, transform;
 }
 
 nav#menu.active ul li {
@@ -87,24 +91,25 @@ nav#menu.active ul li {
     transform: translateX(0);
 }
 
-nav#menu ul li:nth-child(1) { transition-delay: 0.1s; }
-nav#menu ul li:nth-child(2) { transition-delay: 0.15s; }
-nav#menu ul li:nth-child(3) { transition-delay: 0.2s; }
-nav#menu ul li:nth-child(4) { transition-delay: 0.25s; }
-nav#menu ul li:nth-child(5) { transition-delay: 0.3s; }
-nav#menu ul li:nth-child(6) { transition-delay: 0.35s; }
-nav#menu ul li:nth-child(7) { transition-delay: 0.4s; }
-nav#menu ul li:nth-child(8) { transition-delay: 0.45s; }
-nav#menu ul li:nth-child(9) { transition-delay: 0.5s; }
-nav#menu ul li:nth-child(10) { transition-delay: 0.55s; }
-nav#menu ul li:nth-child(11) { transition-delay: 0.6s; }
+nav#menu.active ul li:nth-child(1) { transition-delay: 0.05s; }
+nav#menu.active ul li:nth-child(2) { transition-delay: 0.1s; }
+nav#menu.active ul li:nth-child(3) { transition-delay: 0.15s; }
+nav#menu.active ul li:nth-child(4) { transition-delay: 0.2s; }
+nav#menu.active ul li:nth-child(5) { transition-delay: 0.25s; }
+nav#menu.active ul li:nth-child(6) { transition-delay: 0.3s; }
+nav#menu.active ul li:nth-child(7) { transition-delay: 0.35s; }
+nav#menu.active ul li:nth-child(8) { transition-delay: 0.4s; }
+nav#menu.active ul li:nth-child(9) { transition-delay: 0.45s; }
+nav#menu.active ul li:nth-child(10) { transition-delay: 0.5s; }
+nav#menu.active ul li:nth-child(11) { transition-delay: 0.55s; }
+nav#menu.active ul li:nth-child(12) { transition-delay: 0.6s; }
 
 nav#menu ul li a {
     color: #666666 !important;
     text-decoration: none;
     border-bottom: none;
     font-size: 0.95em;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: block;
     padding: 0.8em 1.2em;
     position: relative;
@@ -131,6 +136,106 @@ nav#menu ul li a:hover {
 
 nav#menu ul li a:hover::before {
     transform: scaleY(1);
+}
+
+/* Close button styling */
+nav#menu .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 24px;
+    height: 24px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    background: transparent;
+    border-radius: 50%;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+nav#menu .close:hover {
+    color: #333;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+nav#menu .close:before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background-color: currentColor;
+    transform: rotate(45deg);
+}
+
+nav#menu .close:after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background-color: currentColor;
+    transform: rotate(-45deg);
+}
+
+nav#menu ul li a.external-link {
+    position: relative;
+    padding-right: 2.2em;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #5b94c5 !important;
+}
+
+nav#menu ul li a.external-link:before {
+    background: #5b94c5;
+}
+
+nav#menu ul li a.external-link:after {
+    content: '\f35d';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    width: auto;
+    height: auto;
+    position: absolute;
+    right: 1.2em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85em;
+    opacity: 0.85;
+    transition: all 0.2s ease;
+}
+
+nav#menu ul li a.external-link:hover:after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(2px);
+}
+
+/* Divider for external links section */
+nav#menu ul li.external-divider {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+nav#menu ul li.external-divider:before {
+    content: 'The POCUS Atlas';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 0 10px;
+    font-size: 0.7em;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    word-spacing: 4px;
+    font-weight: 500;
 }
 
 /* Mobile Optimization */
@@ -181,8 +286,7 @@ nav#menu ul li a:hover::before {
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s ease;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    will-change: opacity;
 }
 
 .menu-overlay.active {
@@ -210,29 +314,6 @@ nav#menu::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* Animation for menu toggle */
-@keyframes slideIn {
-    from {
-        right: -100%;
-        opacity: 0;
-    }
-    to {
-        right: 0;
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        right: 0;
-        opacity: 1;
-    }
-    to {
-        right: -100%;
-        opacity: 0;
-    }
-}
-
 /* Responsive adjustments */
 @media screen and (max-width: 736px) {
     nav#menu .sidebar-logo {
@@ -257,4 +338,41 @@ nav#menu::-webkit-scrollbar-thumb:hover {
         padding: 0.8em 1em;
         font-size: 0.9em;
     }
+}
+
+/* Critical Menu Visibility Styles (Added from inline styles) */
+body.is-menu-visible #menu {
+    display: block !important;
+    visibility: visible !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+}
+
+#menu {
+    transition: all 0.5s ease;
+    position: fixed !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 300px !important;
+    max-width: 80% !important;
+    right: -300px !important;
+    z-index: 10000 !important;
+    overflow-y: auto !important;
+}
+
+#menu.visible {
+    display: block !important;
+    visibility: visible !important;
+    right: 0 !important;
+}
+
+/* Increase z-index for menu toggle button */
+a[href="#menu"] {
+    z-index: 9000 !important;
+    position: relative !important;
+}
+
+/* Ensure menu appears above other elements */
+nav#menu {
+    z-index: 10000 !important;
 } 

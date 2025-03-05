@@ -686,6 +686,45 @@
             border-top: 1px solid #eee;
         }
     </style>
+    <!-- Critical styles for menu visibility -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+            position: fixed !important;
+            top: 0 !important;
+            height: 100% !important;
+            width: 300px !important;
+            max-width: 80% !important;
+            right: -300px !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
 </head>
 <body class="is-preload">
     <!-- HIPAA Compliance Modal -->
@@ -770,7 +809,7 @@
                     <li><a href="image_gallery.html">Image Gallery</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="#menu" class="close" style="position: absolute; top: 20px; right: 20px; display: block; width: 40px; height: 40px; text-align: center; line-height: 40px; color: #777; border: 1px solid #ddd; border-radius: 50%;">✕</a>
+                <a href="#menu" class="close">✕</a>
             </div>
         </nav>
 
@@ -783,7 +822,7 @@
 
                 <!-- Description about AI tool -->
                 <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
-                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment.</strong>
+                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment. <strong>Please ensure that any images uploaded do not contain Protected Health Information (PHI) to comply with HIPAA regulations and safeguard patient privacy.</strong>
                 </p>
 
                 <!-- Steps 1-4 remain unchanged -->
@@ -1169,9 +1208,6 @@
                     return;
                 }
                 
-                // Log file size
-                console.log(`Original file size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
-                
                 // Update status to show processing
                 console.log(`Setting model status for ${type} to processing`);
                 modelStatus.textContent = `Processing ${type.charAt(0).toUpperCase() + type.slice(1)} Image...`;
@@ -1197,8 +1233,8 @@
                         uploadArea.style.opacity = '1';
                     }, 50);
                     
-                    // Resize large images before submission
-                    resizeImageIfNeeded(file, e.target.result, type);
+                    console.log(`Calling classifyImage for ${type}`);
+                    classifyImage(type, file);
                 };
                 
                 reader.onerror = function(error) {
@@ -1219,89 +1255,7 @@
             }
         }
 
-        // Function to resize image if needed before API submission
-        function resizeImageIfNeeded(file, dataUrl, type) {
-            // Set size thresholds and target dimensions
-            const MAX_FILE_SIZE_MB = 4; // MB
-            const MAX_WIDTH = 1200; // px
-            const MAX_HEIGHT = 1200; // px
-            const QUALITY = 0.8; // JPEG quality (0.0 to 1.0)
-            
-            // Check if file exceeds size threshold (4MB)
-            if (file.size <= MAX_FILE_SIZE_MB * 1024 * 1024) {
-                console.log(`Image is under size threshold (${MAX_FILE_SIZE_MB}MB), no resize needed`);
-                classifyImage(type, file, dataUrl); // Proceed with original file
-                return;
-            }
-            
-            console.log(`Image exceeds ${MAX_FILE_SIZE_MB}MB threshold, resizing...`);
-            
-            // Create an image element to load the file
-            const img = new Image();
-            img.onload = function() {
-                // Calculate new dimensions while maintaining aspect ratio
-                let newWidth = img.width;
-                let newHeight = img.height;
-                
-                // Scale down if width exceeds maximum
-                if (newWidth > MAX_WIDTH) {
-                    const scaleFactor = MAX_WIDTH / newWidth;
-                    newWidth = MAX_WIDTH;
-                    newHeight = Math.round(newHeight * scaleFactor);
-                }
-                
-                // Scale down if height still exceeds maximum
-                if (newHeight > MAX_HEIGHT) {
-                    const scaleFactor = MAX_HEIGHT / newHeight;
-                    newHeight = MAX_HEIGHT;
-                    newWidth = Math.round(newWidth * scaleFactor);
-                }
-                
-                // Create canvas for resizing
-                const canvas = document.createElement('canvas');
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                
-                // Draw resized image on canvas
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                
-                // Convert to data URL (JPEG format with quality setting)
-                const resizedDataUrl = canvas.toDataURL('image/jpeg', QUALITY);
-                
-                // Convert data URL to Blob for size comparison
-                fetch(resizedDataUrl)
-                    .then(res => res.blob())
-                    .then(resizedBlob => {
-                        console.log(`Resized image: ${(resizedBlob.size / (1024 * 1024)).toFixed(2)} MB, dimensions: ${newWidth}x${newHeight}`);
-                        
-                        // Create a new File object from the resized Blob
-                        const resizedFile = new File([resizedBlob], file.name, {
-                            type: 'image/jpeg',
-                            lastModified: new Date().getTime()
-                        });
-                        
-                        // Process the resized image
-                        classifyImage(type, resizedFile, resizedDataUrl);
-                    })
-                    .catch(error => {
-                        console.error('Error processing resized image:', error);
-                        // Fall back to original if resize fails
-                        classifyImage(type, file, dataUrl);
-                    });
-            };
-            
-            img.onerror = function() {
-                console.error('Error loading image for resizing');
-                // Fall back to original if resize fails
-                classifyImage(type, file, dataUrl);
-            };
-            
-            // Load the image from data URL
-            img.src = dataUrl;
-        }
-
-        // Function to reset image upload
+        // Function to reset image upload (replacing clearImageUpload)
         function resetImageUpload(type) {
             // Clear the file input
             const fileInput = document.getElementById(`${type}ImageUpload`);
@@ -1403,7 +1357,7 @@
         }
 
         // Function to classify image
-        async function classifyImage(type, file, dataUrl = null) {
+        async function classifyImage(type, file) {
             console.log(`Classification started for ${type} vein type`);
             
             // Clear any previous errors
@@ -1445,23 +1399,17 @@
                 modelStatus.textContent = "Processing image...";
                 modelStatus.classList.add('model-ready');
 
-                // Use provided dataUrl or create a new one
-                let base64Data;
-                if (dataUrl) {
-                    base64Data = dataUrl;
-                } else {
-                    // Use FileReader to get base64 data if not provided
-                    console.log(`Reading ${type} file as Data URL`);
-                    base64Data = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = (error) => {
-                            console.error(`FileReader error in classifyImage for ${type}:`, error);
-                            reject(new Error('Failed to read file'));
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                }
+                // Use FileReader to get base64 data
+                console.log(`Reading ${type} file as Data URL`);
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = (error) => {
+                        console.error(`FileReader error in classifyImage for ${type}:`, error);
+                        reject(new Error('Failed to read file'));
+                    };
+                    reader.readAsDataURL(file);
+                });
 
                 // Extract the actual base64 content and mime type
                 console.log(`Extracting base64 content for ${type}`);
@@ -1965,5 +1913,6 @@
             setTimeout(initializeMenuToggle, 200);
         }
     </script>
+<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
 </html>
