@@ -1222,10 +1222,16 @@
         // Function to resize image if needed before API submission
         function resizeImageIfNeeded(file, dataUrl, type) {
             // Set size thresholds and target dimensions
-            const MAX_FILE_SIZE_MB = 1.5; // MB - reduced from 4MB to match server limit
-            const MAX_WIDTH = 1200; // px
-            const MAX_HEIGHT = 1200; // px
-            const QUALITY = 0.7; // JPEG quality (0.0 to 1.0) - reduced from 0.8 for better compression
+            const MAX_FILE_SIZE_MB = 1.45; // MB - reduced from 1.5MB to ensure we stay under the API limit
+            const MAX_WIDTH = 1200; // px - for normal compression
+            const MAX_HEIGHT = 1200; // px - for normal compression
+            const MAX_WIDTH_AGGRESSIVE = 900; // px - for aggressive compression
+            const MAX_HEIGHT_AGGRESSIVE = 900; // px - for aggressive compression
+            const MAX_WIDTH_SUPER_AGGRESSIVE = 720; // px - for super aggressive compression (iPhone 16)
+            const MAX_HEIGHT_SUPER_AGGRESSIVE = 720; // px - for super aggressive compression (iPhone 16)
+            const QUALITY = 0.7; // JPEG quality (0.0 to 1.0) - first level compression
+            const QUALITY_AGGRESSIVE = 0.5; // second level compression
+            const QUALITY_SUPER_AGGRESSIVE = 0.4; // iPhone 16 level compression
             
             // DIAGNOSTICS: Log original file details
             console.log(`===== RESIZE DIAGNOSTICS =====`);
@@ -1234,14 +1240,19 @@
             console.log(`Original type: ${file.type}`);
             console.log(`Max allowed size: ${MAX_FILE_SIZE_MB} MB`);
             
-            // Check if file exceeds size threshold (1.5MB)
+            // Check if file exceeds size threshold (1.45MB)
             if (file.size <= MAX_FILE_SIZE_MB * 1024 * 1024) {
                 console.log(`Image is under size threshold (${MAX_FILE_SIZE_MB}MB), no resize needed`);
                 classifyImage(type, file, dataUrl); // Proceed with original file
                 return;
             }
             
+            // Determine if this is a very large file (likely iPhone 16)
+            const isVeryLargeFile = file.size > 4 * 1024 * 1024; // 4MB+
             console.log(`Image exceeds ${MAX_FILE_SIZE_MB}MB threshold, resizing...`);
+            if (isVeryLargeFile) {
+                console.log(`Very large file detected (${(file.size / (1024 * 1024)).toFixed(2)}MB - likely iPhone 16), will use super aggressive compression`);
+            }
             
             // Create an image element to load the file
             const img = new Image();
@@ -1253,17 +1264,23 @@
                 let newWidth = img.width;
                 let newHeight = img.height;
                 
+                // Select max dimensions based on file size
+                const targetMaxWidth = isVeryLargeFile ? MAX_WIDTH_SUPER_AGGRESSIVE : 
+                                      (file.size > 2 * 1024 * 1024) ? MAX_WIDTH_AGGRESSIVE : MAX_WIDTH;
+                const targetMaxHeight = isVeryLargeFile ? MAX_HEIGHT_SUPER_AGGRESSIVE : 
+                                       (file.size > 2 * 1024 * 1024) ? MAX_HEIGHT_AGGRESSIVE : MAX_HEIGHT;
+                
                 // Scale down if width exceeds maximum
-                if (newWidth > MAX_WIDTH) {
-                    const scaleFactor = MAX_WIDTH / newWidth;
-                    newWidth = MAX_WIDTH;
+                if (newWidth > targetMaxWidth) {
+                    const scaleFactor = targetMaxWidth / newWidth;
+                    newWidth = targetMaxWidth;
                     newHeight = Math.round(newHeight * scaleFactor);
                 }
                 
                 // Scale down if height still exceeds maximum
-                if (newHeight > MAX_HEIGHT) {
-                    const scaleFactor = MAX_HEIGHT / newHeight;
-                    newHeight = MAX_HEIGHT;
+                if (newHeight > targetMaxHeight) {
+                    const scaleFactor = targetMaxHeight / newHeight;
+                    newHeight = targetMaxHeight;
                     newWidth = Math.round(newWidth * scaleFactor);
                 }
                 
@@ -1278,11 +1295,15 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, newWidth, newHeight);
                 
-                // Convert to data URL (JPEG format with quality setting)
-                const resizedDataUrl = canvas.toDataURL('image/jpeg', QUALITY);
-                console.log(`Applied initial compression quality: ${QUALITY}`);
+                // Choose quality based on file size
+                const initialQuality = isVeryLargeFile ? QUALITY_SUPER_AGGRESSIVE : 
+                                      (file.size > 2 * 1024 * 1024) ? QUALITY_AGGRESSIVE : QUALITY;
                 
-                // More efficient approach: Convert dataURL to Blob directly without fetch
+                // Convert to data URL with appropriate compression
+                const resizedDataUrl = canvas.toDataURL('image/jpeg', initialQuality);
+                console.log(`Applied initial compression quality: ${initialQuality}`);
+                
+                // More efficient approach: Convert dataURL to Blob directly
                 try {
                     // Parse the base64 string
                     const base64 = resizedDataUrl.split(',')[1];
@@ -1304,51 +1325,103 @@
                     console.log(`Resized image: ${resizedSizeMB} MB, dimensions: ${newWidth}x${newHeight}`);
                     console.log(`Size reduction: ${((1 - (resizedBlob.size / file.size)) * 100).toFixed(1)}%`);
                     
-                    // If the resized image is still too large, reduce quality further
+                    // Progressive compression approach
                     if (resizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                        console.log(`Image still exceeds ${MAX_FILE_SIZE_MB}MB after initial resize, reducing quality further...`);
-                        // Try with lower quality
-                        const lowerQuality = 0.5;
-                        console.log(`Applying secondary compression with quality: ${lowerQuality}`);
-                        const furtherResizedDataUrl = canvas.toDataURL('image/jpeg', lowerQuality);
+                        console.log(`Image still exceeds ${MAX_FILE_SIZE_MB}MB after initial resize, reducing further...`);
                         
-                        // Parse the base64 string again
-                        const base64Lower = furtherResizedDataUrl.split(',')[1];
-                        const mimeLower = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
+                        // Try with progressively lower quality until we get under the size limit
+                        // Start with current quality and gradually reduce
+                        let currentQuality = initialQuality * 0.8; // 20% lower than initial
+                        let attemptCount = 1;
+                        let furtherResizedDataUrl = resizedDataUrl;
+                        let furtherResizedBlob = resizedBlob;
                         
-                        // Convert to binary
-                        const binaryStrLower = atob(base64Lower);
-                        const lenLower = binaryStrLower.length;
-                        const arrLower = new Uint8Array(lenLower);
+                        // Try up to 5 compression attempts with decreasing quality and size
+                        const attemptCompression = async () => {
+                            while (attemptCount <= 5 && furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                                console.log(`Compression attempt ${attemptCount}: trying quality ${currentQuality.toFixed(2)}`);
+                                
+                                // If still too large and we've tried a few times, also reduce dimensions further
+                                if (attemptCount > 2) {
+                                    // Reduce dimensions by 10% each additional attempt
+                                    newWidth = Math.floor(newWidth * 0.9);
+                                    newHeight = Math.floor(newHeight * 0.9);
+                                    
+                                    console.log(`Further reducing dimensions to: ${newWidth}x${newHeight}`);
+                                    
+                                    // Redraw with smaller dimensions
+                                    canvas.width = newWidth;
+                                    canvas.height = newHeight;
+                                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                                }
+                                
+                                furtherResizedDataUrl = canvas.toDataURL('image/jpeg', currentQuality);
+                                
+                                // Parse the base64 string again
+                                const base64Lower = furtherResizedDataUrl.split(',')[1];
+                                const mimeLower = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
+                                
+                                // Convert to binary
+                                const binaryStrLower = atob(base64Lower);
+                                const lenLower = binaryStrLower.length;
+                                const arrLower = new Uint8Array(lenLower);
+                                
+                                for (let i = 0; i < lenLower; i++) {
+                                    arrLower[i] = binaryStrLower.charCodeAt(i);
+                                }
+                                
+                                // Create blob from binary data with lower quality
+                                furtherResizedBlob = new Blob([arrLower], { type: mimeLower });
+                                
+                                const furtherResizedSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
+                                console.log(`Compression attempt ${attemptCount}: size now ${furtherResizedSizeMB} MB with quality ${currentQuality.toFixed(2)}`);
+                                
+                                // Reduce quality by 20% each attempt
+                                currentQuality *= 0.8;
+                                attemptCount++;
+                                
+                                // Don't go below 0.1 quality
+                                if (currentQuality < 0.1) currentQuality = 0.1;
+                            }
+                            
+                            if (furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                                console.log(`WARNING: Image still exceeds ${MAX_FILE_SIZE_MB}MB after ${attemptCount-1} compression attempts`);
+                                // Try one last dramatic reduction for extremely stubborn files
+                                canvas.width = Math.floor(newWidth * 0.6);  // 60% of current width
+                                canvas.height = Math.floor(newHeight * 0.6); // 60% of current height
+                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                                furtherResizedDataUrl = canvas.toDataURL('image/jpeg', 0.1);
+                                
+                                // Create final blob
+                                const base64Final = furtherResizedDataUrl.split(',')[1];
+                                const mimeType = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
+                                const binaryData = atob(base64Final);
+                                const data = new Uint8Array(binaryData.length);
+                                for (let i = 0; i < binaryData.length; i++) {
+                                    data[i] = binaryData.charCodeAt(i);
+                                }
+                                furtherResizedBlob = new Blob([data], { type: mimeType });
+                                
+                                const finalSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
+                                console.log(`FINAL ATTEMPT: size reduced to ${finalSizeMB} MB`);
+                            } else {
+                                console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit after ${attemptCount-1} attempts`);
+                            }
+                            
+                            // Create a new File object
+                            const resizedFile = new File([furtherResizedBlob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: new Date().getTime()
+                            });
+                            
+                            console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
+                            console.log(`===== END RESIZE DIAGNOSTICS =====`);
+                            
+                            // Process the resized image
+                            classifyImage(type, resizedFile, furtherResizedDataUrl);
+                        };
                         
-                        for (let i = 0; i < lenLower; i++) {
-                            arrLower[i] = binaryStrLower.charCodeAt(i);
-                        }
-                        
-                        // Create blob from binary data with lower quality
-                        const furtherResizedBlob = new Blob([arrLower], { type: mimeLower });
-                        
-                        const furtherResizedSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
-                        console.log(`Further resized image: ${furtherResizedSizeMB} MB with quality ${lowerQuality}`);
-                        console.log(`Total size reduction: ${((1 - (furtherResizedBlob.size / file.size)) * 100).toFixed(1)}%`);
-                        
-                        if (furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                            console.log(`WARNING: Image still exceeds ${MAX_FILE_SIZE_MB}MB after second resize attempt`);
-                        } else {
-                            console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit`);
-                        }
-                        
-                        // Create a new File object
-                        const resizedFile = new File([furtherResizedBlob], file.name, {
-                            type: 'image/jpeg',
-                            lastModified: new Date().getTime()
-                        });
-                        
-                        console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
-                        console.log(`===== END RESIZE DIAGNOSTICS =====`);
-                        
-                        // Process the further resized image
-                        classifyImage(type, resizedFile, furtherResizedDataUrl);
+                        attemptCompression();
                     } else {
                         console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit`);
                         
