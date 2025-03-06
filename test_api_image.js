@@ -34,7 +34,7 @@ async function testPredictAPI() {
   
   try {
     // Send request to the API
-    const response = await fetch('http://localhost:3003/api/predict', {
+    const response = await fetch('http://localhost:3002/api/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

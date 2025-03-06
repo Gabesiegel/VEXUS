@@ -229,12 +229,13 @@
         .reference-link {
             display: inline-block;
             margin-top: 10px;
-            color: #fcfcfc;
+            color: #6c757d;
             text-decoration: none;
             font-weight: 500;
         }
 
         .reference-link:hover {
+            color: #495057;
             text-decoration: underline;
         }
 
@@ -325,7 +326,7 @@
         }
 
         .citation:hover {
-            background-color: #777777;
+            background-color: #6c757d;
             color: white;
             transform: translateY(-1px);
         }
@@ -335,7 +336,7 @@
             padding: 15px;
             background-color: #fcfcfc;
             border-radius: 8px;
-            border-left: 4px solid #777777;
+            border-left: 4px solid #6c757d;
         }
 
         .image-container img {
@@ -382,6 +383,7 @@
             max-height: 95vh;
             object-fit: contain;
             border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
 
         .close {
@@ -393,12 +395,209 @@
             font-weight: bold;
             transition: 0.3s;
             cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close:hover,
         .close:focus {
             color: #bbb;
+            background-color: rgba(255, 255, 255, 0.1);
             text-decoration: none;
+        }
+
+        /* Acquisition Guide Lightbox Styles */
+        .lightbox-container {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            will-change: opacity; /* Performance optimization for compositing */
+            opacity: 0;
+            transition: opacity 0.2s ease; /* Faster transition */
+        }
+
+        .lightbox-container.active {
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            background-color: #f8f9fa; /* Matching the gray theme */
+            width: 85%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(0); /* Start at final position for better performance */
+            will-change: transform; /* Performance optimization */
+        }
+
+        .lightbox-header {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .lightbox-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-right: 50px;
+            font-weight: 600;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 28px;
+            color: #777;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .lightbox-close:hover {
+            color: #333;
+            background-color: #eaeaea;
+        }
+
+        .lightbox-body {
+            color: #444;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .lightbox-body h3 {
+            color: #2c3e50;
+            margin: 25px 0 15px;
+            font-size: 1.4em;
+        }
+
+        .lightbox-body p {
+            margin-bottom: 16px;
+        }
+
+        .lightbox-body img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .lightbox-body img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Vein Buttons Container */
+        .vein-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .vein-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            font-weight: 500;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            justify-content: center;
+        }
+
+        /* Remove vein-specific button styles */
+        .vein-button.ivc,
+        .vein-button.hepatic,
+        .vein-button.portal,
+        .vein-button.renal {
+            border-left: none; /* Remove colored borders */
+        }
+
+        .vein-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #eaeaea;
+        }
+
+        .vein-button i {
+            display: none; /* Hide icons */
+        }
+
+        /* Vein-specific lightbox styles - updated to match gray theme */
+        .lightbox-content.ivc .lightbox-header {
+            border-bottom: 3px solid #6c757d;
+        }
+
+        .lightbox-content.hepatic .lightbox-header {
+            border-bottom: 3px solid #6c757d;
+        }
+
+        .lightbox-content.portal .lightbox-header {
+            border-bottom: 3px solid #6c757d;
+        }
+
+        .lightbox-content.renal .lightbox-header {
+            border-bottom: 3px solid #6c757d;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .lightbox-content {
+                width: 95%;
+                padding: 20px;
+                margin: 20px auto;
+            }
+
+            .lightbox-title {
+                font-size: 1.5em;
+            }
+            
+            .vein-buttons-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .vein-button {
+                width: 100%;
+            }
+        }
+
+        /* Fix for iOS scroll issues */
+        .overflow-hidden {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -495,15 +694,31 @@
 
                     <h3>2. Inferior Vena Cava (IVC) Assessment</h3>
                     <p>Measure the IVC using the curvilinear or phased-array probe in the subxiphoid view. Measure the diameter of the IVC just distal to the insertion of the hepatic vein into the IVC.</p>
+                    
+                    <div class="vein-button ivc" id="ivc-button">
+                        IVC Image Acquisition
+                    </div>
 
                     <h3>3. Hepatic Vein</h3>
                     <p>Place the doppler gate over any of the principal branches of the hepatic vein.</p>
+                    
+                    <div class="vein-button hepatic" id="hepatic-button">
+                        Hepatic Vein Image Acquisition
+                    </div>
 
                     <h3>4. Portal Vein</h3>
                     <p>Place the doppler gate over any portion of the portal vein, distinguishable by its thick echogenic border.</p>
+                    
+                    <div class="vein-button portal" id="portal-button">
+                        Portal Vein Image Acquisition
+                    </div>
 
                     <h3>5. Renal Vein</h3>
                     <p>Place the doppler gate over distal portion of the renal interlobularvein</p>
+                    
+                    <div class="vein-button renal" id="renal-button">
+                        Renal Vein Image Acquisition
+                    </div>
                 </div>
 
                 <!-- VExUS Grading System Section -->
@@ -658,11 +873,103 @@
                     </div>
                 </div>
 
+                <!-- Add the lightbox containers -->
+                <!-- IVC Lightbox -->
+                <div id="ivc-lightbox" class="lightbox-container">
+                    <div class="lightbox-content ivc">
+                        <div class="lightbox-header">
+                            <div class="lightbox-title">IVC Image Acquisition</div>
+                            <div class="lightbox-close" data-lightbox="ivc-lightbox">&times;</div>
+                        </div>
+                        <div class="lightbox-body">
+                            <h3>Overview</h3>
+                            <p>The inferior vena cava (IVC) is the large vein that carries deoxygenated blood from the lower and middle body to the right atrium of the heart. Assessment of the IVC diameter and collapsibility provides valuable information about central venous pressure.</p>
+                            
+                            <h3>Acquisition Technique</h3>
+                            <p>Position the curvilinear or phased array probe in the subxiphoid position to visualize the IVC as it enters the right atrium. Measure the maximum diameter of the IVC just distal to the hepatic vein junction, approximately 2-3 cm from the right atrium.</p>
+                            
+                            <img src="images/IVC.png" alt="IVC Ultrasound Technique" class="acquisition-image">
+                            
+                            <h3>Interpretation</h3>
+                            <p>A normal IVC diameter is typically 1.5-2.5 cm. An IVC diameter >2.5 cm suggests elevated central venous pressure, while a diameter <1.5 cm suggests reduced central venous pressure. The degree of respiratory variation (collapsibility) provides additional information about volume status.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hepatic Vein Lightbox -->
+                <div id="hepatic-lightbox" class="lightbox-container">
+                    <div class="lightbox-content hepatic">
+                        <div class="lightbox-header">
+                            <div class="lightbox-title">Hepatic Vein Image Acquisition</div>
+                            <div class="lightbox-close" data-lightbox="hepatic-lightbox">&times;</div>
+                        </div>
+                        <div class="lightbox-body">
+                            <h3>Overview</h3>
+                            <p>The hepatic veins drain blood from the liver into the inferior vena cava. Doppler assessment of hepatic vein flow provides information about right atrial pressure and function.</p>
+                            
+                            <h3>Acquisition Technique</h3>
+                            <p>Using the curvilinear probe in the subcostal or intercostal approach, identify the hepatic veins where they join the IVC. Apply color Doppler to visualize flow, then use pulse wave Doppler with the sample gate placed 2-3 cm from the junction with the IVC.</p>
+                            
+                            <img src="images/Hepatic_vein.png" alt="Hepatic Vein Ultrasound Technique" class="acquisition-image">
+                            
+                            <h3>Interpretation</h3>
+                            <p>Normal hepatic vein flow shows a triphasic pattern with two antegrade waves (S and D waves) and one retrograde wave (A wave). In elevated central venous pressure, the S wave amplitude decreases and may become less than the D wave. In severe cases, flow can become monophasic or show systolic flow reversal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portal Vein Lightbox -->
+                <div id="portal-lightbox" class="lightbox-container">
+                    <div class="lightbox-content portal">
+                        <div class="lightbox-header">
+                            <div class="lightbox-title">Portal Vein Image Acquisition</div>
+                            <div class="lightbox-close" data-lightbox="portal-lightbox">&times;</div>
+                        </div>
+                        <div class="lightbox-body">
+                            <h3>Overview</h3>
+                            <p>The portal vein carries blood from the digestive organs to the liver. Normal portal vein flow is continuous with minimal phasicity. Pulsatility in the portal vein is a sensitive indicator of venous congestion.</p>
+                            
+                            <h3>Acquisition Technique</h3>
+                            <p>Using the curvilinear probe in the right intercostal or subcostal approach, identify the portal vein at the porta hepatis. The portal vein has echogenic walls that help differentiate it from hepatic veins. Apply color Doppler to confirm flow direction, then use pulse wave Doppler with the sample gate in the main portal vein.</p>
+                            
+                            <img src="images/Portal_vein.png" alt="Portal Vein Ultrasound Technique" class="acquisition-image">
+                            
+                            <h3>Interpretation</h3>
+                            <p>Normal portal vein flow is continuous with minimal phasicity. Increasing pulsatility suggests elevated right atrial pressure being transmitted through the liver. The pulsatility index can be calculated as (maximum velocity - minimum velocity) / mean velocity. A pulsatility index >0.5 indicates significant venous congestion.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Renal Vein Lightbox -->
+                <div id="renal-lightbox" class="lightbox-container">
+                    <div class="lightbox-content renal">
+                        <div class="lightbox-header">
+                            <div class="lightbox-title">Renal Vein Image Acquisition</div>
+                            <div class="lightbox-close" data-lightbox="renal-lightbox">&times;</div>
+                        </div>
+                        <div class="lightbox-body">
+                            <h3>Overview</h3>
+                            <p>The renal veins drain blood from the kidneys into the inferior vena cava. Doppler assessment of intrarenal veins provides valuable information about venous congestion and its impact on kidney perfusion.</p>
+                            
+                            <h3>Acquisition Technique</h3>
+                            <p>Using the curvilinear probe, obtain a longitudinal view of the kidney. Identify the interlobar or arcuate veins using color Doppler. These veins run parallel to the pyramids toward the renal sinus. Place the pulse wave Doppler sample gate over an interlobar vein.</p>
+                            
+                            <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                            <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                            
+                            <h3>Interpretation</h3>
+                            <p>Normal intrarenal venous flow is continuous with minimal phasicity. Increasing pulsatility suggests venous congestion. In severe congestion, flow can become discontinuous or even show reversal during cardiac cycles. These changes correlate with increased risk of acute kidney injury.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Conclusion Section -->
                 <div class="education-section">
                     <h2>Conclusion</h2>
                     <p>VExUS is a powerful POCUS technique for assessing venous congestion. By mastering the steps outlined above and understanding the potential pitfalls, you can incorporate VExUS into your own practice.</p>
                 </div>
+
+                <!-- References Section -->
 
                 <!-- References Section -->
                 <div class="education-section">
@@ -688,7 +995,7 @@
                         
                         .reference-number {
                             display: inline-block;
-                            background-color: #777777;
+                            background-color: #6c757d;
                             color: white;
                             width: 30px;
                             height: 30px;
@@ -719,12 +1026,13 @@
                         .reference-link {
                             display: inline-block;
                             margin-top: 10px;
-                            color: #777777;
+                            color: #6c757d;
                             text-decoration: none;
                             font-weight: 500;
                         }
                         
                         .reference-link:hover {
+                            color: #495057;
                             text-decoration: underline;
                         }
                     </style>
@@ -869,7 +1177,7 @@
             const modalImg = document.getElementById("modalImage");
             
             // Get all images in image containers
-            const images = document.querySelectorAll(".image-container img");
+            const images = document.querySelectorAll(".image-container img, .lightbox-body img");
             
             // Add click event to each image
             images.forEach(img => {
@@ -898,6 +1206,85 @@
                     // Re-enable scrolling
                     document.body.style.overflow = "";
                 }
+            }
+
+            // Acquisition guide lightbox functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                // Pre-cache lightboxes for better performance
+                const lightboxes = document.querySelectorAll('.lightbox-container');
+                
+                // Vein button click handlers with performance improvements
+                document.getElementById('ivc-button').addEventListener('click', function() {
+                    openLightbox('ivc-lightbox');
+                });
+                
+                document.getElementById('hepatic-button').addEventListener('click', function() {
+                    openLightbox('hepatic-lightbox');
+                });
+                
+                document.getElementById('portal-button').addEventListener('click', function() {
+                    openLightbox('portal-lightbox');
+                });
+                
+                document.getElementById('renal-button').addEventListener('click', function() {
+                    openLightbox('renal-lightbox');
+                });
+                
+                // Close buttons
+                document.querySelectorAll('.lightbox-close').forEach(button => {
+                    button.addEventListener('click', function() {
+                        closeLightbox(this.getAttribute('data-lightbox'));
+                    });
+                });
+                
+                // Close when clicking outside content - with performance improvement
+                document.querySelectorAll('.lightbox-container').forEach(lightbox => {
+                    lightbox.addEventListener('click', function(e) {
+                        if (e.target === this) {
+                            closeLightbox(this.id);
+                        }
+                    });
+                });
+                
+                // Close on escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.lightbox-container:not([style*="display: none"])').forEach(lightbox => {
+                            closeLightbox(lightbox.id);
+                        });
+                    }
+                });
+            });
+            
+            function openLightbox(id) {
+                const lightbox = document.getElementById(id);
+                
+                // First set display to block
+                lightbox.style.display = 'block';
+                
+                // Force a reflow to ensure the transition works
+                void lightbox.offsetWidth;
+                
+                // Then add active class for transition
+                lightbox.classList.add('active');
+                
+                // Add class instead of directly modifying style for better performance
+                document.body.classList.add('overflow-hidden');
+            }
+            
+            function closeLightbox(id) {
+                const lightbox = document.getElementById(id);
+                
+                // Remove active class first to trigger transition
+                lightbox.classList.remove('active');
+                
+                // Wait for transition to complete before hiding
+                setTimeout(() => {
+                    lightbox.style.display = 'none';
+                }, 200); // Match the transition duration
+                
+                // Remove class instead of directly modifying style
+                document.body.classList.remove('overflow-hidden');
             }
         </script>
     </div>

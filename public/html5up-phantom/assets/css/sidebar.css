@@ -138,104 +138,54 @@ nav#menu ul li a:hover::before {
     transform: scaleY(1);
 }
 
-/* Close button styling */
-nav#menu .close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 24px;
-    height: 24px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    background: transparent;
-    border-radius: 50%;
-    text-decoration: none;
-    border: none;
-    transition: all 0.2s ease;
-    opacity: 0.7;
-}
-
 nav#menu .close:hover {
     color: #333;
     opacity: 1;
     transform: scale(1.1);
 }
 
-nav#menu .close:before {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 2px;
-    background-color: currentColor;
-    transform: rotate(45deg);
+/* Style for the external divider - creating a separate section */
+nav#menu ul li.external-divider {
+    position: relative;
+    border-top: solid 1px rgba(0, 0, 0, 0.1);
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+    margin: 25px 0 15px 0;
+    padding: 18px 0;
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
-nav#menu .close:after {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 2px;
-    background-color: currentColor;
-    transform: rotate(-45deg);
-}
-
+/* Style for the external link */
 nav#menu ul li a.external-link {
     position: relative;
-    padding-right: 2.2em;
-    display: flex;
-    align-items: center;
+    display: block;
     font-weight: 500;
-    color: #5b94c5 !important;
+    color: #777777 !important;
+    padding: 0 18px;
+    margin: 0;
+    border-radius: 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    text-decoration: none;
 }
 
 nav#menu ul li a.external-link:before {
-    background: #5b94c5;
+    display: none; /* Remove the left border hover effect */
 }
 
 nav#menu ul li a.external-link:after {
-    content: '\f35d';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    width: auto;
-    height: auto;
-    position: absolute;
-    right: 1.2em;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.85em;
-    opacity: 0.85;
-    transition: all 0.2s ease;
+    display: none;
 }
 
-nav#menu ul li a.external-link:hover:after {
-    opacity: 1;
-    transform: translateY(-50%) translateX(2px);
+nav#menu ul li a.external-link:hover {
+    color: #555555 !important;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Divider for external links section */
-nav#menu ul li.external-divider {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-nav#menu ul li.external-divider:before {
-    content: 'The POCUS Atlas';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    padding: 0 10px;
-    font-size: 0.7em;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    word-spacing: 4px;
-    font-weight: 500;
+/* Style for the logo in the external link */
+nav#menu ul li a.external-link img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: contain;
 }
 
 /* Mobile Optimization */
@@ -375,4 +325,27 @@ a[href="#menu"] {
 /* Ensure menu appears above other elements */
 nav#menu {
     z-index: 10000 !important;
+}
+
+/* Ensure external divider is always visible */
+@media screen and (max-height: 600px) {
+    nav#menu ul {
+        padding-bottom: 80px; /* Add extra padding to ensure external link is visible */
+    }
+}
+
+/* Small screen adjustments for external section */
+@media screen and (max-width: 480px) {
+    nav#menu ul li.external-divider {
+        padding: 12px 0;
+    }
+    
+    nav#menu ul li a.external-link {
+        padding: 0 12px;
+    }
+    
+    nav#menu ul li a.external-link img {
+        width: 20px;
+        height: 20px;
+    }
 } 

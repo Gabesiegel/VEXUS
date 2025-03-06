@@ -1,279 +1,120 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>About VExUS ATLAS</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8" />
+  <title>About - VExUS ATLAS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <style>
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 2em;
-            flex-wrap: wrap;
-            padding: 0 15px;
-        }
+    body {
+      font-family: sans-serif;
+      min-height: 100vh;
+      /* Removed grid layout */
+    }
 
-        .logo {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            object-fit: contain;
-            margin: 10px;
-        }
+    .header {
+      /* Removed grid-area */
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
 
-        .logo:hover {
-            transform: scale(1.02);
-        }
+    .header .logo-container {
+        display: flex;
+        align-items: center;
+    }
 
-        .sidebar-logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 0;
-            padding: 5px;
-        }
+    .header .logo {
+      max-width: 40px; /* Small logo */
+      height: auto;
+      margin-right: 10px; /* Space between logo and text */
+    }
 
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            background: white;
-            padding: 50px;
-            margin: 20px auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
+    .header .tpa-link {
+      text-decoration: none;
+      color: #333; /* Or inherit */
+      font-size: 1em;
+    }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 2em;
-            font-size: 2.5em;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
+    .sidebar {
+      /* Removed grid-area, use absolute positioning */
+      position: absolute;
+      top: 80px; /* Adjust as needed */
+      left: 10px; /* Adjust as needed */
+      padding-top: 20px;
+      z-index: 1000; /* Ensure it's above other content */
+    }
 
-        .about-section {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 2em;
-            padding: 0 20px;
-        }
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
 
-        .about-section p {
-            font-size: 1.2em;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 1.5em;
-        }
+    .sidebar ul li {
+      margin: 10px 0;
+      text-align: center; /* Center micro-sidebar links */
+    }
 
-        .about-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            margin: 0 auto;
-            max-width: 1200px;
-            padding: 0 20px;
-        }
+    .sidebar ul li a {
+      text-decoration: none;
+      /* Removed color, inherit */
+      display: block; /* Make the whole area clickable */
+      padding: 5px;
+    }
 
-        .about-card {
-            background: #ffffff;
-            padding: 35px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            flex: 1;
-            min-width: 300px;
-            max-width: 100%;
-        }
+    .sidebar ul li a:hover {
+        background-color: rgba(0,0,0,0.05); /* Subtle hover */
+    }
 
-        .about-card h2 {
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: 600;
-            text-align: center;
-        }
+  .content {
+      /* Removed grid-area */
+      padding: 20px;
+      margin-top: 20px; /* Add top margin to avoid overlap */
+    }
 
-        .about-card p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 1em;
-        }
+    /* Removed specific styles, inherit */
 
-        .team-link {
-            display: block;
-            text-align: center;
-            margin: 40px auto;
-            padding: 12px 30px;
-            background-color: #777777;
-            color: white !important;
-            border-radius: 5px;
-            font-size: 1.2em;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            max-width: 250px;
-        }
-
-        .team-link:hover {
-            background-color: #777777;
-            transform: translateY(-2px);
-        }
-
-        .user-info {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.8em;
-            color: #888888;
-        }
-
-        @media screen and (max-width: 1200px) {
-            .logo {
-                max-width: 350px;
-            }
-            
-            .logo-container {
-                gap: 20px;
-            }
-        }
-
-        @media screen and (max-width: 980px) {
-            .logo-container {
-                flex-direction: column;
-                gap: 30px;
-            }
-
-            .logo {
-                max-width: 300px;
-                margin: 0 auto;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .logo {
-                max-width: 250px;
-            }
-            
-            .logo-container {
-                gap: 20px;
-                margin-bottom: 1em;
-            }
-        }
-
-        .highlight-box {
-            background-color: #777777;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-    </style>
-    <!-- Additional styles for menu functionality -->
-    <style>
-        /* Critical styles for menu visibility */
-        body.is-menu-visible #menu {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-            z-index: 10000 !important;
-        }
-        
-        #menu {
-            transition: all 0.5s ease;
-        }
-        
-        #menu.visible {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-        }
-        
-        /* Increase z-index for menu toggle button */
-        a[href="#menu"] {
-            z-index: 9000 !important;
-            position: relative !important;
-        }
-        
-        /* Ensure menu appears above other elements */
-        nav#menu {
-            z-index: 10000 !important;
-        }
-    </style>
-    <!-- Critical styles for menu visibility -->
-    <style>
-        /* Critical styles for menu visibility */
-        body.is-menu-visible #menu {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-            z-index: 10000 !important;
-        }
-        
-        #menu {
-            transition: all 0.5s ease;
-            position: fixed !important;
-            top: 0 !important;
-            height: 100% !important;
-            width: 300px !important;
-            max-width: 80% !important;
-            right: -300px !important;
-            z-index: 10000 !important;
-            overflow-y: auto !important;
-        }
-        
-        #menu.visible {
-            display: block !important;
-            visibility: visible !important;
-            right: 0 !important;
-        }
-        
-        /* Increase z-index for menu toggle button */
-        a[href="#menu"] {
-            z-index: 9000 !important;
-            position: relative !important;
-        }
-        
-        /* Ensure menu appears above other elements */
-        nav#menu {
-            z-index: 10000 !important;
-        }
-    </style>
+  </style>
 </head>
 <body class="is-preload">
     <div id="wrapper">
+        <!-- Header -->
         <header id="header">
             <div class="inner">
                 <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <span class="symbol"><img src="./images/VEXUS.ATLAS.png" alt="VEXUS ATLAS" /></span>
+                    <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
                     <span class="title">VExUS ATLAS</span>
                 </a>
-                
+
+                <!-- Nav -->
                 <nav>
                     <ul>
                         <li><a href="#menu">Menu</a></li>
+                    </ul>
                 </nav>
             </div>
         </header>
-
+        <!-- Menu -->
         <nav id="menu">
             <div class="inner">
                 <div class="logo-container">
-                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
                 </div>
                 <h2>Menu</h2>
                 <ul>
@@ -288,194 +129,45 @@
                     <li><a href="image_gallery.html">Image Gallery</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="#menu" class="close">✕</a>
+                <a href="#menu" class="close" style="position: absolute; top: 20px; right: 20px; display: block; width: 40px; height: 40px; text-align: center; line-height: 40px; color: #777; border: 1px solid #ddd; border-radius: 50%;">✕</a>
             </div>
         </nav>
+  <!-- Horizontal top header -->
+  <div class="header">
+    <div class="logo-container">
+      <a href="https://thepocusatlas.com" target="_blank" rel="noopener noreferrer">
+        <img src="images/vexus-ai-logo.png" alt="Vexus-AI Logo" class="logo" />
+      </a>
+      <a href="https://thepocusatlas.com" target="_blank" rel="noopener noreferrer" class="tpa-link">TPA Home</a>
+    </div>
+  </div>
 
-        <div id="main">
-            <div class="inner">
-                <div class="container">
-                    <div class="logo-container">
-                        <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
-                    </div>
+  <!-- Micro sidebar at left -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="#">Link 1</a></li>
+      <li><a href="#">Link 2</a></li>
+      <li><a href="#">Link 3</a></li>
+    </ul>
+  </div>
 
-                    <div class="about-section">
-                        <h1>About VExUS ATLAS</h1>
-                        <p>
-                            VExUS ATLAS represents a breakthrough in medical imaging analysis, combining advanced artificial intelligence with clinical expertise in venous congestion assessment. Our mission is to enhance patient care through innovative technology and evidence-based medicine.
-                        </p>
-                    </div>
+  <!-- Main content area -->
+    <div id="main">
 
-                    <div class="about-content">
-                        <div class="about-card">
-                            <h2>Our Vision</h2>
-                            <p>
-                                VExUS ATLAS aims to revolutionize the way healthcare professionals assess venous congestion by providing cutting-edge AI-powered tools that improve diagnostic accuracy and efficiency. We strive to make advanced venous ultrasound assessment accessible to clinicians worldwide.
-                            </p>
-                            <p>
-                                Our platform integrates state-of-the-art machine learning algorithms with clinical expertise to offer reliable, evidence-based analysis of ultrasound images, helping clinicians make more informed decisions for patient care.
-                            </p>
-                        </div>
-
-                        <div class="about-card">
-                            <h2>Our Approach</h2>
-                            <p>
-                                The VExUS (Venous Excess Ultrasound Score) method evaluates venous congestion by examining the inferior vena cava, hepatic veins, portal veins, and renal veins. This comprehensive approach provides a more complete picture of a patient's venous congestion status.
-                            </p>
-                            <p>
-                                Our AI algorithms are trained on extensive datasets of validated ultrasound images, ensuring high accuracy in classifying different venous waveform patterns. This technology helps standardize the assessment process and reduces interobserver variability.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <a href="our_team.html" class="team-link">Meet Our Team</a>
-                </div>
-            </div>
+  <div class="content">
+    <h1>About VExUS ATLAS</h1>
+    <p>This is a placeholder "About" page for the VExUS ATLAS project.  It demonstrates the integration of a header with a TPA Home link and a micro sidebar, while preserving the existing menu structure.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <h2>Our Mission</h2>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-   <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+      <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-    
-    <script>
-        // Menu toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Menu toggle
-            document.querySelector('a[href="#menu"]').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('menu').style.display = 'block';
-            });
-            
-            // Add click event listener to the body to close menu when clicking outside
-            document.body.addEventListener('click', function(e) {
-                // If the click is not inside the menu and not on the menu toggle button
-                if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
-                    document.getElementById('menu').style.display = 'none';
-                }
-            });
-        });
-    </script>
-    <!-- Menu Toggle Script -->
-    <script>
-        // Function to initialize menu toggle
-        function initializeMenuToggle() {
-            console.log("Initializing menu toggle");
-            
-            try {
-                // Get menu elements
-                const menuToggle = document.querySelector("a[href=\"#menu\"]");
-                const menu = document.getElementById("menu");
-                
-                if (!menuToggle) {
-                    console.error("Menu toggle element not found!");
-                    return;
-                }
-                
-                if (!menu) {
-                    console.error("Menu element not found!");
-                    return;
-                }
-                
-                // First ensure menu is properly hidden to start
-                document.body.classList.remove("is-menu-visible");
-                menu.style.right = "-100%";
-                menu.style.display = "none";
-                menu.classList.remove("visible", "active");
-                
-                // Remove any existing click handlers by cloning and replacing
-                const newMenuToggle = menuToggle.cloneNode(true);
-                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
-                
-                // Add our click handler with support for both CSS class and display property
-                newMenuToggle.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log("Menu toggle clicked");
-                    
-                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
-                    document.body.classList.add("is-menu-visible");
-                    menu.style.display = "block";
-                    menu.style.right = "0";
-                    menu.classList.add("visible", "active");
-                    
-                    // Force a repaint to ensure styles are applied
-                    void menu.offsetWidth;
-                });
-                
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector("a.close");
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                    
-                    newCloseButton.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log("Close button clicked");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    });
-                }
-                
-                // Handle clicks outside the menu (use capture phase to run before other handlers)
-                const bodyClickHandler = function(e) {
-                    // If clicking outside menu and not on menu toggle
-                    if (!e.target.closest("#menu") && !e.target.closest("a[href=\"#menu\"]")) {
-                        console.log("Clicked outside menu");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    }
-                };
-                
-                // Remove any existing body click handler and add our new one
-                document.body.removeEventListener("click", bodyClickHandler, true);
-                document.body.addEventListener("click", bodyClickHandler, true);
-                
-                // Handle escape key
-                const keyHandler = function(e) {
-                    if (e.key === "Escape" || e.keyCode === 27) {
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    }
-                };
-                
-                // Remove any existing key handler and add our new one
-                document.removeEventListener("keydown", keyHandler);
-                document.addEventListener("keydown", keyHandler);
-                
-                console.log("Menu toggle initialization complete");
-            } catch (error) {
-                console.error("Error initializing menu toggle:", error);
-            }
-        }
-        
-        // Initialize the menu toggle after DOM is loaded
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM loaded, initializing menu toggle");
-            // Initial setup with delay to ensure DOM is fully processed
-            setTimeout(initializeMenuToggle, 100);
-        });
-        
-        // Fallback initialization in case DOMContentLoaded already fired
-        if (document.readyState === "complete" || document.readyState === "interactive") {
-            console.log("Document already loaded, running fallback initialization");
-            setTimeout(initializeMenuToggle, 200);
-        }
-    </script>
-<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
 </html>
