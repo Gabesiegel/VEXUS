@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Option 3: Header + Micro Sidebar (Minimalistic)</title>
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 50px 1fr; /* Micro sidebar width */
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "header header"
+        "sidebar content";
+    }
+
+    .header {
+      grid-area: header;
+      /* Removed background and border */
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .header .logo-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .header .logo {
+      max-width: 40px; /* Small logo */
+      height: auto;
+      margin-right: 10px; /* Space between logo and text */
+    }
+
+    .header .tpa-link {
+      text-decoration: none;
+      color: #333; /* Or inherit */
+      font-size: 1em;
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      /* Removed background and border */
+      padding-top: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar ul li {
+      margin: 10px 0;
+      text-align: center; /* Center micro-sidebar links */
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      /* Removed color, inherit */
+      display: block; /* Make the whole area clickable */
+      padding: 5px;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: rgba(0,0,0,0.05); /* Subtle hover */
+    }
+
+    .content {
+      grid-area: content;
+      padding: 20px;
+    }
+
+    /* Removed specific styles, inherit */
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <a href="https://thepocusatlas.com" target="_blank" rel="noopener noreferrer">
+        <img src="../images/vexus-ai-logo.png" alt="Vexus-AI Logo" class="logo" />
+      </a>
+      <a href="https://thepocusatlas.com" target="_blank" rel="noopener noreferrer" class="tpa-link">TPA Home</a>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <ul>
+      <li><a href="#">Link 1</a></li>
+      <li><a href="#">Link 2</a></li>
+      <li><a href="#">Link 3</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1>Option 3: Header + Micro Sidebar (Minimalistic)</h1>
+    <p>This is a refined version of Option 3, designed for minimal visual impact and easy integration.</p>
+    <p>The Vexus-AI logo and "TPA Home" text are in the header. A very slim sidebar provides navigation.</p>
+  </div>
+</body>
+</html>

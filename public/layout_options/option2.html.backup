@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Option 2: Collapsible Sidebar (Minimalistic)</title>
+  <style>
+    /* Very basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif; /* More generic font */
+      display: flex;
+      min-height: 100vh;
+      /* Removed color, inherit from parent */
+    }
+
+    .sidebar {
+      width: 50px; /* Slightly smaller collapsed width */
+      /* Removed background and border, inherit */
+      padding-top: 10px; /* Less padding */
+      transition: width 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar.expanded {
+      width: 200px; /* Slightly smaller expanded width */
+    }
+
+    .toggle-btn {
+      cursor: pointer;
+      text-align: center;
+      margin-bottom: 10px; /* Less margin */
+      transition: all 0.2s; /* Faster transition */
+    }
+
+    /* Hover effect */
+    .toggle-btn:hover {
+      opacity: 0.8;
+    }
+
+    .toggle-btn img {
+      max-width: 40px; /* Smaller logo */
+      height: auto;
+      display: block; /* For consistent spacing */
+      margin: 0 auto; /* Center the logo */
+    }
+
+    .sidebar.expanded .toggle-btn img {
+      max-width: 60px; /* Smaller expanded logo */
+    }
+
+     /* TPA Home Text - only visible when expanded */
+    .tpa-home-text {
+      display: none; /* Hidden by default */
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .sidebar.expanded .tpa-home-text{
+      display: block;
+    }
+
+    .menu {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      text-align: left;
+      padding: 0 15px; /* Less padding */
+    }
+
+    .sidebar.expanded .menu {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu ul {
+      list-style: none;
+      padding-left: 0; /* Remove default padding */
+    }
+
+    .menu ul li {
+      margin: 10px 0; /* Less margin */
+    }
+
+    .menu ul li a {
+      text-decoration: none;
+      /* Removed color and font-weight, inherit */
+      transition: color 0.2s ease;
+      display: block; /* Make the whole area clickable */
+      padding: 5px; /* Add some padding for better click target */
+    }
+
+    /* Removed hover color, inherit or use a subtle effect */
+    .menu ul li a:hover {
+      background-color: rgba(0, 0, 0, 0.05); /* Very subtle hover */
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    /* Removed specific styles for content, inherit */
+
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="toggle-btn" id="toggleBtn">
+      <a href="https://thepocusatlas.com" target="_blank" rel="noopener noreferrer">
+        <img src="../images/vexus-ai-logo.png" alt="Vexus-AI: Go to TPA Home" />
+      </a>
+      <span class="tpa-home-text">TPA Home</span>
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="#">Menu Item 1</a></li>
+        <li><a href="#">Menu Item 2</a></li>
+        <li><a href="#">Menu Item 3</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1>Option 2: Collapsible Sidebar (Minimalistic)</h1>
+    <p>
+      This is a refined version of the collapsible sidebar. It's designed to be even more minimalistic and less likely to conflict with existing styles.
+    </p>
+    <p>
+      The Vexus-AI logo is smaller and serves as the primary visual cue.  When expanded, "TPA Home" text appears below the logo for clarity.
+    </p>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('expanded');
+    });
+  </script>
+</body>
+</html>
