@@ -23,7 +23,8 @@
     "mongoose": "^8.12.0",
     "node-fetch": "^3.3.2",
     "sharp": "^0.33.5",
-    "whatwg-url": "^14.1.1"
+    "whatwg-url": "^14.1.1",
+    "yet-another-react-lightbox": "^3.21.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

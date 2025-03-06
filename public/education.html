@@ -412,36 +412,51 @@
 
         /* Acquisition Guide Lightbox Styles */
         .lightbox-container {
-            display: none;
             position: fixed;
             z-index: 1000;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
-            overflow-y: auto;
-            will-change: opacity; /* Performance optimization for compositing */
             opacity: 0;
-            transition: opacity 0.2s ease; /* Faster transition */
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            will-change: opacity, visibility;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
         }
 
         .lightbox-container.active {
             opacity: 1;
+            visibility: visible;
         }
 
         .lightbox-content {
             position: relative;
-            background-color: #f8f9fa; /* Matching the gray theme */
-            width: 85%;
+            background-color: #f8f9fa;
+            width: 90%;
             max-width: 1200px;
             margin: 40px auto;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            transform: translateY(0); /* Start at final position for better performance */
-            will-change: transform; /* Performance optimization */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .lightbox-container.active .lightbox-content {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .lightbox-header {
@@ -460,23 +475,25 @@
 
         .lightbox-close {
             position: absolute;
-            right: 0;
-            top: 0;
+            right: 15px;
+            top: 15px;
             font-size: 28px;
             color: #777;
             cursor: pointer;
             transition: all 0.2s ease;
-            height: 40px;
             width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 2;
         }
 
         .lightbox-close:hover {
             color: #333;
-            background-color: #eaeaea;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         .lightbox-body {
@@ -599,6 +616,48 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Add these styles to improve menu performance */
+        #menu {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: #fff;
+            transition: transform 0.3s ease, visibility 0.3s ease;
+            visibility: hidden;
+            transform: translateX(100%);
+            will-change: transform;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            z-index: 1000;
+        }
+
+        #menu.active {
+            visibility: visible;
+            transform: translateX(-100%);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -629,13 +688,13 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
                     <li><a href="acquisition.html">Image Acquisition Guide</a></li>
                     <li><a href="education.html">Education</a></li>
                     <li><a href="Publications.html">Publications</a></li>
                     <li><a href="literature_review.html">Literature Review</a></li>
                     <li><a href="about.html">About VExUS ATLAS</a></li>
                     <li><a href="our_team.html">Our Team</a></li>
-                    <li><a href="image_gallery.html">Image Gallery</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <a href="#menu" class="close">✕</a>
@@ -1138,154 +1197,359 @@
         <script src="html5up-phantom/assets/js/main.js"></script>
         
         <script>
-            // Menu functionality
-            const menuButton = document.querySelector('a[href="#menu"]');
-            const menu = document.getElementById('menu');
-            const overlay = document.querySelector('.menu-overlay');
-            const menuLinks = menu.querySelectorAll('a');
+            // Improved menu functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const menuButton = document.querySelector('a[href="#menu"]');
+                const menu = document.getElementById('menu');
+                const overlay = document.querySelector('.menu-overlay');
+                let isAnimating = false;
 
-            function toggleMenu() {
-                menu.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-            }
+                // Performance optimized toggle function
+                function toggleMenu(shouldOpen) {
+                    if (isAnimating) return;
+                    isAnimating = true;
 
-            menuButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleMenu();
-            });
+                    const isOpening = shouldOpen ?? !menu.classList.contains('active');
+                    
+                    // Use requestAnimationFrame for smooth animation
+                    requestAnimationFrame(() => {
+                        // Toggle visibility first
+                        if (isOpening) {
+                            menu.style.visibility = 'visible';
+                            overlay.style.visibility = 'visible';
+                        }
 
-            overlay.addEventListener('click', toggleMenu);
+                        // Force reflow
+                        void menu.offsetWidth;
 
-            menuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (menu.classList.contains('active')) {
-                        toggleMenu();
+                        // Toggle active states
+                        menu.classList.toggle('active', isOpening);
+                        overlay.classList.toggle('active', isOpening);
+                        document.body.style.overflow = isOpening ? 'hidden' : '';
+
+                        // Reset animation flag after transition
+                        setTimeout(() => {
+                            if (!isOpening) {
+                                menu.style.visibility = 'hidden';
+                                overlay.style.visibility = 'hidden';
+                            }
+                            isAnimating = false;
+                        }, 300);
+                    });
+                }
+
+                // Event Listeners with performance optimization
+                const eventOptions = { passive: true };
+
+                menuButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleMenu(true);
+                }, eventOptions);
+
+                overlay.addEventListener('click', () => toggleMenu(false), eventOptions);
+
+                // Close menu on escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && menu.classList.contains('active')) {
+                        toggleMenu(false);
                     }
                 });
+
+                // Optimized resize handler with debounce
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    if (resizeTimeout) clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        if (window.innerWidth > 980 && menu.classList.contains('active')) {
+                            toggleMenu(false);
+                        }
+                    }, 100);
+                }, eventOptions);
+
+                // Handle touch events for better mobile performance
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let isSwiping = false;
+
+                menu.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    isSwiping = true;
+                }, eventOptions);
+
+                menu.addEventListener('touchmove', (e) => {
+                    if (!isSwiping) return;
+
+                    const touchCurrentX = e.touches[0].clientX;
+                    const touchCurrentY = e.touches[0].clientY;
+                    const deltaX = touchCurrentX - touchStartX;
+                    const deltaY = Math.abs(touchCurrentY - touchStartY);
+
+                    // Only handle horizontal swipes
+                    if (deltaY < Math.abs(deltaX) && deltaX > 50) {
+                        isSwiping = false;
+                        toggleMenu(false);
+                    }
+                }, eventOptions);
+
+                menu.addEventListener('touchend', () => {
+                    isSwiping = false;
+                }, eventOptions);
             });
 
-            // Close menu on window resize if open
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 980 && menu.classList.contains('active')) {
-                    toggleMenu();
+            // Remove the old menu toggle script
+            function initializeMenuToggle() {
+                // This function is now deprecated
+                return;
+            }
+
+            // Unified scroll lock utility
+            const scrollLock = {
+                scrollY: 0,
+                scrollbarWidth: window.innerWidth - document.documentElement.clientWidth,
+                enable() {
+                    this.scrollY = window.scrollY;
+                    document.documentElement.style.scrollBehavior = 'auto';
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = `-${this.scrollY}px`;
+                    document.body.style.width = '100%';
+                    document.body.style.overflowY = 'scroll';
+                    document.body.style.paddingRight = `${this.scrollbarWidth}px`;
+                },
+                disable() {
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    document.body.style.width = '';
+                    document.body.style.overflowY = '';
+                    document.body.style.paddingRight = '';
+                    window.scrollTo(0, this.scrollY);
+                    document.documentElement.style.scrollBehavior = '';
                 }
-            });
-            
+            };
+
             // Modal Image Functionality
             const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("modalImage");
+            const modalClose = modal.querySelector(".close");
             
-            // Get all images in image containers
-            const images = document.querySelectorAll(".image-container img, .lightbox-body img");
+            function openModal(imgSrc) {
+                modalImg.src = imgSrc;
+                modal.style.display = "block";
+                scrollLock.enable();
+            }
             
-            // Add click event to each image
-            images.forEach(img => {
-                img.onclick = function() {
-                    modal.style.display = "block";
-                    modalImg.src = this.src;
-                    // Prevent scrolling when modal is open
-                    document.body.style.overflow = "hidden";
-                }
+            function closeModal() {
+                modal.style.display = "none";
+                scrollLock.disable();
+            }
+            
+            // Get all images in image containers and lightbox bodies
+            document.querySelectorAll(".image-container img, .lightbox-body img").forEach(img => {
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent event bubbling
+                    openModal(img.src);
+                });
             });
             
-            // Get the close button
-            const closeBtn = document.getElementsByClassName("close")[0];
-            
-            // Close modal when clicking the × button
-            closeBtn.onclick = function() {
-                modal.style.display = "none";
-                // Re-enable scrolling
-                document.body.style.overflow = "";
-            }
-            
-            // Close modal when clicking outside the image
-            modal.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                    // Re-enable scrolling
-                    document.body.style.overflow = "";
+            // Modal close handlers
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // Lightbox functionality
+            const lightboxes = {};
+            const buttons = {
+                'ivc-button': 'ivc-lightbox',
+                'hepatic-button': 'hepatic-lightbox',
+                'portal-button': 'portal-lightbox',
+                'renal-button': 'renal-lightbox'
+            };
+
+            // Initialize lightboxes
+            Object.values(buttons).forEach(id => {
+                const lightbox = document.getElementById(id);
+                if (lightbox) {
+                    const content = lightbox.querySelector('.lightbox-content');
+                    lightboxes[id] = {
+                        element: lightbox,
+                        content: content
+                    };
+
+                    // Prevent content clicks from propagating to the container
+                    content.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
                 }
+            });
+
+            function openLightbox(id) {
+                const lightbox = lightboxes[id];
+                if (!lightbox) return;
+                
+                // Show lightbox
+                document.body.classList.add('noscroll');
+                lightbox.element.style.display = 'block';
+                
+                // Set timeout for animation to work properly
+                setTimeout(() => {
+                    lightbox.element.classList.add('active');
+                }, 10);
             }
 
-            // Acquisition guide lightbox functionality
-            document.addEventListener('DOMContentLoaded', function() {
-                // Pre-cache lightboxes for better performance
-                const lightboxes = document.querySelectorAll('.lightbox-container');
+            function closeLightbox(id) {
+                const lightbox = lightboxes[id];
+                if (!lightbox) return;
                 
-                // Vein button click handlers with performance improvements
-                document.getElementById('ivc-button').addEventListener('click', function() {
-                    openLightbox('ivc-lightbox');
-                });
+                // Remove active class
+                lightbox.element.classList.remove('active');
                 
-                document.getElementById('hepatic-button').addEventListener('click', function() {
-                    openLightbox('hepatic-lightbox');
-                });
+                // Hide lightbox after animation
+                setTimeout(() => {
+                    lightbox.element.style.display = 'none';
+                    document.body.classList.remove('noscroll');
+                }, 300);
+            }
+
+            // Event Delegation for Lightbox Controls
+            document.addEventListener('click', (e) => {
+                // Open lightbox
+                const buttonId = Object.keys(buttons).find(id => e.target.id === id || e.target.closest(`#${id}`));
+                if (buttonId) {
+                    e.preventDefault();
+                    openLightbox(buttons[buttonId]);
+                    return;
+                }
+
+                // Close lightbox via close button
+                if (e.target.classList.contains('lightbox-close') || e.target.closest('.lightbox-close')) {
+                    e.preventDefault();
+                    const lightbox = e.target.closest('.lightbox-container');
+                    if (lightbox) closeLightbox(lightbox.id);
+                    return;
+                }
+
+                // Close lightbox via outside click
+                if (e.target.classList.contains('lightbox-container')) {
+                    e.preventDefault();
+                    closeLightbox(e.target.id);
+                }
+            });
+
+            // Keyboard Navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const activeLightbox = document.querySelector('.lightbox-container.active');
+                    if (activeLightbox) {
+                        closeLightbox(activeLightbox.id);
+                    }
+                }
+            });
+
+            // Add CSS styles for lightbox
+            const style = document.createElement('style');
+            style.textContent = `
+                /* No-scroll class for body */
+                body.noscroll {
+                    overflow: hidden;
+                }
                 
-                document.getElementById('portal-button').addEventListener('click', function() {
-                    openLightbox('portal-lightbox');
-                });
-                
-                document.getElementById('renal-button').addEventListener('click', function() {
-                    openLightbox('renal-lightbox');
-                });
-                
-                // Close buttons
-                document.querySelectorAll('.lightbox-close').forEach(button => {
-                    button.addEventListener('click', function() {
-                        closeLightbox(this.getAttribute('data-lightbox'));
-                    });
-                });
-                
-                // Close when clicking outside content - with performance improvement
-                document.querySelectorAll('.lightbox-container').forEach(lightbox => {
-                    lightbox.addEventListener('click', function(e) {
-                        if (e.target === this) {
-                            closeLightbox(this.id);
-                        }
-                    });
-                });
-                
-                // Close on escape key
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        document.querySelectorAll('.lightbox-container:not([style*="display: none"])').forEach(lightbox => {
-                            closeLightbox(lightbox.id);
+                /* Lightbox container */
+                .lightbox-container {
+                    display: none;
+                    position: fixed;
+                    z-index: 1000;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+
+                .lightbox-container.active {
+                    opacity: 1;
+                }
+
+                /* Lightbox content */
+                .lightbox-content {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 90%;
+                    max-width: 800px;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    background-color: white;
+                    padding: 25px;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                }
+
+                /* Ensure all images display properly */
+                .lightbox-body img {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin: 15px auto;
+                    border-radius: 5px;
+                }
+
+                /* Close button styling */
+                .lightbox-close {
+                    position: absolute;
+                    top: 15px;
+                    right: 15px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: rgba(0,0,0,0.1);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    font-size: 20px;
+                    transition: background-color 0.2s;
+                }
+
+                .lightbox-close:hover {
+                    background-color: rgba(0,0,0,0.2);
+                }
+
+                /* Mobile optimizations */
+                @media (max-width: 768px) {
+                    .lightbox-content {
+                        width: 95%;
+                        padding: 20px;
+                        max-height: 85vh;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Fix initial loading of images in lightboxes
+            document.addEventListener('DOMContentLoaded', () => {
+                Object.values(buttons).forEach(id => {
+                    const lightbox = document.getElementById(id);
+                    if (lightbox) {
+                        const images = lightbox.querySelectorAll('img');
+                        images.forEach(img => {
+                            if (!img.complete) {
+                                img.addEventListener('load', () => {
+                                    // Image loaded successfully
+                                    console.log(`Image loaded: ${img.src}`);
+                                });
+                                
+                                img.addEventListener('error', () => {
+                                    console.error(`Failed to load image: ${img.src}`);
+                                });
+                            }
                         });
                     }
                 });
             });
-            
-            function openLightbox(id) {
-                const lightbox = document.getElementById(id);
-                
-                // First set display to block
-                lightbox.style.display = 'block';
-                
-                // Force a reflow to ensure the transition works
-                void lightbox.offsetWidth;
-                
-                // Then add active class for transition
-                lightbox.classList.add('active');
-                
-                // Add class instead of directly modifying style for better performance
-                document.body.classList.add('overflow-hidden');
-            }
-            
-            function closeLightbox(id) {
-                const lightbox = document.getElementById(id);
-                
-                // Remove active class first to trigger transition
-                lightbox.classList.remove('active');
-                
-                // Wait for transition to complete before hiding
-                setTimeout(() => {
-                    lightbox.style.display = 'none';
-                }, 200); // Match the transition duration
-                
-                // Remove class instead of directly modifying style
-                document.body.classList.remove('overflow-hidden');
-            }
         </script>
     </div>
 <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
