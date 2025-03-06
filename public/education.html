@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     
     <style>
         /* Maintaining existing styles */
@@ -658,6 +660,62 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Custom Fancybox styles */
+        .fancybox__toolbar {
+            --f-button-width: 50px;
+            --f-button-height: 50px;
+            --f-button-color: #fff;
+            --f-button-hover-color: #fff;
+            --f-button-bg: rgba(0, 0, 0, 0.5);
+            --f-button-hover-bg: rgba(0, 0, 0, 0.7);
+            --f-button-border-radius: 50%;
+            --f-button-active-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        .fancybox__toolbar .is-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .fancybox__toolbar .is-close:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .fancybox__toolbar {
+                --f-button-width: 44px;
+                --f-button-height: 44px;
+            }
+
+            .fancybox__toolbar .is-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Image hover effects */
+        .image-container img {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Backdrop styling */
+        .fancybox__backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -853,7 +911,9 @@
                     </style>
                     
                     <div class="image-container">
-                        <img src="images/organ perfusion.png" alt="Organ Perfusion Diagram">
+                        <a href="images/organ perfusion.png" data-fancybox="gallery" data-caption="Organ Perfusion Diagram">
+                            <img src="images/organ perfusion.png" alt="Organ Perfusion Diagram" />
+                        </a>
                     </div>
                     
                     <div class="image-text">
@@ -880,7 +940,9 @@
                     <h2>Venous Congestion on POCUS: Flow Patterns</h2>
                     
                     <div class="image-container">
-                        <img src="images/veuxus_congestion.png" alt="Venous Congestion Patterns">
+                        <a href="images/veuxus_congestion.png" data-fancybox="gallery" data-caption="Venous Congestion Patterns">
+                            <img src="images/veuxus_congestion.png" alt="Venous Congestion Patterns" />
+                        </a>
                     </div>
                     
                     <div class="image-text">
@@ -906,7 +968,9 @@
                     <h2>VEXUS: The Complete Picture</h2>
                     
                     <div class="image-container">
-                        <img src="images/VEXUS_Overview.png" alt="VEXUS Overview Diagram">
+                        <a href="images/VEXUS_Overview.png" data-fancybox="gallery" data-caption="VEXUS Overview Diagram">
+                            <img src="images/VEXUS_Overview.png" alt="VEXUS Overview Diagram" />
+                        </a>
                     </div>
                     
                     <div class="image-text">
@@ -1027,8 +1091,6 @@
                     <h2>Conclusion</h2>
                     <p>VExUS is a powerful POCUS technique for assessing venous congestion. By mastering the steps outlined above and understanding the potential pitfalls, you can incorporate VExUS into your own practice.</p>
                 </div>
-
-                <!-- References Section -->
 
                 <!-- References Section -->
                 <div class="education-section">
@@ -1178,8 +1240,6 @@
                         </div>
                     </div>
                 </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -1195,360 +1255,109 @@
         <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
         <script src="html5up-phantom/assets/js/util.js"></script>
         <script src="html5up-phantom/assets/js/main.js"></script>
+        <!-- Fancybox JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
         
         <script>
-            // Improved menu functionality
-            document.addEventListener('DOMContentLoaded', function() {
-                const menuButton = document.querySelector('a[href="#menu"]');
-                const menu = document.getElementById('menu');
-                const overlay = document.querySelector('.menu-overlay');
-                let isAnimating = false;
-
-                // Performance optimized toggle function
-                function toggleMenu(shouldOpen) {
-                    if (isAnimating) return;
-                    isAnimating = true;
-
-                    const isOpening = shouldOpen ?? !menu.classList.contains('active');
-                    
-                    // Use requestAnimationFrame for smooth animation
-                    requestAnimationFrame(() => {
-                        // Toggle visibility first
-                        if (isOpening) {
-                            menu.style.visibility = 'visible';
-                            overlay.style.visibility = 'visible';
-                        }
-
-                        // Force reflow
-                        void menu.offsetWidth;
-
-                        // Toggle active states
-                        menu.classList.toggle('active', isOpening);
-                        overlay.classList.toggle('active', isOpening);
-                        document.body.style.overflow = isOpening ? 'hidden' : '';
-
-                        // Reset animation flag after transition
-                        setTimeout(() => {
-                            if (!isOpening) {
-                                menu.style.visibility = 'hidden';
-                                overlay.style.visibility = 'hidden';
-                            }
-                            isAnimating = false;
-                        }, 300);
-                    });
-                }
-
-                // Event Listeners with performance optimization
-                const eventOptions = { passive: true };
-
-                menuButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    toggleMenu(true);
-                }, eventOptions);
-
-                overlay.addEventListener('click', () => toggleMenu(false), eventOptions);
-
-                // Close menu on escape key
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && menu.classList.contains('active')) {
-                        toggleMenu(false);
-                    }
-                });
-
-                // Optimized resize handler with debounce
-                let resizeTimeout;
-                window.addEventListener('resize', () => {
-                    if (resizeTimeout) clearTimeout(resizeTimeout);
-                    resizeTimeout = setTimeout(() => {
-                        if (window.innerWidth > 980 && menu.classList.contains('active')) {
-                            toggleMenu(false);
-                        }
-                    }, 100);
-                }, eventOptions);
-
-                // Handle touch events for better mobile performance
-                let touchStartX = 0;
-                let touchStartY = 0;
-                let isSwiping = false;
-
-                menu.addEventListener('touchstart', (e) => {
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                    isSwiping = true;
-                }, eventOptions);
-
-                menu.addEventListener('touchmove', (e) => {
-                    if (!isSwiping) return;
-
-                    const touchCurrentX = e.touches[0].clientX;
-                    const touchCurrentY = e.touches[0].clientY;
-                    const deltaX = touchCurrentX - touchStartX;
-                    const deltaY = Math.abs(touchCurrentY - touchStartY);
-
-                    // Only handle horizontal swipes
-                    if (deltaY < Math.abs(deltaX) && deltaX > 50) {
-                        isSwiping = false;
-                        toggleMenu(false);
-                    }
-                }, eventOptions);
-
-                menu.addEventListener('touchend', () => {
-                    isSwiping = false;
-                }, eventOptions);
-            });
-
-            // Remove the old menu toggle script
-            function initializeMenuToggle() {
-                // This function is now deprecated
-                return;
-            }
-
-            // Unified scroll lock utility
-            const scrollLock = {
-                scrollY: 0,
-                scrollbarWidth: window.innerWidth - document.documentElement.clientWidth,
-                enable() {
-                    this.scrollY = window.scrollY;
-                    document.documentElement.style.scrollBehavior = 'auto';
-                    document.body.style.position = 'fixed';
-                    document.body.style.top = `-${this.scrollY}px`;
-                    document.body.style.width = '100%';
-                    document.body.style.overflowY = 'scroll';
-                    document.body.style.paddingRight = `${this.scrollbarWidth}px`;
+            // Initialize Fancybox with enhanced mobile support
+            Fancybox.bind("[data-fancybox]", {
+                Carousel: {
+                    friction: 0.8,
+                    transition: "fade", 
+                    preload: 1
                 },
-                disable() {
-                    document.body.style.position = '';
-                    document.body.style.top = '';
-                    document.body.style.width = '';
-                    document.body.style.overflowY = '';
-                    document.body.style.paddingRight = '';
-                    window.scrollTo(0, this.scrollY);
-                    document.documentElement.style.scrollBehavior = '';
-                }
-            };
-
-            // Modal Image Functionality
-            const modal = document.getElementById("imageModal");
-            const modalImg = document.getElementById("modalImage");
-            const modalClose = modal.querySelector(".close");
-            
-            function openModal(imgSrc) {
-                modalImg.src = imgSrc;
-                modal.style.display = "block";
-                scrollLock.enable();
-            }
-            
-            function closeModal() {
-                modal.style.display = "none";
-                scrollLock.disable();
-            }
-            
-            // Get all images in image containers and lightbox bodies
-            document.querySelectorAll(".image-container img, .lightbox-body img").forEach(img => {
-                img.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent event bubbling
-                    openModal(img.src);
-                });
-            });
-            
-            // Modal close handlers
-            modalClose.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-
-            // Lightbox functionality
-            const lightboxes = {};
-            const buttons = {
-                'ivc-button': 'ivc-lightbox',
-                'hepatic-button': 'hepatic-lightbox',
-                'portal-button': 'portal-lightbox',
-                'renal-button': 'renal-lightbox'
-            };
-
-            // Initialize lightboxes
-            Object.values(buttons).forEach(id => {
-                const lightbox = document.getElementById(id);
-                if (lightbox) {
-                    const content = lightbox.querySelector('.lightbox-content');
-                    lightboxes[id] = {
-                        element: lightbox,
-                        content: content
-                    };
-
-                    // Prevent content clicks from propagating to the container
-                    content.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                    });
-                }
-            });
-
-            function openLightbox(id) {
-                const lightbox = lightboxes[id];
-                if (!lightbox) return;
                 
-                // Show lightbox
-                document.body.classList.add('noscroll');
-                lightbox.element.style.display = 'block';
-                
-                // Set timeout for animation to work properly
-                setTimeout(() => {
-                    lightbox.element.classList.add('active');
-                }, 10);
-            }
-
-            function closeLightbox(id) {
-                const lightbox = lightboxes[id];
-                if (!lightbox) return;
-                
-                // Remove active class
-                lightbox.element.classList.remove('active');
-                
-                // Hide lightbox after animation
-                setTimeout(() => {
-                    lightbox.element.style.display = 'none';
-                    document.body.classList.remove('noscroll');
-                }, 300);
-            }
-
-            // Event Delegation for Lightbox Controls
-            document.addEventListener('click', (e) => {
-                // Open lightbox
-                const buttonId = Object.keys(buttons).find(id => e.target.id === id || e.target.closest(`#${id}`));
-                if (buttonId) {
-                    e.preventDefault();
-                    openLightbox(buttons[buttonId]);
-                    return;
-                }
-
-                // Close lightbox via close button
-                if (e.target.classList.contains('lightbox-close') || e.target.closest('.lightbox-close')) {
-                    e.preventDefault();
-                    const lightbox = e.target.closest('.lightbox-container');
-                    if (lightbox) closeLightbox(lightbox.id);
-                    return;
-                }
-
-                // Close lightbox via outside click
-                if (e.target.classList.contains('lightbox-container')) {
-                    e.preventDefault();
-                    closeLightbox(e.target.id);
-                }
-            });
-
-            // Keyboard Navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    const activeLightbox = document.querySelector('.lightbox-container.active');
-                    if (activeLightbox) {
-                        closeLightbox(activeLightbox.id);
+                Toolbar: {
+                    display: {
+                        left: [],
+                        middle: ["prev", "next"],
+                        right: [],
+                        top: ["close"]
+                    },
+                    enabled: true,
+                    items: {
+                        close: {
+                            class: "is-close",
+                            label: "Close",
+                            tabindex: 1
+                        }
                     }
+                },
+                
+                Image: {
+                    zoom: true,
+                    fit: "contain",
+                    Panzoom: {
+                        panOnlyZoomed: true,
+                        doubleClick: "toggleZoom",
+                        touch: true,
+                        mouseWheel: true
+                    }
+                },
+                
+                ScrollLock: true,
+                Hash: false,
+                
+                Thumbs: {
+                    type: "classic",
+                    showOnStart: false
+                },
+                
+                // Mobile-specific options
+                Mobile: {
+                    touch: true,
+                    clickSlide: "close",
+                    dblclickContent: "toggleZoom"
+                },
+                
+                // Better animations
+                showClass: "fancybox-fadeIn",
+                hideClass: "fancybox-fadeOut",
+                animated: true,
+                
+                // Touch handling
+                dragToClose: true,
+                
+                // Keyboard navigation
+                keyboard: {
+                    Escape: "close",
+                    Delete: "close",
+                    Backspace: "close",
+                    PageUp: "next",
+                    PageDown: "prev",
+                    ArrowUp: "prev",
+                    ArrowDown: "next",
+                    ArrowRight: "next",
+                    ArrowLeft: "prev"
                 }
             });
 
-            // Add CSS styles for lightbox
-            const style = document.createElement('style');
-            style.textContent = `
-                /* No-scroll class for body */
-                body.noscroll {
-                    overflow: hidden;
+            // Ensure all images are wrapped in Fancybox links
+            document.querySelectorAll(".image-container img").forEach(img => {
+                if (!img.closest('[data-fancybox]')) {
+                    const wrapper = document.createElement('a');
+                    wrapper.href = img.src;
+                    wrapper.setAttribute('data-fancybox', 'gallery');
+                    wrapper.setAttribute('data-caption', img.alt);
+                    img.parentNode.insertBefore(wrapper, img);
+                    wrapper.appendChild(img);
                 }
-                
-                /* Lightbox container */
-                .lightbox-container {
-                    display: none;
-                    position: fixed;
-                    z-index: 1000;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.8);
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
+            });
 
-                .lightbox-container.active {
-                    opacity: 1;
-                }
-
-                /* Lightbox content */
-                .lightbox-content {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 90%;
-                    max-width: 800px;
-                    max-height: 80vh;
-                    overflow-y: auto;
-                    background-color: white;
-                    padding: 25px;
-                    border-radius: 8px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                }
-
-                /* Ensure all images display properly */
-                .lightbox-body img {
-                    display: block;
-                    max-width: 100%;
-                    height: auto;
-                    margin: 15px auto;
-                    border-radius: 5px;
-                }
-
-                /* Close button styling */
-                .lightbox-close {
-                    position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    width: 30px;
-                    height: 30px;
-                    background-color: rgba(0,0,0,0.1);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    font-size: 20px;
-                    transition: background-color 0.2s;
-                }
-
-                .lightbox-close:hover {
-                    background-color: rgba(0,0,0,0.2);
-                }
-
-                /* Mobile optimizations */
-                @media (max-width: 768px) {
-                    .lightbox-content {
-                        width: 95%;
-                        padding: 20px;
-                        max-height: 85vh;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-
-            // Fix initial loading of images in lightboxes
+            // Add iOS-specific fixes
             document.addEventListener('DOMContentLoaded', () => {
-                Object.values(buttons).forEach(id => {
-                    const lightbox = document.getElementById(id);
-                    if (lightbox) {
-                        const images = lightbox.querySelectorAll('img');
-                        images.forEach(img => {
-                            if (!img.complete) {
-                                img.addEventListener('load', () => {
-                                    // Image loaded successfully
-                                    console.log(`Image loaded: ${img.src}`);
-                                });
-                                
-                                img.addEventListener('error', () => {
-                                    console.error(`Failed to load image: ${img.src}`);
-                                });
-                            }
-                        });
-                    }
-                });
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                
+                if (isIOS) {
+                    document.documentElement.classList.add('is-ios');
+                    
+                    // Prevent background scrolling on iOS
+                    document.body.addEventListener('touchmove', (e) => {
+                        if (document.querySelector('.fancybox__backdrop')) {
+                            e.preventDefault();
+                        }
+                    }, { passive: false });
+                }
             });
         </script>
     </div>

@@ -347,6 +347,115 @@
         body.fancybox-active {
             overflow: hidden !important;
         }
+
+        /* Mobile optimizations for image sections */
+        @media screen and (max-width: 768px) {
+            .view-section {
+                flex-direction: column;
+            }
+
+            .image-section {
+                margin: 0 0 20px 0;
+                width: 100%;
+            }
+
+            .technique-description {
+                width: 100%;
+            }
+
+            .acquisition-section {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            .acquisition-header h1 {
+                font-size: 2em;
+            }
+        }
+
+        /* Fancybox customizations */
+        .fancybox__toolbar {
+            --f-button-width: 46px;
+            --f-button-height: 46px;
+            --f-button-border-radius: 23px;
+        }
+
+        .fancybox__toolbar__items {
+            --f-button-color: #fff;
+            --f-button-hover-color: #fff;
+            --f-button-bg: rgba(0, 0, 0, 0.5);
+            --f-button-hover-bg: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Enhanced close button */
+        .fancybox__toolbar__items.is-top {
+            top: 20px;
+            right: 20px;
+        }
+
+        .fancybox__toolbar__items .f-button.is-close {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .fancybox__toolbar__items .f-button.is-close:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .fancybox__toolbar__items .f-button.is-close::before {
+            content: "×";
+            font-size: 36px;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        /* Mobile optimization for close button */
+        @media screen and (max-width: 768px) {
+            .fancybox__toolbar__items .f-button.is-close {
+                width: 44px;
+                height: 44px;
+                top: 15px;
+                right: 15px;
+            }
+
+            .fancybox__toolbar__items .f-button.is-close::before {
+                font-size: 32px;
+            }
+        }
+
+        .fancybox__toolbar__items .f-button {
+            transition: all 0.2s ease;
+        }
+
+        .fancybox__toolbar__items .f-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Image hover effects */
+        .image-section img, .acquisition-image {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-section img:hover, .acquisition-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -691,10 +800,9 @@
                 overlay.classList.toggle('active');
                 document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
                 
-                // Allow new transitions after current one completes
                 setTimeout(() => {
                     isMenuTransitioning = false;
-                }, 300); // Match this with your CSS transition time
+                }, 300);
             });
         }
 
@@ -705,14 +813,12 @@
 
         overlay.addEventListener('click', toggleMenu);
 
-        // Use event delegation instead of multiple listeners
         menu.addEventListener('click', (e) => {
             if (e.target.tagName === 'A' && menu.classList.contains('active')) {
                 toggleMenu();
             }
         });
 
-        // Debounce resize event
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
@@ -723,49 +829,66 @@
             }, 100);
         });
 
-        // Initialize Fancybox
+        // Initialize Fancybox with enhanced mobile support
         Fancybox.bind("[data-fancybox]", {
-            // Performance optimization
             Carousel: {
                 friction: 0.8,
                 transition: "fade", 
                 preload: 1
             },
             
-            // Improve toolbar configuration
             Toolbar: {
-                display: [
-                    { id: "prev", position: "center" },
-                    { id: "counter", position: "center" },
-                    { id: "next", position: "center" },
-                    "zoom",
-                    "fullscreen",
-                    "close",
-                ],
-                autoEnable: false
+                display: {
+                    left: [],
+                    middle: ["prev", "next"],
+                    right: [],
+                    top: ["close"]
+                },
+                enabled: true,
+                items: {
+                    close: {
+                        class: "is-close",
+                        label: "Close",
+                        tabindex: 1
+                    }
+                }
             },
             
-            // Enhance image handling
             Image: {
                 zoom: true,
                 fit: "contain",
                 Panzoom: {
                     panOnlyZoomed: true,
-                    doubleClick: "toggleZoom"
+                    doubleClick: "toggleZoom",
+                    touch: true,
+                    mouseWheel: true
                 }
             },
             
-            // Better scroll handling
             ScrollLock: true,
+            Hash: false,
             
-            // Optimized animations
+            Thumbs: {
+                type: "classic",
+                showOnStart: false
+            },
+            
+            // Mobile-specific options
+            Mobile: {
+                touch: true,
+                clickSlide: "close",
+                dblclickContent: "toggleZoom"
+            },
+            
+            // Better animations
             showClass: "fancybox-fadeIn",
             hideClass: "fancybox-fadeOut",
+            animated: true,
             
-            // Better touch support
-            dragToClose: false,
+            // Touch handling
+            dragToClose: true,
             
-            // Better keyboard navigation
+            // Keyboard navigation
             keyboard: {
                 Escape: "close",
                 Delete: "close",
@@ -775,205 +898,37 @@
                 ArrowUp: "prev",
                 ArrowDown: "next",
                 ArrowRight: "next",
-                ArrowLeft: "prev",
-            },
-            
-            // Customized caption handling
-            on: {
-                initLayout: (fancybox) => {
-                    // Make the caption look better
-                    const $caption = document.createElement("div");
-                    $caption.classList.add("fancybox__caption");
-                    
-                    fancybox.$container.append($caption);
-                    
-                    fancybox.on("done", (fancybox, slide) => {
-                        const caption = slide.caption || "";
-                        $caption.innerHTML = caption;
-                        $caption.style.display = caption ? "" : "none";
-                    });
-                },
-                
-                // Prevent scroll issues
-                reveal: (fancybox) => {
-                    document.body.classList.add("fancybox-active");
-                    
-                    // Disable all other scrollable elements
-                    const scrollableElements = document.querySelectorAll(".scrollable");
-                    scrollableElements.forEach(el => {
-                        el.dataset.oldOverflow = el.style.overflow;
-                        el.style.overflow = "hidden";
-                    });
-                },
-                
-                // Clean up when closing
-                destroy: () => {
-                    document.body.classList.remove("fancybox-active");
-                    
-                    // Re-enable scrollable elements
-                    const scrollableElements = document.querySelectorAll(".scrollable");
-                    scrollableElements.forEach(el => {
-                        if (el.dataset.oldOverflow) {
-                            el.style.overflow = el.dataset.oldOverflow;
-                            delete el.dataset.oldOverflow;
-                        }
-                    });
-                },
-                
-                // Optimize image loading
-                "Carousel.ready": (fancybox) => {
-                    // Pre-load adjacent slides for smoother experience
-                    const carousel = fancybox.Carousel;
-                    if (carousel && carousel.slides.length > 1) {
-                        const current = carousel.page;
-                        const next = (current + 1) % carousel.slides.length;
-                        const prev = (current - 1 + carousel.slides.length) % carousel.slides.length;
-                        
-                        // Prioritize loading of adjacent slides
-                        carousel.slides[next].$el.setAttribute("loading", "eager");
-                        carousel.slides[prev].$el.setAttribute("loading", "eager");
-                    }
-                }
+                ArrowLeft: "prev"
             }
         });
 
-        // Add fix for iOS scrolling issues in lightbox
+        // Ensure all images are wrapped in Fancybox links
+        document.querySelectorAll(".image-section img, .acquisition-image").forEach(img => {
+            if (!img.closest('[data-fancybox]')) {
+                const wrapper = document.createElement('a');
+                wrapper.href = img.src;
+                wrapper.setAttribute('data-fancybox', 'gallery');
+                wrapper.setAttribute('data-caption', img.alt);
+                img.parentNode.insertBefore(wrapper, img);
+                wrapper.appendChild(img);
+            }
+        });
+
+        // Add iOS-specific fixes
         document.addEventListener('DOMContentLoaded', () => {
-            // Detect iOS for targeted fixes
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             
             if (isIOS) {
-                // Add iOS-specific class for CSS targeting
                 document.documentElement.classList.add('is-ios');
                 
-                // Fix for momentum scrolling issues
-                document.addEventListener('touchmove', (e) => {
-                    if (document.body.classList.contains('fancybox-active')) {
-                        // Only allow touchmove events inside fancybox content
-                        if (!e.target.closest('.fancybox__content')) {
-                            e.preventDefault();
-                        }
+                // Prevent background scrolling on iOS
+                document.body.addEventListener('touchmove', (e) => {
+                    if (document.querySelector('.fancybox__backdrop')) {
+                        e.preventDefault();
                     }
                 }, { passive: false });
             }
         });
-    </script>
-    <!-- Menu Toggle Script -->
-    <script>
-        // Function to initialize menu toggle
-        function initializeMenuToggle() {
-            console.log("Initializing menu toggle");
-            
-            try {
-                // Get menu elements
-                const menuToggle = document.querySelector("a[href=\"#menu\"]");
-                const menu = document.getElementById("menu");
-                
-                if (!menuToggle) {
-                    console.error("Menu toggle element not found!");
-                    return;
-                }
-                
-                if (!menu) {
-                    console.error("Menu element not found!");
-                    return;
-                }
-                
-                // First ensure menu is properly hidden to start
-                document.body.classList.remove("is-menu-visible");
-                menu.style.right = "-100%";
-                menu.style.display = "none";
-                menu.classList.remove("visible", "active");
-                
-                // Remove any existing click handlers by cloning and replacing
-                const newMenuToggle = menuToggle.cloneNode(true);
-                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
-                
-                // Add our click handler with support for both CSS class and display property
-                newMenuToggle.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log("Menu toggle clicked");
-                    
-                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
-                    document.body.classList.add("is-menu-visible");
-                    menu.style.display = "block";
-                    menu.style.right = "0";
-                    menu.classList.add("visible", "active");
-                    
-                    // Force a repaint to ensure styles are applied
-                    void menu.offsetWidth;
-                });
-                
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector("a.close");
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                    
-                    newCloseButton.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log("Close button clicked");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    });
-                }
-                
-                // Handle clicks outside the menu (use capture phase to run before other handlers)
-                const bodyClickHandler = function(e) {
-                    // If clicking outside menu and not on menu toggle
-                    if (!e.target.closest("#menu") && !e.target.closest("a[href=\"#menu\"]")) {
-                        console.log("Clicked outside menu");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    }
-                };
-                
-                // Remove any existing body click handler and add our new one
-                document.body.removeEventListener("click", bodyClickHandler, true);
-                document.body.addEventListener("click", bodyClickHandler, true);
-                
-                // Handle escape key
-                const keyHandler = function(e) {
-                    if (e.key === "Escape" || e.keyCode === 27) {
-                        document.body.classList.remove("is-menu-visible");
-                        menu.style.display = "none";
-                        menu.style.right = "-100%";
-                        menu.classList.remove("visible", "active");
-                    }
-                };
-                
-                // Remove any existing key handler and add our new one
-                document.removeEventListener("keydown", keyHandler);
-                document.addEventListener("keydown", keyHandler);
-                
-                console.log("Menu toggle initialization complete");
-            } catch (error) {
-                console.error("Error initializing menu toggle:", error);
-            }
-        }
-        
-        // Initialize the menu toggle after DOM is loaded
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM loaded, initializing menu toggle");
-            // Initial setup with delay to ensure DOM is fully processed
-            setTimeout(initializeMenuToggle, 100);
-        });
-        
-        // Fallback initialization in case DOMContentLoaded already fired
-        if (document.readyState === "complete" || document.readyState === "interactive") {
-            console.log("Document already loaded, running fallback initialization");
-            setTimeout(initializeMenuToggle, 200);
-        }
     </script>
 </body>
 </html>
