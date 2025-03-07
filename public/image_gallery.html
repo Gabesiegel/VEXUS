@@ -162,7 +162,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
             backdrop-filter: blur(5px);
             background-color: rgba(0,0,0,0.85);
             transition: all 0.3s ease;
@@ -175,13 +176,17 @@
 
         .modal-content {
             position: relative;
-            margin: auto;
+            margin: 40px auto;
             padding: 40px;
             background: #fff;
             border-radius: 20px;
             box-shadow: 0 4px 30px rgba(0,0,0,0.15);
             width: 100%;
             max-width: 1200px;
+            overflow-y: visible;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
         }
 
         .modal.show .modal-content {
@@ -444,6 +449,11 @@
             .modal-content {
                 margin: 20px;
                 padding: 20px;
+                width: calc(100% - 40px); /* Account for margins */
+            }
+            
+            .modal {
+                -webkit-overflow-scrolling: touch; /* Ensure smooth scrolling on iOS */
             }
 
             .sub-tiles {
@@ -559,7 +569,6 @@
             font-weight: bold;
             padding: 0 2px;
         }
-
         .active-filter .remove:hover {
             color: #1565c0;
         }
@@ -937,6 +946,46 @@
         /* Ensure menu appears above other elements */
         nav#menu {
             z-index: 10000 !important;
+        }
+    </style>
+
+    <style>
+        /* Remove tap highlight color */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Remove focus outline */
+        .modal *:focus {
+            outline: none !important;
+        }
+
+        .modal *:active {
+            background-color: transparent !important;
+        }
+
+        .gallery-item,
+        .sub-tile,
+        .close,
+        .back-button,
+        .prev,
+        .next,
+        .modal-breadcrumb span,
+        .tag {
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
+        }
+
+        .image-description {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        #menu {
+            transition: all 0.5s ease;
         }
     </style>
 </head>
@@ -2242,3 +2291,4 @@
 <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
 </html>
+
