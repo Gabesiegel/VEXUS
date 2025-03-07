@@ -213,9 +213,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
-app.use(express.json({ limit: '50mb' }));
-
+// Increase JSON and URL-encoded payload limits
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Log requests
 app.use(async (req, res, next) => {
@@ -224,11 +224,26 @@ app.use(async (req, res, next) => {
     next();
 });
 
+// Add error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Server error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message,
+        timestamp: new Date().toISOString()
+    });
+});
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-
+// Serve static files with proper caching headers
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1h',
+    setHeaders: (res, path) => {
+        if (path.endsWith('.html')) {
+            // Don't cache HTML files
+            res.setHeader('Cache-Control', 'no-cache');
+        }
+    }
+}));
 
 ///////////////////////////////////////////////////////////////////////////////
 // 3) Authentication Endpoint
@@ -703,19 +718,11 @@ app.get('/api/local-health', (req, res) => {
     });
 });
 
-// Default route (API fallback for React Router)
+// Fallback route handler for SPA
 app.get('*', (req, res) => {
-    console.log(`[${new Date().toISOString()}] Fallback route handler for: ${req.url}`);
-    
-    // Only serve index.html for browser requests (HTML), not for API calls
-    const acceptHeader = req.get('accept') || '';
-    if (acceptHeader.includes('text/html')) {
-        console.log('Serving index.html as fallback');
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    } else {
-        console.log('Non-HTML request to unknown route, returning 404');
-        res.status(404).json({ error: 'Not found', path: req.url });
-    }
+    // Log the 404 request
+    console.log(`[${new Date().toISOString()}] 404 - Not Found: ${req.url}`);
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 ///////////////////////////////////////////////////////////////////////////////
