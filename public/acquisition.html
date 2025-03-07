@@ -368,80 +368,59 @@
         .fancybox__container {
             --fancybox-bg: rgba(0, 0, 0, 0.85);
             --fancybox-border-radius: 8px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 99999;
+            -webkit-overflow-scrolling: touch;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
         
-        .fancybox__caption {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-size: 1.1em;
-            padding: 10px 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 4px;
-            margin-top: 10px;
-            max-width: 80%;
-            margin-left: auto;
-            margin-right: auto;
+        .fancybox__backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 99998;
         }
 
-        /* Fix for iOS momentum scrolling */
-        .fancybox__container {
+        .fancybox__content {
+            padding: 0;
+            background: transparent;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 99999;
+            margin: auto;
+            max-width: 100%;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Improve loading state */
-        .fancybox__content {
-            will-change: transform, opacity;
-        }
-
-        /* Fix backdrop behavior */
-        .fancybox__backdrop {
-            background: rgba(0, 0, 0, 0.85);
-            will-change: opacity;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-        }
-
-        /* Better scrollbar styling for lightbox content */
-        .fancybox__container .fancybox__content::-webkit-scrollbar {
-            width: 7px;
-            background: transparent;
-        }
-        
-        .fancybox__container .fancybox__content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-        
-        /* Prevent body scrolling when lightbox is open */
+        /* Prevent body scroll when lightbox is open */
         body.fancybox-active {
             overflow: hidden !important;
+            touch-action: none;
+            -ms-touch-action: none;
         }
 
-        /* Mobile optimizations for image sections */
-        @media screen and (max-width: 768px) {
-            .view-section {
-                flex-direction: column;
+        /* Mobile optimizations */
+        @media screen and (max-width: 1024px) {
+            .fancybox__content {
+                max-height: 85vh;
+                margin: 20px;
             }
-
-            .image-section {
-                margin: 0 0 20px 0;
-                width: 100%;
-            }
-
-            .technique-description {
-                width: 100%;
-            }
-
-            .acquisition-section {
-                padding: 20px;
-                margin-bottom: 30px;
-            }
-
-            .acquisition-header h1 {
-                font-size: 2em;
-            }
-
-            .image-section img, .acquisition-image, .atlas-gif img {
-                max-width: 100%;
+            
+            .fancybox__toolbar {
+                position: fixed;
+                top: env(safe-area-inset-top, 0px);
+                right: env(safe-area-inset-right, 0px);
+                left: env(safe-area-inset-left, 0px);
             }
         }
 
@@ -715,7 +694,7 @@
                                         </ul>
 
                                         <div class="vexus-atlas-tile">
-                                            <h4>VEXUS ATLAS: IVC</h4>
+                                            <h4>IVC</h4>
                                             <div class="image-section atlas-gif">
                                                 <a href="images/IVC.gif" data-fancybox="gallery" data-caption="IVC Assessment Animation">
                                                     <img src="images/IVC.gif" alt="IVC Assessment Animation" class="acquisition-image">
@@ -756,6 +735,15 @@
                                             <li>Biphasic: Mild congestion</li>
                                             <li>Monophasic: Severe congestion</li>
                                         </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Hepatic Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Hepatic.long.gif" data-fancybox="gallery" data-caption="Hepatic Long Axis Assessment Animation">
+                                                    <img src="images/Hepatic.long.gif" alt="Hepatic Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -834,6 +822,15 @@
                                             <li>Pulsatile: Mild congestion</li>
                                             <li>Highly pulsatile: Severe congestion</li>
                                         </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Portal Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Portal.long.gif" data-fancybox="gallery" data-caption="Portal Long Axis Assessment Animation">
+                                                    <img src="images/Portal.long.gif" alt="Portal Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -907,6 +904,15 @@
                                             <li>Pulsatile: Mild congestion</li>
                                             <li>Discontinuous/phasic reversal: Severe congestion</li>
                                         </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Renal Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Renal.long.still.png" data-fancybox="gallery" data-caption="Renal Long Axis Assessment Animation">
+                                                    <img src="images/Renal.long.still.png" alt="Renal Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -932,6 +938,15 @@
                                         
                                         <h4>Special Notes:</h4>
                                         <p>This view is useful for assessing flow within the renal vein while avoiding angle-dependent errors in Doppler measurements.</p>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Renal Short Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Renal.short.still.png" data-fancybox="gallery" data-caption="Renal Short Axis Assessment Animation">
+                                                    <img src="images/Renal.short.still.png" alt="Renal Short Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1049,7 +1064,11 @@
                 }
             },
             
-            ScrollLock: true,
+            ScrollLock: {
+                enabled: true,
+                type: "full"
+            },
+            
             Hash: false,
             
             Thumbs: {
@@ -1061,7 +1080,9 @@
             Mobile: {
                 touch: true,
                 clickSlide: "close",
-                dblclickContent: "toggleZoom"
+                dblclickContent: "toggleZoom",
+                toolbar: true,
+                baseClass: "fancybox-mobile"
             },
             
             // Better animations
@@ -1070,7 +1091,7 @@
             animated: true,
             
             // Touch handling
-            dragToClose: true,
+            dragToClose: false,
             
             // Keyboard navigation
             keyboard: {
