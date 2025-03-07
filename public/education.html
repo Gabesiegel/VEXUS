@@ -10,14 +10,601 @@
     <!-- CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="html5up-phantom/assets/css/mobile.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
-
-    <!-- Additional styles for menu functionality -->
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    
     <style>
+        /* Maintaining existing styles */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            padding: 0 15px;
+        }
+
+        /* Education Page Specific Styles */
+        .education-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 10px;
+        }
+
+        .education-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .education-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .education-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .education-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #fcfcfc;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .education-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .education-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .education-section h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* Table Styles */
+        .vexus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .vexus-table th,
+        .vexus-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .vexus-table th {
+            background-color: #fcfcfc;
+            color: #ffffff;
+        }
+
+        .vexus-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .vexus-table tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        /* List Styles */
+        .education-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .education-content ul li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+        }
+
+        .education-content ul li:before {
+            content: "•";
+            color: #fcfcfc;
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 980px) {
+            .education-container {
+                padding: 20px;
+            }
+
+            .education-section {
+                padding: 20px;
+            }
+
+            .education-header h1 {
+                font-size: 2em;
+            }
+
+            .vexus-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .vexus-grading-container {
+            background-color: #fcfcfc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        .vexus-grading-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 600px;
+        }
+
+        .vexus-grading-table th,
+        .vexus-grading-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #fcfcfc;
+            white-space: normal;
+            vertical-align: top;
+        }
+
+        .vexus-grading-table th {
+            background-color: #fcfcfc;
+            color: #333333;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .vexus-grading-table tbody tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .vexus-grading-table tbody tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        /* Update logo styles */
+        .logo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            object-fit: contain;
+            margin: 10px;
+        }
+
+        .education-tab.active {
+            background-color: #fcfcfc;
+            color: white;
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #fcfcfc;
+            margin: 10px 0 20px;
+        }
+
+        .callout {
+            border-left: 4px solid #fcfcfc;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .highlight {
+            background-color: #fcfcfc;
+            padding: 2px 5px;
+            color: white;
+            border-radius: 3px;
+        }
+
+        .reference-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .reference-link:hover {
+            color: #495057;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design Updates */
+        @media screen and (max-width: 1200px) {
+            .logo {
+                max-width: 350px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+            }
+        }
+
+        @media screen and (max-width: 980px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .logo {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .education-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .education-card {
+                padding: 20px 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 1em;
+            }
+            
+            .education-card h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Enhanced mobile scrolling experience */
+        .vexus-grading-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Add new citation styles */
+        .citation {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            border-radius: 10px;
+            font-size: 0.8em;
+            padding: 0 6px;
+            margin: 0 2px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            vertical-align: super;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .citation:hover {
+            background-color: #6c757d;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .image-text {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .reference-tile {
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .reference-tile:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Vein Buttons Container */
+        .vein-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .vein-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            font-weight: 500;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .vein-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #eaeaea;
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Fancybox Content Styles */
+        .lightbox-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .lightbox-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .lightbox-content h3 {
+            color: #444;
+            margin: 20px 0 10px;
+        }
+
+        .lightbox-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .lightbox-content .acquisition-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Remove old modal and lightbox styles */
+        .modal, .modal-content, .close, .lightbox-container, .lightbox-header, 
+        .lightbox-title, .lightbox-close, .lightbox-body {
+            /* Remove these styles */
+        }
+
+        /* Fancybox customization */
+        .fancybox__content {
+            padding: 0;
+            background: #fff;
+            border-radius: 8px;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .fancybox__container {
+            --fancybox-bg: rgba(0, 0, 0, 0.9);
+        }
+
+        @media screen and (max-width: 768px) {
+            .lightbox-content {
+                padding: 20px;
+            }
+
+            .vein-button {
+                width: 100%;
+            }
+        }
+
+        /* Fix for iOS scroll issues */
+        .overflow-hidden {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Add these styles to improve menu performance */
+        #menu {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: #fff;
+            transition: transform 0.3s ease, visibility 0.3s ease;
+            visibility: hidden;
+            transform: translateX(100%);
+            will-change: transform;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            z-index: 1000;
+        }
+
+        #menu.active {
+            visibility: visible;
+            transform: translateX(-100%);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Custom Fancybox styles */
+        .fancybox__toolbar {
+            --f-button-width: 50px;
+            --f-button-height: 50px;
+            --f-button-color: #fff;
+            --f-button-hover-color: #fff;
+            --f-button-bg: rgba(0, 0, 0, 0.5);
+            --f-button-hover-bg: rgba(0, 0, 0, 0.7);
+            --f-button-border-radius: 50%;
+            --f-button-active-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        .fancybox__toolbar .is-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .fancybox__toolbar .is-close:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .fancybox__toolbar {
+                --f-button-width: 44px;
+                --f-button-height: 44px;
+            }
+
+            .fancybox__toolbar .is-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Image hover effects */
+        .image-container img {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Backdrop styling */
+        .fancybox__backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .vein-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+        .vein-button i {
+            font-size: 1.1em;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .vein-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #eaeaea;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .vein-button:hover i {
+            color: #333;
+            transform: scale(1.1);
+        }
+
         /* Critical styles for menu visibility */
         body.is-menu-visible #menu {
             display: block !important;
@@ -36,6 +623,7 @@
             right: -300px !important;
             z-index: 10000 !important;
             overflow-y: auto !important;
+            background: #ffffff;
         }
         
         #menu.visible {
@@ -43,7 +631,7 @@
             visibility: visible !important;
             right: 0 !important;
         }
-        
+
         /* Increase z-index for menu toggle button */
         a[href="#menu"] {
             z-index: 9000 !important;
@@ -94,9 +682,22 @@
         nav#menu ul li a:hover {
             color: #777777 !important;
         }
+
+        @media (hover: none) {
+            .feature-card,
+            nav#menu ul li a {
+                cursor: default;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+
+            nav#menu ul li a {
+                padding: 15px 0;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
+    <!-- Navigation -->
     <div id="wrapper">
         <header id="header">
             <div class="inner">
@@ -109,11 +710,11 @@
                 <nav>
                     <ul>
                         <li><a href="#menu">Menu</a></li>
-                    </ul>
                 </nav>
             </div>
         </header>
 
+        <!-- Sidebar Menu -->
         <nav id="menu">
             <div class="inner">
                 <div class="logo-container">
@@ -135,6 +736,9 @@
                 <a href="#menu" class="close"></a>
             </div>
         </nav>
+
+        <!-- Menu Overlay -->
+        <div class="menu-overlay"></div>
 
         <!-- Main Content -->
         <div id="main">
@@ -644,146 +1248,267 @@
             <span class="close">&times;</span>
             <img class="modal-content" id="modalImage">
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="html5up-phantom/assets/js/jquery.min.js" defer></script>
-    <script src="html5up-phantom/assets/js/browser.min.js" defer></script>
-    <script src="html5up-phantom/assets/js/breakpoints.min.js" defer></script>
-    <script src="html5up-phantom/assets/js/util.js" defer></script>
-    <script src="html5up-phantom/assets/js/performance-utils.js" defer></script>
-    <script src="html5up-phantom/assets/js/main.js" defer></script>
-    <script src="html5up-phantom/assets/js/add-tpa-link.js" defer></script>
-    
-    <!-- Menu Toggle Script -->
-    <script>
-        // Function to initialize menu toggle
-        function initializeMenuToggle() {
-            console.log("Initializing menu toggle");
-            
-            try {
-                // Get menu elements
-                const menuToggle = document.querySelector('a[href="#menu"]');
-                const menu = document.getElementById('menu');
+        <!-- Scripts -->
+        <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+        <script src="html5up-phantom/assets/js/browser.min.js"></script>
+        <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+        <script src="html5up-phantom/assets/js/util.js"></script>
+        <script src="html5up-phantom/assets/js/main.js"></script>
+        <!-- Fancybox JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+        
+        <script>
+            // Initialize Fancybox with enhanced mobile support
+            Fancybox.bind("[data-fancybox]", {
+                // Common options for all Fancybox instances
+                Toolbar: {
+                    display: {
+                        left: [],
+                        middle: ["prev", "next"],
+                        right: [],
+                        top: ["close"]
+                    },
+                    enabled: true,
+                    items: {
+                        close: {
+                            class: "is-close",
+                            label: "Close",
+                            tabindex: 1
+                        }
+                    }
+                },
+
+                // Better animations
+                showClass: "fancybox-fadeIn",
+                hideClass: "fancybox-fadeOut",
+                animated: true,
+                dragToClose: true,
                 
-                if (!menuToggle) {
-                    console.error("Menu toggle element not found!");
-                    return;
+                // Keyboard navigation
+                keyboard: {
+                    Escape: "close",
+                    Delete: "close",
+                    Backspace: "close",
+                    PageUp: "next",
+                    PageDown: "prev",
+                    ArrowUp: "prev",
+                    ArrowDown: "next",
+                    ArrowRight: "next",
+                    ArrowLeft: "prev"
                 }
+            });
+
+            // Additional configuration for image gallery
+            Fancybox.bind("[data-fancybox='gallery']", {
+                Carousel: {
+                    friction: 0.8,
+                    transition: "fade", 
+                    preload: 1
+                },
                 
-                if (!menu) {
-                    console.error("Menu element not found!");
-                    return;
+                Image: {
+                    zoom: true,
+                    fit: "contain",
+                    Panzoom: {
+                        panOnlyZoomed: true,
+                        doubleClick: "toggleZoom"
+                    }
+                },
+                
+                Thumbs: {
+                    type: "classic",
+                    showOnStart: false
                 }
+            });
+
+            // Additional configuration for vein guides
+            Fancybox.bind("[data-fancybox='vein-guides']", {
+                dragToClose: false,
+                mainClass: "vein-guide-modal",
                 
-                // Track transition state to prevent multiple simultaneous transitions
-                let isMenuTransitioning = false;
-                
-                // First ensure menu is properly hidden to start
-                document.body.classList.remove('is-menu-visible');
-                menu.classList.remove('visible', 'active');
-                
-                // Remove any existing click handlers by cloning and replacing
-                const newMenuToggle = menuToggle.cloneNode(true);
-                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
-                
-                // Add our click handler with support for both CSS class and display property
-                newMenuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    if (isMenuTransitioning) return;
-                    isMenuTransitioning = true;
-                    
-                    requestAnimationFrame(() => {
-                        // Use both approaches: class toggle (for theme) and display property (for our custom code)
-                        document.body.classList.add('is-menu-visible');
-                        menu.style.display = 'block';
+                on: {
+                    reveal: (fancybox, slide) => {
+                        // Get gallery images from data-gallery attribute
+                        const galleryData = slide.triggerEl?.dataset?.gallery;
+                        if (galleryData) {
+                            const galleryImages = JSON.parse(galleryData);
+                            
+                            // Create a "View All Images" button
+                            const viewAllBtn = document.createElement('button');
+                            viewAllBtn.className = 'view-all-images-btn';
+                            viewAllBtn.textContent = 'View All Images';
+                            viewAllBtn.style.cssText = `
+                                position: absolute;
+                                bottom: 20px;
+                                right: 20px;
+                                padding: 10px 20px;
+                                background: rgba(0, 0, 0, 0.7);
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                z-index: 10;
+                            `;
+                            
+                            viewAllBtn.addEventListener('click', () => {
+                                // Close current Fancybox
+                                fancybox.close();
+                                
+                                // Open gallery view
+                                Fancybox.show(
+                                    galleryImages.map(src => ({
+                                        src,
+                                        type: 'image'
+                                    })),
+                                    {
+                                        Carousel: {
+                                            friction: 0.8,
+                                            transition: "fade"
+                                        },
+                                        Image: {
+                                            zoom: true,
+                                            fit: "contain",
+                                            Panzoom: {
+                                                panOnlyZoomed: true,
+                                                doubleClick: "toggleZoom"
+                                            }
+                                        },
+                                        Toolbar: {
+                                            display: {
+                                                left: [],
+                                                middle: ["prev", "next"],
+                                                right: [],
+                                                top: ["close"]
+                                            }
+                                        }
+                                    }
+                                );
+                            });
+                            
+                            // Add button to the content
+                            const content = slide.el;
+                            if (content) {
+                                content.style.position = 'relative';
+                                content.appendChild(viewAllBtn);
+                            }
+                        }
                         
-                        // Force a repaint to ensure styles are applied before transition
-                        void menu.offsetWidth;
-                        
-                        menu.classList.add('visible', 'active');
-                        
-                        // Reset transition flag after animation completes
-                        setTimeout(() => {
-                            isMenuTransitioning = false;
-                        }, 300); // Match with CSS transition duration
-                    });
-                });
-                
-                // Function to hide menu with performance optimizations
-                function hideMenu() {
-                    if (isMenuTransitioning) return;
-                    isMenuTransitioning = true;
-                    
-                    requestAnimationFrame(() => {
-                        // Hide menu using classes first (for transitions)
-                        document.body.classList.remove('is-menu-visible');
-                        menu.classList.remove('visible', 'active');
-                        
-                        // After transition completes, update display property and reset flag
-                        setTimeout(() => {
-                            menu.style.display = 'none';
-                            isMenuTransitioning = false;
-                        }, 300); // Match with CSS transition duration
-                    });
+                        // Ensure content is properly sized and centered
+                        const content = slide.el;
+                        if (content) {
+                            content.style.maxHeight = '90vh';
+                            content.style.overflowY = 'auto';
+                        }
+                    }
                 }
+            });
+
+            // Add iOS-specific fixes
+            document.addEventListener('DOMContentLoaded', () => {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector('a.close');
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                if (isIOS) {
+                    document.documentElement.classList.add('is-ios');
                     
-                    newCloseButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        hideMenu();
-                    });
+                    // Prevent background scrolling on iOS
+                    document.body.addEventListener('touchmove', (e) => {
+                        if (document.querySelector('.fancybox__backdrop')) {
+                            e.preventDefault();
+                        }
+                    }, { passive: false });
                 }
-                
-                // Handle clicks outside the menu (use event delegation instead of capture phase)
-                const bodyClickHandler = function(e) {
-                    // If clicking outside menu and not on menu toggle
-                    if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
-                        hideMenu();
+            });
+
+            // Menu functionality
+            (function($) {
+                var $menu = $('#menu'),
+                    $body = $('body');
+
+                // Menu.
+                $menu.wrapInner('<div class="inner"></div>');
+
+                $menu._locked = false;
+
+                $menu._lock = function() {
+                    if ($menu._locked)
+                        return false;
+
+                    $menu._locked = true;
+
+                    window.setTimeout(function() {
+                        $menu._locked = false;
+                    }, 350);
+
+                    return true;
+                };
+
+                $menu._show = function() {
+                    if ($menu._lock()) {
+                        $body.addClass('is-menu-visible');
+                        $menu.addClass('visible');
                     }
                 };
-                
-                // Remove any existing body click handler and add our new one
-                document.body.removeEventListener('click', bodyClickHandler);
-                document.body.addEventListener('click', bodyClickHandler);
-                
-                // Handle escape key
-                const keyHandler = function(e) {
-                    if (e.key === 'Escape' || e.keyCode === 27) {
-                        hideMenu();
+
+                $menu._hide = function() {
+                    if ($menu._lock()) {
+                        $body.removeClass('is-menu-visible');
+                        $menu.removeClass('visible');
                     }
                 };
-                
-                // Remove any existing key handler and add our new one
-                document.removeEventListener('keydown', keyHandler);
-                document.addEventListener('keydown', keyHandler);
-                
-                console.log("Menu toggle initialization complete");
-            } catch (error) {
-                console.error("Error initializing menu toggle:", error);
-            }
-        }
-        
-        // Initialize the menu toggle after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM loaded, initializing menu toggle");
-            // Initial setup with delay to ensure DOM is fully processed
-            setTimeout(initializeMenuToggle, 100);
-        });
-        
-        // Fallback initialization in case DOMContentLoaded already fired
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            console.log("Document already loaded, running fallback initialization");
-            setTimeout(initializeMenuToggle, 200);
-        }
-    </script>
+
+                $menu._toggle = function() {
+                    if ($menu._lock()) {
+                        if ($body.hasClass('is-menu-visible'))
+                            $menu._hide();
+                        else
+                            $menu._show();
+                    }
+                };
+
+                $menu
+                    .appendTo($body)
+                    .on('click', function(event) {
+                        event.stopPropagation();
+                    })
+                    .on('click', 'a', function(event) {
+                        var href = $(this).attr('href');
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        // Hide.
+                        $menu._hide();
+
+                        // Redirect.
+                        if (href === '#menu')
+                            return;
+
+                        window.setTimeout(function() {
+                            window.location.href = href;
+                        }, 350);
+                    });
+
+                $body
+                    .on('click', 'a[href="#menu"]', function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+
+                        // Toggle.
+                        $menu._toggle();
+                    })
+                    .on('click', function(event) {
+                        // Hide.
+                        $menu._hide();
+                    })
+                    .on('keydown', function(event) {
+                        // Hide on escape.
+                        if (event.keyCode == 27)
+                            $menu._hide();
+                    });
+            })(jQuery);
+        </script>
+    </div>
+<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
 </html>
