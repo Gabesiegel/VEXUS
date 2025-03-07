@@ -122,27 +122,78 @@
         .view-section {
             display: flex;
             flex-direction: column;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        @media screen and (min-width: 980px) {
-            .view-section {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-            
-            .image-section {
-                flex: 0 0 40%;
-                margin-right: 25px;
-            }
-            
-            .technique-description {
-                flex: 0 0 55%;
-            }
-            
-            .image-section img, .acquisition-image {
-                max-width: 100%;
-            }
+        .view-section > h3 {
+            margin-bottom: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image-section {
+            width: 100%;
+            margin: 0;
+        }
+
+        .technique-description {
+            width: 100%;
+        }
+
+        .image-section img, .acquisition-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Fix IVC tile section */
+        .vexus-atlas-tile {
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .vexus-atlas-tile .image-section {
+            width: 100%;
+            margin: 0;
+        }
+
+        .atlas-gif {
+            width: 100%;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .atlas-gif img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Remove any conflicting styles */
+        .view-section .image-section {
+            text-align: center;
+        }
+
+        .technique-description {
+            text-align: left;
+        }
+
+        /* Override any floating styles */
+        .image-section, .technique-description {
+            float: none !important;
         }
 
         /* Table Styles */
@@ -388,6 +439,10 @@
             .acquisition-header h1 {
                 font-size: 2em;
             }
+
+            .image-section img, .acquisition-image, .atlas-gif img {
+                max-width: 100%;
+            }
         }
 
         /* Fancybox customizations */
@@ -482,6 +537,9 @@
             margin: 30px 0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
 
         .vexus-atlas-tile:hover {
@@ -495,6 +553,8 @@
             margin-bottom: 20px;
             font-size: 1.3em;
             font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
 
         .atlas-gif {
@@ -502,13 +562,27 @@
             overflow: hidden;
             background: #f8f9fa;
             padding: 15px;
+            position: relative;
+            z-index: 2;
         }
 
         .atlas-gif img {
             display: block;
             margin: 0 auto;
-            max-width: 100%;
-            height: auto;
+            max-width: 100% !important;
+            height: auto !important;
+            border-radius: 6px;
+        }
+
+        .vexus-atlas-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.8), rgba(255,255,255,0.95));
+            z-index: 1;
         }
 
         @media screen and (max-width: 768px) {
@@ -516,6 +590,32 @@
                 padding: 20px;
                 margin: 20px 0;
             }
+            
+            .atlas-gif {
+                padding: 10px;
+            }
+            
+            .atlas-gif img {
+                max-width: 95% !important;
+            }
+        }
+
+        /* Override any conflicting styles */
+        .technique-description .vexus-atlas-tile {
+            width: 100% !important;
+            max-width: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .image-section.atlas-gif {
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        .acquisition-image {
+            width: 100% !important;
+            max-width: 100% !important;
         }
     </style>
 </head>
@@ -580,45 +680,47 @@
                         <div class="acquisition-section">
                             <h2>IVC Assessment</h2>
                             <div class="view-section">
-                                <div class="image-section">
-                                    <a href="images/IVC.png" data-fancybox="gallery" data-caption="IVC Assessment Technique">
-                                        <img src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Place probe in subxiphoid or subcostal position to obtain a longitudinal view of the IVC.</p>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/IVC.png" data-fancybox="gallery" data-caption="IVC Assessment Technique">
+                                            <img src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place probe in subxiphoid or subcostal position to obtain a longitudinal view of the IVC.</p>
 
-                                    <h4>Key Points:</h4>
-                                    <ul>
-                                        <li>Place patient in supine position</li>
-                                        <li>Use a low frequency (curvilinear) probe</li>
-                                        <li>Measure IVC diameter 2-3 cm from right atrial junction</li>
-                                        <li>Assess for inspiratory collapse (if applicable)</li>
-                                        <li>Record maximum diameter for VExUS classification</li>
-                                    </ul>
+                                        <h4>Key Points:</h4>
+                                        <ul>
+                                            <li>Place patient in supine position</li>
+                                            <li>Use a low frequency (curvilinear) probe</li>
+                                            <li>Measure IVC diameter 2-3 cm from right atrial junction</li>
+                                            <li>Assess for inspiratory collapse (if applicable)</li>
+                                            <li>Record maximum diameter for VExUS classification</li>
+                                        </ul>
 
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Inferior Vena Cava (IVC)</li>
-                                        <li>Right atrial junction</li>
-                                        <li>Hepatic vein confluence</li>
-                                        <li>Liver</li>
-                                    </ul>
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Inferior Vena Cava (IVC)</li>
+                                            <li>Right atrial junction</li>
+                                            <li>Hepatic vein confluence</li>
+                                            <li>Liver</li>
+                                        </ul>
 
-                                    <h4>Special Notes:</h4>
-                                    <ul>
-                                        <li>Ensure measurement is taken during normal respiration</li>
-                                        <li>Document both maximum and minimum diameters if significant respiratory variation</li>
-                                        <li>Consider patient's volume status and positioning when interpreting measurements</li>
-                                    </ul>
+                                        <h4>Special Notes:</h4>
+                                        <ul>
+                                            <li>Ensure measurement is taken during normal respiration</li>
+                                            <li>Document both maximum and minimum diameters if significant respiratory variation</li>
+                                            <li>Consider patient's volume status and positioning when interpreting measurements</li>
+                                        </ul>
 
-                                    <div class="vexus-atlas-tile">
-                                        <h4>VEXUS ATLAS: IVC</h4>
-                                        <div class="image-section atlas-gif">
-                                            <a href="images/IVC.gif" data-fancybox="gallery" data-caption="IVC Assessment Animation">
-                                                <img src="images/IVC.gif" alt="IVC Assessment Animation" class="acquisition-image">
-                                            </a>
+                                        <div class="vexus-atlas-tile">
+                                            <h4>VEXUS ATLAS: IVC</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/IVC.gif" data-fancybox="gallery" data-caption="IVC Assessment Animation">
+                                                    <img src="images/IVC.gif" alt="IVC Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -631,48 +733,52 @@
                             
                             <div class="view-section">
                                 <h3>Long Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/hepatic_long.png" data-fancybox="gallery" data-caption="Hepatic Vein - Long Axis View">
-                                        <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Place the probe in the right intercostal space, angled towards the right shoulder.</p>
-                                    
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Hepatic vein</li>
-                                        <li>IVC junction</li>
-                                        <li>Liver parenchyma</li>
-                                    </ul>
-                                    
-                                    <h4>Doppler Waveforms:</h4>
-                                    <ul>
-                                        <li>Triphasic: Normal venous return</li>
-                                        <li>Biphasic: Mild congestion</li>
-                                        <li>Monophasic: Severe congestion</li>
-                                    </ul>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/hepatic_long.png" data-fancybox="gallery" data-caption="Hepatic Vein - Long Axis View">
+                                            <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place the probe in the right intercostal space, angled towards the right shoulder.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Hepatic vein</li>
+                                            <li>IVC junction</li>
+                                            <li>Liver parenchyma</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Triphasic: Normal venous return</li>
+                                            <li>Biphasic: Mild congestion</li>
+                                            <li>Monophasic: Severe congestion</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="view-section">
                                 <h3>Short Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/hepatic_short.png" data-fancybox="gallery" data-caption="Hepatic Vein - Short Axis View">
-                                        <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head. Probe rotated 90 degrees counterclockwise from long-axis position.</p>
-                                    
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Hepatic veins</li>
-                                        <li>Portal vein</li>
-                                        <li>IVC</li>
-                                    </ul>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/hepatic_short.png" data-fancybox="gallery" data-caption="Hepatic Vein - Short Axis View">
+                                            <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head. Probe rotated 90 degrees counterclockwise from long-axis position.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Hepatic veins</li>
+                                            <li>Portal vein</li>
+                                            <li>IVC</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -705,44 +811,48 @@
                             
                             <div class="view-section">
                                 <h3>Long Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/Portal_long_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Long Axis View">
-                                        <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Place probe in the right intercostal space, angled slightly cephalad.</p>
-                                    
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Portal vein main trunk</li>
-                                        <li>Hepatic artery</li>
-                                        <li>Liver parenchyma</li>
-                                    </ul>
-                                    
-                                    <h4>Doppler Waveforms:</h4>
-                                    <ul>
-                                        <li>Normal: Continuous flow with minimal pulsatility</li>
-                                        <li>Pulsatile: Mild congestion</li>
-                                        <li>Highly pulsatile: Severe congestion</li>
-                                    </ul>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Portal_long_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Long Axis View">
+                                            <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place probe in the right intercostal space, angled slightly cephalad.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Portal vein main trunk</li>
+                                            <li>Hepatic artery</li>
+                                            <li>Liver parenchyma</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Normal: Continuous flow with minimal pulsatility</li>
+                                            <li>Pulsatile: Mild congestion</li>
+                                            <li>Highly pulsatile: Severe congestion</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="view-section">
                                 <h3>Short Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/Portal_short_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Short Axis View">
-                                        <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Probe in mid-axillary line, below the xiphoid process, angled slightly toward patient's right shoulder, rotated 90 degrees counterclockwise from long axis view.</p>
-                                    
-                                    <h4>Special Note:</h4>
-                                    <p>This view can be helpful for distinguishing portal vein pulsations from those originating from the nearby hepatic artery.</p>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Portal_short_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Short Axis View">
+                                            <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Probe in mid-axillary line, below the xiphoid process, angled slightly toward patient's right shoulder, rotated 90 degrees counterclockwise from long axis view.</p>
+                                        
+                                        <h4>Special Note:</h4>
+                                        <p>This view can be helpful for distinguishing portal vein pulsations from those originating from the nearby hepatic artery.</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -773,52 +883,56 @@
                             
                             <div class="view-section">
                                 <h3>Long Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/Renal_vein_long.png" data-fancybox="gallery" data-caption="Renal Vein - Long Axis View">
-                                        <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Position the probe in the right flank, posterior to the mid-axillary line.</p>
-                                    
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Renal vein</li>
-                                        <li>IVC junction</li>
-                                        <li>Kidney</li>
-                                        <li>Right renal artery</li>
-                                    </ul>
-                                    
-                                    <h4>Doppler Waveforms:</h4>
-                                    <ul>
-                                        <li>Continuous: Normal venous return</li>
-                                        <li>Pulsatile: Mild congestion</li>
-                                        <li>Discontinuous/phasic reversal: Severe congestion</li>
-                                    </ul>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Renal_vein_long.png" data-fancybox="gallery" data-caption="Renal Vein - Long Axis View">
+                                            <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Position the probe in the right flank, posterior to the mid-axillary line.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Renal vein</li>
+                                            <li>IVC junction</li>
+                                            <li>Kidney</li>
+                                            <li>Right renal artery</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Continuous: Normal venous return</li>
+                                            <li>Pulsatile: Mild congestion</li>
+                                            <li>Discontinuous/phasic reversal: Severe congestion</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="view-section">
                                 <h3>Short Axis View</h3>
-                                <div class="image-section">
-                                    <a href="images/Renal_short_axis.png" data-fancybox="gallery" data-caption="Renal Vein - Short Axis View">
-                                        <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
-                                    </a>
-                                </div>
-                                <div class="technique-description">
-                                    <h4>Probe Position:</h4>
-                                    <p>Position probe in transverse orientation at right flank, looking for the kidney in cross-section.</p>
-                                    
-                                    <h4>Key Structures:</h4>
-                                    <ul>
-                                        <li>Renal vein</li>
-                                        <li>Renal artery</li>
-                                        <li>Kidney hilum</li>
-                                    </ul>
-                                    
-                                    <h4>Special Notes:</h4>
-                                    <p>This view is useful for assessing flow within the renal vein while avoiding angle-dependent errors in Doppler measurements.</p>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Renal_short_axis.png" data-fancybox="gallery" data-caption="Renal Vein - Short Axis View">
+                                            <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Position probe in transverse orientation at right flank, looking for the kidney in cross-section.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Renal vein</li>
+                                            <li>Renal artery</li>
+                                            <li>Kidney hilum</li>
+                                        </ul>
+                                        
+                                        <h4>Special Notes:</h4>
+                                        <p>This view is useful for assessing flow within the renal vein while avoiding angle-dependent errors in Doppler measurements.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
