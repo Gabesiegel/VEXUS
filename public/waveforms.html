@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Waveforms - VExUS ATLAS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Gabesiegel" />
+    <meta name="last-modified" content="2025-02-12T00:37:03Z" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    
+    <style>
+        /* Maintaining existing styles */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            padding: 0 15px;
+        }
+
+        .education-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 10px;
+        }
+
+        .education-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .education-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .education-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .education-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #fcfcfc;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .education-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .education-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .education-section h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .waveform-image {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .reference-list {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .reference-list li {
+            margin-bottom: 15px;
+        }
+
+        .reference-link {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .reference-link:hover {
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">VExUS ATLAS</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <div class="education-container">
+                    <div class="education-header">
+                        <h1>Interpreting VExUS Doppler Waveforms</h1>
+                        <p>Hepatic, Portal, and Renal Veins</p>
+                    </div>
+
+                    <div class="education-content">
+                        <div class="education-section">
+                            <h2>Introduction to VExUS and Venous Waveforms</h2>
+                            <p>Venous Excess Ultrasound (VExUS) is a point-of-care ultrasound assessment method that evaluates systemic venous congestion by examining the Doppler waveforms of key veins (hepatic, portal, and intrarenal) alongside the size and variation of the inferior vena cava (IVC) [1,2]. By analyzing these venous patterns, clinicians can estimate how elevated right-sided heart pressures or excessive fluid loading affect organ blood flow [1,3].</p>
+                            
+                            <p>Recognizing normal waveforms versus mild or severe abnormalities provides an immediate snapshot of venous congestion:</p>
+                            <ul>
+                                <li>Normal waveforms suggest no significant congestion.</li>
+                                <li>Mild abnormalities indicate early or moderate venous hypertension.</li>
+                                <li>Severe abnormalities reflect high venous pressure and substantial backward flow.</li>
+                            </ul>
+                        </div>
+
+                        <div class="education-section">
+                            <h2>1. Hepatic Vein Waveforms</h2>
+                            <img src="images/ekgtracing.hepatic.png" alt="Hepatic Vein Waveform Patterns" class="waveform-image">
+                            
+                            <h3>Normal Pattern</h3>
+                            <ul>
+                                <li>"S > D": The systolic wave (S) is larger than the diastolic wave (D) when viewed on Doppler.</li>
+                                <li>Includes small retrograde deflections: the A wave (atrial contraction) and a tiny V wave (end-systole).</li>
+                                <li>Overall, flow is predominantly toward the heart during both systole and diastole, with only minor reversals in late diastole (A wave) [4].</li>
+                            </ul>
+
+                            <h3>Mild Congestion</h3>
+                            <ul>
+                                <li>"S < D": The systolic wave is still below the baseline (forward) but smaller in amplitude compared to the diastolic wave.</li>
+                                <li>The A wave (atrial reversal) becomes more pronounced; the V wave may also be noticeable.</li>
+                                <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet [5,6].</li>
+                            </ul>
+
+                            <h3>Severe Congestion</h3>
+                            <ul>
+                                <li>Reversed S Wave: Now the S wave is above the baseline, indicating backward flow into the liver during systole.</li>
+                                <li>Only the D wave remains antegrade. The A (and sometimes V) waves become markedly elevated.</li>
+                                <li>Reflects significantly elevated right atrial pressures, often seen in severe tricuspid regurgitation or right-sided heart failure [2,5].</li>
+                            </ul>
+                        </div>
+
+                        <div class="education-section">
+                            <h2>2. Portal Vein Waveforms</h2>
+                            <h3>Normal Pattern</h3>
+                            <ul>
+                                <li>Continuous Monophasic Flow: In healthy states, the portal vein shows essentially steady forward flow (hepatopetal), with minimal respiratory or cardiac pulsatility.</li>
+                                <li>Pulsatility fraction < 30% (little variation in velocity over the cardiac cycle) [3,7].</li>
+                            </ul>
+
+                            <h3>Mild Congestion</h3>
+                            <ul>
+                                <li>Mildly Pulsatile Flow: A noticeable undulation in velocity emerges, yielding a 30–50% pulsatility index.</li>
+                                <li>Forward flow is preserved (no reversal), but the waveform starts dipping and peaking in sync with cardiac activity [2,3].</li>
+                            </ul>
+
+                            <h3>Severe Congestion</h3>
+                            <ul>
+                                <li>High Pulsatility > 50%: Marked oscillation of the portal flow with deep troughs.</li>
+                                <li>Can approach or briefly cross the baseline (or show short-lived flow reversal), reflecting high venous pressures transmitted back from the right atrium and hepatic circulation [3,6].</li>
+                            </ul>
+                        </div>
+
+                        <div class="education-section">
+                            <h2>3. Intrarenal (Renal Parenchymal) Vein Waveforms</h2>
+                            <h3>Normal Pattern</h3>
+                            <ul>
+                                <li>Continuous Monophasic Flow: The tiny interlobar veins in the kidney typically exhibit a steady, non-pulsatile flow throughout the cardiac cycle [7].</li>
+                                <li>No distinct systolic or diastolic components are recognizable; wave appears almost flat on Doppler.</li>
+                            </ul>
+
+                            <h3>Mild Congestion</h3>
+                            <ul>
+                                <li>Biphasic (S & D) Pulsatile Flow: As venous pressure rises, a waveform emerges with two forward-flow peaks—one in systole and another in diastole—separated by a brief trough.</li>
+                                <li>Called a "discontinuous" pattern, it reflects moderate venous congestion within the renal parenchyma [1,5].</li>
+                            </ul>
+
+                            <h3>Severe Congestion</h3>
+                            <ul>
+                                <li>Monophasic D-Only Flow: The systolic component disappears entirely, and only diastolic flow remains visible per heartbeat.</li>
+                                <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury [1,8].</li>
+                            </ul>
+                        </div>
+
+                        <div class="education-section">
+                            <h2>Putting It All Together: VExUS Grading</h2>
+                            <img src="images/vexus.grading.png" alt="VExUS Grading System" class="waveform-image">
+                            <ul>
+                                <li>Grade 0 (Normal): All hepatic, portal, and renal waveforms are normal, with a collapsible IVC.</li>
+                                <li>Grade 1 (Mild): One or more veins show mild abnormalities (e.g., S < D in hepatic vein, mild pulsatility in portal vein, or biphasic renal flow) combined with a dilated or non-collapsing IVC.</li>
+                                <li>Grade 2 (Moderate): At least one severe abnormality (e.g., reversed S wave in hepatic vein, marked pulsatility or brief reversal in portal vein, or D-only renal flow).</li>
+                                <li>Grade 3 (Severe): Two or more severe waveform changes across hepatic, portal, or renal veins.</li>
+                            </ul>
+                            <p>Patients with advanced VExUS grades are at higher risk for congestive organ injury (hepatic congestion, kidney injury, etc.), and recognition of these patterns prompts intensified decongestive therapies [1,2,8].</p>
+                        </div>
+
+                        <div class="reference-list">
+                            <h2>References</h2>
+                            <ol>
+                                <li>Beaubien-Souligny W, et al. The Venous Excess Ultrasound Grading System (VExUS) in Predicting AKI in Cardiac Surgery Patients: An Observational Study. Crit Care Med. 2021;49(3):e263-e272.
+                                    <a href="https://journals.lww.com/ccmjournal/Fulltext/2021/03000/The_Venous_Excess_Ultrasound_Grading_System.6.aspx" class="reference-link" target="_blank">Link</a></li>
+                                <li>Beaubien-Souligny W, et al. Focused Ultrasound Evaluation in Acute Medicine: Development and Preliminary Validation of a Point-of-care Ultrasound Protocol to Assess Venous Congestion in a Cardiac Intensive Care Unit. J Am Heart Assoc. 2020;9:e014974.
+                                    <a href="https://www.ahajournals.org/doi/10.1161/JAHA.119.014974" class="reference-link" target="_blank">Link</a></li>
+                                <li>Denault AY, et al. Clinical Significance of Portal Flow Pulsatility: A Scoping Review. J Cardiothorac Vasc Anesth. 2022;36(3):874-883.
+                                    <a href="https://www.sciencedirect.com/science/article/pii/S1053077021005960" class="reference-link" target="_blank">Link</a></li>
+                                <li>Mitchell C, et al. Guidelines for Performing a Comprehensive Transthoracic Echocardiographic Examination in Adults. J Am Soc Echocardiogr. 2019;32(1):1-64.
+                                    <a href="https://www.onlinejase.com/article/S0894-7317(18)30760-5/fulltext" class="reference-link" target="_blank">Link</a></li>
+                                <li>Mullens W, et al. Evaluation of organ congestion in heart failure: ultrasound, biomarkers, and integrative strategies. J Am Coll Cardiol. 2023;81(8):821-836.
+                                    <a href="https://www.jacc.org/doi/10.1016/j.jacc.2022.11.078" class="reference-link" target="_blank">Link</a></li>
+                                <li>Ait-Oufella H, et al. Early Detection of Fluid Overload and Elevated Venous Pressure Using Tissue Doppler of the Portal Vein in Critically Ill Patients. Crit Care. 2019;23(1):176.
+                                    <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-019-2443-7" class="reference-link" target="_blank">Link</a></li>
+                                <li>Sobczyk D, Nycz K. Renal Doppler Ultrasonography in the Critical Care Setting: Current Evidence. Crit Care Res Pract. 2020;2020:8858794.
+                                    <a href="https://www.hindawi.com/journals/ccrp/2020/8858794/" class="reference-link" target="_blank">Link</a></li>
+                                <li>Sorouri K, et al. A Stepwise Demonstration of the VExUS Score: Venous Excess Ultrasound for the Assessment of Fluid Overload. J Cardiothorac Vasc Anesth. 2022;36(4):1163-1171.
+                                    <a href="https://www.sciencedirect.com/science/article/pii/S1053077021008502" class="reference-link" target="_blank">Link</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    <!-- Fancybox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        Fancybox.bind("[data-fancybox]", {
+            // Your custom options
+        });
+    </script>
+</body>
+</html> 
