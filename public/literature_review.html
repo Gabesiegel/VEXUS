@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
@@ -400,7 +417,7 @@
 
                     <div class="article-card">
                         <div class="article-title">Prospective Evaluation of Venous Excess Ultrasound for Estimation of Venous Congestion</div>
-                        <div class="article-reference">Longino A, Martin K, Leyba K, Siegel G, Thai TN, Riscinti M, Douglas IS, Gill E, Burke J. Chest. 2024 Mar;165(3):590-600. doi: 10.1016/j.chest.2023.09.029.</div>
+                        <div class="article-reference">Longino A, Martin K, Leyba K, Siegel G, Thai TN, Riscinti M, Douglas IS, Gill E, Burke J. Chest. 2024 Mar 9;165(3):590-600. doi: 10.1016/j.chest.2023.09.029.</div>
                         <div class="article-key-points">
                             <div class="key-point">This validation study evaluates VExUS against right heart catheterization in a diverse hospital cohort, providing strong evidence for its clinical utility.</div>
                             <div class="key-point">Establishes robust correlations between VExUS scores and key hemodynamic parameters including right atrial pressure, pulmonary capillary wedge pressure, and mean pulmonary artery pressure.</div>

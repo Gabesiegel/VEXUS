@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="author" content="Gabesiegel" />
     
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
     <!-- CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
@@ -90,6 +107,43 @@
             .about-header h1 {
                 font-size: 2em;
             }
+        }
+
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+            position: fixed !important;
+            top: 0 !important;
+            height: 100% !important;
+            width: 300px !important;
+            max-width: 80% !important;
+            right: -300px !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
         }
     </style>
 </head>
@@ -186,6 +240,126 @@
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/performance-utils.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+    
+    <!-- Menu Toggle Script -->
+    <script>
+        // Function to initialize menu toggle
+        function initializeMenuToggle() {
+            console.log("Initializing menu toggle");
+            
+            try {
+                // Get menu elements
+                const menuToggle = document.querySelector('a[href="#menu"]');
+                const menu = document.getElementById('menu');
+                
+                if (!menuToggle) {
+                    console.error("Menu toggle element not found!");
+                    return;
+                }
+                
+                if (!menu) {
+                    console.error("Menu element not found!");
+                    return;
+                }
+                
+                // First ensure menu is properly hidden to start
+                document.body.classList.remove('is-menu-visible');
+                menu.style.right = "-100%";
+                menu.style.display = "none";
+                menu.classList.remove('visible', 'active');
+                
+                // Remove any existing click handlers by cloning and replacing
+                const newMenuToggle = menuToggle.cloneNode(true);
+                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+                
+                // Add our click handler with support for both CSS class and display property
+                newMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Menu toggle clicked");
+                    
+                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                    document.body.classList.add('is-menu-visible');
+                    menu.style.display = 'block';
+                    menu.style.right = '0';
+                    menu.classList.add('visible', 'active');
+                    
+                    // Force a repaint to ensure styles are applied
+                    void menu.offsetWidth;
+                });
+                
+                // Create close button handler (important for mobile)
+                const closeButton = menu.querySelector('a.close');
+                if (closeButton) {
+                    const newCloseButton = closeButton.cloneNode(true);
+                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                    
+                    newCloseButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Close button clicked");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%';
+                        menu.classList.remove('visible', 'active');
+                    });
+                }
+                
+                // Handle clicks outside the menu (use capture phase to run before other handlers)
+                const bodyClickHandler = function(e) {
+                    // If clicking outside menu and not on menu toggle
+                    if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
+                        console.log("Clicked outside menu");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%';
+                        menu.classList.remove('visible', 'active');
+                    }
+                };
+                
+                // Remove any existing body click handler and add our new one
+                document.body.removeEventListener('click', bodyClickHandler, true);
+                document.body.addEventListener('click', bodyClickHandler, true);
+                
+                // Handle escape key
+                const keyHandler = function(e) {
+                    if (e.key === 'Escape' || e.keyCode === 27) {
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%';
+                        menu.classList.remove('visible', 'active');
+                    }
+                };
+                
+                // Remove any existing key handler and add our new one
+                document.removeEventListener('keydown', keyHandler);
+                document.addEventListener('keydown', keyHandler);
+                
+                console.log("Menu toggle initialization complete");
+            } catch (error) {
+                console.error("Error initializing menu toggle:", error);
+            }
+        }
+        
+        // Initialize the menu toggle after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded, initializing menu toggle");
+            // Initial setup with delay to ensure DOM is fully processed
+            setTimeout(initializeMenuToggle, 100);
+        });
+        
+        // Fallback initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            console.log("Document already loaded, running fallback initialization");
+            setTimeout(initializeMenuToggle, 200);
+        }
+    </script>
 </body>
 </html>

@@ -1,10 +1,26 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<!-- Previous head and style sections remain unchanged -->
 <head>
-    <title>VExUS ATLAS - AI Image Recognition &amp; Scoring</title>
+    <title>AI Image Recognition - VExUS ATLAS</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
     
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />

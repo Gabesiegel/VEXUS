@@ -5,6 +5,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
     <!-- Phantom Template CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
@@ -544,7 +561,9 @@
     <script src="html5up-phantom/assets/js/browser.min.js"></script>
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/performance-utils.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
     
     <!-- Override menu functionality to ensure it works properly -->
     <script>
@@ -705,6 +724,5 @@
             setTimeout(initializeMenuToggle, 200);
         }
     </script>
-<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
 </body>
 </html> 

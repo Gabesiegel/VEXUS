@@ -7,6 +7,23 @@
     <meta name="author" content="Gabesiegel" />
     <meta name="last-modified" content="2025-02-11T09:49:16Z" />
     
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
     <!-- CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
@@ -456,6 +473,50 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             cursor: pointer;
         }
+
+        .vexus-atlas-tile {
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vexus-atlas-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .vexus-atlas-tile h4 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .atlas-gif {
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+            padding: 15px;
+        }
+
+        .atlas-gif img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media screen and (max-width: 768px) {
+            .vexus-atlas-tile {
+                padding: 20px;
+                margin: 20px 0;
+            }
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -551,6 +612,15 @@
                                         <li>Document both maximum and minimum diameters if significant respiratory variation</li>
                                         <li>Consider patient's volume status and positioning when interpreting measurements</li>
                                     </ul>
+
+                                    <div class="vexus-atlas-tile">
+                                        <h4>VEXUS ATLAS: IVC</h4>
+                                        <div class="image-section atlas-gif">
+                                            <a href="images/IVC.gif" data-fancybox="gallery" data-caption="IVC Assessment Animation">
+                                                <img src="images/IVC.gif" alt="IVC Assessment Animation" class="acquisition-image">
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
