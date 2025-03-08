@@ -32,9 +32,13 @@ const VALID_VEIN_TYPES = ['hepatic', 'portal', 'renal'];
 
 // Configuration with defaults that can be overridden with environment variables
 const CONFIG = {
-    port: process.env.PORT || 3000,
-    projectId: process.env.GCP_PROJECT_ID || '456295042668',
+    port: process.env.PORT || 3002,
+    projectId: process.env.GCP_PROJECT_ID || 'plucky-weaver-450819-k7',
+    projectNumber: process.env.GCP_PROJECT_NUMBER || '456295042668',
     location: process.env.GCP_LOCATION || 'us-central1',
+    
+    // Bucket name for Cloud Storage
+    bucketName: process.env.GCP_BUCKET_NAME || 'vexus-images',
     
     // Endpoints configured for different vein types
     endpointIds: {
@@ -196,32 +200,50 @@ async function getCredentials() {
         return JSON.parse(version.payload.data.toString());
     } catch (error) {
         console.error('Failed to get credentials from Secret Manager:', error);
-        throw error;
+        
+        // In Cloud Run, missing credentials should not crash the application
+        // Instead, log the error and return a flag indicating auth is not available
+        console.warn('⚠️ APPLICATION RUNNING WITHOUT CREDENTIALS - Some features may not work');
+        
+        // Return an object that indicates auth failed but won't break JSON.parse
+        return { 
+            _credentialError: true,
+            errorMessage: error.message,
+            timestamp: new Date().toISOString()
+        };
     }
 }
 
 // Initialize Vertex AI client
 async function initializeVertexAI() {
     try {
-        console.log('Getting credentials from Secret Manager...');
+        console.log('Initializing Vertex AI client...');
+        
+        // Get credentials from Secret Manager
         const credentials = await getCredentials();
-
-        console.log('Initializing Vertex AI client with Secret Manager credentials');
-        const apiEndpoint = process.env.VERTEX_AI_ENDPOINT || 
-                          `${CONFIG.location}-aiplatform.googleapis.com`;
         
-        console.log(`Using Vertex AI API endpoint: ${apiEndpoint}`);
-        console.log(`Configured endpoints - Hepatic: ${CONFIG.endpointIds.hepatic}, Portal: ${CONFIG.endpointIds.portal}, Renal: ${CONFIG.endpointIds.renal}`);
+        // Check if credentials retrieval failed
+        if (credentials._credentialError) {
+            console.warn(`Cannot initialize Vertex AI: ${credentials.errorMessage}`);
+            throw new Error(`Credential error: ${credentials.errorMessage}`);
+        }
         
-        return new v1.PredictionServiceClient({
-            apiEndpoint: apiEndpoint,
+        // Initialize Google auth with credentials
+        const auth = new GoogleAuth({
             credentials: credentials,
-            // Add timeout to prevent hanging calls
-            timeout: 120000 // 2 minutes timeout
+            scopes: ['https://www.googleapis.com/auth/cloud-platform']
         });
+        
+        // Create prediction client
+        console.log('Creating Vertex AI Prediction client...');
+        predictionClient = new PredictionServiceClient({
+            auth: auth
+        });
+        
+        console.log('Vertex AI client initialized successfully');
+        return predictionClient;
     } catch (error) {
         console.error('Failed to initialize Vertex AI client:', error);
-        console.error('Error details:', error); // Log the entire error object for more details
         throw error;
     }
 }
@@ -585,6 +607,16 @@ app.post('/api/preload-endpoint', async (req, res) => {
             // Get credentials from Secret Manager
             const credentials = await getCredentials();
             
+            // Check if credentials retrieval failed
+            if (credentials._credentialError) {
+                console.warn(`Authentication error during endpoint prewarming: ${credentials.errorMessage}`);
+                return res.json({
+                    status: 'warming',
+                    message: `Endpoint warming initiated with limited auth (${credentials.errorMessage})`,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
             // Get an access token using the credentials
             const auth = new GoogleAuth({
                 credentials: credentials,
@@ -838,6 +870,15 @@ app.post('/api/test-endpoint', async (req, res) => {
         // Get credentials from Secret Manager
         const credentials = await getCredentials();
         
+        // Check if credentials retrieval failed
+        if (credentials._credentialError) {
+            return res.status(500).json({
+                status: 'error',
+                message: `Authentication error: ${credentials.errorMessage}`,
+                timestamp: new Date().toISOString()
+            });
+        }
+        
         // Get an access token using the credentials
         const auth = new GoogleAuth({
             credentials: credentials,
@@ -889,12 +930,224 @@ app.get('*', (req, res) => {
     res.status(404).send('Route not found');
 });
 
-// Start the server
-// Use the DEFAULT_PORT variable consistently
-app.listen(DEFAULT_PORT, () => {
-    console.log(`Server running on port ${DEFAULT_PORT}`);
-    console.log(`Configuration: ${JSON.stringify(CONFIG, null, 2)}`);
+///////////////////////////////////////////////////////////////////////////////
+// 8) Image Prediction API
+///////////////////////////////////////////////////////////////////////////////
+app.post('/api/predict', async (req, res) => {
+    const startTime = Date.now();
+    console.log('Received /api/predict request');
+    
+    try {
+        // Check that we have the necessary request data
+        if (!req.body || !req.body.instances || !req.body.instances.length) {
+            return res.status(400).json({
+                error: 'Invalid request format',
+                message: 'Request must include instances array',
+                timestamp: new Date().toISOString()
+            });
+        }
+        
+        // Get the vein type from metadata
+        const metadata = req.body.metadata || {};
+        const veinType = metadata.veinType || 'hepatic';
+        
+        if (!VALID_VEIN_TYPES.includes(veinType)) {
+            return res.status(400).json({
+                error: 'Invalid vein type',
+                message: `Vein type must be one of: ${VALID_VEIN_TYPES.join(', ')}`,
+                timestamp: new Date().toISOString()
+            });
+        }
+        
+        // Check if we should only use on-demand service
+        const onlyUseOnDemand = metadata.onlyOnDemand === true;
+        console.log(`Using on-demand service only: ${onlyUseOnDemand}`);
+        
+        // Get parameters from request or use defaults
+        const parameters = req.body.parameters || {
+            confidenceThreshold: 0.0,
+            maxPredictions: 5
+        };
+        
+        // Add diagnostic logging for request
+        await logDiagnostics('API_PREDICT_REQUEST', `Prediction request for ${veinType}`, {
+            veinType,
+            onlyUseOnDemand,
+            hasInstances: !!req.body.instances,
+            instancesCount: req.body.instances ? req.body.instances.length : 0,
+            parameters
+        });
+        
+        // First try the on-demand service
+        try {
+            console.log(`Making prediction request for ${veinType} vein via on-demand service`);
+            
+            // Prepare payload for on-demand service
+            const onDemandPayload = {
+                instances: req.body.instances,
+                parameters,
+                metadata: {
+                    ...metadata,
+                    veinType,
+                    timestamp: Date.now()
+                }
+            };
+            
+            // Call the on-demand service
+            const onDemandResult = await makeApiCallWithRetry(
+                `${CONFIG.onDemandServiceUrl}/predict/${veinType}`,
+                onDemandPayload
+            );
+            
+            // Log the successful response
+            await logDiagnostics('API_PREDICT_SUCCESS', `On-demand prediction success for ${veinType}`, {
+                veinType,
+                responseTime: Date.now() - startTime,
+                method: 'ondemand'
+            });
+            
+            // Return the prediction results with method information
+            return res.json({
+                ...onDemandResult,
+                method: 'ondemand',
+                timestamp: Date.now()
+            });
+        } catch (onDemandError) {
+            console.error('On-demand service error:', onDemandError);
+            
+            // Add diagnostic logging for on-demand error
+            await logDiagnostics('API_PREDICT_ONDEMAND_ERROR', `On-demand error for ${veinType}`, null, onDemandError);
+            
+            // If we're configured to only use on-demand service, return the error
+            if (onlyUseOnDemand) {
+                console.log('Only using on-demand service as requested, returning error');
+                return res.status(503).json({
+                    error: 'Prediction service unavailable',
+                    message: 'On-demand prediction service is unavailable and fallback is disabled',
+                    detail: onDemandError.message,
+                    timestamp: Date.now()
+                });
+            }
+            
+            // Otherwise fall back to direct Vertex AI call
+            console.log('Falling back to direct Vertex AI call');
+            
+            try {
+                const directResponse = await makeDirectVertexAIPrediction(
+                    veinType, 
+                    req.body.instances, 
+                    parameters
+                );
+                
+                // Log the successful response
+                await logDiagnostics('API_PREDICT_SUCCESS', `Direct prediction success for ${veinType}`, {
+                    veinType,
+                    responseTime: Date.now() - startTime,
+                    method: 'direct'
+                });
+                
+                // Return the prediction results
+                return res.json({
+                    ...directResponse,
+                    method: 'direct',
+                    timestamp: Date.now()
+                });
+            } catch (directError) {
+                console.error('Direct Vertex AI call failed:', directError);
+                
+                // Add diagnostic logging for direct API error
+                await logDiagnostics('API_PREDICT_DIRECT_ERROR', `Direct error for ${veinType}`, null, directError);
+                
+                // Return error
+                return res.status(500).json({
+                    error: 'Prediction failed',
+                    message: `Failed to process request. ${directError.message}`,
+                    timestamp: Date.now(),
+                    veinType
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Prediction error:', error);
+        
+        // Add error diagnostic logging
+        await logDiagnostics('API_PREDICT_ERROR', `General prediction error`, null, error);
+        
+        // Return the error to the client
+        return res.status(500).json({
+            error: 'Prediction failed',
+            message: error.message,
+            timestamp: Date.now()
+        });
+    }
 });
+
+///////////////////////////////////////////////////////////////////////////////
+// 7) Main Server Initialization - MODIFIED FOR CLOUD RUN RELIABILITY
+///////////////////////////////////////////////////////////////////////////////
+
+// Start listening for requests immediately to avoid Cloud Run timeout
+const server = app.listen(DEFAULT_PORT, () => {
+    console.log(`Server started and listening on port ${DEFAULT_PORT} at ${new Date().toISOString()}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        console.log('HTTP server closed');
+    });
+});
+
+// Handle possible uncaught exceptions to prevent server crash
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught exception:', error);
+    // Don't crash the server, just log the error
+    // In a production environment, you might want to restart the process
+});
+
+// Initialize services asynchronously AFTER the server is already listening
+(async function initializeServices() {
+    console.log('Starting asynchronous service initialization...');
+    
+    try {
+        // Test connection to on-demand service
+        console.log(`Testing connection to on-demand service at ${CONFIG.onDemandServiceUrl}...`);
+        
+        try {
+            const response = await fetch(`${CONFIG.onDemandServiceUrl}/health`, {
+                method: 'GET',
+                timeout: 5000 // 5 second timeout
+            });
+            
+            if (response.ok) {
+                console.log('✅ On-demand service is healthy');
+            } else {
+                console.warn(`⚠️ On-demand service returned status ${response.status}`);
+            }
+        } catch (serviceError) {
+            console.warn(`⚠️ Failed to connect to on-demand service: ${serviceError.message}`);
+            // Continue initialization despite this error
+        }
+        
+        // Initialize other services as needed
+        console.log('Initializing other services...');
+        
+        // Try to initialize Vertex AI client but don't block on failure
+        try {
+            await initializeVertexAI();
+            console.log('✅ Vertex AI client initialized successfully');
+        } catch (vertexError) {
+            console.warn(`⚠️ Vertex AI client initialization failed: ${vertexError.message}`);
+            // Continue despite this error
+        }
+        
+        console.log('✅ Asynchronous service initialization completed');
+    } catch (error) {
+        console.error('❌ Error during service initialization:', error);
+        // Don't crash the server - just log the error
+    }
+})();
 
 // Function to prepare the image for prediction
 function prepareImageForPrediction(base64Image, mimeType = 'image/jpeg') {
@@ -1088,6 +1341,13 @@ async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
         // Get credentials from Secret Manager
         console.log('Getting credentials from Secret Manager...');
         const credentials = await getCredentials();
+        
+        // Check if credentials retrieval failed
+        if (credentials._credentialError) {
+            console.error(`Cannot make prediction: ${credentials.errorMessage}`);
+            throw new Error(`Authentication error: ${credentials.errorMessage}`);
+        }
+        
         console.log('Got credentials from Secret Manager');
         
         // Initialize Vertex AI client

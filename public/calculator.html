@@ -1304,6 +1304,7 @@
                 portal: '2970410926785691648',
                 renal: '1148704877514326016'
             },
+            serverPort: 3002, // Update to match server port configuration
             lastUpdated: new Date().toISOString(),
             developer: 'Gabesiegel'
         };
@@ -1375,8 +1376,29 @@
                 };
             }
 
+            // Check API connectivity before warming up
+            try {
+                const healthCheck = await fetch('/api/health');
+                if (!healthCheck.ok) {
+                    console.error("Health check failed - API may be unavailable");
+                    updateAllModelStatuses('error', 'API server not responding. Please check connection.');
+                    return;
+                }
+            } catch (error) {
+                console.error("Cannot connect to API server:", error);
+                updateAllModelStatuses('error', 'Cannot connect to API server');
+                return;
+            }
+
             // Warm up endpoints
             await warmUpEndpoints();
+        }
+
+        // Helper to update all model statuses at once
+        function updateAllModelStatuses(status, message) {
+            ['hepatic', 'portal', 'renal'].forEach(type => {
+                updateModelStatus(type, status, message);
+            });
         }
 
         // Function to warm up endpoints with detailed status updates
@@ -1399,21 +1421,37 @@
                     // Step 3: Warming up model
                     updateModelStatus(type, 'warming', `<i class="fas fa-spinner fa-pulse"></i> Loading the model...`);
 
-                    const response = await fetch('/api/preload-endpoint', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ type })
-                    });
+                    // Try both endpoint formats to ensure backward compatibility
+                    try {
+                        const response = await fetch('/api/preload-endpoint', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type })
+                        });
 
-                    const data = await response.json();
-                    
-                    // Fix: Handle "Endpoint warming initiated" message as a success status
-                    if (data.status === 'warming' || data.status === 'ok' ||
-                        (data.message && data.message.includes('warming initiated'))) {
-                        // Step 5: Model ready
-                        updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
-                    } else {
-                        throw new Error(data.message || 'Failed to warm up endpoint');
+                        const data = await response.json();
+                        
+                        // Fix: Handle "Endpoint warming initiated" message as a success status
+                        if (data.status === 'warming' || data.status === 'ok' ||
+                            (data.message && data.message.includes('warming initiated'))) {
+                            // Step 5: Model ready
+                            updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
+                        } else {
+                            throw new Error(data.message || 'Failed to warm up endpoint');
+                        }
+                    } catch (error) {
+                        console.warn(`Error with primary endpoint format, trying fallback: ${error.message}`);
+                        // Try alternate endpoint format
+                        const fallbackResponse = await fetch(`/preload-endpoint/${type}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        
+                        if (fallbackResponse.ok) {
+                            updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
+                        } else {
+                            throw new Error('Both endpoint formats failed');
+                        }
                     }
                 } catch (error) {
                     // Don't treat "warming initiated" as an error
@@ -1426,139 +1464,6 @@
                     }
                 }
             }
-        }
-
-        // Remove the step parameter
-        function updateModelStatus(type, status, message, step = null) {
-            const statusElement = document.getElementById(`${type}ModelStatus`);
-            if (!statusElement) return;
-
-            // Remove all existing status classes
-            statusElement.className = 'model-status';
-
-            // Add appropriate class based on status
-            switch (status) {
-                case 'warming':
-                    statusElement.classList.add('warming');
-                    break;
-                case 'ready':
-                    statusElement.classList.add('model-ready');
-                    break;
-                case 'error':
-                    statusElement.classList.add('error');
-                    break;
-                case 'warning':
-                    statusElement.classList.add('warning');
-                    break;
-                case 'processing':
-                    statusElement.classList.add('processing');
-                    break;
-            }
-
-            // Add step class if provided
-            if (step) {
-                statusElement.classList.add(`step-${step}`);
-            }
-
-            // Update content with progress bar and message
-            statusElement.innerHTML = `
-                ${message}
-                <div class="progress-container">
-                    <div class="progress-bar ${!step ? 'indeterminate' : ''}"></div>
-                </div>
-            `;
-        }
-
-        // Enhanced function to update model status with progress and icons
-        function updateModelStatus(type, status, message, step = null) {
-            const statusElement = document.getElementById(`${type}ModelStatus`);
-            if (!statusElement) return;
-
-            // Remove all existing status classes
-            statusElement.className = 'model-status';
-
-            // Add appropriate class based on status
-            switch (status) {
-                case 'warming':
-                    statusElement.classList.add('warming');
-                    break;
-                case 'ready':
-                    statusElement.classList.add('model-ready');
-                    break;
-                case 'error':
-                    statusElement.classList.add('error');
-                    break;
-                case 'warning':
-                    statusElement.classList.add('warning');
-                    break;
-                case 'processing':
-                    statusElement.classList.add('processing');
-                    break;
-            }
-
-            // Add step class if provided
-            if (step) {
-                statusElement.classList.add(`step-${step}`);
-            }
-
-            // Update content with progress bar and message
-            statusElement.innerHTML = `
-                ${message}
-                <div class="progress-container">
-                    <div class="progress-bar ${!step ? 'indeterminate' : ''}"></div>
-                </div>
-            `;
-        }
-
-        // Function to resize image to optimum size for AI processing
-        async function resizeImageForProcessing(base64Data, maxWidth = 800, maxHeight = 800, quality = 0.8) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = function() {
-                    // Calculate new dimensions while maintaining aspect ratio
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > height) {
-                        if (width > maxWidth) {
-                            height = Math.round(height * (maxWidth / width));
-                            width = maxWidth;
-                        }
-                    } else {
-                        if (height > maxHeight) {
-                            width = Math.round(width * (maxHeight / height));
-                            height = maxHeight;
-                        }
-                    }
-                    
-                    // Create canvas and resize image
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Get MIME type from original data
-                    const mimeTypeMatch = base64Data.match(/^data:(.*?);base64,/);
-                    const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
-                    
-                    // Convert back to base64
-                    const resizedBase64 = canvas.toDataURL(mimeType, quality);
-                    
-                    // Extract base64 content and return with MIME type
-                    const base64Content = resizedBase64.split(',')[1];
-                    resolve({
-                        base64Content,
-                        mimeType,
-                        width,
-                        height,
-                        originalWidth: img.width,
-                        originalHeight: img.height,
-                        compressionRatio: Math.round((base64Content.length / base64Data.split(',')[1].length) * 100) + '%'
-                    });
-                };
-                img.src = base64Data;
-            });
         }
 
         // Function to handle image upload and prediction with detailed status updates
@@ -1574,11 +1479,6 @@
                 const errorNoteElement = document.getElementById(`${type}ErrorNote`);
                 const errorContainer = document.getElementById(`${type}ErrorContainer`);
                 const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-                
-                // We're no longer showing the loading indicator per user request
-                // if (loadingIndicator) {
-                //     loadingIndicator.style.display = 'block';
-                // }
                 
                 // Step 1: Preparing image
                 updateModelStatus(type, 'processing', '<i class="fas fa-file-image"></i> Preparing image...', 1);
@@ -1607,19 +1507,32 @@
                 updateModelStatus(type, 'processing', '<i class="fas fa-server"></i> Checking endpoint status...', 2);
 
                 // Ping endpoint first
-                const pingResponse = await fetch(`/api/test-endpoint`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        metadata: { 
-                            veinType: type,
-                            timestamp: Date.now()
-                        }
-                    })
-                });
+                try {
+                    const pingResponse = await fetch(`/api/test-endpoint`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            metadata: { 
+                                veinType: type,
+                                timestamp: Date.now()
+                            }
+                        })
+                    });
 
-                if (!pingResponse.ok) {
-                    throw new Error('Failed to verify endpoint status');
+                    if (!pingResponse.ok) {
+                        throw new Error('Failed to verify endpoint status');
+                    }
+                } catch (pingError) {
+                    console.warn(`Primary endpoint test failed: ${pingError.message}. Trying fallback.`);
+                    // Try alternate format for test endpoint
+                    const fallbackPing = await fetch(`/test-endpoint/${type}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (!fallbackPing.ok) {
+                        throw new Error('All endpoint tests failed. Server may be unavailable.');
+                    }
                 }
 
                 // Step 3: Making prediction
@@ -1651,12 +1564,24 @@
                 console.log(`Sending ${type} image for classification...`);
 
                 // Make prediction request with timeout
-                const predictionResponse = await fetch('/api/predict', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
-                });
+                let predictionResponse;
+                try {
+                    predictionResponse = await fetch(`/predict/${type}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                } catch (error) {
+                    // If primary endpoint fails, try alternate format
+                    console.warn(`Primary prediction endpoint failed: ${error.message}. Trying fallback.`);
+                    predictionResponse = await fetch(`/api/predict/${type}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                }
                 
                 // Clear timeout since request completed
                 clearTimeout(timeoutId);
@@ -1715,11 +1640,6 @@
                         errorNoteElement.style.display = 'block';
                     }
                     
-                    // We no longer need to hide loading indicator since we never show it
-                    // if (loadingIndicator) {
-                    //     loadingIndicator.style.display = 'none';
-                    // }
-                    
                     return; // Stop further processing
                 }
                 
@@ -1738,12 +1658,6 @@
                 console.error(`Error in handleImageUpload for ${type}:`, error);
                 updateModelStatus(type, 'error', `<i class="fas fa-exclamation-triangle"></i> Error: ${error.message}`);
                 displayError(type, error.message);
-                
-                // We no longer need to hide loading indicator since we never show it
-                // const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-                // if (loadingIndicator) {
-                //     loadingIndicator.style.display = 'none';
-                // }
             }
         }
 
@@ -2163,18 +2077,30 @@
                     try {
                         updateModelStatus(type, 'warming', `<i class="fas fa-network-wired"></i> Checking API connection...`);
                         
-                        const response = await fetch('/api/health');
-                        
-                        if (!response.ok) {
-                            throw new Error(`API health check failed: ${response.status}`);
-                        }
-                        
-                        const data = await response.json();
-                        
-                        if (data.status === 'ok') {
+                        try {
+                            const response = await fetch('/api/health');
+                            
+                            if (!response.ok) {
+                                throw new Error(`API health check failed: ${response.status}`);
+                            }
+                            
+                            const data = await response.json();
+                            
+                            if (data.status === 'ok') {
+                                updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`);
+                            } else {
+                                throw new Error(data.message || 'API health check returned non-OK status');
+                            }
+                        } catch (primaryError) {
+                            // Try alternate health endpoint format if primary fails
+                            console.warn(`Primary health endpoint failed: ${primaryError.message}. Trying fallback.`);
+                            const fallbackResponse = await fetch('/health');
+                            
+                            if (!fallbackResponse.ok) {
+                                throw new Error('All health endpoints failed');
+                            }
+                            
                             updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`);
-                        } else {
-                            throw new Error(data.message || 'API health check returned non-OK status');
                         }
                     } catch (error) {
                         console.error(`Error checking API connection for ${type}:`, error);
@@ -2203,11 +2129,8 @@
             // Setup dropdown listeners
             setupDropdownListeners();
             
-            // Warm up endpoints with detailed status updates
-            await warmUpEndpoints();
-            
-            // Check API connection
-            await checkApiConnection();
+            // Call our main initialization function
+            await initializeApplication();
         });
 
         // Function to reset all inputs
