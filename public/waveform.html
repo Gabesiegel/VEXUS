@@ -40,6 +40,12 @@
             border-radius: 10px;
         }
 
+        .waveform-container h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
         .waveform-section {
             margin-bottom: 40px;
             padding: 30px;
@@ -472,7 +478,7 @@
                         <h2>EKG Tracing in VExUS Assessment</h2>
                         <p>Hepatic vein waveforms are best interpreted with respect to the cardiac cycle, making simultaneous EKG tracing invaluable for accurate pattern recognition and phase identification. The cardiac electrical events help identify the timing of various waveform components:</p>
                         
-                        <img src="images/ekgtracing.hepatic.png" alt="EKG Tracing with Hepatic Vein Waveform" class="waveform-image">
+                        <img src="images/EKGtracing.hepatic.png" alt="EKG Tracing with Hepatic Vein Waveform" class="waveform-image">
                         
                         <p>With EKG tracing, clinicians can precisely identify:</p>
                         <ul>
@@ -495,11 +501,31 @@
                             <li>Overall, flow is predominantly toward the heart during both systole and diastole, with only minor reversals in late diastole (A wave)<sup class="citation"><a href="#reference-4">4</a></sup>.</li>
                         </ul>
                         
+                        <div class="image-tile">
+                            <div class="title">Normal Hepatic Vein: Spectral Doppler ASVD Pattern</div>
+                            <a href="images/hepaticvein.normal.asvd.png" data-fancybox="hepatic-gallery" data-caption="Spectral Doppler display of normal hepatic vein ASVD pattern. The clear wave components show optimal Doppler alignment with characteristic wave timing and amplitude relationships.">
+                                <img src="images/hepaticvein.normal.asvd.png" alt="Spectral Doppler Normal Hepatic ASVD Pattern">
+                            </a>
+                            <div class="caption">
+                                Spectral Doppler display showing the characteristic ASVD pattern in optimal alignment. Each wave component is clearly defined: atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave amplitude relative to D wave demonstrates normal right atrial pressures and preserved venous return dynamics.
+                            </div>
+                        </div>
+
+                        <div class="image-tile">
+                            <div class="title">Normal Hepatic Vein: Complementary ASVD View</div>
+                            <a href="images/Hepatic.asvd.normal.2.png" data-fancybox="hepatic-gallery" data-caption="Complementary view of normal hepatic vein ASVD pattern showing clear wave components. Note the prominent S wave and the characteristic A, V, and D waves in proper sequence.">
+                                <img src="images/Hepatic.asvd.normal.2.png" alt="Complementary Normal Hepatic ASVD Pattern">
+                            </a>
+                            <div class="caption">
+                                A complementary view of the normal hepatic vein waveform showing the classic ASVD pattern. This perspective highlights the wave components from a different angle, with clear visualization of the atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave confirms normal right heart pressures.
+                            </div>
+                        </div>
+                        
                         <h3>Mild Congestion</h3>
                         <ul>
                             <li><strong>"S < D":</strong> The systolic wave is still below the baseline (forward) but smaller in amplitude compared to the diastolic wave.</li>
                             <li>The A wave (atrial reversal) becomes more pronounced; the V wave may also be noticeable.</li>
-                            <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet<sup class="citation"><a href="#reference-5">5,6</a></sup>.</li>
+                            <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet<a href="#reference-5" class="citation">5</a><a href="#reference-6" class="citation">6</a>.</li>
                         </ul>
                         
                         <h3>Severe Congestion</h3>
@@ -558,14 +584,14 @@
                         <h3>Severe Congestion</h3>
                         <ul>
                             <li><strong>Monophasic D-Only Flow:</strong> The systolic component disappears entirely, and only diastolic flow remains visible per heartbeat.</li>
-                            <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury<sup class="citation"><a href="#reference-1">1,8</a></sup>.</li>
+                            <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury<a href="#reference-1" class="citation">1</a><a href="#reference-8" class="citation">8</a>.</li>
                         </ul>
                     </div>
 
                     <div class="waveform-section">
                         <h2>Putting It All Together: VExUS Grading</h2>
                         
-                        <img src="images/vexus.grading.png" alt="VExUS Grading System" class="waveform-image">
+                        <img src="images/VExUS.grading.png" alt="VExUS Grading System" class="waveform-image">
                         
                         <ul>
                             <li><strong>Grade 0 (Normal):</strong> All hepatic, portal, and renal waveforms are normal, with a collapsible IVC.</li>
@@ -656,51 +682,67 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+    <!-- Fancybox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     
     <script>
-        // Initialize Fancybox with improved scroll handling
-        Fancybox.bind("[data-fancybox]", {
-            fitToView: false,
-            autoSize: false,
-            closeClick: false,
-            helpers: {
-                overlay: {
-                    locked: false
+        // Initialize Fancybox with gallery navigation
+        Fancybox.bind("[data-fancybox='hepatic-gallery']", {
+            // Common options for all Fancybox instances
+            Toolbar: {
+                display: {
+                    left: [],
+                    middle: ["prev", "next"],
+                    right: ["close"],
                 }
             },
-            touch: {
-                vertical: true,
-                momentum: true
+            
+            // Enable arrows and gallery navigation
+            Navigation: {
+                prevTpl: '<button class="fancybox__button--prev" title="Previous"><svg><path d="M4 12l10-10v20z"/></svg></button>',
+                nextTpl: '<button class="fancybox__button--next" title="Next"><svg><path d="M16 12L6 2v20z"/></svg></button>',
             },
-            dragToClose: true,
-            closeButton: "top",
-            template: {
-                closeButton: '<button data-fancybox-close class="fancybox-button fancybox-button--close">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
-                            '<path d="M20 6.91L17.09 4 12 9.09 6.91 4 4 6.91 9.09 12 4 17.09 6.91 20 12 14.91 17.09 20 20 17.09 14.91 12 20 6.91z"/>' +
-                            '</svg>' +
-                            '</button>'
+            
+            // Fix scrolling issues
+            ScrollLock: false,
+            
+            // Better touch handling
+            Panzoom: {
+                touch: true,
+                panOnlyZoomed: false,
             },
+            
+            // Improved animation
+            showClass: "fancybox-fadeIn",
+            hideClass: "fancybox-fadeOut",
+            animated: true,
+            
+            // Custom CSS to fix scrolling
+            mainClass: "fancybox-custom-class",
+            
+            // Prevent zooming on mobile to avoid scroll issues
+            Image: {
+                zoom: false,
+            },
+            
             on: {
                 init: (fancybox) => {
+                    // Add class to body when Fancybox opens
                     document.body.classList.add('fancybox-active');
                 },
                 destroy: (fancybox) => {
+                    // Remove class from body when Fancybox closes
                     document.body.classList.remove('fancybox-active');
+                },
+                reveal: (fancybox, slide) => {
+                    // Enable scrolling
+                    document.body.style.overflow = "auto";
                 }
             }
         });
 
         // Special configuration for vein guides
         Fancybox.bind("[data-fancybox='vein-guides']", {
-            fitToView: false,
-            autoSize: false,
-            closeClick: false,
-            helpers: {
-                overlay: {
-                    locked: false
-                }
-            },
             dragToClose: false,
             on: {
                 reveal: (fancybox, slide) => {
@@ -731,16 +773,7 @@
                                 galleryImages.map(src => ({
                                     src,
                                     type: 'image'
-                                })),
-                                {
-                                    fitToView: false,
-                                    autoSize: false,
-                                    helpers: {
-                                        overlay: {
-                                            locked: false
-                                        }
-                                    }
-                                }
+                                }))
                             );
                         });
                         
@@ -750,6 +783,9 @@
                             content.appendChild(viewAllBtn);
                         }
                     }
+                    
+                    // Enable scrolling
+                    document.body.style.overflow = "auto";
                 }
             }
         });
