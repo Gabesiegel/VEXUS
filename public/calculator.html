@@ -1397,7 +1397,7 @@
                     await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UI feedback
                     
                     // Step 3: Warming up model
-                    updateModelStatus(type, 'warming', `<i class="fas fa-temperature-high"></i> Warming up ${type} model...`, 3);
+                    updateModelStatus(type, 'warming', `<i class="fas fa-spinner fa-pulse"></i> Loading the model...`);
 
                     const response = await fetch('/api/preload-endpoint', {
                         method: 'POST',
@@ -1407,12 +1407,8 @@
 
                     const data = await response.json();
                     
-                    // Step 4: Verifying model status
-                    updateModelStatus(type, 'warming', `<i class="fas fa-check-circle"></i> Verifying ${type} model status...`, 4);
-                    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UI feedback
-                    
                     // Fix: Handle "Endpoint warming initiated" message as a success status
-                    if (data.status === 'warming' || data.status === 'ok' || 
+                    if (data.status === 'warming' || data.status === 'ok' ||
                         (data.message && data.message.includes('warming initiated'))) {
                         // Step 5: Model ready
                         updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
@@ -1430,6 +1426,47 @@
                     }
                 }
             }
+        }
+
+        // Remove the step parameter
+        function updateModelStatus(type, status, message, step = null) {
+            const statusElement = document.getElementById(`${type}ModelStatus`);
+            if (!statusElement) return;
+
+            // Remove all existing status classes
+            statusElement.className = 'model-status';
+
+            // Add appropriate class based on status
+            switch (status) {
+                case 'warming':
+                    statusElement.classList.add('warming');
+                    break;
+                case 'ready':
+                    statusElement.classList.add('model-ready');
+                    break;
+                case 'error':
+                    statusElement.classList.add('error');
+                    break;
+                case 'warning':
+                    statusElement.classList.add('warning');
+                    break;
+                case 'processing':
+                    statusElement.classList.add('processing');
+                    break;
+            }
+
+            // Add step class if provided
+            if (step) {
+                statusElement.classList.add(`step-${step}`);
+            }
+
+            // Update content with progress bar and message
+            statusElement.innerHTML = `
+                ${message}
+                <div class="progress-container">
+                    <div class="progress-bar ${!step ? 'indeterminate' : ''}"></div>
+                </div>
+            `;
         }
 
         // Enhanced function to update model status with progress and icons

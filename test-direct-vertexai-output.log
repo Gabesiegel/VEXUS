@@ -1,0 +1,118 @@
+[35m=== Testing Direct Vertex AI Calls with Different Formats ===[0m
+
+[34mTesting format: Format 1: Standard content[0m
+Payload: {
+  "instances": [
+    {
+      "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    }
+  ]
+}
+[36mResponse (500):[0m
+{
+  "error": {
+    "code": 500,
+    "message": "Failed to process request. endpoint_id: 8159951878260523008, deployed_model_id: 1564557767325253632.",
+    "status": "INTERNAL"
+  }
+}
+Format 1: Standard content: [31mFAILED[0m
+-----------------------------------
+[34mTesting format: Format 2: Nested b64 field[0m
+Payload: {
+  "instances": [
+    {
+      "content": {
+        "b64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+      }
+    }
+  ]
+}
+[36mResponse (400):[0m
+{
+  "error": {
+    "code": 400,
+    "message": "Provided image is not valid.",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+Format 2: Nested b64 field: [31mFAILED[0m
+-----------------------------------
+[34mTesting format: Format 3: With data URI prefix[0m
+Payload: {
+  "instances": [
+    {
+      "content": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    }
+  ]
+}
+[36mResponse (400):[0m
+{
+  "error": {
+    "code": 400,
+    "message": "The image is not base64 encoded.",
+    "status": "FAILED_PRECONDITION"
+  }
+}
+Format 3: With data URI prefix: [31mFAILED[0m
+-----------------------------------
+[34mTesting format: Format 4: GCS URI approach[0m
+Payload: {
+  "instances": [
+    {
+      "content": "gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741407818372.png"
+    }
+  ]
+}
+[36mResponse (400):[0m
+{
+  "error": {
+    "code": 400,
+    "message": "The image is not base64 encoded.",
+    "status": "FAILED_PRECONDITION"
+  }
+}
+Format 4: GCS URI approach: [31mFAILED[0m
+-----------------------------------
+[34mTesting format: Format 5: Different outer structure[0m
+Payload: {
+  "instances": [
+    {
+      "image": {
+        "bytesBase64Encoded": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+      }
+    }
+  ]
+}
+[36mResponse (400):[0m
+{
+  "error": {
+    "code": 400,
+    "message": "Invalid instances: struct_value \t {\n  fields {\n    key: \"image\"\n    value {\n      struct_value {\n        fields {\n          key: \"bytesBase64Encoded\"\n          value {\n            string_value: \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=\"\n          }\n        }\n      }\n    }\n  }\n}\n",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+Format 5: Different outer structure: [31mFAILED[0m
+-----------------------------------
+[34mTesting format: Format 6: AutoML Vision structure[0m
+Payload: {
+  "instances": [
+    {
+      "image_bytes": {
+        "b64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+      }
+    }
+  ]
+}
+[36mResponse (400):[0m
+{
+  "error": {
+    "code": 400,
+    "message": "Invalid instances: struct_value \t {\n  fields {\n    key: \"image_bytes\"\n    value {\n      struct_value {\n        fields {\n          key: \"b64\"\n          value {\n            string_value: \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=\"\n          }\n        }\n      }\n    }\n  }\n}\n",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+Format 6: AutoML Vision structure: [31mFAILED[0m
+-----------------------------------
+
+[32mTest completed![0m

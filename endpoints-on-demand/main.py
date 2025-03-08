@@ -312,14 +312,21 @@ def get_prediction(endpoint_id, instances):
     
     endpoint = aiplatform.Endpoint(endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}")
     
-    # FIXED: Properly handle base64 encoded images
+    # Process instances to ensure correct format
     processed_instances = []
     
     for instance in instances:
-        # Handle the format that works with direct Vertex AI: { content: base64string }
-        if 'content' in instance and isinstance(instance['content'], str):
-            # This is directly compatible with the Vertex AI format
-            processed_instances.append(instance)
+        # Handle the correct Vertex AI format: { content: base64string }
+        if 'content' in instance:
+            if isinstance(instance['content'], str):
+                # Clean up any whitespace in the base64 string
+                clean_content = instance['content'].strip().replace('\n', '').replace('\r', '').replace(' ', '')
+                processed_instances.append({
+                    'content': clean_content
+                })
+            else:
+                logger.error(f"Unsupported content format: {json.dumps(instance)[:100]}...")
+                raise ValueError("Unsupported content format. Expected {content: 'base64-encoded-image'}")
         else:
             # For any other format, log it and reject
             logger.error(f"Unsupported instance format: {json.dumps(instance)[:100]}...")
@@ -398,7 +405,7 @@ def predict_endpoint(vein_type):
                 content = instance['content']
                 
                 # Remove any whitespace or newlines from base64 content
-                content = content.strip().replace('\n', '').replace('\r', '')
+                content = content.strip().replace('\n', '').replace('\r', '').replace(' ', '')
                 
                 # Validate base64 format
                 try:
@@ -453,6 +460,13 @@ def predict_endpoint(vein_type):
             
         except Exception as e:
             logger.error(f"Prediction error for {vein_type} with endpoint {endpoint_id}: {str(e)}")
+            logger.error(f"Error type: {type(e).__name__}")
+            if hasattr(e, 'code'):
+                logger.error(f"Error code: {e.code}")
+            if hasattr(e, 'details'):
+                logger.error(f"Error details: {e.details}")
+            if hasattr(e, 'metadata'):
+                logger.error(f"Error metadata: {e.metadata}")
             return jsonify({
                 'error': 'Prediction failed',
                 'message': f'Failed to process request. endpoint_id: {endpoint_id}, error: {str(e)}',
@@ -466,6 +480,37 @@ def predict_endpoint(vein_type):
             'error': 'Prediction failed',
             'message': str(e),
             'veinType': vein_type,
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+@app.route('/test', methods=['POST'])
+def test_endpoint():
+    """Test endpoint for debugging."""
+    try:
+        # Parse request data
+        request_data = request.get_json()
+        if not request_data:
+            return jsonify({
+                'error': 'Invalid request format',
+                'message': 'Request must include data',
+                'timestamp': datetime.now().isoformat()
+            }), 400
+        
+        # Log the request data for debugging
+        logger.info(f"Test endpoint request data: {json.dumps(request_data)[:1000]}")
+        
+        # Return success
+        return jsonify({
+            'status': 'ok',
+            'message': 'Test endpoint working',
+            'timestamp': datetime.now().isoformat(),
+            'request_data': request_data
+        })
+    except Exception as e:
+        logger.error(f"Error in test endpoint: {str(e)}")
+        return jsonify({
+            'error': 'Test failed',
+            'message': str(e),
             'timestamp': datetime.now().isoformat()
         }), 500
 

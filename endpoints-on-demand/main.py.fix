@@ -11,6 +11,7 @@ import google.auth.transport.requests
 import threading
 import logging
 from collections import defaultdict
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -38,14 +39,17 @@ usage_window = 24 * 60 * 60  # 24 hours window for usage analysis
 MODELS = {
     "renal": {
         "model_id": "8902680778916233216",
+        "endpoint_id": "1148704877514326016",  # Correct Renal endpoint ID
         "endpoint_name": "VExUS - Renal Vein"
     },
     "portal": {
         "model_id": "6378976137728491520",
+        "endpoint_id": "2970410926785691648",  # Correct Portal endpoint ID
         "endpoint_name": "VExUS - Portal Vein"
     },
     "hepatic": {
         "model_id": "6041241350047793152",
+        "endpoint_id": "8159951878260523008",  # Correct Hepatic endpoint ID
         "endpoint_name": "VExUS - Hepatic Vein"
     }
 }
@@ -206,26 +210,33 @@ def create_endpoint(model_type):
         raise ValueError(f"Unknown model type: {model_type}")
     
     try:
-        # Check if we need to clean up resources before creating a new endpoint
-        quota_cleanup_performed = check_quota_availability()
-        if quota_cleanup_performed:
-            logger.info("Preemptive quota management: cleaned up resources before creating new endpoint")
-        
-        # Check if there's an available endpoint in the pool
-        endpoint_id = EndpointPool.get_available_endpoint(model_type)
-        if endpoint_id:
-            logger.info(f"Reusing existing endpoint {endpoint_id} from pool")
-            return endpoint_id
-        
-        model_info = MODELS[model_type]
-        model_id = model_info["model_id"]
-        endpoint_name = model_info["endpoint_name"] + "-temp"
-        
         # Initialize Vertex AI
         aiplatform.init(project=PROJECT_ID, location=LOCATION)
         
-        # Create the endpoint
-        endpoint = aiplatform.Endpoint.create(display_name=endpoint_name)
+        model_info = MODELS[model_type]
+        model_id = model_info["model_id"]
+        endpoint_id = model_info["endpoint_id"]  # Use the fixed endpoint ID
+        endpoint_name = model_info["endpoint_name"]
+        
+        # Try to get the existing endpoint first
+        try:
+            endpoint = aiplatform.Endpoint(
+                endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}"
+            )
+            logger.info(f"Found existing endpoint {endpoint_id} for {model_type}")
+            
+            # Check if the endpoint has deployed models
+            if hasattr(endpoint.gca_resource, 'deployed_models') and endpoint.gca_resource.deployed_models:
+                logger.info(f"Endpoint {endpoint_id} already has deployed models")
+                return endpoint_id
+            
+            logger.info(f"Endpoint {endpoint_id} exists but has no deployed models. Deploying model...")
+        except Exception as e:
+            logger.info(f"Endpoint {endpoint_id} not found, creating it...")
+            endpoint = aiplatform.Endpoint.create(
+                display_name=endpoint_name,
+                endpoint_id=endpoint_id
+            )
         
         # Get the model
         model = aiplatform.Model(model_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/models/{model_id}")
@@ -238,45 +249,23 @@ def create_endpoint(model_type):
                 min_replica_count=1,
                 max_replica_count=1
             )
+            logger.info(f"Successfully deployed model to endpoint {endpoint_id}")
         except Exception as deploy_error:
-            # If deployment fails, try to clean up the endpoint
             logger.error(f"Error deploying model to endpoint: {str(deploy_error)}")
-            try:
-                endpoint.delete()
-                logger.info(f"Cleaned up endpoint after deployment failure")
-            except Exception as cleanup_error:
-                logger.error(f"Failed to clean up endpoint: {str(cleanup_error)}")
             
             # Check for quota error
             error_msg = str(deploy_error).lower()
             if "quota" in error_msg or "exceeded" in error_msg or "limit" in error_msg:
                 raise ValueError(f"Quota exceeded: {str(deploy_error)}. Please request a quota increase or clean up unused endpoints.")
             
-            # Re-raise the original error
             raise deploy_error
-        
-        # Get the endpoint ID
-        endpoint_id = endpoint.resource_name.split("/")[-1]
         
         # Add to the endpoint pool
         EndpointPool.add_endpoint(model_type, endpoint_id, endpoint)
         
-        logger.info(f"Endpoint for {model_type} created with ID: {endpoint_id}")
-        
-        # Start cleanup timer
-        cleanup_thread = threading.Thread(target=schedule_cleanup, args=(model_type, endpoint_id))
-        cleanup_thread.daemon = True
-        cleanup_thread.start()
-        
         return endpoint_id
     except Exception as e:
         logger.error(f"Error creating endpoint for {model_type}: {str(e)}")
-        
-        # Special handling for quota errors
-        error_msg = str(e).lower()
-        if "quota" in error_msg or "exceeded" in error_msg or "limit" in error_msg:
-            raise ValueError(f"Quota exceeded: {str(e)}. Please request a quota increase or clean up unused endpoints.")
-        
         raise
 
 def schedule_cleanup(model_type, endpoint_id):
@@ -323,14 +312,21 @@ def get_prediction(endpoint_id, instances):
     
     endpoint = aiplatform.Endpoint(endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}")
     
-    # FIXED: Properly handle base64 encoded images
+    # Process instances to ensure correct format
     processed_instances = []
     
     for instance in instances:
-        # Handle the format that works with direct Vertex AI: { content: base64string }
-        if 'content' in instance and isinstance(instance['content'], str):
-            # This is directly compatible with the Vertex AI format
-            processed_instances.append(instance)
+        # Handle the correct Vertex AI format: { content: base64string }
+        if 'content' in instance:
+            if isinstance(instance['content'], str):
+                # Clean up any whitespace in the base64 string
+                clean_content = instance['content'].strip().replace('\n', '').replace('\r', '').replace(' ', '')
+                processed_instances.append({
+                    'content': clean_content
+                })
+            else:
+                logger.error(f"Unsupported content format: {json.dumps(instance)[:100]}...")
+                raise ValueError("Unsupported content format. Expected {content: 'base64-encoded-image'}")
         else:
             # For any other format, log it and reject
             logger.error(f"Unsupported instance format: {json.dumps(instance)[:100]}...")
@@ -341,91 +337,182 @@ def get_prediction(endpoint_id, instances):
     
     return prediction
 
-@app.route('/predict/<model_type>', methods=['POST'])
-def predict(model_type):
-    """Endpoint for making predictions."""
+@app.route('/predict/<vein_type>', methods=['POST'])
+def predict_endpoint(vein_type):
     try:
-        if model_type not in MODELS:
-            return jsonify({"error": f"Unknown model type: {model_type}"}), 400
+        # Parse request data
+        request_data = request.get_json()
+        if not request_data or 'instances' not in request_data:
+            return jsonify({
+                'error': 'Invalid request format',
+                'message': 'Request must include instances array',
+                'timestamp': datetime.now().isoformat()
+            }), 400
+
+        # Get metadata and parameters
+        metadata = request_data.get('metadata', {})
+        parameters = request_data.get('parameters', {
+            'confidenceThreshold': 0.0,
+            'maxPredictions': 5
+        })
+
+        # Validate vein type
+        if vein_type not in MODELS:
+            return jsonify({
+                'error': 'Invalid vein type',
+                'message': f'Vein type must be one of: {", ".join(MODELS.keys())}',
+                'timestamp': datetime.now().isoformat()
+            }), 400
+
+        # Get endpoint ID from metadata or config
+        endpoint_id = metadata.get('endpointId') or MODELS[vein_type]['endpoint_id']
         
-        # Track usage for adaptive timeout
-        now = time.time()
-        usage_history[model_type].append(now)
+        # Initialize Vertex AI
+        aiplatform.init(project=PROJECT_ID, location=LOCATION)
         
-        # Check if we need to create an endpoint
-        endpoint_id = None
         try:
-            endpoint_id = create_endpoint(model_type)
-        except ValueError as ve:
-            # Handle quota errors with a specific error code and message
-            if "quota exceeded" in str(ve).lower():
-                logger.error(f"Quota error: {str(ve)}")
-                return jsonify({
-                    "error": str(ve),
-                    "errorType": "QUOTA_EXCEEDED",
-                    "solutions": [
-                        "Request a quota increase in Google Cloud Console",
-                        "Clean up unused endpoints using gcloud ai endpoints list/delete commands",
-                        "Wait for endpoints to be automatically cleaned up"
-                    ]
-                }), 429  # Too Many Requests is appropriate for quota issues
+            # Get or create endpoint using EndpointPool
+            if vein_type not in endpoints or endpoint_id not in endpoints[vein_type]:
+                # Initialize the endpoint pool for this type if needed
+                if vein_type not in endpoints:
+                    endpoints[vein_type] = {}
+                
+                # Create the endpoint if it doesn't exist
+                endpoint = aiplatform.Endpoint(
+                    endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}"
+                )
+                
+                # Add to pool
+                EndpointPool.add_endpoint(vein_type, endpoint_id, endpoint)
             else:
-                return jsonify({"error": str(ve)}), 400
-        
-        # Get the request data
-        request_json = request.get_json(silent=True)
-        
-        if not request_json or 'instances' not in request_json:
-            # Release the endpoint back to the pool if we're not going to use it
-            if endpoint_id:
-                EndpointPool.release_endpoint(model_type, endpoint_id)
-            return jsonify({"error": "Invalid request format. 'instances' field is required."}), 400
-        
-        instances = request_json['instances']
-        
-        # Log request information without full base64 data
-        logger.info(f"Request for {model_type} prediction: {len(instances)} instances")
-        
-        # Get the prediction
-        try:
-            prediction = get_prediction(endpoint_id, instances)
+                # Get existing endpoint from pool
+                endpoint = endpoints[vein_type][endpoint_id]['endpoint_obj']
             
-            # Release the endpoint back to the pool
-            EndpointPool.release_endpoint(model_type, endpoint_id)
+            # Track usage for adaptive timeout
+            usage_history[vein_type].append(time.time())
             
-            return jsonify({"predictions": prediction.predictions})
-        except ValueError as ve:
-            # Release the endpoint back to the pool
-            if endpoint_id:
-                EndpointPool.release_endpoint(model_type, endpoint_id)
+            # Validate instances format
+            instances = request_data['instances']
+            if not isinstance(instances, list) or not instances:
+                raise ValueError("Instances must be a non-empty array")
+                
+            processed_instances = []
+            for instance in instances:
+                if not isinstance(instance, dict) or 'content' not in instance:
+                    raise ValueError("Each instance must be an object with 'content' field")
+                
+                # Get base64 content
+                content = instance['content']
+                
+                # Remove any whitespace or newlines from base64 content
+                content = content.strip().replace('\n', '').replace('\r', '').replace(' ', '')
+                
+                # Validate base64 format
+                try:
+                    # Decode base64 to check if it's valid
+                    image_data = base64.b64decode(content)
+                    
+                    # Check file size (1.5MB limit)
+                    if len(image_data) > 1.5 * 1024 * 1024:
+                        raise ValueError("Image size must be less than 1.5MB")
+                    
+                    # Add processed instance
+                    processed_instances.append({
+                        'content': content
+                    })
+                except Exception as e:
+                    raise ValueError(f"Invalid base64 image content: {str(e)}")
             
-            # Handle format validation errors
-            return jsonify({"error": str(ve)}), 400
+            try:
+                # Make prediction with processed instances
+                response = endpoint.predict(
+                    instances=processed_instances,
+                    parameters=parameters
+                )
+                
+                # Extract predictions from response
+                if not response.predictions or not response.predictions[0]:
+                    raise ValueError("No predictions returned from model")
+                
+                prediction = response.predictions[0]
+                
+                # Format response
+                result = {
+                    'displayNames': prediction.get('displayNames', []),
+                    'confidences': prediction.get('confidences', []),
+                    'deployedModelId': response.deployed_model_id,
+                    'model': response.model,
+                    'modelDisplayName': response.model_display_name,
+                    'modelVersionId': response.model_version_id,
+                    'timestamp': datetime.now().isoformat(),
+                    'status': 'success'
+                }
+                
+                # Release endpoint back to pool
+                EndpointPool.release_endpoint(vein_type, endpoint_id)
+                
+                return jsonify(result)
+            
+            except Exception as predict_error:
+                # Release endpoint on error
+                EndpointPool.release_endpoint(vein_type, endpoint_id)
+                raise predict_error
+            
         except Exception as e:
-            # Release the endpoint back to the pool
-            if endpoint_id:
-                EndpointPool.release_endpoint(model_type, endpoint_id)
-            
-            # Handle other errors
-            error_msg = str(e)
-            logger.error(f"Prediction error: {error_msg}")
-            
-            # Check for specific error types
-            if "quota" in error_msg.lower() or "exceeded" in error_msg.lower():
-                return jsonify({
-                    "error": error_msg,
-                    "errorType": "QUOTA_EXCEEDED",
-                    "solutions": [
-                        "Request a quota increase in Google Cloud Console",
-                        "Clean up unused endpoints using gcloud ai endpoints list/delete commands"
-                    ]
-                }), 429  # Too Many Requests is appropriate for quota issues
-            else:
-                return jsonify({"error": error_msg}), 500
-    
+            logger.error(f"Prediction error for {vein_type} with endpoint {endpoint_id}: {str(e)}")
+            logger.error(f"Error type: {type(e).__name__}")
+            if hasattr(e, 'code'):
+                logger.error(f"Error code: {e.code}")
+            if hasattr(e, 'details'):
+                logger.error(f"Error details: {e.details}")
+            if hasattr(e, 'metadata'):
+                logger.error(f"Error metadata: {e.metadata}")
+            return jsonify({
+                'error': 'Prediction failed',
+                'message': f'Failed to process request. endpoint_id: {endpoint_id}, error: {str(e)}',
+                'veinType': vein_type,
+                'timestamp': datetime.now().isoformat()
+            }), 500
+
     except Exception as e:
-        logger.error(f"Error in predict: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in predict_endpoint for {vein_type}: {str(e)}")
+        return jsonify({
+            'error': 'Prediction failed',
+            'message': str(e),
+            'veinType': vein_type,
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+@app.route('/test', methods=['POST'])
+def test_endpoint():
+    """Test endpoint for debugging."""
+    try:
+        # Parse request data
+        request_data = request.get_json()
+        if not request_data:
+            return jsonify({
+                'error': 'Invalid request format',
+                'message': 'Request must include data',
+                'timestamp': datetime.now().isoformat()
+            }), 400
+        
+        # Log the request data for debugging
+        logger.info(f"Test endpoint request data: {json.dumps(request_data)[:1000]}")
+        
+        # Return success
+        return jsonify({
+            'status': 'ok',
+            'message': 'Test endpoint working',
+            'timestamp': datetime.now().isoformat(),
+            'request_data': request_data
+        })
+    except Exception as e:
+        logger.error(f"Error in test endpoint: {str(e)}")
+        return jsonify({
+            'error': 'Test failed',
+            'message': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 500
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -546,6 +633,101 @@ def cleanup_all():
             for model_type, model_endpoints in endpoints.items()
         }
     })
+
+@app.route('/ping/<vein_type>', methods=['POST'])
+def ping_endpoint(vein_type):
+    """Check if an endpoint is ready."""
+    try:
+        if vein_type not in MODELS:
+            return jsonify({
+                'error': f'Invalid vein type. Must be one of: {", ".join(MODELS.keys())}'
+            }), 400
+
+        # Get the request data
+        request_data = request.get_json() or {}
+
+        # Extract endpoint ID from request or use configured ID
+        endpoint_id = request_data.get('endpointId') or MODELS[vein_type]['endpoint_id']
+        logger.info(f"Pinging endpoint {endpoint_id} for {vein_type}")
+        
+        # Track usage for adaptive timeout
+        now = time.time()
+        usage_history[vein_type].append(now)
+        
+        # Initialize Vertex AI
+        aiplatform.init(project=PROJECT_ID, location=LOCATION)
+        
+        # Check if the endpoint exists
+        try:
+            endpoint = aiplatform.Endpoint(
+                endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}"
+            )
+            endpoint_info = endpoint.gca_resource
+            
+            # Check if the endpoint has deployed models
+            has_models = (
+                hasattr(endpoint_info, 'deployed_models') and 
+                endpoint_info.deployed_models and 
+                len(endpoint_info.deployed_models) > 0
+            )
+            
+            if has_models:
+                return jsonify({
+                    'status': 'ready',
+                    'endpoint_id': endpoint_id,
+                    'display_name': endpoint_info.display_name,
+                    'model_type': vein_type,
+                    'deployed_models': [
+                        {
+                            'id': model.id,
+                            'model': model.model,
+                            'display_name': model.display_name
+                        }
+                        for model in endpoint_info.deployed_models
+                    ]
+                })
+            else:
+                # Start a thread to deploy the model in the background
+                def deploy_model_background():
+                    try:
+                        model_id = MODELS[vein_type]['model_id']
+                        model = aiplatform.Model(model_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/models/{model_id}")
+                        model.deploy(
+                            endpoint=endpoint,
+                            machine_type="n1-standard-2",
+                            min_replica_count=1,
+                            max_replica_count=1
+                        )
+                        logger.info(f"Successfully deployed model to endpoint {endpoint_id}")
+                    except Exception as e:
+                        logger.error(f"Background model deployment failed: {str(e)}")
+                
+                thread = threading.Thread(target=deploy_model_background)
+                thread.daemon = True
+                thread.start()
+                
+                return jsonify({
+                    'status': 'warming',
+                    'message': 'Endpoint exists but has no deployed models. Deploying model...',
+                    'endpoint_id': endpoint_id,
+                    'model_type': vein_type
+                }), 202
+                
+        except Exception as e:
+            logger.error(f"Error checking endpoint {endpoint_id}: {str(e)}")
+            return jsonify({
+                'status': 'not_ready',
+                'error': f'Failed to access endpoint: {str(e)}',
+                'endpoint_id': endpoint_id,
+                'model_type': vein_type
+            }), 404
+
+    except Exception as e:
+        logger.error(f"Error in ping endpoint: {str(e)}")
+        return jsonify({
+            'error': str(e),
+            'model_type': vein_type
+        }), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))

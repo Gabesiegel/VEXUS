@@ -1,0 +1,323 @@
+=== VExUS Service Comparison Test ===
+Reading test image: /Users/gabe/VEXUS/public/test_hepatic.png
+Preparing image for prediction
+Image content type: string
+Image content starts with: iVBORw0KGgoAAAANSUhE...
+Image content length: 1053532 characters
+Is valid base64 (without data URL): true
+
+
+=== Testing hepatic vein ===
+
+=== Testing On-Demand Service for hepatic ===
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Sending request to on-demand service: https://endpoints-on-demand-456295042668.us-central1.run.app/predict/hepatic
+On-demand service response: [
+  {
+    "confidences": [
+      0.059873797,
+      0.843852162,
+      0.0962740257
+    ],
+    "displayNames": [
+      "Hepatic_Vein_Severe",
+      "Hepatic_Vein_Mild",
+      "Hepatic_Vein_Normal"
+    ],
+    "ids": [
+      "729151306442211328",
+      "5332111600591568896",
+      "5221843778465169408"
+    ]
+  }
+]
+
+=== Testing Direct Vertex AI for hepatic ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Direct Vertex AI error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(3) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array],
+      'pc-high-bwd-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Direct Vertex AI with Incorrect Format for hepatic ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/8159951878260523008
+Direct Vertex AI (incorrect format) error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(3) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array],
+      'pc-high-bwd-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Server Direct Endpoint for hepatic ===
+Sending request to server direct endpoint: http://localhost:3003/api/predict/direct/hepatic
+Server direct endpoint error: Error: Server direct endpoint request failed with status 500: {"error":"Prediction service unavailable","details":"3 INVALID_ARGUMENT: ","veinType":"hepatic","timestamp":"2025-03-08T18:33:39.101Z"}
+    at testServerDirectEndpoint (file:///Users/gabe/VEXUS/test-compare-services.js:279:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async main (file:///Users/gabe/VEXUS/test-compare-services.js:323:40)
+
+=== Comparison for hepatic vein ===
+On-demand service success: true
+Direct Vertex AI success: false
+Direct Vertex AI (incorrect format) success: false
+Server direct endpoint success: false
+
+
+=== Testing portal vein ===
+
+=== Testing On-Demand Service for portal ===
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Sending request to on-demand service: https://endpoints-on-demand-456295042668.us-central1.run.app/predict/portal
+On-demand service response: [
+  {
+    "confidences": [
+      0.706277311,
+      0.108019508,
+      0.185703248
+    ],
+    "displayNames": [
+      "Portal_Vein_Normal",
+      "Portal_Vein_Mild",
+      "Portal_Vein_Severe"
+    ],
+    "ids": [
+      "8799601838690140160",
+      "7940258734792507392",
+      "8772932084646805504"
+    ]
+  }
+]
+
+=== Testing Direct Vertex AI for portal ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2970410926785691648
+Direct Vertex AI error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(3) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array],
+      'pc-high-bwd-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Direct Vertex AI with Incorrect Format for portal ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/2970410926785691648
+Direct Vertex AI (incorrect format) error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(2) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Server Direct Endpoint for portal ===
+Sending request to server direct endpoint: http://localhost:3003/api/predict/direct/portal
+Server direct endpoint error: Error: Server direct endpoint request failed with status 500: {"error":"Prediction service unavailable","details":"3 INVALID_ARGUMENT: ","veinType":"portal","timestamp":"2025-03-08T18:33:40.672Z"}
+    at testServerDirectEndpoint (file:///Users/gabe/VEXUS/test-compare-services.js:279:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async main (file:///Users/gabe/VEXUS/test-compare-services.js:323:40)
+
+=== Comparison for portal vein ===
+On-demand service success: true
+Direct Vertex AI success: false
+Direct Vertex AI (incorrect format) success: false
+Server direct endpoint success: false
+
+
+=== Testing renal vein ===
+
+=== Testing On-Demand Service for renal ===
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Sending request to on-demand service: https://endpoints-on-demand-456295042668.us-central1.run.app/predict/renal
+On-demand service response: [
+  {
+    "confidences": [
+      0.187772334,
+      0.0797832161,
+      0.732444465
+    ],
+    "displayNames": [
+      "Renal_Vein_Severe",
+      "Renal_Vein_Mild",
+      "Renal_Vein_Normal"
+    ],
+    "ids": [
+      "5117346193361338368",
+      "3219923375354806272",
+      "4827778811070251008"
+    ]
+  }
+]
+
+=== Testing Direct Vertex AI for renal ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
+Direct Vertex AI error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(3) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array],
+      'pc-high-bwd-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Direct Vertex AI with Incorrect Format for renal ===
+Getting credentials from Secret Manager...
+Getting credentials from Secret Manager: projects/plucky-weaver-450819-k7/secrets/KEY/versions/latest
+Initializing Vertex AI client with Secret Manager credentials
+Using Vertex AI API endpoint: us-central1-aiplatform.googleapis.com
+Sending direct prediction request to endpoint: projects/456295042668/locations/us-central1/endpoints/1148704877514326016
+Direct Vertex AI (incorrect format) error: Error: 3 INVALID_ARGUMENT: 
+    at callErrorFromStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:192:76)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:360:141)
+    at Object.onReceiveStatus (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:323:181)
+    at /Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeUnaryRequest (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/client.js:160:32)
+    at ServiceClientImpl.<anonymous> (/Users/gabe/VEXUS/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)
+    at /Users/gabe/VEXUS/node_modules/@google-cloud/aiplatform/build/src/v1/prediction_service_client.js:219:29
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+    at OngoingCallPromise.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/call.js:67:27)
+    at NormalApiCaller.call (/Users/gabe/VEXUS/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)
+    at /Users/gabe/VEXUS/node_modules/google-gax/build/src/createApiCall.js:84:30 {
+  code: 3,
+  details: '',
+  metadata: Metadata {
+    internalRepr: Map(3) {
+      'endpoint-load-metrics-bin' => [Array],
+      'grpc-server-stats-bin' => [Array],
+      'pc-high-bwd-bin' => [Array]
+    },
+    options: {}
+  }
+}
+
+=== Testing Server Direct Endpoint for renal ===
+Sending request to server direct endpoint: http://localhost:3003/api/predict/direct/renal
+Server direct endpoint error: Error: Server direct endpoint request failed with status 500: {"error":"Prediction service unavailable","details":"3 INVALID_ARGUMENT: ","veinType":"renal","timestamp":"2025-03-08T18:33:42.089Z"}
+    at testServerDirectEndpoint (file:///Users/gabe/VEXUS/test-compare-services.js:279:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async main (file:///Users/gabe/VEXUS/test-compare-services.js:323:40)
+
+=== Comparison for renal vein ===
+On-demand service success: true
+Direct Vertex AI success: false
+Direct Vertex AI (incorrect format) success: false
+Server direct endpoint success: false
+
+=== Test completed ===
