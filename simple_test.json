@@ -1,0 +1,16 @@
+{
+  "instances": [
+    {
+      "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    }
+  ],
+  "parameters": {
+    "confidenceThreshold": 0.0,
+    "maxPredictions": 5
+  },
+  "metadata": {
+    "veinType": "hepatic",
+    "imageType": "image/png",
+    "timestamp": 1741429241000
+  }
+} 
