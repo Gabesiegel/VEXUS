@@ -1,0 +1,29 @@
+{
+  "direct_api": [
+    "standard_with_mimetype",
+    "lowercase_mimetype",
+    "no_mimetype",
+    "no_parameters",
+    "different_params",
+    "with_dataType"
+  ],
+  "on_demand": [
+    "standard_with_mimetype",
+    "lowercase_mimetype",
+    "no_mimetype",
+    "no_parameters",
+    "different_params",
+    "with_dataType",
+    "with_metadata"
+  ],
+  "timestamp": 1741473269.228456,
+  "endpoint_id": "8159951878260523008",
+  "image_info": {
+    "description": "Actual test image (600x476 JPEG)",
+    "size": [
+      600,
+      476
+    ],
+    "mime_type": "image/jpeg"
+  }
+}

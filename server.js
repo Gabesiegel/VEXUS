@@ -15,6 +15,7 @@ import multer from 'multer';
 import http from 'http';
 import fetch from 'node-fetch';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
+import axios from 'axios';
 
 // ES modules dirname setup
 const __filename = fileURLToPath(import.meta.url);
@@ -428,8 +429,18 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
                               req.body.direct === true || 
                               process.env.BYPASS_ONDEMAND === 'true';
         
+        // Check if we should only use the on-demand service (no fallback to direct calls)
+        const onlyUseOnDemand = req.query.onlyOnDemand === 'true' || 
+                               req.body.metadata?.onlyOnDemand === true || 
+                               req.body.onlyOnDemand === true || 
+                               process.env.ONLY_USE_ONDEMAND === 'true';
+        
         if (bypassOnDemand) {
             console.log('Bypassing on-demand service as requested');
+        }
+        
+        if (onlyUseOnDemand) {
+            console.log('Only using on-demand service as requested (no fallback to direct calls)');
         }
         
         // Check valid vein type
@@ -483,10 +494,11 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
             }
         }
         
-        // Create the correctly formatted instances array
+        // Prepare the instances array with the correct format
         const instances = [
             {
-                content: preparedImage.content
+                content: preparedImage.content,
+                mimeType: preparedImage.mimeType  // Include mimeType for Vertex AI
             }
         ];
         
@@ -498,6 +510,7 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
         
         // First try the on-demand service
         console.log('Calling on-demand service for prediction');
+        console.log(`Using on-demand service URL: ${CONFIG.onDemandEndpointService}`);
         console.log(`Using on-demand service URL: ${CONFIG.onDemandEndpointService}`);
         
         // Log request diagnostics
@@ -517,8 +530,11 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
             
             // Add diagnostic logging for on-demand request
             const onDemandPayload = {
-                instances,
-                parameters,
+                instances: instances.map(instance => ({
+                    content: instance.content,
+                    mimeType: instance.mimeType || 'image/jpeg'
+                })),
+                parameters: parameters,
                 metadata: {
                     veinType,
                     imageType: preparedImage.mimeType,
@@ -530,7 +546,7 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
             
             // Call the on-demand service
             const result = await makeApiCallWithRetry(
-                CONFIG.onDemandEndpointService,
+                `${CONFIG.onDemandEndpointService}/predict/${veinType}`,
                 onDemandPayload,
                 token,
                 veinType
@@ -578,8 +594,18 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
                 });
             }
             
-            // If we got empty predictions, try direct Vertex AI call
-            console.log('On-demand service returned empty predictions, trying direct Vertex AI call');
+            // If we got empty predictions, try direct Vertex AI call if not restricted to on-demand only
+            if (onlyUseOnDemand) {
+                console.log('On-demand service returned empty predictions, but only using on-demand service as requested');
+                return res.status(404).json({
+                    error: 'No predictions available from on-demand service',
+                    details: 'On-demand service returned empty predictions and fallback to direct calls is disabled',
+                    veinType: veinType,
+                    timestamp: new Date().toISOString()
+                });
+            } else {
+                console.log('On-demand service returned empty predictions, trying direct Vertex AI call');
+            }
         } catch (onDemandError) {
             console.error('On-demand service error:', onDemandError);
             
@@ -595,9 +621,20 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
                 console.error('Response status:', onDemandError.response.status);
                 console.error('Response text:', await onDemandError.response.text());
             }
+            
+            // If only using on-demand service, return error instead of falling back to direct calls
+            if (onlyUseOnDemand) {
+                console.log('On-demand service failed, but only using on-demand service as requested');
+                return res.status(503).json({
+                    error: 'On-demand prediction service unavailable',
+                    details: onDemandError.message || 'Error during on-demand service call',
+                    veinType: veinType,
+                    timestamp: new Date().toISOString()
+                });
+            }
         }
         
-        // Try direct vertex AI call as a fallback
+        // Try direct vertex AI call as a fallback (only if not restricted to on-demand only)
         console.log('Falling back to direct Vertex AI call');
         
         try {
@@ -803,7 +840,8 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
         // Create the correctly formatted instances array
         const instances = [
             {
-                content: preparedImage.content
+                content: preparedImage.content,
+                mimeType: preparedImage.mimeType  // Include mimeType for Vertex AI
             }
         ];
         
@@ -826,9 +864,27 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
         // Create the request object for direct Vertex AI call
         const directRequest = {
             endpoint: endpointPath,
-            instances: instances,
-            parameters: parameters
+            instances: instances.map(instance => {
+                // Ensure each instance has both content and mimeType fields
+                return {
+                    content: instance.content,
+                    mimeType: instance.mimeType || 'image/jpeg'
+                };
+            }),
+            parameters: parameters || {
+                confidenceThreshold: 0.0,
+                maxPredictions: 5
+            }
         };
+        
+        // Log the exact format being sent to Vertex AI (without the full image content)
+        console.log('DEBUG - Vertex AI request format:', JSON.stringify({
+            ...directRequest,
+            instances: directRequest.instances.map(instance => ({
+                ...instance,
+                content: instance.content ? `[BASE64 DATA - ${instance.content.length} chars]` : undefined
+            }))
+        }, null, 2));
         
         // Add diagnostic logging for direct API request
         await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
@@ -1232,12 +1288,27 @@ async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
         // Create the request object for direct Vertex AI call
         const directRequest = {
             endpoint: endpointPath,
-            instances: instances,
+            instances: instances.map(instance => {
+                // Ensure each instance has both content and mimeType fields
+                return {
+                    content: instance.content,
+                    mimeType: instance.mimeType || 'image/jpeg'
+                };
+            }),
             parameters: parameters || {
                 confidenceThreshold: 0.0,
                 maxPredictions: 5
             }
         };
+        
+        // Log the exact format being sent to Vertex AI (without the full image content)
+        console.log('DEBUG - Vertex AI request format:', JSON.stringify({
+            ...directRequest,
+            instances: directRequest.instances.map(instance => ({
+                ...instance,
+                content: instance.content ? `[BASE64 DATA - ${instance.content.length} chars]` : undefined
+            }))
+        }, null, 2));
         
         // Add diagnostic logging for direct API request
         await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);

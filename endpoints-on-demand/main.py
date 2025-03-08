@@ -153,16 +153,62 @@ def calculate_adaptive_timeout(model_type):
 
 def authenticate():
     """Authenticate with Google Cloud."""
-    credentials, project = google.auth.default()
-    auth_req = google.auth.transport.requests.Request()
-    credentials.refresh(auth_req)
-    return credentials
+    try:
+        # Primary path - look for the mounted secret file at the exact Cloud Run mount path
+        secret_path = '/secrets/KEY/KEY'
+        if os.path.exists(secret_path):
+            logger.info(f"Found secret at {secret_path}")
+            try:
+                with open(secret_path, 'r') as f:
+                    credentials_info = json.load(f)
+                
+                from google.oauth2 import service_account
+                credentials = service_account.Credentials.from_service_account_info(credentials_info)
+                auth_req = google.auth.transport.requests.Request()
+                credentials.refresh(auth_req)
+                logger.info(f"Successfully loaded credentials from {secret_path}")
+                return credentials
+            except Exception as e:
+                logger.warning(f"Failed to load credentials from {secret_path}: {e}")
+        else:
+            logger.warning(f"Secret file not found at {secret_path}")
+        
+        # Fallback to environment variable if file not found
+        if 'KEY' in os.environ:
+            logger.info("Using KEY environment variable for authentication")
+            try:
+                credentials_info = json.loads(os.environ['KEY'])
+                from google.oauth2 import service_account
+                credentials = service_account.Credentials.from_service_account_info(credentials_info)
+                auth_req = google.auth.transport.requests.Request()
+                credentials.refresh(auth_req)
+                logger.info("Successfully authenticated using KEY environment variable")
+                return credentials
+            except Exception as e:
+                logger.warning(f"Failed to use KEY environment variable: {e}")
+        
+        # Fall back to default credentials as last resort
+        logger.warning("No valid secret file or environment variable found, falling back to default credentials")
+        credentials, project = google.auth.default()
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+        return credentials
+    except Exception as e:
+        logger.error(f"Authentication error: {str(e)}")
+        # Still try default credentials as last resort
+        credentials, project = google.auth.default()
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+        return credentials
 
 def check_quota_availability():
     """Check if we're approaching quota limits and take preemptive action."""
     try:
-        # Initialize Vertex AI
-        aiplatform.init(project=PROJECT_ID, location=LOCATION)
+        # Get authenticated credentials
+        credentials = authenticate()
+        
+        # Initialize Vertex AI with the authenticated credentials
+        aiplatform.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
         
         # Get current endpoint count
         endpoint_list = aiplatform.Endpoint.list()
@@ -367,8 +413,11 @@ def predict_endpoint(vein_type):
         # Get endpoint ID from metadata or config
         endpoint_id = metadata.get('endpointId') or MODELS[vein_type]['endpoint_id']
         
-        # Initialize Vertex AI
-        aiplatform.init(project=PROJECT_ID, location=LOCATION)
+        # Get authenticated credentials
+        credentials = authenticate()
+        
+        # Initialize Vertex AI with the authenticated credentials
+        aiplatform.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
         
         try:
             # Get or create endpoint using EndpointPool
@@ -405,7 +454,7 @@ def predict_endpoint(vein_type):
                 content = instance['content']
                 
                 # Remove any whitespace or newlines from base64 content
-                content = content.strip().replace('\n', '').replace('\r', '').replace(' ', '')
+                content = content.strip().replace('\n', '').replace('\r', '').replace(' ', '').replace(' ', '')
                 
                 # Validate base64 format
                 try:
@@ -441,12 +490,21 @@ def predict_endpoint(vein_type):
                     'displayNames': prediction.get('displayNames', []),
                     'confidences': prediction.get('confidences', []),
                     'deployedModelId': response.deployed_model_id,
-                    'model': response.model,
-                    'modelDisplayName': response.model_display_name,
-                    'modelVersionId': response.model_version_id,
+                }
+                
+                # Add optional fields if they exist
+                if hasattr(response, 'model'):
+                    result['model'] = response.model
+                if hasattr(response, 'model_display_name'):
+                    result['modelDisplayName'] = response.model_display_name
+                if hasattr(response, 'model_version_id'):
+                    result['modelVersionId'] = response.model_version_id
+                
+                # Add remaining fields
+                result.update({
                     'timestamp': datetime.now().isoformat(),
                     'status': 'success'
-                }
+                })
                 
                 # Release endpoint back to pool
                 EndpointPool.release_endpoint(vein_type, endpoint_id)
@@ -460,6 +518,13 @@ def predict_endpoint(vein_type):
             
         except Exception as e:
             logger.error(f"Prediction error for {vein_type} with endpoint {endpoint_id}: {str(e)}")
+            logger.error(f"Error type: {type(e).__name__}")
+            if hasattr(e, 'code'):
+                logger.error(f"Error code: {e.code}")
+            if hasattr(e, 'details'):
+                logger.error(f"Error details: {e.details}")
+            if hasattr(e, 'metadata'):
+                logger.error(f"Error metadata: {e.metadata}")
             logger.error(f"Error type: {type(e).__name__}")
             if hasattr(e, 'code'):
                 logger.error(f"Error code: {e.code}")
@@ -517,26 +582,102 @@ def test_endpoint():
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint."""
-    active_endpoints = {}
-    
-    # Collect information about all endpoints in the pool
-    for model_type, model_endpoints in endpoints.items():
-        active_endpoints[model_type] = []
-        for endpoint_id, info in model_endpoints.items():
-            active_endpoints[model_type].append({
-                "endpoint_id": endpoint_id,
-                "created_at": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(info["created_at"])),
-                "in_use": info.get("in_use", False)
-            })
-    
-    status = {
-        "status": "healthy",
-        "active_endpoints": active_endpoints,
-        "usage_patterns": {
-            model_type: len(timestamps) for model_type, timestamps in usage_history.items()
+    try:
+        # Try to authenticate using our new function
+        credentials = authenticate()
+        
+        # Check if credentials are valid by getting token
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+        token = credentials.token
+        
+        return jsonify({
+            'status': 'ok',
+            'message': 'Service is healthy',
+            'authentication': 'successful',
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Service health check failed: {str(e)}',
+            'authentication': 'failed',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+@app.route('/auth-debug', methods=['GET'])
+def auth_debug():
+    """Debug endpoint to check authentication status."""
+    try:
+        # Check for the mounted secret file
+        secret_path = '/secrets/KEY/KEY'
+        secret_exists = os.path.exists(secret_path)
+        secret_info = {
+            'exists': secret_exists,
+            'path': secret_path
         }
-    }
-    return jsonify(status)
+        
+        if secret_exists:
+            try:
+                # Try to read the first few characters to verify access
+                with open(secret_path, 'r') as f:
+                    content = f.read(10)
+                secret_info['readable'] = True
+                secret_info['content_preview'] = content + '...'
+            except Exception as e:
+                secret_info['readable'] = False
+                secret_info['error'] = str(e)
+        
+        # Check for additional environment variables
+        env_vars = {
+            'KEY_exists': 'KEY' in os.environ,
+            'SECRET_environment_vars': [k for k in os.environ if k.startswith('KEY') or k.startswith('SECRET')]
+        }
+        
+        # Try to authenticate
+        credentials = authenticate()
+        
+        # Check if credentials are valid
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+        
+        # Get token info
+        token = credentials.token
+        token_expiry = credentials.expiry.isoformat() if credentials.expiry else "unknown"
+        
+        return jsonify({
+            'status': 'ok',
+            'authentication': 'successful',
+            'credentials_type': type(credentials).__name__,
+            'token_expiry': token_expiry,
+            'secret_file': secret_info,
+            'environment': env_vars,
+            'service_account': getattr(credentials, 'service_account_email', 'unknown'),
+            'working_dir': os.getcwd(),
+            'file_system_info': {
+                '/etc': os.path.exists('/etc'),
+                '/etc/secrets': os.path.exists('/etc/secrets'),
+                '/secrets': os.path.exists('/secrets'),
+                '/secrets/KEY': os.path.exists('/secrets/KEY')
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Auth debug failed: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'authentication': 'failed',
+            'error': str(e),
+            'error_type': type(e).__name__,
+            'file_system_check': {
+                '/etc': os.path.exists('/etc'),
+                '/etc/secrets': os.path.exists('/etc/secrets'),
+                '/secrets': os.path.exists('/secrets'),
+                '/secrets/KEY': os.path.exists('/secrets/KEY')
+            },
+            'timestamp': datetime.now().isoformat()
+        }), 500
 
 @app.route('/quota-check', methods=['GET'])
 def quota_check():
@@ -577,8 +718,6 @@ def quota_check():
         except Exception as e:
             test_status = "QUOTA_ERROR"
             error_message = str(e)
-        
-        # Return quota information
         return jsonify({
             "project": PROJECT_ID,
             "location": LOCATION,
@@ -606,22 +745,17 @@ def quota_check():
 def cleanup_all():
     """Manually trigger cleanup of all endpoints."""
     cleanup_count = 0
-    
     # Make a copy of the model types to avoid modification during iteration
     model_types = list(endpoints.keys())
-    
     for model_type in model_types:
-        # Make a copy of the endpoint IDs to avoid modification during iteration
         if model_type in endpoints:
             endpoint_ids = list(endpoints[model_type].keys())
             for endpoint_id in endpoint_ids:
                 # Skip endpoints that are in use
                 if endpoints[model_type][endpoint_id].get("in_use", False):
                     continue
-                
                 EndpointPool.delete_endpoint(model_type, endpoint_id)
                 cleanup_count += 1
-    
     return jsonify({
         "status": "success",
         "message": f"Cleaned up {cleanup_count} endpoints",
@@ -642,35 +776,22 @@ def ping_endpoint(vein_type):
             return jsonify({
                 'error': f'Invalid vein type. Must be one of: {", ".join(MODELS.keys())}'
             }), 400
-
-        # Get the request data
         request_data = request.get_json() or {}
-
-        # Extract endpoint ID from request or use configured ID
         endpoint_id = request_data.get('endpointId') or MODELS[vein_type]['endpoint_id']
         logger.info(f"Pinging endpoint {endpoint_id} for {vein_type}")
-        
-        # Track usage for adaptive timeout
         now = time.time()
         usage_history[vein_type].append(now)
-        
-        # Initialize Vertex AI
         aiplatform.init(project=PROJECT_ID, location=LOCATION)
-        
-        # Check if the endpoint exists
         try:
             endpoint = aiplatform.Endpoint(
                 endpoint_name=f"projects/{PROJECT_ID}/locations/{LOCATION}/endpoints/{endpoint_id}"
             )
             endpoint_info = endpoint.gca_resource
-            
-            # Check if the endpoint has deployed models
             has_models = (
                 hasattr(endpoint_info, 'deployed_models') and 
                 endpoint_info.deployed_models and 
                 len(endpoint_info.deployed_models) > 0
             )
-            
             if has_models:
                 return jsonify({
                     'status': 'ready',
@@ -687,7 +808,6 @@ def ping_endpoint(vein_type):
                     ]
                 })
             else:
-                # Start a thread to deploy the model in the background
                 def deploy_model_background():
                     try:
                         model_id = MODELS[vein_type]['model_id']
@@ -701,18 +821,15 @@ def ping_endpoint(vein_type):
                         logger.info(f"Successfully deployed model to endpoint {endpoint_id}")
                     except Exception as e:
                         logger.error(f"Background model deployment failed: {str(e)}")
-                
                 thread = threading.Thread(target=deploy_model_background)
                 thread.daemon = True
                 thread.start()
-                
                 return jsonify({
                     'status': 'warming',
                     'message': 'Endpoint exists but has no deployed models. Deploying model...',
                     'endpoint_id': endpoint_id,
                     'model_type': vein_type
                 }), 202
-                
         except Exception as e:
             logger.error(f"Error checking endpoint {endpoint_id}: {str(e)}")
             return jsonify({
@@ -721,7 +838,6 @@ def ping_endpoint(vein_type):
                 'endpoint_id': endpoint_id,
                 'model_type': vein_type
             }), 404
-
     except Exception as e:
         logger.error(f"Error in ping endpoint: {str(e)}")
         return jsonify({
@@ -731,4 +847,4 @@ def ping_endpoint(vein_type):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port) 
+    app.run(host="0.0.0.0", port=port)
