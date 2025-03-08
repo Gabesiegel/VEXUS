@@ -25,9 +25,9 @@ const CONFIG = {
     projectNumber: "456295042668",
     location: "us-central1",
     endpointIds: {
-        hepatic: process.env.HEPATIC_ENDPOINT_ID || "8159951878260523008",  // Hepatic vein prediction endpoint
-        portal: process.env.PORTAL_ENDPOINT_ID || "2970410926785691648",   // Portal vein prediction endpoint
-        renal: process.env.RENAL_ENDPOINT_ID || "1148704877514326016"     // Renal vein prediction endpoint
+        hepatic: process.env.HEPATIC_ENDPOINT_ID || "8159951878260523008",  // VExUS - Hepatic Vein
+        portal: process.env.PORTAL_ENDPOINT_ID || "2970410926785691648",    // VExUS - Portal Vein
+        renal: process.env.RENAL_ENDPOINT_ID || "1148704877514326016"      // VExUS - Renal Vein
     },
     onDemandEndpointService: process.env.ON_DEMAND_ENDPOINT_SERVICE || "https://endpoints-on-demand-456295042668.us-central1.run.app",
     lastUpdated: new Date().toISOString(),
@@ -398,159 +398,85 @@ app.get('/api/health', async (req, res) => {
 // 5) Image Upload and Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
 app.post('/api/predict', async (req, res) => {
-    // Define veinType outside the try block to make it accessible in the catch block
     let veinType = 'unknown';
     
     try {
         console.log(`[${new Date().toISOString()}] /api/predict handler invoked`);
-        await fs.appendFile('server.log', `[${new Date().toISOString()}] /api/predict handler invoked\n`);
-
+        
         const { instances, parameters } = req.body;
-        
-        console.log("Received request body:", JSON.stringify(req.body, (key, value) => {
-            // Don't log the entire content string, just the first 100 chars
-            if (key === 'content' && typeof value === 'string' && value.length > 100) {
-                return value.substring(0, 100) + '... [truncated]';
-            }
-            return value;
-        }, 2));
-        
-        if (!instances || !Array.isArray(instances)) {
-            return res.status(400).json({ 
-                error: 'Invalid request format. Expected "instances" array', 
-                timestamp: new Date().toISOString() 
-            });
-        }
-
-        // Validate and log each instance's format
-        for (let i = 0; i < instances.length; i++) {
-            const instance = instances[i];
-            console.log(`Checking instance ${i}:`);
-            
-            if (!instance.content) {
-                return res.status(400).json({ 
-                    error: 'Each instance must have content data', 
-                    instanceIndex: i,
-                    timestamp: new Date().toISOString() 
-                });
-            }
-            
-            // Check if content is directly a string (base64)
-            if (typeof instance.content === 'string') {
-                console.log(`Instance ${i}: content is a base64 string (length: ${instance.content.length})`);
-            } 
-            // Check if content is an object with b64 field
-            else if (typeof instance.content === 'object' && instance.content.b64) {
-                console.log(`Instance ${i}: content has b64 field (length: ${instance.content.b64.length})`);
-                // Convert to format expected by Vertex AI
-                console.log(`Converting instance ${i} from {content: {b64: '...'}} to {content: '...'} format`);
-                instances[i] = {
-                    content: instance.content.b64
-                };
-            } else {
-                console.log(`Instance ${i}: has unexpected content format:`, typeof instance.content);
-            }
-        }
-
-        // Extract image type if metadata is provided
-        const imageType = req.body.metadata?.imageType || 'image/jpeg';
-        // Extract vein type if provided
         veinType = req.body.metadata?.veinType || 'hepatic';
 
-        // Store the image in Cloud Storage
-        let imageInfo = null;
-        try {
-            // Get the image content from the first instance
-            const imageContent = instances[0].content;
-            
-            // Upload the image to Cloud Storage
-            imageInfo = await uploadImage(imageContent, imageType);
-            console.log(`Image stored successfully with ID: ${imageInfo.filename}`);
-            
-            // Add metadata to imageInfo
-            imageInfo.veinType = veinType;
-        } catch (storageError) {
-            console.error('Error storing image in Cloud Storage:', storageError);
-            // Continue with prediction even if storage fails
-        }
-
-        try {
-            // NEW: Use the on-demand endpoint service instead of direct Vertex AI call
-            console.log(`Using on-demand endpoint service for ${veinType} predictions`);
-            
-            // Construct the on-demand endpoint URL
-            const url = `${CONFIG.onDemandEndpointService}/predict/${veinType}`;
-            console.log(`Making prediction request to on-demand service: ${url}`);
-            
-            // Construct the payload for the on-demand service
-            const payload = {
-                instances: instances,
-                parameters: parameters || {
-                    confidenceThreshold: 0.0,
-                    maxPredictions: 5
-                }
-            };
-            
-            // Make the API call to the on-demand service (no auth token needed)
-            const response = await makeApiCallWithRetry(url, payload, null, veinType);
-            
-            // Process the successful response
-            const result = await response.json();
-            console.log('Successfully received predictions from on-demand service');
-            
-            // Handle empty predictions
-            if (!result.predictions) {
-                return res.status(404).json({ 
-                    error: 'No predictions returned from the model',
-                    timestamp: new Date().toISOString() 
-                });
-            }
-            
-            // Format the prediction response for the frontend
-            const prediction = result.predictions;
-            
-            // Store the prediction results if we have image info
-            let resultStoragePath = null;
-            if (imageInfo) {
-                try {
-                    resultStoragePath = await storePredictionResults(
-                        imageInfo,
-                        prediction,
-                        veinType
-                    );
-                    console.log(`Prediction results stored at: ${resultStoragePath}`);
-                } catch (resultStorageError) {
-                    console.error('Error storing prediction results:', resultStorageError);
-                    // Continue even if storage fails
-                }
-            }
-            
-            // Return the prediction results to the client
-            return res.status(200).json({
-                success: true,
-                predictions: prediction,
-                imageId: imageInfo?.id || null,
-                timestamp: new Date().toISOString(),
-                resultStoragePath
-            });
-        } catch (error) {
-            console.error(`Error during prediction (${veinType}):`, error);
-            
-            // Return a helpful error message
-            return res.status(500).json({
-                error: 'Prediction failed',
-                message: error.message,
-                veinType,
+        if (!instances || !Array.isArray(instances)) {
+            return res.status(400).json({ 
+                error: 'Invalid request format. Expected "instances" array',
                 timestamp: new Date().toISOString()
             });
         }
+
+        // Construct the payload for the on-demand service
+        const payload = {
+            instances: instances,
+            parameters: parameters || {
+                confidenceThreshold: 0.0,
+                maxPredictions: 5
+            },
+            metadata: {
+                veinType: veinType,
+                endpointId: CONFIG.endpointIds[veinType],
+                timestamp: Date.now()
+            }
+        };
+
+        // First ping the endpoint to ensure it's ready
+        console.log(`Pinging ${veinType} endpoint...`);
+        const pingResponse = await fetch(
+            `${CONFIG.onDemandEndpointService}/ping/${veinType}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ endpointId: CONFIG.endpointIds[veinType] })
+            }
+        );
+
+        if (!pingResponse.ok) {
+            console.log(`Ping returned ${pingResponse.status}, proceeding with prediction`);
+        } else {
+            console.log('Ping successful');
+        }
+
+        // Make the prediction request
+        console.log(`Making prediction request for ${veinType}`);
+        const response = await fetch(
+            `${CONFIG.onDemandEndpointService}/predict/${veinType}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Prediction failed: ${response.status} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        
+        // Format the response
+        res.json({
+            displayNames: result.predictions?.[0]?.displayNames || [],
+            confidences: result.predictions?.[0]?.confidences || [],
+            modelId: result.deployedModelId,
+            timestamp: new Date().toISOString()
+        });
+
     } catch (error) {
-        console.error(`Error in predict handler (${veinType}):`, error);
-        return res.status(500).json({ 
-            error: 'Server error during prediction',
+        console.error(`Error in /api/predict for ${veinType}:`, error);
+        res.status(500).json({
+            error: 'Prediction failed',
             message: error.message,
-            veinType,
-            timestamp: new Date().toISOString() 
+            veinType: veinType,
+            timestamp: new Date().toISOString()
         });
     }
 });
@@ -940,6 +866,204 @@ app.post('/api/test-firestore', async (req, res) => {
             error: 'Firestore test failed',
             message: error.message,
             timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Endpoint to pre-warm the AI models
+app.post('/api/preload-endpoint', async (req, res) => {
+    try {
+        const { type } = req.body;
+        
+        if (!type || !['hepatic', 'portal', 'renal'].includes(type)) {
+            return res.status(400).json({ 
+                status: 'error', 
+                message: 'Invalid vein type. Must be one of: hepatic, portal, renal' 
+            });
+        }
+        
+        console.log(`Received pre-warming request for ${type} vein endpoint`);
+        
+        // First try the ping endpoint (which might be available in newer versions)
+        const pingUrl = `${CONFIG.onDemandEndpointService}/ping/${type}`;
+        const predictUrl = `${CONFIG.onDemandEndpointService}/predict/${type}`;
+        
+        // Create a lightweight payload for prediction (only used if ping fails)
+        const minimalPayload = {
+            instances: [
+                {
+                    // Use a tiny 1x1 transparent pixel in base64 format
+                    content: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                }
+            ],
+            parameters: {
+                confidenceThreshold: 0.0,
+                maxPredictions: 1
+            },
+            metadata: {
+                veinType: type,
+                prewarming: true,
+                timestamp: Date.now()
+            }
+        };
+        
+        // Use Promise.race to respond quickly to the client
+        const timeoutPromise = new Promise(resolve => setTimeout(() => {
+            resolve({ status: 'timeout' });
+        }, 5000)); // Respond to client within 5 seconds
+        
+        // First try the ping endpoint
+        let pingSuccess = false;
+        let pingResult;
+        let pingErrorDetails = null;
+        
+        try {
+            console.log(`Trying ping endpoint for ${type}...`);
+            const pingResponse = await fetch(pingUrl, { method: 'POST' });
+            if (pingResponse.ok) {
+                pingSuccess = true;
+                pingResult = await pingResponse.json();
+                console.log(`Successfully pinged ${type} endpoint for pre-warming`);
+            } else {
+                const statusText = pingResponse.statusText || 'Unknown error';
+                pingErrorDetails = `HTTP ${pingResponse.status}: ${statusText}`;
+                console.log(`Ping endpoint returned ${pingResponse.status}, falling back to predict endpoint`);
+                
+                try {
+                    // Try to get more error details
+                    const errorBody = await pingResponse.text();
+                    if (errorBody) {
+                        pingErrorDetails += ` - ${errorBody.substring(0, 200)}`;
+                    }
+                } catch (e) {
+                    // Ignore error body parsing errors
+                }
+            }
+        } catch (pingError) {
+            pingErrorDetails = pingError.message || 'Network error';
+            console.log(`Ping endpoint not available for ${type}, error: ${pingError.message}`);
+            // Will fallback to predict endpoint
+        }
+        
+        // If ping failed, try the predict endpoint with minimal payload
+        let predictPromise = Promise.resolve({ status: 'skipped' });
+        let predictErrorDetails = null;
+        
+        if (!pingSuccess) {
+            console.log(`Falling back to predict endpoint for ${type} pre-warming`);
+            predictPromise = fetch(predictUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(minimalPayload)
+            })
+            .then(async response => {
+                if (response.ok) {
+                    console.log(`Successfully pre-warmed ${type} endpoint with predict endpoint`);
+                    return { status: 'warming' };
+                } else {
+                    const statusText = response.statusText || 'Unknown error';
+                    predictErrorDetails = `HTTP ${response.status}: ${statusText}`;
+                    
+                    try {
+                        // Try to get more error details
+                        const errorBody = await response.text();
+                        
+                        // Check if response is JSON
+                        try {
+                            const jsonError = JSON.parse(errorBody);
+                            
+                            // Format the error details for easier debugging
+                            if (jsonError.error) {
+                                predictErrorDetails += ` - ${jsonError.error}`;
+                                
+                                // Extract endpoint ID and model ID if available
+                                const endpointMatch = jsonError.error.match(/endpoint_id: ([0-9]+)/);
+                                const modelMatch = jsonError.error.match(/deployed_model_id: ([0-9]+)/);
+                                
+                                if (endpointMatch && modelMatch) {
+                                    console.log(`Endpoint ID ${endpointMatch[1]} with model ${modelMatch[1]} failed for ${type}`);
+                                    
+                                    // Add a note about quota/resource limits
+                                    predictErrorDetails += ` (This is likely a temporary resource limitation and won't affect functionality)`;
+                                }
+                            } else {
+                                predictErrorDetails += ` - ${errorBody.substring(0, 200)}`;
+                            }
+                        } catch (e) {
+                            // Not JSON, just use the text
+                            predictErrorDetails += ` - ${errorBody.substring(0, 200)}`;
+                        }
+                    } catch (e) {
+                        // Ignore error body parsing errors
+                    }
+                    
+                    console.log(`Predict endpoint returned ${response.status} for ${type}: ${predictErrorDetails}`);
+                    
+                    // For 500 errors with specific endpoint patterns, log a more informative message
+                    if (response.status === 500 && predictErrorDetails.includes('endpoint_id')) {
+                        console.log(`Note: 500 errors with endpoint IDs are usually temporary quota issues and can be ignored`);
+                    }
+                    
+                    return { 
+                        status: 'error', 
+                        code: response.status,
+                        details: predictErrorDetails
+                    };
+                }
+            })
+            .catch(error => {
+                predictErrorDetails = error.message || 'Network error';
+                console.log(`Network error calling predict endpoint for ${type}: ${error.message}`);
+                return { 
+                    status: 'error', 
+                    message: error.message,
+                    details: predictErrorDetails
+                };
+            });
+        }
+        
+        // Respond to client before the warm-up completes - use ping result if available
+        const result = pingSuccess ? pingResult : await Promise.race([predictPromise, timeoutPromise]);
+        
+        // Enhance the response with more detailed error information
+        const responseObj = { 
+            status: result.status || 'warming',
+            message: 'Endpoint warming initiated',
+            veinType: type,
+            method: pingSuccess ? 'ping' : 'predict'
+        };
+        
+        // Add detailed error information if available
+        if (result.status === 'error') {
+            responseObj.errorDetails = result.details || (pingSuccess ? pingErrorDetails : predictErrorDetails);
+            
+            // Add troubleshooting suggestions
+            responseObj.troubleshooting = [
+                "The on-demand service might be temporarily unavailable",
+                "The service might be experiencing quota limitations",
+                "Network connectivity issues between server and on-demand service",
+                "The endpoint may be in a failed state and needs admin intervention"
+            ];
+            
+            // Log detailed error for server-side debugging
+            console.error(`Detailed pre-warming error for ${type}: ${responseObj.errorDetails}`);
+        }
+        
+        res.json(responseObj);
+        
+        // Continue warming up even after responding to client
+        if (!pingSuccess) {
+            predictPromise.catch(error => {
+                console.error(`Background warming for ${type} failed: ${error.message}`);
+            });
+        }
+    } catch (error) {
+        console.error('Error in pre-warm endpoint:', error);
+        res.status(500).json({ 
+            status: 'error', 
+            message: 'Server error during pre-warming',
+            errorDetails: error.message || 'Unknown server error',
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
 });

@@ -115,3 +115,336 @@ Requesting: /api/predict
 [2025-03-08T04:23:38.372Z] /api/predict handler invoked
 [2025-03-08T04:23:38.373Z] Uploading image: image_1741407818372.png
 [2025-03-08T04:23:38.653Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741407818372.png
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/header.css
+Requesting: /html5up-phantom/assets/css/sidebar.css
+Requesting: /html5up-phantom/assets/css/logo.css
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /images/VEXUS.ATLAS.png
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:14:41.745Z] /api/predict handler invoked
+[2025-03-08T06:14:41.749Z] Uploading image: image_1741414481749.png
+[2025-03-08T06:14:42.335Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741414481749.png
+[2025-03-08T06:14:44.244Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741414481749_results.json
+Requesting: /api/predict
+[2025-03-08T06:18:34.512Z] /api/predict handler invoked
+[2025-03-08T06:18:34.519Z] Uploading image: image_1741414714518.png
+[2025-03-08T06:18:35.094Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741414714518.png
+[2025-03-08T06:18:37.400Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741414714518_results.json
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/health
+Requesting: /api/predict
+[2025-03-08T06:19:54.813Z] /api/predict handler invoked
+[2025-03-08T06:19:54.817Z] Uploading image: image_1741414794816.png
+[2025-03-08T06:19:55.521Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741414794816.png
+[2025-03-08T06:19:57.298Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741414794816_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:23:38.151Z] /api/predict handler invoked
+[2025-03-08T06:23:38.156Z] Uploading image: image_1741415018155.png
+[2025-03-08T06:23:38.616Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415018155.png
+[2025-03-08T06:23:40.433Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415018155_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:24:53.178Z] /api/predict handler invoked
+[2025-03-08T06:24:53.198Z] Uploading image: image_1741415093197.png
+[2025-03-08T06:24:53.483Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415093197.png
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:29:51.230Z] /api/predict handler invoked
+[2025-03-08T06:29:51.231Z] Uploading image: image_1741415391231.png
+[2025-03-08T06:29:51.726Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415391231.png
+Requesting: /api/predict
+[2025-03-08T06:32:00.276Z] /api/predict handler invoked
+[2025-03-08T06:32:00.278Z] Uploading image: image_1741415520276.png
+[2025-03-08T06:32:00.623Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415520276.png
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:32:29.658Z] /api/predict handler invoked
+[2025-03-08T06:32:29.659Z] Uploading image: image_1741415549658.jpeg
+[2025-03-08T06:32:29.949Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415549658.jpeg
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:36:30.435Z] /api/predict handler invoked
+[2025-03-08T06:36:30.489Z] Uploading image: image_1741415790471.jpeg
+[2025-03-08T06:36:30.778Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415790471.jpeg
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:38:24.761Z] /api/predict handler invoked
+[2025-03-08T06:38:24.988Z] Uploading image: image_1741415904983.jpeg
+[2025-03-08T06:38:25.794Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415904983.jpeg
+[2025-03-08T06:38:27.365Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415904983_results.json
+Requesting: /api/predict
+[2025-03-08T06:38:28.444Z] /api/predict handler invoked
+[2025-03-08T06:38:28.445Z] Uploading image: image_1741415908445.jpeg
+[2025-03-08T06:38:29.329Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415908445.jpeg
+[2025-03-08T06:38:30.308Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415908445_results.json
+Requesting: /api/predict
+[2025-03-08T06:38:32.343Z] /api/predict handler invoked
+[2025-03-08T06:38:32.344Z] Uploading image: image_1741415912344.jpeg
+[2025-03-08T06:38:32.729Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415912344.jpeg
+[2025-03-08T06:38:33.499Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415912344_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:39:15.514Z] /api/predict handler invoked
+[2025-03-08T06:39:15.515Z] Uploading image: image_1741415955515.jpeg
+[2025-03-08T06:39:16.341Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415955515.jpeg
+[2025-03-08T06:39:17.216Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415955515_results.json
+Requesting: /api/predict
+[2025-03-08T06:39:18.230Z] /api/predict handler invoked
+[2025-03-08T06:39:18.231Z] Uploading image: image_1741415958231.jpeg
+[2025-03-08T06:39:18.802Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415958231.jpeg
+[2025-03-08T06:39:20.291Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415958231_results.json
+Requesting: /api/predict
+[2025-03-08T06:39:22.305Z] /api/predict handler invoked
+[2025-03-08T06:39:22.306Z] Uploading image: image_1741415962305.jpeg
+[2025-03-08T06:39:22.712Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741415962305.jpeg
+[2025-03-08T06:39:23.518Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741415962305_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:41:20.260Z] /api/predict handler invoked
+[2025-03-08T06:41:20.265Z] Uploading image: image_1741416080263.jpeg
+[2025-03-08T06:41:20.776Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416080263.jpeg
+[2025-03-08T06:41:21.590Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416080263_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:22.602Z] /api/predict handler invoked
+[2025-03-08T06:41:22.603Z] Uploading image: image_1741416082603.jpeg
+[2025-03-08T06:41:22.876Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416082603.jpeg
+[2025-03-08T06:41:23.836Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416082603_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:25.851Z] /api/predict handler invoked
+[2025-03-08T06:41:25.852Z] Uploading image: image_1741416085852.jpeg
+[2025-03-08T06:41:26.142Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416085852.jpeg
+[2025-03-08T06:41:27.006Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416085852_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:41:37.557Z] /api/predict handler invoked
+[2025-03-08T06:41:37.558Z] Uploading image: image_1741416097558.jpeg
+[2025-03-08T06:41:38.250Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416097558.jpeg
+[2025-03-08T06:41:39.326Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416097558_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:40.402Z] /api/predict handler invoked
+[2025-03-08T06:41:40.408Z] Uploading image: image_1741416100406.jpeg
+[2025-03-08T06:41:40.809Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416100406.jpeg
+[2025-03-08T06:41:41.582Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416100406_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:43.596Z] /api/predict handler invoked
+[2025-03-08T06:41:43.597Z] Uploading image: image_1741416103596.jpeg
+[2025-03-08T06:41:43.941Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416103596.jpeg
+[2025-03-08T06:41:44.848Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416103596_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:41:52.884Z] /api/predict handler invoked
+[2025-03-08T06:41:52.985Z] Uploading image: image_1741416112984.jpeg
+[2025-03-08T06:41:53.920Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416112984.jpeg
+[2025-03-08T06:41:55.022Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416112984_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:56.049Z] /api/predict handler invoked
+[2025-03-08T06:41:56.050Z] Uploading image: image_1741416116050.jpeg
+[2025-03-08T06:41:56.755Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416116050.jpeg
+[2025-03-08T06:41:57.517Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416116050_results.json
+Requesting: /api/predict
+[2025-03-08T06:41:59.672Z] /api/predict handler invoked
+[2025-03-08T06:41:59.674Z] Uploading image: image_1741416119673.jpeg
+[2025-03-08T06:42:00.018Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416119673.jpeg
+[2025-03-08T06:42:00.792Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416119673_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:43:38.878Z] /api/predict handler invoked
+[2025-03-08T06:43:38.879Z] Uploading image: image_1741416218879.jpeg
+[2025-03-08T06:43:39.446Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416218879.jpeg
+[2025-03-08T06:43:40.851Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416218879_results.json
+Requesting: /api/predict
+[2025-03-08T06:43:41.873Z] /api/predict handler invoked
+[2025-03-08T06:43:41.874Z] Uploading image: image_1741416221874.jpeg
+[2025-03-08T06:43:42.149Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416221874.jpeg
+[2025-03-08T06:43:43.002Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416221874_results.json
+Requesting: /api/predict
+[2025-03-08T06:43:45.012Z] /api/predict handler invoked
+[2025-03-08T06:43:45.013Z] Uploading image: image_1741416225013.jpeg
+[2025-03-08T06:43:45.283Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416225013.jpeg
+[2025-03-08T06:43:45.983Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416225013_results.json
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:48:31.175Z] /api/predict handler invoked
+[2025-03-08T06:48:31.177Z] Uploading image: image_1741416511177.jpeg
+[2025-03-08T06:48:31.809Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416511177.jpeg
+[2025-03-08T06:48:33.892Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416511177_results.json
+Requesting: /api/predict
+[2025-03-08T06:49:26.772Z] /api/predict handler invoked
+[2025-03-08T06:49:26.778Z] Uploading image: image_1741416566776.jpeg
+[2025-03-08T06:49:27.065Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416566776.jpeg
+Requesting: /api/predict
+[2025-03-08T06:50:12.777Z] /api/predict handler invoked
+[2025-03-08T06:50:12.778Z] Uploading image: image_1741416612778.jpeg
+[2025-03-08T06:50:13.518Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416612778.jpeg
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:51:07.241Z] /api/predict handler invoked
+[2025-03-08T06:51:07.243Z] Uploading image: image_1741416667242.jpeg
+[2025-03-08T06:51:07.755Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416667242.jpeg
+Requesting: /api/predict
+[2025-03-08T06:51:16.779Z] /api/predict handler invoked
+[2025-03-08T06:51:16.785Z] Uploading image: image_1741416676784.jpeg
+[2025-03-08T06:51:17.090Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416676784.jpeg
+Requesting: /api/predict
+[2025-03-08T06:51:24.512Z] /api/predict handler invoked
+[2025-03-08T06:51:24.566Z] Uploading image: image_1741416684566.jpeg
+[2025-03-08T06:51:25.082Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416684566.jpeg
+Requesting: /api/predict
+[2025-03-08T06:51:53.236Z] /api/predict handler invoked
+[2025-03-08T06:51:53.237Z] Uploading image: image_1741416713237.jpeg
+[2025-03-08T06:51:53.550Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416713237.jpeg
+Requesting: /api/predict
+[2025-03-08T06:52:02.778Z] /api/predict handler invoked
+[2025-03-08T06:52:02.779Z] Uploading image: image_1741416722779.jpeg
+[2025-03-08T06:52:03.116Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416722779.jpeg
+Requesting: /api/predict
+[2025-03-08T06:52:10.218Z] /api/predict handler invoked
+[2025-03-08T06:52:10.219Z] Uploading image: image_1741416730219.jpeg
+[2025-03-08T06:52:10.529Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416730219.jpeg
+[2025-03-08T06:52:22.836Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416566776_results.json
+[2025-03-08T06:52:23.222Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416612778_results.json
+[2025-03-08T06:52:23.572Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416667242_results.json
+Requesting: /api/predict
+[2025-03-08T06:52:55.250Z] /api/predict handler invoked
+[2025-03-08T06:52:55.251Z] Uploading image: image_1741416775250.jpeg
+[2025-03-08T06:52:55.502Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416775250.jpeg
+Requesting: /api/predict
+[2025-03-08T06:53:04.785Z] /api/predict handler invoked
+[2025-03-08T06:53:04.786Z] Uploading image: image_1741416784786.jpeg
+[2025-03-08T06:53:05.438Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416784786.jpeg
+Requesting: /api/predict
+[2025-03-08T06:53:12.221Z] /api/predict handler invoked
+[2025-03-08T06:53:12.222Z] Uploading image: image_1741416792222.jpeg
+[2025-03-08T06:53:12.500Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416792222.jpeg
+Requesting: /calculator.html
+Requesting: /api/health
+Requesting: /favicon.ico
+Requesting: /api/predict
+[2025-03-08T06:53:27.232Z] /api/predict handler invoked
+[2025-03-08T06:53:27.233Z] Uploading image: image_1741416807233.jpeg
+[2025-03-08T06:53:27.742Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416807233.jpeg
+Requesting: /api/predict
+[2025-03-08T06:54:58.241Z] /api/predict handler invoked
+[2025-03-08T06:54:58.243Z] Uploading image: image_1741416898242.jpeg
+[2025-03-08T06:54:58.654Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416898242.jpeg
+Requesting: /api/predict
+[2025-03-08T06:55:17.322Z] /api/predict handler invoked
+[2025-03-08T06:55:17.323Z] Uploading image: image_1741416917323.jpeg
+[2025-03-08T06:55:17.592Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741416917323.jpeg
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+[2025-03-08T06:55:56.877Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416676784_results.json
+[2025-03-08T06:55:57.363Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416684566_results.json
+[2025-03-08T06:55:57.734Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416713237_results.json
+[2025-03-08T06:55:58.267Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416722779_results.json
+[2025-03-08T06:55:58.861Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416730219_results.json
+[2025-03-08T06:55:59.298Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416775250_results.json
+[2025-03-08T06:55:59.644Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416784786_results.json
+[2025-03-08T06:55:59.769Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416792222_results.json
+Requesting: /api/preload-endpoint
+[2025-03-08T06:56:00.005Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416807233_results.json
+[2025-03-08T06:56:00.539Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416898242_results.json
+[2025-03-08T06:56:00.896Z] Prediction results stored at: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/results/image_1741416917323_results.json
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /calculator.html
+Requesting: /html5up-phantom/assets/css/main.css
+Requesting: /html5up-phantom/assets/css/fontawesome-all.min.css
+Requesting: /html5up-phantom/assets/css/header.css
+Requesting: /html5up-phantom/assets/css/sidebar.css
+Requesting: /html5up-phantom/assets/css/logo.css
+Requesting: /images/vexus-ai-logo.png
+Requesting: /images/VEXUS.ATLAS.png
+Requesting: /html5up-phantom/assets/js/jquery.min.js
+Requesting: /html5up-phantom/assets/js/browser.min.js
+Requesting: /html5up-phantom/assets/js/breakpoints.min.js
+Requesting: /html5up-phantom/assets/js/util.js
+Requesting: /html5up-phantom/assets/js/main.js
+Requesting: /favicon.ico
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint
+Requesting: /api/preload-endpoint

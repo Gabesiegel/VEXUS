@@ -7,9 +7,9 @@ const LOCATION = "us-central1";
 
 // Endpoint IDs to test
 const ENDPOINTS = {
-    hepatic: "8159951878260523008",
-    renal: "2369174844613853184",
-    portal: "2232940955885895680"
+    hepatic: "8159951878260523008",  // Hepatic vein prediction endpoint
+    renal: "1148704877514326016",    // Renal vein prediction endpoint
+    portal: "2970410926785691648"    // Portal vein prediction endpoint
 };
 
 // Colors for console output

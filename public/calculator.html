@@ -367,19 +367,98 @@
             margin: 10px auto;
         }
 
-        .model-status {
+        .model-status, .error-container {
             text-align: center;
             padding: 8px;
             border-radius: 5px;
-            background-color: #f8d7da;
-            color: #721c24;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
             font-weight: 500;
-            white-space: pre-wrap;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             min-height: 36px;
+            height: 36px; /* Explicit height to ensure matching */
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+            font-size: 1em;
+            flex-direction: row;
+        }
+
+        .model-status {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .error-container {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            display: none;
+        }
+
+        .error-container .error-title {
+            font-weight: bold;
+            margin: 0 5px 0 0;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .error-container .error-title i {
+            margin-right: 5px;
+        }
+
+        .error-container .error-actions {
+            margin: 0 0 0 5px;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+        .model-status .step-indicator {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #2c3e50;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        
+        .model-status.step-1 {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+        
+        .model-status.step-2 {
+            background-color: #e1f5fe;
+            color: #0277bd;
+        }
+        
+        .model-status.step-3 {
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+        
+        .model-status.step-4 {
+            background-color: #e0f2f1;
+            color: #004d40;
+        }
+        
+        .model-status.step-5 {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+        
+        .model-status.step-retry {
+            background-color: #fff3cd;
+            color: #856404;
         }
         
         .model-ready {
@@ -532,23 +611,103 @@
         /* Enhanced loading states */
         .loading-indicator {
             display: none;
-            margin: 10px auto;
+            margin: 15px auto;
             text-align: center;
+            padding: 20px;
+            background-color: rgba(245, 245, 245, 0.9);
+            border-radius: 10px;
+            max-width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
         
         .loading-spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3498db;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 0 auto 15px auto;
+        }
+        
+        .loading-indicator p {
+            margin: 8px 0;
+            color: #333;
+            font-size: 1em;
+            font-weight: 400;
+        }
+        
+        .loading-indicator p strong {
+            color: #2c3e50;
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .loading-indicator .retry-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* Progress indicator */
+        .loading-indicator .step-progress {
+            margin: 15px auto 5px auto;
+            max-width: 85%;
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .loading-indicator .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Step 1 = 20%, Step 2 = 40%, etc. */
+        .loading-indicator.step-1 .progress-bar {
+            width: 20%;
+        }
+        
+        .loading-indicator.step-2 .progress-bar {
+            width: 40%;
+        }
+        
+        .loading-indicator.step-3 .progress-bar {
+            width: 60%;
+        }
+        
+        .loading-indicator.step-4 .progress-bar {
+            width: 80%;
+        }
+        
+        .loading-indicator.step-5 .progress-bar {
+            width: 100%;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Error container styles */
+        .error-container {
+            /* Styles are now defined in the combined model-status, .error-container block above */
+            /* This duplicate definition has been removed to avoid conflicts */
+        }
+
+        .error-container .error-title {
+            /* Using styles from above */
+        }
+
+        .error-container .error-actions {
+            /* Using styles from above */
         }
         
         /* PHI warning styles */
@@ -684,22 +843,160 @@
         }
         
         /* Enhanced error handling */
-        .error-container {
-            margin: 10px auto;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            display: none;
-        }
-
         .reset-section {
             display: flex;
             justify-content: center;
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid #eee;
+        }
+
+        /* Model status bar styles with progress bar support */
+        .model-status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+            font-size: 1em;
+            flex-direction: row;
+            position: relative;
+            background-color: #f0f8ff; /* Light blue for default state */
+            color: #0066cc;
+            border-color: #b8daff;
+        }
+
+        /* Error state - red */
+        .model-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        /* Processing state - light blue */
+        .model-status.processing {
+            background-color: #e6f7ff;
+            color: #0066cc;
+            border-color: #b8daff;
+        }
+
+        /* Style for ready status */
+        .model-status.model-ready {
+            background-color: #d4edda; /* Light green background */
+            color: #155724; /* Darker green text */
+            border: 1px solid #c3e6cb; /* Light green border */
+            transition: all 0.5s ease;
+        }
+        
+        .model-status.model-ready .check-symbol {
+            color: #155724; /* Darker green checkmark */
+            margin-right: 4px;
+            font-weight: bold;
+        }
+        
+        /* Style for warning status */
+        .model-status.model-ready.warning {
+            background-color: #d4edda; /* Light green background */
+            color: #155724; /* Darker green text */
+            border-left: 4px solid #6c757d; /* Gray warning indicator instead of orange */
+        }
+        
+        /* Add a subtle indicator for the warning state */
+        .model-status.model-ready.warning .progress-note {
+            color: #6c757d; /* Darker gray for better readability */
+            font-weight: 500; /* Slightly bolder */
+        }
+
+        /* Progress bar container */
+        .model-status .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Progress bar fill */
+        .model-status .progress-bar {
+            height: 100%;
+            background-color: #007bff;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Different steps have different progress percentages */
+        .model-status.step-1 .progress-bar { width: 20%; }
+        .model-status.step-2 .progress-bar { width: 40%; }
+        .model-status.step-3 .progress-bar { width: 60%; }
+        .model-status.step-4 .progress-bar { width: 80%; }
+        .model-status.step-5 .progress-bar { width: 100%; }
+
+        /* Pulsing animation for progress bar during indeterminate states */
+        @keyframes progress-pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .model-status .progress-bar.indeterminate {
+            animation: progress-pulse 2s infinite;
+        }
+
+        /* Add this to your CSS */
+        .progress-note {
+            font-size: 0.85em;
+            font-style: italic;
+            color: #777;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        /* Add this class to make slow operations more noticeable */
+        .creating-endpoint .progress-container .progress-bar {
+            background: linear-gradient(90deg, #ff9800, #ffeb3b, #ff9800);
+            background-size: 200% 100%;
+            animation: progress-gradient 2s linear infinite;
+        }
+        
+        /* Style for warming up status */
+        .model-status.warming {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            transition: all 0.5s ease;
+        }
+        
+        .model-status.warming i {
+            color: #ff9800;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        @keyframes progress-gradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: -200% 0%; }
         }
     </style>
 </head>
@@ -991,1153 +1288,156 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
-
+    
+    <!-- Endpoint pre-warming to improve prediction speed -->
     <script>
-        // Global configuration - automatically updated by deployment process
+        // Configuration
         const config = {
-            appName: 'VExUS ATLAS',
-            apiBase: window.location.origin,
-            developer: 'Gabesiegel',
-            lastUpdated: '2024-02-28',
             projectId: 'plucky-weaver-450819-k7',
-            // Remove the explicit endpointId - now handled on server side with model-specific IDs
-            modelLabels: {
-                hepatic: ['HV Normal', 'HV Mild', 'HV Severe'],
-                portal: ['PV Normal', 'PV Mild', 'PV Severe'],
-                renal: ['RV Normal', 'RV Mild', 'RV Severe'],
-            }
+            location: 'us-central1',
+            endpointIds: {
+                hepatic: '8159951878260523008',  // Hepatic vein prediction endpoint
+                renal: '1148704877514326016',    // Renal vein prediction endpoint
+                portal: '2970410926785691648'    // Portal vein prediction endpoint
+            },
+            lastUpdated: '2025-02-28',
+            developer: 'Gabesiegel'
         };
-
-        // Global variables for upload handling
-        let currentUploadType = null;
-        let currentUploadFile = null;
         
-        // Initialize the page and model statuses
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize model status indicators
-            initializeModelStatus('hepaticModelStatus');
-            initializeModelStatus('portalModelStatus');
-            initializeModelStatus('renalModelStatus');
-            
-            // Setup the warning modal functionality
-            setupModalListeners();
-            
-            // Setup image upload event handlers
-            setupImageUploadListeners();
-            
-            // Setup dropdown listeners
-            setupDropdownListeners();
-            
-            // Check API connection
-            checkApiConnection();
-
-            // Show HIPAA warning on page load
-            document.getElementById('hipaaWarningModal').style.display = 'block';
-        });
-        
-        // Function to set up PHI warning modal listeners
-        function setupModalListeners() {
-            // HIPAA Modal elements
-            const hipaaModal = document.getElementById('hipaaWarningModal');
-            const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
-            const confirmHipaaBtn = document.getElementById('confirmHipaaBtn');
-            
-            // Beta Software Modal elements
-            const betaModal = document.getElementById('betaWarningModal');
-            const cancelBetaBtn = document.getElementById('cancelBetaBtn');
-            const confirmBetaBtn = document.getElementById('confirmBetaBtn');
-            
-            // HIPAA Modal listeners
-            cancelHipaaBtn.addEventListener('click', function() {
-                hipaaModal.style.display = 'none';
-                currentUploadType = null;
-                currentUploadFile = null;
-                
-                // Re-initialize menu toggle after modals are closed
-                initializeMenuToggle();
-            });
-            
-            confirmHipaaBtn.addEventListener('click', function() {
-                hipaaModal.style.display = 'none';
-                // After acknowledging HIPAA compliance, show Beta Software disclaimer
-                betaModal.style.display = 'block';
-            });
-            
-            // Beta Software Modal listeners
-            cancelBetaBtn.addEventListener('click', function() {
-                betaModal.style.display = 'none';
-                currentUploadType = null;
-                currentUploadFile = null;
-                
-                // Re-initialize menu toggle after modals are closed
-                initializeMenuToggle();
-            });
-            
-            confirmBetaBtn.addEventListener('click', function() {
-                betaModal.style.display = 'none';
-                // Only after confirming both modals, trigger the file input click
-                if (currentUploadType) {
-                    document.getElementById(`${currentUploadType}ImageUpload`).click();
-                }
-                
-                // Re-initialize menu toggle after modals are closed
-                initializeMenuToggle();
-            });
-        }
-        
-        // Setup image upload listeners
-        function setupImageUploadListeners() {
-            console.log("Setting up image upload listeners for all vein types");
-            
-            // Check for required elements before setting up event listeners
-            const veinTypes = ['hepatic', 'portal', 'renal'];
-            
-            veinTypes.forEach(type => {
-                const fileInput = document.getElementById(`${type}ImageUpload`);
-                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
-                const previewImg = document.getElementById(`${type}Preview`);
-                const modelStatus = document.getElementById(`${type}ModelStatus`);
-                
-                console.log(`${type} vein elements: `, {
-                    fileInput: fileInput ? true : false,
-                    uploadArea: uploadArea ? true : false,
-                    previewImg: previewImg ? true : false,
-                    modelStatus: modelStatus ? true : false
-                });
-                
-                if (!fileInput) {
-                    console.error(`File input element for ${type} not found, cannot set up listener!`);
-                    return;
-                }
-                
-                // Hepatic vein upload
-                fileInput.addEventListener('change', function() {
-                    console.log(`File selected for ${type} vein, calling handleImageUpload`);
-                    handleImageUpload(type, this.files[0]);
-                });
-                
-                console.log(`Successfully set up listener for ${type} vein upload`);
-            });
-        }
-        
-        // Function to hide all modals
-        function hideModals() {
-            document.getElementById('hipaaWarningModal').style.display = 'none';
-            document.getElementById('betaWarningModal').style.display = 'none';
-        }
-        
-        // Function to initiate image upload with HIPAA warning first
+        // Function to handle clicking on the upload area
         function initiateImageUpload(type) {
-            console.log(`Initiating image upload for ${type} vein type`);
-            currentUploadType = type;
-            try {
-                // Directly trigger file input click without showing modals
-                const fileInput = document.getElementById(`${type}ImageUpload`);
-                if (fileInput) {
-                    fileInput.click();
-                } else {
-                    console.error(`File input element for ${type} not found!`);
-                    alert(`Error: File input element for ${type} not found. Please report this issue.`);
-                }
-            } catch (error) {
-                console.error(`Error initiating upload for ${type}:`, error);
-                alert(`Error starting ${type} upload: ${error.message}. Please try again.`);
+            // Find the file input element for the specified vein type
+            const fileInput = document.getElementById(`${type}FileInput`);
+            if (fileInput) {
+                // Trigger a click on the hidden file input
+                fileInput.click();
+            } else {
+                console.error(`File input for ${type} not found`);
             }
         }
         
-        // Function to handle image upload and preview
-        function handleImageUpload(type, file) {
-            console.log(`handleImageUpload called for ${type} with file:`, file ? file.name : 'no file');
+        // Function to pre-warm AI endpoints when the page loads
+        async function preWarmEndpoints() {
+            console.log("Pre-warming AI endpoints to improve first prediction speed...");
             
-            try {
-                // Clear any previous errors
-                clearError(type);
+            // All vein types that need prediction endpoints
+            const veinTypes = ["hepatic", "portal", "renal"];
+            
+            // Track which endpoints are being warmed up
+            const warmupStatus = {};
+            veinTypes.forEach(type => {
+                warmupStatus[type] = "pending";
                 
-                const previewImg = document.getElementById(`${type}Preview`);
-                if (!previewImg) {
-                    console.error(`Preview image element for ${type} not found!`);
-                    displayError(type, `Preview image element not found. Please report this issue.`);
-                    return;
-                }
-                
-                const previewContainer = previewImg.parentElement;
-                const resultElement = document.getElementById(`${type}Result`);
-                const topResultsElement = document.getElementById(`${type}TopResults`);
-                const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-                const errorContainer = document.getElementById(`${type}ErrorContainer`);
-                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
+                // Update the model status to show warming up
                 const modelStatus = document.getElementById(`${type}ModelStatus`);
-                
-                // Log all element IDs to debug
-                console.log(`${type} elements: `, {
-                    previewImg: previewImg ? previewImg.id : null,
-                    previewContainer: previewContainer ? true : false,
-                    resultElement: resultElement ? resultElement.id : null,
-                    topResultsElement: topResultsElement ? topResultsElement.id : null,
-                    loadingIndicator: loadingIndicator ? loadingIndicator.id : null,
-                    errorContainer: errorContainer ? errorContainer.id : null,
-                    uploadArea: uploadArea ? true : false,
-                    modelStatus: modelStatus ? modelStatus.id : null
-                });
-                
-                if (!file) {
-                    console.log(`No file selected for ${type}, resetting upload`);
-                    resetImageUpload(type);
-                    return;
-                }
-                
-                // Log file size
-                console.log(`Original file size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
-                
-                // Update status to show processing
-                console.log(`Setting model status for ${type} to processing`);
-                modelStatus.textContent = `Processing ${type.charAt(0).toUpperCase() + type.slice(1)} Image...`;
-                modelStatus.classList.add('model-ready');
-                
-                // Show loading indicator
-                loadingIndicator.style.display = 'block';
-                
-                // Create preview with fade-in animation
-                console.log(`Creating FileReader for ${type} image preview`);
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log(`FileReader onload triggered for ${type}`);
-                    previewImg.src = e.target.result;
-                    previewContainer.style.display = 'block';
-                    previewContainer.style.opacity = '0';
-                    previewImg.style.display = 'block';
-                    uploadArea.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        previewContainer.style.opacity = '1';
-                        uploadArea.style.display = 'none';
-                        uploadArea.style.opacity = '1';
-                    }, 50);
-                    
-                    // Resize large images before submission
-                    resizeImageIfNeeded(file, e.target.result, type);
-                };
-                
-                reader.onerror = function(error) {
-                    console.error(`FileReader error for ${type}:`, error);
-                    modelStatus.textContent = `Error reading ${type} image file`;
-                    loadingIndicator.style.display = 'none';
-                    if (errorContainer) {
-                        errorContainer.style.display = 'block';
-                        errorContainer.innerHTML = `<p>Error: Failed to read image file. Please try again with a different image.</p>`;
-                    }
-                };
-                
-                console.log(`Starting to read ${type} image as data URL`);
-                reader.readAsDataURL(file);
-            } catch (error) {
-                console.error(`Error in handleImageUpload for ${type}:`, error);
-                displayError(type, error.message);
-            }
-        }
-
-        // Function to resize image if needed before API submission
-        function resizeImageIfNeeded(file, dataUrl, type) {
-            // Set size thresholds and target dimensions
-            const MAX_FILE_SIZE_MB = 1.45; // MB - reduced from 1.5MB to ensure we stay under the API limit
-            const MAX_WIDTH = 1200; // px - for normal compression
-            const MAX_HEIGHT = 1200; // px - for normal compression
-            const MAX_WIDTH_AGGRESSIVE = 900; // px - for aggressive compression
-            const MAX_HEIGHT_AGGRESSIVE = 900; // px - for aggressive compression
-            const MAX_WIDTH_SUPER_AGGRESSIVE = 720; // px - for super aggressive compression (iPhone 16)
-            const MAX_HEIGHT_SUPER_AGGRESSIVE = 720; // px - for super aggressive compression (iPhone 16)
-            const QUALITY = 0.7; // JPEG quality (0.0 to 1.0) - first level compression
-            const QUALITY_AGGRESSIVE = 0.5; // second level compression
-            const QUALITY_SUPER_AGGRESSIVE = 0.4; // iPhone 16 level compression
-            
-            // DIAGNOSTICS: Log original file details
-            console.log(`===== RESIZE DIAGNOSTICS =====`);
-            console.log(`Original file: ${file.name}`);
-            console.log(`Original size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
-            console.log(`Original type: ${file.type}`);
-            console.log(`Max allowed size: ${MAX_FILE_SIZE_MB} MB`);
-            
-            // Check if file exceeds size threshold (1.45MB)
-            if (file.size <= MAX_FILE_SIZE_MB * 1024 * 1024) {
-                console.log(`Image is under size threshold (${MAX_FILE_SIZE_MB}MB), no resize needed`);
-                classifyImage(type, file, dataUrl); // Proceed with original file
-                return;
-            }
-            
-            // Determine if this is a very large file (likely iPhone 16)
-            const isVeryLargeFile = file.size > 4 * 1024 * 1024; // 4MB+
-            console.log(`Image exceeds ${MAX_FILE_SIZE_MB}MB threshold, resizing...`);
-            if (isVeryLargeFile) {
-                console.log(`Very large file detected (${(file.size / (1024 * 1024)).toFixed(2)}MB - likely iPhone 16), will use super aggressive compression`);
-            }
-            
-            // Create an image element to load the file
-            const img = new Image();
-            img.onload = function() {
-                // Log original dimensions
-                console.log(`Original dimensions: ${img.width}x${img.height}`);
-                
-                // Calculate new dimensions while maintaining aspect ratio
-                let newWidth = img.width;
-                let newHeight = img.height;
-                
-                // Select max dimensions based on file size
-                const targetMaxWidth = isVeryLargeFile ? MAX_WIDTH_SUPER_AGGRESSIVE : 
-                                      (file.size > 2 * 1024 * 1024) ? MAX_WIDTH_AGGRESSIVE : MAX_WIDTH;
-                const targetMaxHeight = isVeryLargeFile ? MAX_HEIGHT_SUPER_AGGRESSIVE : 
-                                       (file.size > 2 * 1024 * 1024) ? MAX_HEIGHT_AGGRESSIVE : MAX_HEIGHT;
-                
-                // Scale down if width exceeds maximum
-                if (newWidth > targetMaxWidth) {
-                    const scaleFactor = targetMaxWidth / newWidth;
-                    newWidth = targetMaxWidth;
-                    newHeight = Math.round(newHeight * scaleFactor);
-                }
-                
-                // Scale down if height still exceeds maximum
-                if (newHeight > targetMaxHeight) {
-                    const scaleFactor = targetMaxHeight / newHeight;
-                    newHeight = targetMaxHeight;
-                    newWidth = Math.round(newWidth * scaleFactor);
-                }
-                
-                console.log(`New dimensions after resize: ${newWidth}x${newHeight}`);
-                
-                // Create canvas for resizing
-                const canvas = document.createElement('canvas');
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                
-                // Draw resized image on canvas
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                
-                // Choose quality based on file size
-                const initialQuality = isVeryLargeFile ? QUALITY_SUPER_AGGRESSIVE : 
-                                      (file.size > 2 * 1024 * 1024) ? QUALITY_AGGRESSIVE : QUALITY;
-                
-                // Convert to data URL with appropriate compression
-                const resizedDataUrl = canvas.toDataURL('image/jpeg', initialQuality);
-                console.log(`Applied initial compression quality: ${initialQuality}`);
-                
-                // More efficient approach: Convert dataURL to Blob directly
-                try {
-                    // Parse the base64 string
-                    const base64 = resizedDataUrl.split(',')[1];
-                    const mime = resizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
-                    
-                    // Convert to binary
-                    const binaryStr = atob(base64);
-                    const len = binaryStr.length;
-                    const arr = new Uint8Array(len);
-                    
-                    for (let i = 0; i < len; i++) {
-                        arr[i] = binaryStr.charCodeAt(i);
-                    }
-                    
-                    // Create blob from binary data
-                    const resizedBlob = new Blob([arr], { type: mime });
-                    
-                    const resizedSizeMB = (resizedBlob.size / (1024 * 1024)).toFixed(2);
-                    console.log(`Resized image: ${resizedSizeMB} MB, dimensions: ${newWidth}x${newHeight}`);
-                    console.log(`Size reduction: ${((1 - (resizedBlob.size / file.size)) * 100).toFixed(1)}%`);
-                    
-                    // Progressive compression approach
-                    if (resizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                        console.log(`Image still exceeds ${MAX_FILE_SIZE_MB}MB after initial resize, reducing further...`);
-                        
-                        // Try with progressively lower quality until we get under the size limit
-                        // Start with current quality and gradually reduce
-                        let currentQuality = initialQuality * 0.8; // 20% lower than initial
-                        let attemptCount = 1;
-                        let furtherResizedDataUrl = resizedDataUrl;
-                        let furtherResizedBlob = resizedBlob;
-                        
-                        // Try up to 5 compression attempts with decreasing quality and size
-                        const attemptCompression = async () => {
-                            while (attemptCount <= 5 && furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                                console.log(`Compression attempt ${attemptCount}: trying quality ${currentQuality.toFixed(2)}`);
-                                
-                                // If still too large and we've tried a few times, also reduce dimensions further
-                                if (attemptCount > 2) {
-                                    // Reduce dimensions by 10% each additional attempt
-                                    newWidth = Math.floor(newWidth * 0.9);
-                                    newHeight = Math.floor(newHeight * 0.9);
-                                    
-                                    console.log(`Further reducing dimensions to: ${newWidth}x${newHeight}`);
-                                    
-                                    // Redraw with smaller dimensions
-                                    canvas.width = newWidth;
-                                    canvas.height = newHeight;
-                                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                                }
-                                
-                                furtherResizedDataUrl = canvas.toDataURL('image/jpeg', currentQuality);
-                                
-                                // Parse the base64 string again
-                                const base64Lower = furtherResizedDataUrl.split(',')[1];
-                                const mimeLower = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
-                                
-                                // Convert to binary
-                                const binaryStrLower = atob(base64Lower);
-                                const lenLower = binaryStrLower.length;
-                                const arrLower = new Uint8Array(lenLower);
-                                
-                                for (let i = 0; i < lenLower; i++) {
-                                    arrLower[i] = binaryStrLower.charCodeAt(i);
-                                }
-                                
-                                // Create blob from binary data with lower quality
-                                furtherResizedBlob = new Blob([arrLower], { type: mimeLower });
-                                
-                                const furtherResizedSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
-                                console.log(`Compression attempt ${attemptCount}: size now ${furtherResizedSizeMB} MB with quality ${currentQuality.toFixed(2)}`);
-                                
-                                // Reduce quality by 20% each attempt
-                                currentQuality *= 0.8;
-                                attemptCount++;
-                                
-                                // Don't go below 0.1 quality
-                                if (currentQuality < 0.1) currentQuality = 0.1;
-                            }
-                            
-                            if (furtherResizedBlob.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                                console.log(`WARNING: Image still exceeds ${MAX_FILE_SIZE_MB}MB after ${attemptCount-1} compression attempts`);
-                                // Try one last dramatic reduction for extremely stubborn files
-                                canvas.width = Math.floor(newWidth * 0.6);  // 60% of current width
-                                canvas.height = Math.floor(newHeight * 0.6); // 60% of current height
-                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                                furtherResizedDataUrl = canvas.toDataURL('image/jpeg', 0.1);
-                                
-                                // Create final blob
-                                const base64Final = furtherResizedDataUrl.split(',')[1];
-                                const mimeType = furtherResizedDataUrl.split(',')[0].match(/:(.*?);/)[1];
-                                const binaryData = atob(base64Final);
-                                const data = new Uint8Array(binaryData.length);
-                                for (let i = 0; i < binaryData.length; i++) {
-                                    data[i] = binaryData.charCodeAt(i);
-                                }
-                                furtherResizedBlob = new Blob([data], { type: mimeType });
-                                
-                                const finalSizeMB = (furtherResizedBlob.size / (1024 * 1024)).toFixed(2);
-                                console.log(`FINAL ATTEMPT: size reduced to ${finalSizeMB} MB`);
-                            } else {
-                                console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit after ${attemptCount-1} attempts`);
-                            }
-                            
-                            // Create a new File object
-                            const resizedFile = new File([furtherResizedBlob], file.name, {
-                                type: 'image/jpeg',
-                                lastModified: new Date().getTime()
-                            });
-                            
-                            console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
-                            console.log(`===== END RESIZE DIAGNOSTICS =====`);
-                            
-                            // Process the resized image
-                            classifyImage(type, resizedFile, furtherResizedDataUrl);
-                        };
-                        
-                        attemptCompression();
-                    } else {
-                        console.log(`SUCCESS: Image now under ${MAX_FILE_SIZE_MB}MB limit`);
-                        
-                        // Create a new File object from the resized Blob
-                        const resizedFile = new File([resizedBlob], file.name, {
-                            type: 'image/jpeg',
-                            lastModified: new Date().getTime()
-                        });
-                        
-                        console.log(`Final file size: ${(resizedFile.size / (1024 * 1024)).toFixed(2)} MB`);
-                        console.log(`===== END RESIZE DIAGNOSTICS =====`);
-                        
-                        // Process the resized image
-                        classifyImage(type, resizedFile, resizedDataUrl);
-                    }
-                } catch (error) {
-                    console.error('Error converting resized image:', error);
-                    console.log(`RESIZE FAILED: ${error.message}`);
-                    console.log(`===== END RESIZE DIAGNOSTICS WITH ERROR =====`);
-                    // Fall back to original if conversion fails
-                    classifyImage(type, file, dataUrl);
-                }
-            };
-            
-            img.onerror = function() {
-                console.error('Error loading image for resizing');
-                console.log(`RESIZE FAILED: Error loading image`);
-                console.log(`===== END RESIZE DIAGNOSTICS WITH ERROR =====`);
-                // Fall back to original if resize fails
-                classifyImage(type, file, dataUrl);
-            };
-            
-            // Load the image from data URL
-            img.src = dataUrl;
-        }
-
-        // Function to reset image upload
-        function resetImageUpload(type) {
-            // Clear the file input
-            const fileInput = document.getElementById(`${type}ImageUpload`);
-            fileInput.value = '';
-            
-            // Fade out preview with animation
-            const preview = document.getElementById(`${type}Preview`);
-            const previewContainer = preview.parentElement;
-            previewContainer.style.opacity = '0';
-            
-            setTimeout(() => {
-                // Hide the preview
-                preview.style.display = 'none';
-                preview.src = '';
-                previewContainer.style.display = 'none';
-                
-                // Show the upload area with fade-in animation
-                const uploadArea = document.querySelector(`#step${type === 'hepatic' ? '2' : type === 'portal' ? '3' : '4'} .upload-area`);
-                uploadArea.style.opacity = '0';
-                uploadArea.style.display = 'block';
-                
-                setTimeout(() => {
-                    uploadArea.style.opacity = '1';
-                    previewContainer.style.opacity = '1';
-                }, 50);
-            }, 300);
-            
-            // Reset the results
-            document.getElementById(`${type}Result`).textContent = `${capitalizeFirstLetter(type)} recognition result will appear here...`;
-            document.getElementById(`${type}TopResults`).innerHTML = '';
-            
-            // Reset dropdown
-            document.getElementById(`${type}Dropdown`).value = '';
-            document.getElementById(`${type}ErrorNote`).style.display = 'none';
-            
-            // Reset model status to ready state
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
-            modelStatus.textContent = "Ready for Image";
-            modelStatus.classList.add('model-ready');
-            
-            // Hide loading indicator and error container
-            document.getElementById(`${type}LoadingIndicator`).style.display = 'none';
-            document.getElementById(`${type}ErrorContainer`).style.display = 'none';
-        }
-
-        // Helper function to capitalize first letter
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-        
-        // Function to initialize a model status indicator
-        function initializeModelStatus(statusId) {
-            const statusElement = document.getElementById(statusId);
-            if (statusElement) {
-                statusElement.textContent = "Connecting...";
-                statusElement.classList.remove('model-ready');
-                statusElement.classList.add('model-testing');
-            }
-        }
-        
-        // Function to check API connection
-        async function checkApiConnection() {
-            const modelStatuses = [
-                { element: document.getElementById('hepaticModelStatus'), type: 'hepatic' },
-                { element: document.getElementById('portalModelStatus'), type: 'portal' },
-                { element: document.getElementById('renalModelStatus'), type: 'renal' }
-            ];
-
-            try {
-                // First check general API health
-                console.log('Checking API health...');
-                const healthResponse = await fetch('/api/health');
-                
-                if (!healthResponse.ok) {
-                    throw new Error(`API health check failed: ${healthResponse.status}`);
-                }
-                
-                const healthData = await healthResponse.json();
-                console.log('API health check successful:', healthData);
-
-                // If we get here, the API is responding, so we'll set all statuses to ready
-                modelStatuses.forEach(status => {
-                    if (status.element) {
-                        status.element.textContent = 'AI MODEL READY';
-                        status.element.classList.remove('model-testing');
-                        status.element.classList.add('model-ready');
-                    }
-                });
-
-            } catch (error) {
-                console.error('API connection error:', error);
-                modelStatuses.forEach(status => {
-                    if (status.element) {
-                        status.element.textContent = `Error: Cannot connect to server`;
-                        status.element.classList.remove('model-testing', 'model-ready');
-                    }
-                });
-            }
-        }
-
-        // Function to classify image
-        async function classifyImage(type, file, dataUrl = null) {
-            console.log(`Classification started for ${type} vein type`);
-            
-            // Clear any previous errors
-            clearError(type);
-            
-            const previewImg = document.getElementById(`${type}Preview`);
-            const resultElement = document.getElementById(`${type}Result`);
-            const topResultsElement = document.getElementById(`${type}TopResults`);
-            const dropdownElement = document.getElementById(`${type}Dropdown`);
-            const errorNoteElement = document.getElementById(`${type}ErrorNote`);
-            const errorContainer = document.getElementById(`${type}ErrorContainer`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
-            
-            // Log all element IDs to debug
-            console.log(`${type} classification elements: `, {
-                previewImg: previewImg ? previewImg.id : null,
-                resultElement: resultElement ? resultElement.id : null,
-                topResultsElement: topResultsElement ? topResultsElement.id : null,
-                dropdownElement: dropdownElement ? dropdownElement.id : null,
-                errorNoteElement: errorNoteElement ? errorNoteElement.id : null,
-                errorContainer: errorContainer ? errorContainer.id : null,
-                loadingIndicator: loadingIndicator ? loadingIndicator.id : null,
-                modelStatus: modelStatus ? modelStatus.id : null
-            });
-            
-            // Hide any previous errors
-            if (errorContainer) {
-                errorContainer.style.display = 'none';
-                errorContainer.innerHTML = '';
-            }
-            
-            try {
-                if (!file) {
-                    throw new Error("No file selected.");
-                }
-
-                // Update model status to green "Processing image"
-                modelStatus.textContent = "Processing image...";
-                modelStatus.classList.add('model-ready');
-
-                // Use provided dataUrl or create a new one
-                let base64Data;
-                if (dataUrl) {
-                    base64Data = dataUrl;
-                } else {
-                    // Use FileReader to get base64 data if not provided
-                    console.log(`Reading ${type} file as Data URL`);
-                    base64Data = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = (error) => {
-                            console.error(`FileReader error in classifyImage for ${type}:`, error);
-                            reject(new Error('Failed to read file'));
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                }
-
-                // Extract the actual base64 content and mime type
-                console.log(`Extracting base64 content for ${type}`);
-                const parts = base64Data.split(',');
-                if (parts.length !== 2) {
-                    throw new Error('Invalid base64 data format');
-                }
-                
-                const base64Content = parts[1];
-                const mimeTypeMatch = parts[0].match(/:(.*?);/);
-                if (!mimeTypeMatch) {
-                    throw new Error('Could not determine image mime type');
-                }
-                const mimeType = mimeTypeMatch[1];
-
-                // Structure payload for Vertex AI - ensure correct format
-                const payload = {
-                    instances: [
-                        {
-                            content: base64Content
-                        }
-                    ],
-                    parameters: {
-                        confidenceThreshold: 0.0,
-                        maxPredictions: 5
-                    },
-                    metadata: {
-                        veinType: type, // hepatic, portal, or renal
-                        imageType: mimeType,
-                        timestamp: Date.now()
-                    }
-                };
-
-                // Send to API endpoint with timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
-                
-                console.log(`Sending ${type} image for classification...`);
-                
-                const response = await fetch('/api/predict', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-
-                if (!response.ok) {
-                    let errorMessage = `Server error: ${response.status}`;
-                    try {
-                        const errorData = await response.json();
-                        errorMessage = errorData.message || errorMessage;
-                    } catch (e) {
-                        // If parsing fails, use status code
-                    }
-                    throw new Error(errorMessage);
-                }
-
-                // Process response
-                const result = await response.json();
-                
-                // Validate response format
-                if (!result || !result.displayNames || !result.confidences) {
-                    throw new Error('Invalid response format from server');
-                }
-
-                // Log storage information if available
-                if (result.storage && result.storage.stored) {
-                    console.log(`Image stored at: ${result.storage.imageUrl}`);
-                    console.log(`Prediction results stored at: ${result.storage.resultsPath}`);
-                }
-
-                // Process predictions
-                const confidences = result.confidences;
-                const displayNames = result.displayNames;
-                
-                // Create top 3 predictions
-                const top3List = confidences
-                    .map((conf, idx) => ({
-                        label: displayNames[idx] || "Unknown",
-                        prob: (conf * 100).toFixed(1)
-                    }))
-                    .sort((a, b) => parseFloat(b.prob) - parseFloat(a.prob))
-                    .slice(0, 3);
-
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-                
-                // Update model status
-                modelStatus.textContent = "Model Ready";
-                modelStatus.classList.add('model-ready');
-
-                // Map API response labels to dropdown values
-                const labelMapping = {
-                    'hepatic': {
-                        'Hepatic_Vein_Normal': 'HV Normal',
-                        'Hepatic_Vein_Mild': 'HV Mild',
-                        'Hepatic_Vein_Severe': 'HV Severe'
-                    },
-                    'portal': {
-                        'Portal_Vein_Normal': 'PV Normal',
-                        'Portal_Vein_Mild': 'PV Mild',
-                        'Portal_Vein_Severe': 'PV Severe'
-                    },
-                    'renal': {
-                        'Renal_Vein_Normal': 'RV Normal',
-                        'Renal_Vein_Mild': 'RV Mild',
-                        'Renal_Vein_Severe': 'RV Severe'
-                    }
-                };
-                
-                console.log(`${type} classification - received labels:`, displayNames);
-                
-                // Create top 3 predictions with mapped labels
-                const top3 = confidences
-                    .map((conf, idx) => {
-                        const apiLabel = displayNames[idx] || "Unknown";
-                        // Check if the label belongs to the expected type
-                        const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
-                                               type === 'portal' ? apiLabel.includes('Portal') :
-                                               apiLabel.includes('Renal');
-                        
-                        let dropdownLabel;
-                        if (isExpectedType) {
-                            // Use the type-specific mapping
-                            dropdownLabel = labelMapping[type][apiLabel] || apiLabel;
-                        } else {
-                            // If model returned wrong type of prediction, try to find mapping in any category
-                            for (const veinType in labelMapping) {
-                                if (labelMapping[veinType][apiLabel]) {
-                                    console.log(`Warning: Received ${apiLabel} for ${type} request`);
-                                    // Still use the expected type prefix (HV/PV/RV)
-                                    const severity = apiLabel.includes('Normal') ? 'Normal' : 
-                                                    apiLabel.includes('Mild') ? 'Mild' : 'Severe';
-                                    dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
-                                    break;
-                                }
-                            }
-                            // If no mapping found in any category
-                            if (!dropdownLabel) dropdownLabel = apiLabel;
-                        }
-                        
-                        return {
-                            apiLabel: apiLabel,
-                            label: dropdownLabel,
-                            prob: (conf * 100).toFixed(1)
-                        };
-                    })
-                    .sort((a, b) => parseFloat(b.prob) - parseFloat(a.prob))
-                    .slice(0, 3);
-
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-                
-                // Update model status back to green connected state
-                modelStatus.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} AI MODEL READY`;
-                modelStatus.classList.add('model-ready');
-
-                // Update results in UI
-                if (top3.length > 0) {
-                    const top1 = top3[0];
-                    resultElement.textContent = `Top prediction: ${top1.label} (${top1.prob}%)`;
-                    topResultsElement.innerHTML = '<strong>Top 3 Predictions:</strong><br>' + 
-                        top3.map(r => `${r.label}: ${r.prob}%`).join('<br>');
-                    
-                    // Always set dropdown to top prediction regardless of confidence
-                    const matchingOption = Array.from(dropdownElement.options)
-                        .find(opt => opt.value === top1.label);
-                        
-                    if (matchingOption) {
-                        dropdownElement.value = matchingOption.value;
-                    } else if (parseFloat(top1.prob) <= 50) {
-                        // If no matching option and confidence is low, set to the low confidence option
-                        dropdownElement.value = "Confidence of waveform < 50%";
-                    }
-                    
-                    // Show warning if confidence is low
-                    if (parseFloat(top1.prob) > 50) {
-                        errorNoteElement.style.display = "none";
-                    } else {
-                        errorNoteElement.style.display = "block";
-                    }
-                    
-                    // Hide modals when classification is complete
-                    hideModals();
-                } else {
-                    resultElement.textContent = "No predictions found.";
-                    topResultsElement.innerHTML = "";
-                    
-                    // Reset dropdown when no predictions are found
-                    dropdownElement.value = "";
-                    
-                    // Hide modals even when no predictions are found
-                    hideModals();
-                }
-
-            } catch (error) {
-                console.error(`Error classifying ${type} image:`, error);
-                
-                // Clean up UI elements
-                if (loadingIndicator) loadingIndicator.style.display = 'none';
-                
-                // Display error message
-                displayError(type, error.message);
-                
-                // Optional: update model status
                 if (modelStatus) {
-                    modelStatus.textContent = "AI MODEL ERROR";
-                    modelStatus.classList.remove('model-ready');
+                    modelStatus.innerHTML = `
+                        <i class="fas fa-fire"></i> Warming Up
+                        <div class="progress-note">Preparing AI model in background</div>
+                    `;
+                    modelStatus.className = 'model-status warming';
                 }
-                
-                // Optional: reset image?
-                // resetImageUpload(type);
-            }
-        }
-
-        // Function to calculate VExUS score
-        function calculateVexusScore() {
-            // Step #1: IVC <2cm or >2cm
-            const ivcSelection = document.getElementById('ivcDropdown').value;
-            let ivcValue = null; 
-            if (ivcSelection === "<2cm") ivcValue = 1.9;
-            if (ivcSelection === ">2cm") ivcValue = 2.1;
-            
-            // Get classifications from dropdowns
-            const hvChoice = document.getElementById('hepaticDropdown').value;
-            const pvChoice = document.getElementById('portalDropdown').value;
-            const rvChoice = document.getElementById('renalDropdown').value;
-
-            // Check for incomplete data
-            if (!ivcValue) {
-                document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
-                return;
-            }
-            
-            // Check if all vein classifications are selected
-            if (!hvChoice || !pvChoice || !rvChoice) {
-                document.getElementById('total-score').textContent = "Incomplete Data (All Vein Classifications Required)";
-                return;
-            }
-
-            // Check for low confidence predictions
-            if (
-                hvChoice === "Confidence of waveform < 50%" ||
-                pvChoice === "Confidence of waveform < 50%" ||
-                rvChoice === "Confidence of waveform < 50%"
-            ) {
-                document.getElementById('total-score').textContent = "Cannot Calculate Score";
-                return;
-            }
-
-            // Convert choices to numerical scores based on actual dropdown values
-            let hvScore = 0;
-            if (hvChoice === "HV Mild") hvScore = 1; // HV Mild
-            if (hvChoice === "HV Severe") hvScore = 2; // HV Severe
-
-            let pvScore = 0;
-            if (pvChoice === "PV Mild") pvScore = 1; // PV Mild
-            if (pvChoice === "PV Severe") pvScore = 2; // PV Severe
-
-            let rvScore = 0;
-            if (rvChoice === "RV Mild") rvScore = 1; // RV Mild
-            if (rvChoice === "RV Severe") rvScore = 2; // RV Severe
-
-            // Count severe cases
-            let severityCount = 0;
-            if (hvScore === 2) severityCount++;
-            if (pvScore === 2) severityCount++;
-            if (rvScore === 2) severityCount++;
-
-            // Calculate VExUS grade
-            let vexusGrade;
-            if (ivcValue < 2) {
-                vexusGrade = "Grade 0: No Congestion";
-            } else if (severityCount === 0) {
-                vexusGrade = "Grade 1: Mild Congestion";
-            } else if (severityCount === 1) {
-                vexusGrade = "Grade 2: Moderate Congestion";
-            } else {
-                vexusGrade = "Grade 3: Severe Congestion";
-            }
-
-            document.getElementById('total-score').textContent = vexusGrade;
-        }
-
-        // Reset all fields and results
-        function resetAll() {
-            // Clear IVC and score
-            document.getElementById('ivcDropdown').value = "";
-            document.getElementById('total-score').textContent = "--";
-
-            // Clear all vein type data
-            ['hepatic', 'portal', 'renal'].forEach(type => {
-                resetImageUpload(type);
             });
-        }
-
-        // Function to setup dropdown listeners
-        function setupDropdownListeners() {
-            // Add change event listeners to the dropdowns
-            document.getElementById('hepaticDropdown').addEventListener('change', function() {
-                hideModals();
-            });
-
-            document.getElementById('portalDropdown').addEventListener('change', function() {
-                hideModals();
-            });
-
-            document.getElementById('renalDropdown').addEventListener('change', function() {
-                hideModals();
-            });
-        }
-
-        // Function to display error in the appropriate container
-        function displayError(type, message) {
-            console.log(`Displaying error for ${type}: ${message}`);
-            const errorContainer = document.getElementById(`${type}ErrorContainer`);
-            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
-            const modelStatus = document.getElementById(`${type}ModelStatus`);
             
-            // Hide loading indicator
-            if (loadingIndicator) {
-                loadingIndicator.style.display = 'none';
-            }
-            
-            // Update model status
-            if (modelStatus) {
-                modelStatus.textContent = "AI MODEL ERROR";
-                modelStatus.classList.remove('model-ready');
-            }
-            
-            // Display error message
-            if (errorContainer) {
-                errorContainer.innerHTML = `
-                    <div class="alert alert-danger">
-                        <strong>Error:</strong> ${message}
-                        <p>Please try again or try a different image.</p>
-                    </div>
-                `;
-                errorContainer.style.display = 'block';
-                
-                // Scroll to error container
-                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                // Fallback to alert if container not found
-                alert(`Error with ${type} vein: ${message}`);
-            }
-        }
-        
-        // Function to reset error display
-        function clearError(type) {
-            const errorContainer = document.getElementById(`${type}ErrorContainer`);
-            if (errorContainer) {
-                errorContainer.innerHTML = '';
-                errorContainer.style.display = 'none';
-            }
-        }
-        
-        // Function to initialize menu toggle
-        function initializeMenuToggle() {
-            console.log("Initializing menu toggle");
-            
-            try {
-                // Get menu elements
-                const menuToggle = document.querySelector('a[href="#menu"]');
-                const menu = document.getElementById('menu');
-                
-                if (!menuToggle) {
-                    console.error("Menu toggle element not found!");
-                    return;
-                }
-                
-                if (!menu) {
-                    console.error("Menu element not found!");
-                    return;
-                }
-                
-                // Debug info
-                console.log("Menu element:", menu);
-                console.log("Menu toggle element:", menuToggle);
-                console.log("Current menu display:", window.getComputedStyle(menu).display);
-                console.log("Current menu right:", window.getComputedStyle(menu).right);
-                console.log("Current body classes:", document.body.className);
-                
-                // First ensure menu is properly hidden to start
-                document.body.classList.remove('is-menu-visible');
-                menu.style.right = "-100%";
-                menu.style.display = "none";
-                menu.classList.remove('visible', 'active');
-                
-                // Remove any existing click handlers by cloning and replacing
-                const newMenuToggle = menuToggle.cloneNode(true);
-                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
-                
-                // Add our click handler with support for both CSS class and display property
-                newMenuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log("Menu toggle clicked");
+            // Send pre-warming requests for each type with a slight delay between them
+            // to avoid overwhelming the server with simultaneous requests
+            for (let i = 0; i < veinTypes.length; i++) {
+                const type = veinTypes[i];
+                setTimeout(() => {
+                    console.log(`Sending pre-warm request for ${type} vein model...`);
                     
-                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
-                    document.body.classList.add('is-menu-visible');
-                    menu.style.display = 'block';
-                    menu.style.right = '0';
-                    menu.classList.add('visible', 'active');
-                    
-                    // Force a repaint to ensure styles are applied
-                    void menu.offsetWidth;
-                    
-                    // Debug after toggle
-                    console.log("After toggle - menu display:", window.getComputedStyle(menu).display);
-                    console.log("After toggle - menu right:", window.getComputedStyle(menu).right);
-                    console.log("After toggle - body classes:", document.body.className);
-                });
-                
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector('a.close');
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                    
-                    newCloseButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log("Close button clicked");
+                    // Send the pre-warm request - using relative URL instead of absolute with port
+                    fetch('/api/preload-endpoint', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(`Pre-warming status for ${type}: ${data.status}`);
+                        warmupStatus[type] = data.status || "unknown";
                         
-                        // Hide menu using both approaches
-                        document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%';
-                        menu.classList.remove('visible', 'active');
+                        // Add more detailed logging for debugging
+                        if (data.status === 'error' && data.errorDetails) {
+                            console.warn(`Detailed error for ${type} prewarming:`, data.errorDetails);
+                            
+                            // Check for specific error patterns to provide better guidance
+                            const errorDetails = data.errorDetails.toLowerCase();
+                            if (errorDetails.includes('quota') || errorDetails.includes('limit')) {
+                                console.warn(`${type} appears to have quota limitations. This is expected and won't affect functionality.`);
+                            } else if (errorDetails.includes('endpoint') && errorDetails.includes('failed')) {
+                                console.warn(`${type} endpoint may be in a failed state. Will fall back to on-demand creation.`);
+                            }
+                        }
                         
-                        // Debug after close
-                        console.log("After close - menu display:", window.getComputedStyle(menu).display);
-                        console.log("After close - menu right:", window.getComputedStyle(menu).right);
+                        // Update the model status based on the response
+                        const modelStatus = document.getElementById(`${type}ModelStatus`);
+                        if (modelStatus) {
+                            if (data.status === 'warming') {
+                                // Still warming up - keep the warming indicator
+                                modelStatus.innerHTML = `
+                                    <i class="fas fa-fire"></i> Warming Up
+                                    <div class="progress-note">Preparing AI model (may take 1-2 minutes)</div>
+                                `;
+                                modelStatus.className = 'model-status warming';
+                            } else if (data.status === 'timeout') {
+                                // Timeout but still warming up in background
+                                modelStatus.innerHTML = `
+                                    <i class="fas fa-fire"></i> Warming Up
+                                    <div class="progress-note">Still preparing (taking longer than usual)</div>
+                                `;
+                                modelStatus.className = 'model-status warming';
+                            } else if (data.status === 'error') {
+                                // Show error but in a non-blocking way
+                                console.error(`Error warming ${type} endpoint: ${data.errorDetails || 'Unknown error'}`);
+                                
+                                if (data.troubleshooting) {
+                                    console.log(`Troubleshooting suggestions for ${type}:`, data.troubleshooting);
+                                }
+                                
+                                // Update UI to indicate warning status
+                                modelStatus.innerHTML = `
+                                    <span class="check-symbol">✓</span> Model Ready
+                                    <div class="progress-note">First prediction may be slower</div>
+                                `;
+                                modelStatus.className = 'model-status model-ready warning';
+                            } else if (data.status === 'ready' || data.status === 'complete') {
+                                // Model is fully ready
+                                modelStatus.innerHTML = `<span class="check-symbol">✓</span> Model Ready`;
+                                modelStatus.className = 'model-status model-ready';
+                            } else {
+                                // Any other status (like skipped), show ready with warning
+                                modelStatus.innerHTML = `
+                                    <span class="check-symbol">✓</span> Model Ready
+                                    <div class="progress-note">First prediction may be slower</div>
+                                `;
+                                modelStatus.className = 'model-status model-ready warning';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Pre-warming attempt for ${type} failed: ${error.message}`);
+                        warmupStatus[type] = "failed";
+                        
+                        // Update UI to indicate warming failed but model can still be used
+                        const modelStatus = document.getElementById(`${type}ModelStatus`);
+                        if (modelStatus) {
+                            modelStatus.innerHTML = `
+                                <span class="check-symbol">✓</span> Model Ready
+                                <div class="progress-note">First prediction may be slower</div>
+                            `;
+                            modelStatus.className = 'model-status model-ready warning';
+                        }
                     });
-                }
-                
-                // Handle clicks outside the menu (use capture phase to run before other handlers)
-                const bodyClickHandler = function(e) {
-                    // If clicking outside menu and not on menu toggle
-                    if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
-                        console.log("Clicked outside menu");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%';
-                        menu.classList.remove('visible', 'active');
-                    }
-                };
-                
-                // Remove any existing body click handler and add our new one
-                document.body.removeEventListener('click', bodyClickHandler, true);
-                document.body.addEventListener('click', bodyClickHandler, true);
-                
-                // Handle escape key
-                const keyHandler = function(e) {
-                    if (e.key === 'Escape' || e.keyCode === 27) {
-                        document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%';
-                        menu.classList.remove('visible', 'active');
-                    }
-                };
-                
-                // Remove any existing key handler and add our new one
-                document.removeEventListener('keydown', keyHandler);
-                document.addEventListener('keydown', keyHandler);
-                
-                console.log("Menu toggle initialization complete");
-            } catch (error) {
-                console.error("Error initializing menu toggle:", error);
+                }, i * 3000); // Stagger requests by 3 seconds each
             }
         }
         
-        // Initialize the menu toggle after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM loaded, initializing menu toggle");
-            // Initial setup with delay to ensure DOM is fully processed
-            setTimeout(initializeMenuToggle, 100);
-            
-            // Also set up modal listeners to reinitialize menu toggle after modals
-            const confirmHipaaBtn = document.getElementById('confirmHipaaBtn');
-            const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
-            const confirmBetaBtn = document.getElementById('confirmBetaBtn');
-            const cancelBetaBtn = document.getElementById('cancelBetaBtn');
-            
-            if (confirmHipaaBtn) confirmHipaaBtn.addEventListener('click', initializeMenuToggle);
-            if (cancelHipaaBtn) cancelHipaaBtn.addEventListener('click', initializeMenuToggle);
-            if (confirmBetaBtn) confirmBetaBtn.addEventListener('click', initializeMenuToggle);
-            if (cancelBetaBtn) cancelBetaBtn.addEventListener('click', initializeMenuToggle);
+        // Call the pre-warming function when the page has loaded
+        window.addEventListener('load', () => {
+            // Delay pre-warming slightly to ensure the page is fully interactive first
+            setTimeout(preWarmEndpoints, 2000);
         });
-        
-        // Fallback initialization in case DOMContentLoaded already fired
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            console.log("Document already loaded, running fallback initialization");
-            setTimeout(initializeMenuToggle, 200);
-        }
     </script>
 </body>
 </html>
