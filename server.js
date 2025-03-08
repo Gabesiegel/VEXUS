@@ -21,24 +21,34 @@ import axios from 'axios';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Constants
+const DEBUG_LOGS_ENABLED = process.env.DEBUG_LOGS_ENABLED === 'true' || true;
+const DEBUG_LOG_PATH = process.env.DEBUG_LOG_PATH || 'server_debug.log';
+const VALID_VEIN_TYPES = ['hepatic', 'portal', 'renal'];
+
 ///////////////////////////////////////////////////////////////////////////////
 // 1) Configuration Setup
 ///////////////////////////////////////////////////////////////////////////////
 
+// Configuration with defaults that can be overridden with environment variables
 const CONFIG = {
-    projectId: "plucky-weaver-450819-k7",
-    projectNumber: "456295042668",
-    location: "us-central1",
+    port: process.env.PORT || 3000,
+    projectId: process.env.GCP_PROJECT_ID || '456295042668',
+    location: process.env.GCP_LOCATION || 'us-central1',
+    
+    // Endpoints configured for different vein types
     endpointIds: {
-        hepatic: process.env.HEPATIC_ENDPOINT_ID || "8159951878260523008",  // VExUS - Hepatic Vein
-        portal: process.env.PORTAL_ENDPOINT_ID || "2970410926785691648",    // VExUS - Portal Vein
-        renal: process.env.RENAL_ENDPOINT_ID || "1148704877514326016"      // VExUS - Renal Vein
+        hepatic: process.env.HEPATIC_ENDPOINT_ID || '8159951878260523008',
+        portal: process.env.PORTAL_ENDPOINT_ID || '2970410926785691648',
+        renal: process.env.RENAL_ENDPOINT_ID || '1148704877514326016'
     },
-    onDemandEndpointService: process.env.ON_DEMAND_ENDPOINT_SERVICE || "https://endpoints-on-demand-456295042668.us-central1.run.app",
-    lastUpdated: new Date().toISOString(),
-    developer: 'Gabesiegel',
-    bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
-}; // Each vein type uses its own specific endpoint
+    
+    // On-demand service URL
+    onDemandServiceUrl: process.env.ONDEMAND_SERVICE_URL || 'https://endpoints-on-demand-456295042668.us-central1.run.app',
+    
+    // Endpoint shutdown timeout in minutes
+    endpointShutdownDelayMinutes: parseInt(process.env.ENDPOINT_SHUTDOWN_DELAY_MINUTES || '5', 10)
+};
 
 // Initialize Cloud Storage client
 const storage = new Storage();
@@ -413,128 +423,60 @@ app.get('/api/health', async (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 // 5) Image Upload and Prediction Endpoint
 ///////////////////////////////////////////////////////////////////////////////
-app.post('/api/predict', upload.single('image'), async (req, res) => {
-    console.log('Received prediction request');
-    const startTime = Date.now();
-    let imageInfo = null;
+app.post('/predict/:veinType', async (req, res) => {
+    const veinType = req.params.veinType.toLowerCase();
+    console.log(`Received prediction request for ${veinType} vein`);
     
     try {
-        // Get vein type from request
-        const veinType = (req.body.metadata?.veinType || req.body.veinType || 'hepatic').toLowerCase();
-        console.log(`Prediction request for ${veinType} vein`);
-        
-        // Check if we should bypass the on-demand service
-        const bypassOnDemand = req.query.direct === 'true' || 
-                              req.body.metadata?.direct === true || 
-                              req.body.direct === true || 
-                              process.env.BYPASS_ONDEMAND === 'true';
-        
-        // Check if we should only use the on-demand service (no fallback to direct calls)
-        const onlyUseOnDemand = req.query.onlyOnDemand === 'true' || 
-                               req.body.metadata?.onlyOnDemand === true || 
-                               req.body.onlyOnDemand === true || 
-                               process.env.ONLY_USE_ONDEMAND === 'true';
-        
-        if (bypassOnDemand) {
-            console.log('Bypassing on-demand service as requested');
+        // Verify vein type is valid
+        if (!VALID_VEIN_TYPES.includes(veinType)) {
+            throw new Error(`Invalid vein type: ${veinType}`);
         }
         
-        if (onlyUseOnDemand) {
-            console.log('Only using on-demand service as requested (no fallback to direct calls)');
+        // Check that we have image data
+        if (!req.body || !req.body.image) {
+            throw new Error('Missing image data in request body');
         }
         
-        // Check valid vein type
-        if (!['hepatic', 'portal', 'renal'].includes(veinType)) {
-            return res.status(400).json({ 
-                error: `Invalid vein type: ${veinType}. Must be one of: hepatic, portal, renal` 
-            });
-        }
-        
-        // Get image data from request
-        let imageData;
-        let imageType = req.body.metadata?.imageType || req.body.imageType || 'image/jpeg';
-        
-        if (req.file) {
-            // If image was uploaded as a file
-            console.log('Processing uploaded file for prediction');
-            const imageBuffer = req.file.buffer;
-            imageData = imageBuffer.toString('base64');
-        } else if (req.body.instances && req.body.instances[0] && req.body.instances[0].content) {
-            // If image was sent in Vertex AI format
-            console.log('Processing image from instances array');
-            imageData = req.body.instances[0].content;
-        } else if (req.body.content) {
-            // If image was sent directly in content field
-            console.log('Processing image from direct content field');
-            imageData = req.body.content;
-        } else {
-            return res.status(400).json({ error: 'No image data provided' });
-        }
-        
-        // Prepare image for prediction
-        const preparedImage = await prepareImageForPrediction(imageData, imageType);
-        
-        if (!preparedImage || !preparedImage.content) {
-            return res.status(400).json({ error: 'Provided image is not valid' });
-        }
-        
-        console.log(`Image prepared for prediction, mime type: ${preparedImage.mimeType}`);
-        
-        // Store image if enabled (both raw and processed versions for debugging)
-        if (CONFIG.storeImages) {
-            try {
-                imageInfo = await uploadImage(
-                    `data:${preparedImage.mimeType};base64,${preparedImage.content}`, 
-                    veinType
-                );
-                console.log(`Image stored with ID: ${imageInfo.id}`);
-            } catch (storageError) {
-                console.error('Error storing image:', storageError);
-                // Continue despite storage error
-            }
-        }
-        
-        // Prepare the instances array with the correct format
-        const instances = [
-            {
-                content: preparedImage.content,
-                mimeType: preparedImage.mimeType  // Include mimeType for Vertex AI
-            }
-        ];
-        
-        // Get parameters from request or use defaults
+        // Prepare the image and parameters
+        const imageData = req.body.image;
         const parameters = req.body.parameters || {
-            confidenceThreshold: 0.0,
+            confidenceThreshold: 0,
             maxPredictions: 5
         };
         
-        // First try the on-demand service
-        console.log('Calling on-demand service for prediction');
-        console.log(`Using on-demand service URL: ${CONFIG.onDemandEndpointService}`);
-        console.log(`Using on-demand service URL: ${CONFIG.onDemandEndpointService}`);
-        
-        // Log request diagnostics
-        await logDiagnostics('REQUEST', { 
+        // Add diagnostic logging for request
+        logDiagnostics('REQUEST', 'Prediction request received', {
             veinType, 
-            imageType: preparedImage.mimeType,
-            hasInstances: true,
-            instanceCount: instances.length,
+            hasImage: !!imageData,
             parameters
-        }, null, veinType);
+        });
         
-        // Make the call to the on-demand service
+        // Prepare image for prediction
+        const preparedImage = prepareImageForPrediction(imageData);
+        
+        // Check if image preparation failed
+        if (preparedImage.error) {
+            return res.status(400).json({ 
+                error: 'Invalid image format', 
+                details: preparedImage.error 
+            });
+        }
+        
+        // Create instances array with the prepared image
+        const instances = [{
+            content: preparedImage.content,
+            mimeType: preparedImage.mimeType
+        }];
+        
+        // First try the on-demand service
         try {
-            // Get credentials and token 
-            const credentials = await getCredentials();
-            const token = credentials.access_token || credentials;
+            console.log(`Making prediction request for ${veinType} vein via on-demand service`);
             
-            // Add diagnostic logging for on-demand request
+            // Prepare payload for on-demand service
             const onDemandPayload = {
-                instances: instances.map(instance => ({
-                    content: instance.content,
-                    mimeType: instance.mimeType || 'image/jpeg'
-                })),
-                parameters: parameters,
+                instances,
+                parameters,
                 metadata: {
                     veinType,
                     imageType: preparedImage.mimeType,
@@ -542,171 +484,78 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
                 }
             };
             
-            await logDiagnostics('ONDEMAND_REQUEST', onDemandPayload, null, veinType);
+            logDiagnostics('ONDEMAND_REQUEST', `On-demand request for ${veinType}`, onDemandPayload);
             
             // Call the on-demand service
             const result = await makeApiCallWithRetry(
-                `${CONFIG.onDemandEndpointService}/predict/${veinType}`,
-                onDemandPayload,
-                token,
-                veinType
+                `${CONFIG.onDemandServiceUrl}/predict/${veinType}`,
+                onDemandPayload
             );
-
+            
             // Add diagnostic logging for on-demand response
-            await logDiagnostics('ONDEMAND_RESPONSE', result, null, veinType);
+            logDiagnostics('ONDEMAND_RESPONSE', `On-demand response for ${veinType}`, result);
             
-            // Store prediction results if we have image info
-            if (imageInfo && result.predictions && result.predictions.length > 0) {
-                try {
-                    await storePredictionResults(
-                        imageInfo,
-                        {
-                            displayNames: result.predictions[0].displayNames || [],
-                            confidences: result.predictions[0].confidences || [],
-                            modelId: result.modelId || null
-                        },
-                        veinType
-                    );
-                } catch (resultStorageError) {
-                    console.error('Error storing prediction results:', resultStorageError);
-                }
-            }
-            
-            // Check if we got empty predictions
-            const displayNames = result.predictions?.[0]?.displayNames || [];
-            const confidences = result.predictions?.[0]?.confidences || [];
-            
-            console.log(`Received ${displayNames.length} displayNames and ${confidences.length} confidences`);
-            
-            // If we got valid predictions, return them
-            if (displayNames.length > 0 && confidences.length > 0) {
-                return res.json({
-                    displayNames: displayNames,
-                    confidences: confidences,
-                    modelId: result.modelId || null,
-                    method: 'ondemand',
-                    timestamp: new Date().toISOString(),
-                    storage: imageInfo ? {
-                        stored: true,
-                        imageUrl: imageInfo.url,
-                        resultsPath: imageInfo.id
-                    } : null
-                });
-            }
-            
-            // If we got empty predictions, try direct Vertex AI call if not restricted to on-demand only
-            if (onlyUseOnDemand) {
-                console.log('On-demand service returned empty predictions, but only using on-demand service as requested');
-                return res.status(404).json({
-                    error: 'No predictions available from on-demand service',
-                    details: 'On-demand service returned empty predictions and fallback to direct calls is disabled',
-                    veinType: veinType,
-                    timestamp: new Date().toISOString()
-                });
-            } else {
-                console.log('On-demand service returned empty predictions, trying direct Vertex AI call');
-            }
+            // Return the prediction results
+            return res.json(result);
         } catch (onDemandError) {
             console.error('On-demand service error:', onDemandError);
             
             // Add diagnostic logging for on-demand error
-            await logDiagnostics('ONDEMAND_ERROR', null, onDemandError, veinType);
+            logDiagnostics('ONDEMAND_ERROR', `On-demand error for ${veinType}`, null, onDemandError);
             
-            // Log more details about the error
-            console.error('Error type:', onDemandError.constructor.name);
-            if (onDemandError.code) {
-                console.error('Error code:', onDemandError.code);
-            }
-            if (onDemandError.response) {
-                console.error('Response status:', onDemandError.response.status);
-                console.error('Response text:', await onDemandError.response.text());
-            }
+            console.log('Falling back to direct Vertex AI call');
             
-            // If only using on-demand service, return error instead of falling back to direct calls
-            if (onlyUseOnDemand) {
-                console.log('On-demand service failed, but only using on-demand service as requested');
-                return res.status(503).json({
-                    error: 'On-demand prediction service unavailable',
-                    details: onDemandError.message || 'Error during on-demand service call',
-                    veinType: veinType,
-                    timestamp: new Date().toISOString()
+            try {
+                const directResponse = await makeDirectVertexAIPrediction(veinType, instances, parameters);
+                
+                // Extract predictions from the direct response
+                if (directResponse && directResponse.predictions && directResponse.predictions.length > 0) {
+                    // Return the prediction results
+                    return res.json({
+                        displayNames: directResponse.predictions[0].displayNames || [],
+                        confidences: directResponse.predictions[0].confidences || [],
+                        modelId: directResponse.deployedModelId || null,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    // Log the empty prediction response
+                    logDiagnostics('EMPTY_PREDICTION_ERROR', `Empty prediction error for ${veinType}`, directResponse);
+                    
+                    // Return error for empty predictions
+                    return res.status(404).json({
+                        error: 'No predictions available',
+                        message: 'The model did not return any predictions',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            } catch (directError) {
+                console.error('Direct Vertex AI call failed:', directError);
+                
+                // Add diagnostic logging for direct API error
+                logDiagnostics('DIRECT_ERROR', `Direct error for ${veinType}`, null, directError);
+                
+                // Return error
+                return res.status(500).json({
+                    error: 'Prediction failed',
+                    message: `Failed to process request. ${directError.message}`,
+                    timestamp: new Date().toISOString(),
+                    veinType
                 });
             }
-        }
-        
-        // Try direct vertex AI call as a fallback (only if not restricted to on-demand only)
-        console.log('Falling back to direct Vertex AI call');
-        
-        try {
-            // Use the helper function for direct Vertex AI prediction
-            const directResponse = await makeDirectVertexAIPrediction(veinType, instances, parameters);
-            
-            // If direct call also fails to provide predictions, return error instead of using mock
-            if (!directResponse.predictions || 
-                directResponse.predictions.length === 0 || 
-                !directResponse.predictions[0].displayNames || 
-                directResponse.predictions[0].displayNames.length === 0) {
-                
-                console.log('Direct call also returned empty predictions, returning error');
-                
-                // Log the empty prediction response
-                await logDiagnostics('EMPTY_PREDICTION_ERROR', directResponse, null, veinType);
-                
-                // Return an error response to the client
-                return res.status(404).json({
-                    error: 'No predictions available from AI model',
-                    details: 'Both on-demand service and direct calls returned empty predictions',
-                    veinType: veinType,
-                    timestamp: new Date().toISOString()
-                });
-            }
-            
-            // Return the direct prediction response
-            return res.json({
-                displayNames: directResponse.predictions[0].displayNames || [],
-                confidences: directResponse.predictions[0].confidences || [],
-                modelId: directResponse.deployedModelId || null,
-                method: 'direct', // Indicate this was a direct call
-                timestamp: new Date().toISOString()
-            });
-        } catch (directError) {
-            console.error('Direct Vertex AI call failed:', directError);
-            
-            // Add diagnostic logging for direct API error
-            await logDiagnostics('DIRECT_ERROR', null, directError, veinType);
-            
-            // Schedule endpoint shutdown even after error
-            scheduleEndpointShutdown(veinType);
-            
-            // Return error instead of using mock predictions
-            console.log('Returning prediction error after direct call failed');
-            
-            return res.status(500).json({
-                error: 'Prediction service unavailable',
-                details: directError.message || 'Error during direct Vertex AI call',
-                veinType: veinType,
-                timestamp: new Date().toISOString()
-            });
         }
     } catch (error) {
-        // Get vein type from request if not already defined
-        const veinType = req.body?.metadata?.veinType || req.body?.veinType || 'hepatic';
+        console.error('Prediction error:', error);
         
-        console.error(`Prediction error for ${veinType}:`, error);
-        
-        // Add diagnostic logging for error
-        await logDiagnostics('PREDICTION_ERROR', null, error, veinType);
+        // Add error diagnostic logging
+        logDiagnostics('PREDICTION_ERROR', `Prediction error for ${veinType}`, null, error);
         
         // Return the error to the client
-        return res.status(500).json({ 
-            error: error.message || 'An unexpected error occurred during prediction',
-            veinType: veinType,
-            timestamp: new Date().toISOString()
+        res.status(500).json({
+            error: 'Prediction failed',
+            message: error.message,
+            timestamp: new Date().toISOString(),
+            veinType
         });
-    } finally {
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-        console.log(`Prediction request completed in ${duration}ms`);
     }
 });
 
@@ -829,10 +678,14 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
         }
         
         // Prepare image for prediction
-        const preparedImage = await prepareImageForPrediction(imageData, imageType);
+        const preparedImage = prepareImageForPrediction(imageData);
         
-        if (!preparedImage || !preparedImage.content) {
-            return res.status(400).json({ error: 'Provided image is not valid' });
+        // Check if image preparation failed
+        if (preparedImage.error) {
+            return res.status(400).json({ 
+                error: 'Invalid image format', 
+                details: preparedImage.error 
+            });
         }
         
         console.log(`Image prepared for prediction, mime type: ${preparedImage.mimeType}`);
@@ -887,13 +740,13 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
         }, null, 2));
         
         // Add diagnostic logging for direct API request
-        await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
+        await logDiagnostics('DIRECT_REQUEST', `Direct request for ${veinType}`, directRequest, { veinType });
         
         try {
             const [directResponse] = await predictionClient.predict(directRequest);
             
             // Add diagnostic logging for direct API response
-            await logDiagnostics('DIRECT_RESPONSE', directResponse, null, veinType);
+            await logDiagnostics('DIRECT_RESPONSE', `Direct response for ${veinType}`, directResponse, { veinType });
             
             // Check if we got valid predictions, return error if not
             if (!directResponse.predictions || 
@@ -904,7 +757,7 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
                 console.log('Direct call returned empty predictions, returning error');
                 
                 // Log the error
-                await logDiagnostics('EMPTY_PREDICTION_ERROR', directResponse, null, veinType);
+                await logDiagnostics('EMPTY_PREDICTION_ERROR', `Empty prediction error for ${veinType}`, directResponse, { veinType });
                 
                 // Return an error response to the client
                 return res.status(404).json({
@@ -927,9 +780,14 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
             console.error('Direct Vertex AI call failed:', directError);
             
             // Add diagnostic logging for direct API error
-            await logDiagnostics('DIRECT_ERROR', null, directError, veinType);
+            await logDiagnostics('DIRECT_ERROR', `Direct error for ${veinType}`, null, { error: directError, veinType });
             
-            // Return error
+            // Schedule endpoint shutdown even after error
+            scheduleEndpointShutdown(veinType);
+            
+            // Return error instead of using mock predictions
+            console.log('Returning prediction error after direct call failed');
+            
             return res.status(500).json({
                 error: 'Prediction service unavailable',
                 details: directError.message || 'Error during direct Vertex AI call',
@@ -941,7 +799,7 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
         console.error('Direct prediction error:', error);
         
         // Add error diagnostic logging
-        await logDiagnostics('ERROR', null, error);
+        await logDiagnostics('ERROR', 'General error', null, { error });
         
         // Return the error to the client
         return res.status(500).json({ 
@@ -1038,179 +896,131 @@ app.listen(DEFAULT_PORT, () => {
     console.log(`Configuration: ${JSON.stringify(CONFIG, null, 2)}`);
 });
 
-// Function to prepare image for prediction
-async function prepareImageForPrediction(imageContent, imageType = 'image/jpeg') {
-    console.log(`Preparing image for prediction, type: ${imageType}`);
-    
+// Function to prepare the image for prediction
+function prepareImageForPrediction(base64Image, mimeType = 'image/jpeg') {
+    // Handle null or undefined input
+    if (!base64Image) {
+        console.error('Invalid image data: null or undefined');
+        return { error: 'Invalid image data' };
+    }
+
     try {
-        // Log the type and first few characters of the content for debugging
-        console.log(`Image content type: ${typeof imageContent}`);
-        if (typeof imageContent === 'string') {
-            console.log(`Image content starts with: ${imageContent.substring(0, 20)}...`);
-            console.log(`Image content length: ${imageContent.length} characters`);
-            
-            // Check if it's a valid base64 string
-            const isBase64 = /^[A-Za-z0-9+/=]+$/.test(imageContent.replace(/\s/g, ''));
-            console.log(`Is valid base64 (without data URL): ${isBase64}`);
-        } else if (Buffer.isBuffer(imageContent)) {
-            console.log(`Image content is a Buffer of length: ${imageContent.length} bytes`);
-        } else {
-            console.log(`Image content is of unexpected type: ${typeof imageContent}`);
-        }
-        
-        // Check if the imageContent is already a base64 string without data URL prefix
-        if (!/^data:/.test(imageContent) && /^[A-Za-z0-9+/=]+$/.test(imageContent.replace(/\s/g, ''))) {
-            console.log('Image content appears to be already in base64 format without prefix');
-            // Remove any whitespace that might be in the base64 string
-            const cleanBase64 = imageContent.replace(/\s/g, '');
+        // Handle buffer input 
+        if (Buffer.isBuffer(base64Image)) {
             return {
-                content: cleanBase64,
-                mimeType: imageType
-            };
-        }
-        
-        // Check if the imageContent is a data URL (starts with data:)
-        if (imageContent.startsWith('data:')) {
-            console.log('Image content is a data URL, extracting base64 content and mime type');
-            const parts = imageContent.split(',');
-            if (parts.length !== 2) {
-                throw new Error('Invalid base64 data format');
-            }
-            
-            const base64Content = parts[1];
-            const mimeTypeMatch = parts[0].match(/:(.*?);/);
-            if (!mimeTypeMatch) {
-                console.log('Could not determine image MIME type from data URL, using provided type');
-                return {
-                    content: base64Content,
-                    mimeType: imageType
-                };
-            }
-            
-            const mimeType = mimeTypeMatch[1];
-            console.log(`Successfully extracted base64 content and MIME type: ${mimeType}`);
-            return {
-                content: base64Content,
+                content: base64Image.toString('base64'),
                 mimeType: mimeType
             };
         }
-        
-        // If we're dealing with a file path or buffer
-        if (typeof imageContent === 'string' && !imageContent.startsWith('data:')) {
-            if (fs.existsSync(imageContent)) {
-                console.log(`Reading image from file path: ${imageContent}`);
-                const imageBuffer = await fs.readFile(imageContent);
-                const base64Content = imageBuffer.toString('base64');
+    
+        // Handle string input
+        if (typeof base64Image === 'string') {
+            // Remove data URI prefix if present
+            let cleanedBase64 = base64Image;
+            if (base64Image.startsWith('data:')) {
+                const parts = base64Image.split(',');
+                if (parts.length === 2) {
+                    cleanedBase64 = parts[1];
+                    // Extract mimeType if not provided
+                    if (!mimeType && parts[0].includes(':') && parts[0].includes(';')) {
+                        mimeType = parts[0].split(':')[1].split(';')[0];
+                    }
+                }
+            }
+            
+            return {
+                content: cleanedBase64,
+                mimeType: mimeType
+            };
+        }
+    
+        // Handle object input
+        if (typeof base64Image === 'object') {
+            // If it already has the content field
+            if (base64Image.content) {
                 return {
-                    content: base64Content,
-                    mimeType: imageType
+                    content: base64Image.content,
+                    mimeType: base64Image.mimeType || mimeType
                 };
-            } else {
-                console.log('Image content is not a file path, treating as raw base64');
-                // Clean up any whitespace in the base64 string
-                const cleanBase64 = imageContent.replace(/\s/g, '');
+            }
+            
+            // If it has the base64 field
+            if (base64Image.base64) {
                 return {
-                    content: cleanBase64,
-                    mimeType: imageType
+                    content: base64Image.base64,
+                    mimeType: base64Image.mimeType || mimeType
+                };
+            }
+            
+            // If it has the imageBytes field
+            if (base64Image.imageBytes) {
+                return {
+                    content: base64Image.imageBytes,
+                    mimeType: base64Image.mimeType || mimeType
                 };
             }
         }
         
-        // If we have a buffer
-        if (Buffer.isBuffer(imageContent)) {
-            console.log('Image content is a buffer, converting to base64');
-            const base64Content = imageContent.toString('base64');
-            return {
-                content: base64Content,
-                mimeType: imageType
-            };
-        }
-        
-        // Fallback - assume it's already properly formatted
-        console.log('Using image content as-is with provided MIME type');
-        if (typeof imageContent === 'string') {
-            // Clean up any whitespace in the base64 string
-            const cleanBase64 = imageContent.replace(/\s/g, '');
-            return {
-                content: cleanBase64,
-                mimeType: imageType
-            };
-        }
-        
-        return {
-            content: imageContent,
-            mimeType: imageType
-        };
+        // If we can't handle the input format, return an error
+        console.error('Unsupported image format:', typeof base64Image);
+        return { error: 'Unsupported image format' };
     } catch (error) {
         console.error('Error preparing image for prediction:', error);
-        throw new Error('Failed to prepare image for prediction: ' + error.message);
+        return { error: error.message };
     }
 }
 
 // Function to log diagnostics
-async function logDiagnostics(eventType, data, error, veinType = 'unknown') {
+async function logDiagnostics(type, message, data, metadata) {
     try {
-        console.log(`[DIAGNOSTIC] ${eventType} - ${veinType}`);
-        
+        if (!DEBUG_LOGS_ENABLED) return;
+
+        // Create a deep copy of data to sanitize if needed
+        let sanitizedData = null;
         if (data) {
-            // Avoid logging large image data
-            const sanitizedData = { ...data };
-            if (sanitizedData.instances) {
-                sanitizedData.instances = sanitizedData.instances.map(instance => {
-                    if (instance.content) {
-                        if (typeof instance.content === 'string') {
-                            return { 
-                                ...instance, 
-                                content: `[BASE64 DATA - ${instance.content.length} chars]`
-                            };
-                        } else if (instance.content.b64) {
-                            return {
-                                ...instance,
-                                content: {
-                                    b64: `[BASE64 DATA - ${instance.content.b64.length} chars]`
-                                }
-                            };
-                        }
-                    }
-                    return instance;
-                });
-            }
-            
-            console.log(`[DIAGNOSTIC] Data: ${JSON.stringify(sanitizedData, null, 2)}`);
-        }
-        
-        if (error) {
-            console.error(`[DIAGNOSTIC] Error: ${error.message}`);
-            console.error(`[DIAGNOSTIC] Stack: ${error.stack}`);
-            
-            // Log more detailed error information for specific error types
-            if (error.code) {
-                console.error(`[DIAGNOSTIC] Error Code: ${error.code}`);
-            }
-            if (error.details) {
-                console.error(`[DIAGNOSTIC] Error Details: ${error.details}`);
-            }
-            if (error.metadata) {
-                console.error(`[DIAGNOSTIC] Error Metadata:`, error.metadata);
+            try {
+                sanitizedData = JSON.parse(JSON.stringify(data));
+            } catch (parseError) {
+                console.error('Error sanitizing data for logging:', parseError);
+                sanitizedData = { error: 'Data could not be stringified', original: String(data) };
             }
         }
         
-        // Log to file for persistent diagnostics
+        // If data contains a content field with base64 data, abbreviate it
+        if (sanitizedData && sanitizedData.instances) {
+            sanitizedData.instances.forEach(instance => {
+                if (instance && instance.content && typeof instance.content === 'string' && instance.content.length > 100) {
+                    instance.content = `[BASE64 DATA - ${instance.content.length} chars]`;
+                }
+            });
+        } else if (sanitizedData && sanitizedData.content && typeof sanitizedData.content === 'string' && sanitizedData.content.length > 100) {
+            sanitizedData.content = `[BASE64 DATA - ${sanitizedData.content.length} chars]`;
+        }
+        
+        // Create log entry
+        const logEntry = {
+            timestamp: new Date().toISOString(),
+            type,
+            message,
+            data: sanitizedData,
+            metadata
+        };
+        
+        // Write to log file
         try {
-            await fs.appendFile('server_debug.log', 
-                `[${new Date().toISOString()}] [${eventType}] [${veinType}] ` + 
-                (data ? `Data: ${JSON.stringify(sanitizedData, null, 2)} ` : '') +
-                (error ? `Error: ${error.message} ` : '') + 
-                '\n'
-            );
-        } catch (fileError) {
-            console.error('Error writing to debug log file:', fileError);
+            fs.appendFileSync(DEBUG_LOG_PATH, JSON.stringify(logEntry) + '\n', 'utf8');
+        } catch (writeError) {
+            console.error('Error writing to log file:', writeError);
         }
         
-        // In a production environment, you might want to store these diagnostics
-        // in a database or log aggregation service
-    } catch (logError) {
-        console.error('Error logging diagnostics:', logError);
+        // Log to console in development
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[DIAGNOSTIC] ${type} - ${message}`);
+            if (sanitizedData) console.log(`[DIAGNOSTIC] Data: ${JSON.stringify(sanitizedData, null, 2)}`);
+            if (metadata) console.log(`[DIAGNOSTIC] Metadata: ${JSON.stringify(metadata, null, 2)}`);
+        }
+    } catch (error) {
+        console.error(`Error writing to debug log file: ${error}`);
     }
 }
 
@@ -1272,90 +1082,118 @@ async function generateMockPredictions(veinType = 'hepatic') {
 
 // Function to make direct Vertex AI prediction call
 async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
-    console.log(`Making direct Vertex AI prediction for ${veinType} vein`);
-    
     try {
-        // Initialize Vertex AI client if not already done
+        console.log('Making direct Vertex AI prediction for', veinType, 'vein');
+        
+        // Get credentials from Secret Manager
+        console.log('Getting credentials from Secret Manager...');
+        const credentials = await getCredentials();
+        console.log('Got credentials from Secret Manager');
+        
+        // Initialize Vertex AI client
+        console.log('Initializing Vertex AI client with Secret Manager credentials');
         if (!predictionClient) {
-            predictionClient = await initializeVertexAI();
+            await initializeVertexAI();
         }
         
-        const endpointId = CONFIG.endpointIds[veinType];
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
+        console.log('Using Vertex AI API endpoint:', `${CONFIG.location}-aiplatform.googleapis.com`);
+        console.log('Configured endpoints - Hepatic:', CONFIG.endpointIds.hepatic, 
+                                      ', Portal:', CONFIG.endpointIds.portal, 
+                                      ', Renal:', CONFIG.endpointIds.renal);
         
-        console.log(`Sending direct prediction request to endpoint: ${endpointPath}`);
-        
-        // Create the request object for direct Vertex AI call
-        const directRequest = {
-            endpoint: endpointPath,
-            instances: instances.map(instance => {
-                // Ensure each instance has both content and mimeType fields
+        // Ensure instances have the correct format with both content and mimeType
+        const formattedInstances = instances.map(instance => {
+            // If instance is already an object with content field
+            if (typeof instance === 'object' && instance !== null && instance.content) {
                 return {
                     content: instance.content,
                     mimeType: instance.mimeType || 'image/jpeg'
                 };
-            }),
+            }
+            
+            // If instance is a string (base64 content directly)
+            if (typeof instance === 'string') {
+                return {
+                    content: instance,
+                    mimeType: 'image/jpeg'
+                };
+            }
+            
+            // Return instance if it doesn't match any known format
+            return instance;
+        });
+
+        // Format the API request
+        const directRequest = {
+            endpoint: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointIds[veinType]}`,
+            instances: formattedInstances,
             parameters: parameters || {
-                confidenceThreshold: 0.0,
+                confidenceThreshold: 0,
                 maxPredictions: 5
             }
         };
-        
-        // Log the exact format being sent to Vertex AI (without the full image content)
+
+        // Log the request format for debugging
         console.log('DEBUG - Vertex AI request format:', JSON.stringify({
-            ...directRequest,
-            instances: directRequest.instances.map(instance => ({
-                ...instance,
-                content: instance.content ? `[BASE64 DATA - ${instance.content.length} chars]` : undefined
-            }))
+            endpoint: directRequest.endpoint,
+            instances: directRequest.instances.map(inst => ({
+                content: inst.content ? `[BASE64 DATA - ${inst.content.length} chars]` : 'undefined',
+                mimeType: inst.mimeType || 'undefined'
+            })),
+            parameters: directRequest.parameters
         }, null, 2));
+
+        // Log diagnostics for the request
+        await logDiagnostics('DIRECT_REQUEST', veinType, directRequest);
         
-        // Add diagnostic logging for direct API request
-        await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
+        // Make the API call
+        const response = await predictionClient.predict(directRequest);
         
-        const [directResponse] = await predictionClient.predict(directRequest);
-        
-        // Add diagnostic logging for direct API response
-        await logDiagnostics('DIRECT_RESPONSE', directResponse, null, veinType);
-        
-        // Schedule endpoint shutdown after the direct API call
+        // Schedule endpoint shutdown
+        console.log('Scheduling shutdown for', veinType, 'endpoint in', CONFIG.endpointShutdownDelayMinutes, 'minutes');
         scheduleEndpointShutdown(veinType);
         
-        return directResponse;
+        return response;
     } catch (error) {
+        // Log the error
+        await logDiagnostics('DIRECT_ERROR', veinType, null, { error });
         console.error('Direct Vertex AI call failed:', error);
         
-        // Add diagnostic logging for direct API error
-        await logDiagnostics('DIRECT_ERROR', null, error, veinType);
+        // Log detailed error information
+        console.log('Error type:', error.constructor.name);
+        if (error.code !== undefined) console.log('Error code:', error.code);
+        if (error.message) console.log('Error message:', error.message);
+        if (error.details) console.log('Error details:', error.details);
+        if (error.metadata) console.log('Error metadata:', error.metadata);
         
         // Schedule endpoint shutdown even after error
+        console.log('Scheduling shutdown for', veinType, 'endpoint in', CONFIG.endpointShutdownDelayMinutes, 'minutes');
         scheduleEndpointShutdown(veinType);
         
         throw error;
     }
 }
 
-// Function to make API call with retry
-async function makeApiCallWithRetry(url, payload, token, veinType, maxRetries = 2) {
-    let retries = 0;
-    let lastError = null;
+// Function to make API calls with retry logic
+async function makeApiCallWithRetry(url, payload, maxRetries = 3, initialDelay = 2000) {
+    let attempt = 1;
+    let delay = initialDelay;
     
-    while (retries <= maxRetries) {
+    while (attempt <= maxRetries) {
+        console.log(`Making API call to ${url} (attempt ${attempt}/${maxRetries})`);
+        console.log(`Payload: ${JSON.stringify({
+            ...payload,
+            instances: payload.instances.map(instance => ({
+                ...instance,
+                content: instance.content ? `[BASE64 DATA - ${typeof instance.content === 'string' ? instance.content.length : 'unknown'} chars]` : undefined
+            }))
+        })}`);
+        
         try {
-            console.log(`Making API call to ${url} (attempt ${retries + 1}/${maxRetries + 1})`);
-            console.log(`Payload: ${JSON.stringify({
-                ...payload,
-                instances: payload.instances.map(instance => ({
-                    ...instance,
-                    content: instance.content ? `[BASE64 DATA - ${instance.content.length} chars]` : undefined
-                }))
-            }, null, 2)}`);
-            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             });
@@ -1365,25 +1203,22 @@ async function makeApiCallWithRetry(url, payload, token, veinType, maxRetries = 
                 throw new Error(`API call failed with status ${response.status}: ${errorText}`);
             }
             
-            const result = await response.json();
-            console.log(`API call succeeded with result: ${JSON.stringify(result, null, 2)}`);
-            return result;
+            return await response.json();
         } catch (error) {
-            console.error(`API call attempt ${retries + 1} failed:`, error.message);
-            lastError = error;
-            retries++;
+            console.log(`API call attempt ${attempt} failed: ${error.message}`);
             
-            if (retries <= maxRetries) {
-                // Wait before retrying (exponential backoff)
-                const delay = Math.pow(2, retries) * 1000;
-                console.log(`Waiting ${delay}ms before retry...`);
-                await new Promise(resolve => setTimeout(resolve, delay));
+            if (attempt === maxRetries) {
+                throw error;
             }
+            
+            console.log(`Waiting ${delay}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            // Exponential backoff
+            delay *= 2;
+            attempt++;
         }
     }
-    
-    // If we get here, all retries failed
-    throw lastError || new Error('API call failed after all retries');
 }
 
 // Function to schedule endpoint shutdown

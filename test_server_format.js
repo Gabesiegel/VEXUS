@@ -24,7 +24,7 @@ async function testServerFormat() {
     
     // Create the request payload - make sure to use the format expected by the server
     const payload = {
-      image: imageContent,  // Changed from imageData to image
+      content: imageContent,  // Using the content field as expected by the server
       veinType: 'hepatic',
       metadata: {
         source: 'test_script',
