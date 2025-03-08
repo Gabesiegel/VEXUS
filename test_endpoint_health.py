@@ -11,15 +11,15 @@ from datetime import datetime
 print("========== ENDPOINT AND SERVICE HEALTH CHECK ==========")
 
 # Configuration
-ONDEMAND_URL = "https://endpoints-on-demand-456295042668.us-central1.run.app"
+PROJECT_ID = "plucky-weaver-450819-k7"
+LOCATION = "us-central1"
+ONDEMAND_URL = f"https://endpoints-on-demand-{PROJECT_ID}.{LOCATION}.run.app"
 SERVER_URL = "http://localhost:3002"
 ENDPOINTS = {
     "hepatic": "8159951878260523008",
     "portal": "2970410926785691648",
     "renal": "1148704877514326016"
 }
-PROJECT_ID = "456295042668"
-LOCATION = "us-central1"
 
 def get_access_token():
     """Get access token from gcloud"""
