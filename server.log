@@ -1173,3 +1173,5 @@ Requesting: /api/predict/direct/hepatic
 Requesting: /api/predict/direct/hepatic
 Requesting: /api/predict/direct/portal
 Requesting: /api/predict/direct/renal
+Requesting: /api/local-health
+Requesting: /api/local-health

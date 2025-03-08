@@ -601,69 +601,209 @@ app.post('/api/predict', upload.single('image'), async (req, res) => {
         console.log('Falling back to direct Vertex AI call');
         
         try {
-            // Use the helper function for direct Vertex AI prediction
-            const directResponse = await makeDirectVertexAIPrediction(veinType, instances, parameters);
+            // Initialize Vertex AI client if not already done
+                    if (!predictionClient) {
+                        predictionClient = await initializeVertexAI();
+                    }
+                    
+                    const endpointId = CONFIG.endpointIds[veinType];
+                    const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
+                    
+                    console.log(`Sending direct prediction request to endpoint: ${endpointPath}`);
+                    
+                    // Create the request object for direct Vertex AI call
+                    const directRequest = {
+                        endpoint: endpointPath,
+                        instances: instances,
+                        parameters: parameters || {
+                            confidenceThreshold: 0.0,
+                            maxPredictions: 5
+                        }
+                    };
+                    
+                    // Add diagnostic logging for direct API request
+                    await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
+                    
+                    const [directResponse] = await predictionClient.predict(directRequest);
+                    
+                    // Add diagnostic logging for direct API response
+                    await logDiagnostics('DIRECT_RESPONSE', directResponse, null, veinType);
+                    
+                    // Schedule endpoint shutdown after the direct API call
+                    scheduleEndpointShutdown(veinType);
+                    
+                    // If direct call also fails to provide predictions, return error instead of using mock
+                    if (!directResponse.predictions || 
+                        directResponse.predictions.length === 0 || 
+                        !directResponse.predictions[0].displayNames || 
+                        directResponse.predictions[0].displayNames.length === 0) {
+                        
+                        console.log('Direct call also returned empty predictions, returning error');
+                        
+                        // Log the empty prediction response
+                        await logDiagnostics('EMPTY_PREDICTION_ERROR', directResponse, null, veinType);
+                        
+                        // Return an error response to the client
+                        return res.status(404).json({
+                            error: 'No predictions available from AI model',
+                            details: 'Both on-demand service and direct calls returned empty predictions',
+                            veinType: veinType,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                    
+                    // Return the direct prediction response
+                    return res.json({
+                        displayNames: directResponse.predictions[0].displayNames || [],
+                        confidences: directResponse.predictions[0].confidences || [],
+                        modelId: directResponse.deployedModelId || null,
+                        method: 'direct', // Indicate this was a direct call
+                        timestamp: new Date().toISOString()
+                    });
+                } catch (directError) {
+                    console.error('Direct Vertex AI call failed:', directError);
+                    
+                    // Add diagnostic logging for direct API error
+                    await logDiagnostics('DIRECT_ERROR', null, directError, veinType);
+                    
+                    // Schedule endpoint shutdown even after error
+                    scheduleEndpointShutdown(veinType);
+                    
+                    // Return error instead of using mock predictions
+                    console.log('Returning prediction error after direct call failed');
+                    
+                    return res.status(500).json({
+                        error: 'Prediction service unavailable',
+                        details: directError.message || 'Error during direct Vertex AI call',
+                        veinType: veinType,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+    } catch (error) {
+            console.error('Prediction error:', error);
             
-            // If direct call also fails to provide predictions, return error instead of using mock
-            if (!directResponse.predictions || 
-                directResponse.predictions.length === 0 || 
-                !directResponse.predictions[0].displayNames || 
-                directResponse.predictions[0].displayNames.length === 0) {
+            // Add diagnostic logging for error
+            await logDiagnostics('PREDICTION_ERROR', null, error, veinType);
+            
+            // Try direct vertex AI call as a fallback
+            console.log('Falling back to direct Vertex AI call');
+            
+            try {
+                // Initialize Vertex AI client if not already done
+                if (!predictionClient) {
+                    predictionClient = await initializeVertexAI();
+                }
                 
-                console.log('Direct call also returned empty predictions, returning error');
+                const endpointId = CONFIG.endpointIds[veinType];
+                const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
                 
-                // Log the empty prediction response
-                await logDiagnostics('EMPTY_PREDICTION_ERROR', directResponse, null, veinType);
+                console.log(`Sending direct prediction request to endpoint: ${endpointPath}`);
                 
-                // Return an error response to the client
-                return res.status(404).json({
-                    error: 'No predictions available from AI model',
-                    details: 'Both on-demand service and direct calls returned empty predictions',
+                // Create the request object for direct Vertex AI call
+                const directRequest = {
+                    endpoint: endpointPath,
+                    instances: instances,
+                    parameters: parameters || {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    }
+                };
+                
+                // Add diagnostic logging for direct API request
+                await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
+                
+                const [directResponse] = await predictionClient.predict(directRequest);
+                
+                // Add diagnostic logging for direct API response
+                await logDiagnostics('DIRECT_RESPONSE', directResponse, null, veinType);
+                
+                // Store results if we have image info
+                if (imageInfo && directResponse.predictions && directResponse.predictions.length > 0) {
+                    const directPrediction = directResponse.predictions[0];
+                    
+                    try {
+                        await storePredictionResults(
+                            imageInfo,
+                            {
+                                displayNames: directPrediction.displayNames || [],
+                                confidences: directPrediction.confidences || [],
+                                modelId: directResponse.deployedModelId || null
+                            },
+                            veinType
+                        );
+                    } catch (resultStorageError) {
+                        console.error('Error storing direct prediction results:', resultStorageError);
+                    }
+                }
+                
+                // Schedule endpoint shutdown after the direct API call
+                scheduleEndpointShutdown(veinType);
+                
+                // Check if we got valid predictions, return error if not
+                if (!directResponse.predictions || 
+                    directResponse.predictions.length === 0 || 
+                    !directResponse.predictions[0].displayNames || 
+                    directResponse.predictions[0].displayNames.length === 0) {
+                    
+                    console.log('Direct call returned empty predictions, returning error');
+                    
+                    // Log the error
+                    await logDiagnostics('EMPTY_PREDICTION_ERROR', directResponse, null, veinType);
+                    
+                    // Return an error response to the client
+                    return res.status(404).json({
+                        error: 'No predictions available from AI model',
+                        details: 'Direct Vertex AI call returned empty predictions',
+                        veinType: veinType,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                // Return the prediction response
+                return res.json({
+                    displayNames: directResponse.predictions[0].displayNames || [],
+                    confidences: directResponse.predictions[0].confidences || [],
+                    modelId: directResponse.deployedModelId || null,
+                    method: 'direct', // Indicate this was a direct call
+                    timestamp: new Date().toISOString(),
+                    storage: imageInfo ? {
+                        stored: true,
+                        imageUrl: imageInfo.url,
+                        resultsPath: imageInfo.id
+                    } : null
+                });
+                
+            } catch (directError) {
+                console.error('Direct Vertex AI call failed:', directError);
+                
+                // Add diagnostic logging for direct API error
+                await logDiagnostics('DIRECT_ERROR', null, directError, veinType);
+                
+                // Schedule endpoint shutdown even after error
+                scheduleEndpointShutdown(veinType);
+                
+                // Return error instead of using mock predictions
+                console.log('Returning prediction error after both services failed');
+                
+                return res.status(503).json({
+                    error: 'Prediction service unavailable',
+                    details: 'Direct Vertex AI call failed',
+                    message: directError.message,
                     veinType: veinType,
                     timestamp: new Date().toISOString()
                 });
             }
-            
-            // Return the direct prediction response
-            return res.json({
-                displayNames: directResponse.predictions[0].displayNames || [],
-                confidences: directResponse.predictions[0].confidences || [],
-                modelId: directResponse.deployedModelId || null,
-                method: 'direct', // Indicate this was a direct call
-                timestamp: new Date().toISOString()
-            });
-        } catch (directError) {
-            console.error('Direct Vertex AI call failed:', directError);
-            
-            // Add diagnostic logging for direct API error
-            await logDiagnostics('DIRECT_ERROR', null, directError, veinType);
-            
-            // Schedule endpoint shutdown even after error
-            scheduleEndpointShutdown(veinType);
-            
-            // Return error instead of using mock predictions
-            console.log('Returning prediction error after direct call failed');
-            
-            return res.status(500).json({
-                error: 'Prediction service unavailable',
-                details: directError.message || 'Error during direct Vertex AI call',
-                veinType: veinType,
-                timestamp: new Date().toISOString()
-            });
         }
+        
     } catch (error) {
-        // Get vein type from request if not already defined
-        const veinType = req.body?.metadata?.veinType || req.body?.veinType || 'hepatic';
+        console.error('Prediction error:', error);
         
-        console.error(`Prediction error for ${veinType}:`, error);
-        
-        // Add diagnostic logging for error
-        await logDiagnostics('PREDICTION_ERROR', null, error, veinType);
+        // Add error diagnostic logging
+        await logDiagnostics('ERROR', null, error);
         
         // Return the error to the client
         return res.status(500).json({ 
             error: error.message || 'An unexpected error occurred during prediction',
-            veinType: veinType,
             timestamp: new Date().toISOString()
         });
     } finally {
@@ -976,9 +1116,9 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
-// Use the DEFAULT_PORT variable consistently
-app.listen(DEFAULT_PORT, () => {
-    console.log(`Server running on port ${DEFAULT_PORT}`);
+PORT = process.env.PORT || 3003;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
     console.log(`Configuration: ${JSON.stringify(CONFIG, null, 2)}`);
 });
 
@@ -1212,56 +1352,6 @@ async function generateMockPredictions(veinType = 'hepatic') {
         method: 'mock',
         timestamp: new Date().toISOString()
     };
-}
-
-// Function to make direct Vertex AI prediction call
-async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
-    console.log(`Making direct Vertex AI prediction for ${veinType} vein`);
-    
-    try {
-        // Initialize Vertex AI client if not already done
-        if (!predictionClient) {
-            predictionClient = await initializeVertexAI();
-        }
-        
-        const endpointId = CONFIG.endpointIds[veinType];
-        const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
-        
-        console.log(`Sending direct prediction request to endpoint: ${endpointPath}`);
-        
-        // Create the request object for direct Vertex AI call
-        const directRequest = {
-            endpoint: endpointPath,
-            instances: instances,
-            parameters: parameters || {
-                confidenceThreshold: 0.0,
-                maxPredictions: 5
-            }
-        };
-        
-        // Add diagnostic logging for direct API request
-        await logDiagnostics('DIRECT_REQUEST', directRequest, null, veinType);
-        
-        const [directResponse] = await predictionClient.predict(directRequest);
-        
-        // Add diagnostic logging for direct API response
-        await logDiagnostics('DIRECT_RESPONSE', directResponse, null, veinType);
-        
-        // Schedule endpoint shutdown after the direct API call
-        scheduleEndpointShutdown(veinType);
-        
-        return directResponse;
-    } catch (error) {
-        console.error('Direct Vertex AI call failed:', error);
-        
-        // Add diagnostic logging for direct API error
-        await logDiagnostics('DIRECT_ERROR', null, error, veinType);
-        
-        // Schedule endpoint shutdown even after error
-        scheduleEndpointShutdown(veinType);
-        
-        throw error;
-    }
 }
 
 // Function to make API call with retry
