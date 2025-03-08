@@ -99,3 +99,19 @@ Requesting: /images/image_gallery/Portal_Vein/Mild/01.0.1.PV.MD.png
 Requesting: /images/image_gallery/Portal_Vein/Severe/09.01.01.PV.SR.png
 Requesting: /images/image_gallery/IVC/Less/01.01.1.IVC.NL.png
 Requesting: /images/image_gallery/IVC/More/02.01.1.IVC.MD.png
+Requesting: /
+Requesting: /api/predict
+[2025-03-08T03:58:40.067Z] /api/predict handler invoked
+[2025-03-08T03:58:40.068Z] Uploading image: image_1741406320068.jpeg
+[2025-03-08T03:58:40.379Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741406320068.jpeg
+Requesting: /
+Requesting: /
+Requesting: /api/predict
+[2025-03-08T04:09:52.484Z] /api/predict handler invoked
+[2025-03-08T04:09:52.486Z] Uploading image: image_1741406992485.png
+[2025-03-08T04:09:52.758Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741406992485.png
+Requesting: /
+Requesting: /api/predict
+[2025-03-08T04:23:38.372Z] /api/predict handler invoked
+[2025-03-08T04:23:38.373Z] Uploading image: image_1741407818372.png
+[2025-03-08T04:23:38.653Z] Image uploaded to: gs://vexus-ai-images-plucky-weaver-450819-k7-20250223131511/images/image_1741407818372.png

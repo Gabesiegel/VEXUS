@@ -29,6 +29,7 @@ const CONFIG = {
         portal: process.env.PORTAL_ENDPOINT_ID || "2970410926785691648",   // Portal vein prediction endpoint
         renal: process.env.RENAL_ENDPOINT_ID || "1148704877514326016"     // Renal vein prediction endpoint
     },
+    onDemandEndpointService: process.env.ON_DEMAND_ENDPOINT_SERVICE || "https://endpoints-on-demand-456295042668.us-central1.run.app",
     lastUpdated: new Date().toISOString(),
     developer: 'Gabesiegel',
     bucketName: "vexus-ai-images-plucky-weaver-450819-k7-20250223131511"
@@ -473,51 +474,15 @@ app.post('/api/predict', async (req, res) => {
             // Continue with prediction even if storage fails
         }
 
-        // Track the selected endpoint ID to include in error details if needed
-        let endpointId = null;
-
         try {
-            // Get credentials from Secret Manager
-            console.log('Getting credentials from Secret Manager...');
-            const credentials = await getCredentials();
+            // NEW: Use the on-demand endpoint service instead of direct Vertex AI call
+            console.log(`Using on-demand endpoint service for ${veinType} predictions`);
             
-            // Get an access token using the credentials
-            const auth = new GoogleAuth({
-                credentials: credentials,
-                scopes: ['https://www.googleapis.com/auth/cloud-platform']
-            });
+            // Construct the on-demand endpoint URL
+            const url = `${CONFIG.onDemandEndpointService}/predict/${veinType}`;
+            console.log(`Making prediction request to on-demand service: ${url}`);
             
-            const client = await auth.getClient();
-            const token = await client.getAccessToken();
-            
-            console.log('Successfully obtained access token');
-            
-            // Use the endpoint IDs from the CONFIG object
-            endpointId = CONFIG.endpointIds[veinType];
-            if (!endpointId) {
-                throw new Error(`Invalid vein type: ${veinType}`);
-            }
-            console.log(`Selected endpoint ID for ${veinType}: ${endpointId}`);
-            
-            // Verify endpoint ID matches known values for specific vein types
-            if (veinType === 'renal' && endpointId !== CONFIG.endpointIds.renal) {
-                console.warn(`WARNING: Renal vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.renal}`);
-            }
-            if (veinType === 'portal' && endpointId !== CONFIG.endpointIds.portal) {
-                console.warn(`WARNING: Portal vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.portal}`);
-            }
-            if (veinType === 'hepatic' && endpointId !== CONFIG.endpointIds.hepatic) {
-                console.warn(`WARNING: Hepatic vein is using incorrect endpoint ID ${endpointId}, should be ${CONFIG.endpointIds.hepatic}`);
-            }
-            
-            // Construct the predict request URL
-            const baseApiUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1`;
-            const endpointPath = `projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${endpointId}`;
-            const url = `${baseApiUrl}/${endpointPath}:predict`;
-            
-            console.log(`Making prediction request to: ${url}`);
-            
-            // Construct the payload
+            // Construct the payload for the on-demand service
             const payload = {
                 instances: instances,
                 parameters: parameters || {
@@ -526,20 +491,23 @@ app.post('/api/predict', async (req, res) => {
                 }
             };
             
-            // Make the API call using fetch with retry mechanism
-            const response = await makeApiCallWithRetry(url, payload, token, veinType);
+            // Make the API call to the on-demand service (no auth token needed)
+            const response = await makeApiCallWithRetry(url, payload, null, veinType);
             
             // Process the successful response
             const result = await response.json();
-            console.log('Successfully received predictions');
+            console.log('Successfully received predictions from on-demand service');
             
             // Handle empty predictions
-            if (!result.predictions || result.predictions.length === 0) {
-                return res.status(404).json({ error: 'No predictions returned from the model' });
+            if (!result.predictions) {
+                return res.status(404).json({ 
+                    error: 'No predictions returned from the model',
+                    timestamp: new Date().toISOString() 
+                });
             }
             
             // Format the prediction response for the frontend
-            const prediction = result.predictions[0];
+            const prediction = result.predictions;
             
             // Store the prediction results if we have image info
             let resultStoragePath = null;
@@ -547,104 +515,42 @@ app.post('/api/predict', async (req, res) => {
                 try {
                     resultStoragePath = await storePredictionResults(
                         imageInfo,
-                        {
-                            displayNames: prediction.displayNames || [],
-                            confidences: prediction.confidences || [],
-                            modelId: result.deployedModelId || null
-                        },
+                        prediction,
                         veinType
                     );
+                    console.log(`Prediction results stored at: ${resultStoragePath}`);
                 } catch (resultStorageError) {
                     console.error('Error storing prediction results:', resultStorageError);
-                    // Continue even if result storage fails
+                    // Continue even if storage fails
                 }
             }
             
-            // Return response with additional storage information
-            res.json({
-                displayNames: prediction.displayNames || [],
-                confidences: prediction.confidences || [],
-                modelId: result.deployedModelId || null,
+            // Return the prediction results to the client
+            return res.status(200).json({
+                success: true,
+                predictions: prediction,
+                imageId: imageInfo?.id || null,
                 timestamp: new Date().toISOString(),
-                storage: imageInfo ? {
-                    imageUrl: imageInfo.publicUrl,
-                    resultsPath: resultStoragePath,
-                    stored: true
-                } : {
-                    stored: false,
-                    reason: 'Image storage failed or was not attempted'
-                }
+                resultStoragePath
             });
-        } catch (apiError) {
-            // Handle any errors during the API request process
-            console.error(`API request error for ${veinType} vein:`, apiError);
-            await fs.appendFile('server.log', `[${new Date().toISOString()}] API request error: ${JSON.stringify(apiError)}\n`);
+        } catch (error) {
+            console.error(`Error during prediction (${veinType}):`, error);
             
-            // Default error message and status
-            let errorMessage = `Error processing ${veinType} vein prediction request`;
-            let errorDetails = { originalError: apiError };
-            let statusCode = 500;
-            
-            // Check for specific error conditions
-            if (apiError.error && apiError.error.message) {
-                if (apiError.error.message.includes('Failed to process request')) {
-                    errorMessage = `The ${veinType} vein model is currently unavailable. This may be due to model loading issues or quota limits.`;
-                    errorDetails = {
-                        code: 'MODEL_UNAVAILABLE',
-                        veinType: veinType,
-                        endpointId: endpointId,
-                        deployedModelId: apiError.error.message.match(/deployed_model_id: (\d+)/)?.[1] || 'unknown',
-                        originalError: apiError.error.message
-                    };
-                    
-                    // Log troubleshooting steps
-                    console.error(`Model unavailable for ${veinType}. Troubleshooting steps:
-                    1. Check if the model is still loading (can take up to 15 minutes)
-                    2. Verify billing status for project ${CONFIG.projectId}
-                    3. Check quota limits for Vertex AI API in Google Cloud Console
-                    4. Verify service account permissions`);
-                } else if (apiError.error.message.includes('quota') || 
-                          apiError.error.message.includes('billing') || 
-                          apiError.error.message.includes('payment')) {
-                    errorMessage = `The ${veinType} vein endpoint may have billing or quota issues. Please check your Google Cloud billing status.`;
-                    errorDetails = {
-                        code: 'BILLING_OR_QUOTA_ISSUE',
-                        veinType: veinType,
-                        endpointId: endpointId,
-                        originalError: apiError.error.message
-                    };
-                } else if (apiError.error.message.includes('Endpoint') && apiError.error.message.includes('not found')) {
-                    statusCode = 404;
-                    errorMessage = `The ${veinType} vein endpoint (ID: ${endpointId}) could not be found. The model may have been moved or deleted.`;
-                    errorDetails = {
-                        code: 'ENDPOINT_NOT_FOUND',
-                        veinType: veinType,
-                        endpointId: endpointId,
-                        originalError: apiError.error.message
-                    };
-                }
-            }
-            
-            // Return a meaningful error response
-            res.status(statusCode).json({
-                error: errorMessage,
-                details: errorDetails,
-                timestamp: new Date().toISOString(),
-                storage: imageInfo ? {
-                    imageUrl: imageInfo.publicUrl,
-                    stored: true
-                } : {
-                    stored: false
-                }
+            // Return a helpful error message
+            return res.status(500).json({
+                error: 'Prediction failed',
+                message: error.message,
+                veinType,
+                timestamp: new Date().toISOString()
             });
         }
     } catch (error) {
-        console.error(`Error in /api/predict for ${veinType} vein:`, error);
-        await fs.appendFile('server.log', `[${new Date().toISOString()}] Error in /api/predict: ${error}\n`);
-        res.status(500).json({ 
-            error: 'Prediction failed', 
+        console.error(`Error in predict handler (${veinType}):`, error);
+        return res.status(500).json({ 
+            error: 'Server error during prediction',
             message: error.message,
-            veinType: veinType 
+            veinType,
+            timestamp: new Date().toISOString() 
         });
     }
 });
@@ -809,13 +715,20 @@ const makeApiCallWithRetry = async (url, payload, token, veinType, maxRetries = 
         try {
             console.log(`Attempt ${attempt + 1}/${maxRetries + 1} for ${veinType} endpoint`);
             
+            // Build headers - only include Authorization if token is provided
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            // Add Authorization header only if token is provided
+            if (token && token.token) {
+                headers['Authorization'] = `Bearer ${token.token}`;
+            }
+            
             // Make the API call using fetch
             const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token.token}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify(payload)
             });
             
@@ -837,48 +750,29 @@ const makeApiCallWithRetry = async (url, payload, token, veinType, maxRetries = 
             } catch (parseError) {
                 const errorText = await response.text();
                 console.error(`API error text from ${veinType} endpoint:`, errorText);
-                
-                // If we can't parse as JSON and should retry, do so
-                if (shouldRetry) {
-                    console.log(`Retrying ${veinType} endpoint due to error: ${response.status}`);
-                    // Add exponential backoff delay
-                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
-                    continue;
-                }
-                
-                // If we can't parse as JSON and should not retry, throw a formatted error
-                throw {
-                    status: response.status,
-                    statusText: response.statusText,
-                    text: errorText
-                };
             }
             
-            // Check for specific error conditions
-            if (errorJson.error && errorJson.error.message && 
-                errorJson.error.message.includes('Failed to process request')) {
-                
-                console.log(`Detected model processing error for ${veinType} endpoint`);
-                
-                if (shouldRetry) {
-                    console.log(`Retrying ${veinType} endpoint after model processing error`);
-                    // Add exponential backoff delay
-                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
-                    continue;
-                }
+            if (shouldRetry) {
+                console.log(`Will retry ${veinType} endpoint request after delay...`);
+                // Exponential backoff
+                const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                continue;
             }
             
-            // If we shouldn't retry or are out of retries, throw the error
-            throw errorJson;
+            // If we shouldn't retry or we're out of retries, throw the error
+            throw new Error(`API request failed with status ${response.status}: ${errorJson ? JSON.stringify(errorJson) : 'No error details available'}`);
         } catch (error) {
-            // If this is the last attempt, or it's not a network error, rethrow
-            if (attempt === maxRetries || !(error instanceof TypeError)) {
-                throw error;
+            const isLastAttempt = attempt === maxRetries;
+            if (isLastAttempt) {
+                console.error(`All ${maxRetries + 1} attempts failed for ${veinType} endpoint:`, error);
+                throw error; // Rethrow on the last attempt
+            } else {
+                console.log(`Attempt ${attempt + 1} failed, will retry: ${error.message}`);
+                // Exponential backoff
+                const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
             }
-            
-            console.log(`Network error for ${veinType} endpoint, retrying: ${error.message}`);
-            // Add exponential backoff delay
-            await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
         }
     }
 };

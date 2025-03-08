@@ -79,87 +79,41 @@
 
         /* Header Styles */
         #header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 8000;
-            transition: transform 0.3s ease;
-        }
-
-        #header.hide {
-            transform: translateY(-100%);
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            height: 3.5em; /* Reduced height */
         }
 
         #header .inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1em 2em;
+            padding: 0.1em 1.5em; /* Reduced top/bottom padding */
+            height: 100%;
         }
 
-        /* Adjust main content to account for fixed header */
+        /* Add margin to main content to prevent it from being hidden behind fixed header */
         #main {
-            padding-top: 80px;
-            position: relative;
-            z-index: 2;
-            background: #ffffff;
+            padding-top: 5.5em; /* Increased padding from 4.5em */
+            margin-top: 0;
         }
 
-        /* Content Structure */
-        #wrapper {
-            position: relative;
-            z-index: 1;
+        #main .inner {
+            padding-top: 3em; /* Increased padding from 2em */
         }
 
-        #main {
-            position: relative;
-            z-index: 2;
-            background: #ffffff;
-        }
-
-        .inner {
-            position: relative;
-            z-index: 3;
-        }
-
-        /* Logo Styles */
+        /* Remove margin from logo container */
         .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin: 1em auto;
+            margin-top: 2em; /* Increased margin from 1em */
         }
 
-        .logo {
-            max-width: 500px;
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.02);
-        }
-
-        .sidebar-logo {
-            width: 100px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            padding: 5px;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-logo:hover {
-            transform: scale(1.1);
-        }
-
-        /* Header Logo Styles */
         #header .logo {
             text-decoration: none;
             border: 0;
@@ -168,102 +122,98 @@
         }
 
         #header .logo .symbol {
-            margin-right: 1em;
+            margin-right: 0.5em; /* Reduced margin */
         }
 
         #header .logo .symbol img {
-            width: 4.5em;
-            height: 4.5em;
+            width: 2.8em; /* Reduced size */
+            height: 2.8em;
             object-fit: contain;
         }
 
         #header .logo .title {
             color: #585858;
-            font-size: 1.4em;
+            font-size: 1.1em; /* Reduced size */
             font-weight: 700;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8); /* Help text readability */
         }
 
         /* Responsive adjustments */
-        @media screen and (max-width: 1200px) {
-            .logo {
-                width: 100%;
-                max-width: 500px;
-                height: auto;
-                margin: 10px 0;
+        @media screen and (max-width: 736px) {
+            #header {
+                height: 3em;
+            }
+
+            #header .inner {
+                padding: 0.2em 1em;
             }
             
-            .logo-container {
-                gap: 20px;
+            #main {
+                padding-top: 4.5em; /* Adjusted for mobile */
             }
-        }
-
-        @media screen and (max-width: 980px) {
-            .logo {
-                max-width: 400px;
-                margin: 0 auto;
+            
+            #main .inner {
+                padding-top: 2em;
             }
-        }
-
-        @media screen and (max-width: 736px) {
+            
             #header .logo .symbol img {
-                width: 4em;
-                height: 4em;
+                width: 2.5em;
+                height: 2.5em;
             }
             
             #header .logo .title {
-                font-size: 1.3em;
-                font-weight: 700;
-            }
-
-            .sidebar-logo {
-                width: 80px;
-            }
-
-            .logo {
-                max-width: 350px;
+                font-size: 1em;
             }
         }
 
         @media screen and (max-width: 480px) {
+            #header {
+                height: 2.8em;
+                background: rgba(255, 255, 255, 0.98); /* Slightly more opaque on mobile */
+            }
+
+            #header .inner {
+                padding: 0.1em 0.8em; /* Reduced padding */
+            }
+            
+            #main {
+                padding-top: 4em; /* Adjusted for smaller screens */
+            }
+            
+            #main .inner {
+                padding-top: 1.5em;
+            }
+            
             #header .logo .symbol img {
-                width: 3.5em;
-                height: 3.5em;
+                width: 2.2em;
+                height: 2.2em;
             }
             
             #header .logo .title {
-                font-size: 1.2em;
-                font-weight: 700;
-            }
-
-            .logo {
-                max-width: 300px;
-            }
-            
-            .logo-container {
-                padding: 0 10px;
-            }
-
-            .sidebar-logo {
-                width: 70px;
+                font-size: 0.9em;
             }
         }
 
         /* Main Content Styles */
         .waveform-container {
-            position: relative;
-            z-index: 1;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px;
+            margin: 1rem auto 2rem;
+            padding: 2rem;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
         }
 
-        /* Ensure content is visible */
-        body {
-            background: #f5f5f5;
-            min-height: 100vh;
+        .education-header {
+            text-align: center;
+            margin: 1rem 0 3rem;
+        }
+
+        .education-header h1 {
+            color: #333;
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
         }
 
         #main > .inner {
@@ -337,12 +287,6 @@
         /* Custom Scrollbar */
         nav#menu::-webkit-scrollbar {
             width: 6px;
-        }
-
-        .waveform-container h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2c3e50;
         }
 
         .waveform-section {
@@ -438,7 +382,7 @@
         .image-tile .caption {
             font-size: 1.05em;
             color: #34495e;
-            text-align: center;
+            text-align: left;
             padding: 0 10px;
             line-height: 1.5;
         }
@@ -448,7 +392,7 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: #2c3e50;
-            text-align: center;
+            text-align: left;
         }
 
         /* Updated references styling */
@@ -679,14 +623,17 @@
 
         /* Mobile optimizations */
         @media (max-width: 768px) {
-            .fancybox__toolbar {
-                --f-button-width: 44px;
-                --f-button-height: 44px;
+            .fancybox__button {
+                width: 42px !important;
+                height: 42px !important;
             }
-
-            .fancybox__toolbar .is-close {
-                top: 10px;
-                right: 10px;
+            
+            .fancybox__toolbar {
+                padding: 8px !important;
+            }
+            
+            .fancybox__slide {
+                padding: 12px !important;
             }
         }
 
@@ -700,11 +647,264 @@
             transform: scale(1.02);
         }
 
-        /* Backdrop styling */
+        /* Improved Fancybox 5.0 styling */
+        .fancybox__container {
+            --fancybox-bg: rgba(24, 24, 27, 0.95);
+            /* Ensure fancybox appears above the header */
+            --fancybox-ui-primary-color: #fff;
+            --fancybox-ui-secondary-color: rgba(255, 255, 255, 0.8);
+            z-index: 10001 !important; /* Higher than header's z-index */
+        }
+
+        /* Force container above everything */
         .fancybox__backdrop {
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            z-index: 10000 !important;
+        }
+
+        /* Ensure toolbar and buttons are visible */
+        .fancybox__toolbar {
+            z-index: 10002 !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Ensure close button is visible */
+        .fancybox__button--close {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            color: #000 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            z-index: 10003 !important;
+            position: relative !important;
+        }
+
+        .fancybox__button--close:hover {
+            background-color: #fff !important;
+        }
+
+        /* Ensure buttons are properly sized */
+        .fancybox__button {
+            width: 46px !important;
+            height: 46px !important;
+        }
+        
+        /* Ensure content is visible */
+        .fancybox__content {
+            z-index: 10002 !important;
+        }
+        
+        /* Ensure captions are visible */
+        .fancybox__caption {
+            visibility: visible !important;
+            opacity: 1 !important;
+            color: white !important;
+            padding: 10px 15px !important;
+            background: rgba(0, 0, 0, 0.7) !important;
+        }
+        
+        /* Fix slide visibility */
+        .fancybox__slide {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Ensure images are visible */
+        .fancybox__image {
+            opacity: 1 !important;
+            visibility: visible !important;
+            max-height: 90vh !important;
+            position: relative !important;
+            z-index: 10005 !important; /* Even higher z-index */
+            background: transparent !important;
+            display: block !important;
+        }
+        
+        /* Fix content container */
+        .fancybox__container .fancybox__content {
+            background: transparent !important;
+            border: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            max-width: none !important;
+            max-height: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            position: relative !important;
+        }
+        
+        /* Fix slide container */
+        .fancybox__slide.is-selected {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Ensure carousel is visible */
+        .fancybox__carousel {
+            z-index: 10004 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            overflow: visible !important;
+        }
+        
+        /* Lower the header z-index to prevent conflicts */
+        #header {
+            z-index: 999 !important;
+        }
+        
+        /* Ensure the menu still works */
+        #menu, a[href="#menu"] {
+            z-index: 1000 !important;
+        }
+
+        /* Content Structure */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 2rem 3rem;
+            margin: 1.5rem auto 3rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 1.5rem;
+                max-width: 95%;
+            }
+            
+            .waveform-container {
+                padding: 1.5rem;
+            }
+            
+            .education-header {
+                margin: 0.5rem 0 2rem;
+            }
+            
+            .education-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 1.25rem;
+                margin: 1rem auto 2rem;
+            }
+            
+            .waveform-container {
+                padding: 1.25rem;
+            }
+            
+            .education-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        /* Responsive logo adjustments */
+        @media screen and (max-width: 980px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .logo {
+                max-width: 250px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo-container {
+                margin: 1.5rem auto;
+            }
+            
+            .logo {
+                max-width: 200px;
+            }
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-logo:hover {
+            transform: scale(1.1);
+        }
+
+        /* Additional critical Fancybox fixes */
+        /* Force visible images */
+        img.fancybox-image {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            max-width: 100% !important;
+            max-height: 90vh !important;
+            margin: 0 auto !important;
+        }
+        
+        /* Fix iframe handling */
+        .fancybox__iframe {
+            background: transparent !important;
+            border: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+            display: block !important;
+        }
+        
+        /* Ensure proper stacking context */
+        .fancybox__container * {
+            box-sizing: border-box !important;
+        }
+        
+        /* Reset any transforms that might interfere */
+        .fancybox__content,
+        .fancybox__slide,
+        .fancybox__carousel {
+            transform: none !important;
+        }
+        
+        /* Fix slide content */
+        .is-draggable {
+            cursor: grab !important;
+        }
+        
+        /* Ensure visible */
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
         }
     </style>
 </head>
@@ -736,7 +936,7 @@
                 <h2>Menu</h2>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html">VEXUS Overview</a></li>
+                    <li><a href="education.html">VEXUS Overview</a></li>
                     <li><a href="waveform.html">Waveforms</a></li>
                     <li><a href="calculator.html">AI Image Recognition</a></li>
                     <li><a href="acquisition.html">Image Acquisition Guide</a></li>
@@ -754,225 +954,239 @@
         <!-- Main Content -->
         <div id="main">
             <div class="inner">
-                <div class="logo-container">
-                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
-                </div>
-                <div class="waveform-container">
-                    <h1 style="text-align: center; margin-bottom: 20px; color: #333;">Interpreting VExUS Doppler Waveforms</h1>
-                    
-                    <div class="waveform-section">
-                        <h2 style="text-align: center;">Introduction to VExUS and Venous Waveforms</h2>
-                        <p>Venous Excess Ultrasound (VExUS) is a point-of-care ultrasound assessment method that evaluates systemic venous congestion by examining the Doppler waveforms of key veins (hepatic, portal, and intrarenal) alongside the size and variation of the inferior vena cava (IVC)<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-2">2</a></sup>. By analyzing these venous patterns, clinicians can estimate how elevated right-sided heart pressures or excessive fluid loading affect organ blood flow<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-3">3</a></sup>.</p>
-                        
-                        <p>Recognizing normal waveforms versus mild or severe abnormalities provides an immediate snapshot of venous congestion:</p>
-                        <ul>
-                            <li><strong>Normal waveforms</strong> suggest no significant congestion.</li>
-                            <li><strong>Mild abnormalities</strong> indicate early or moderate venous hypertension.</li>
-                            <li><strong>Severe abnormalities</strong> reflect high venous pressure and substantial backward flow.</li>
-                        </ul>
-                        <p>This resource will describe how to recognize these pattern changes in each vein type.</p>
+                <div class="container">
+                    <div class="logo-container">
+                        <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
                     </div>
+                    <div class="waveform-container">
+                        <div class="education-header">
+                            <h1>Interpreting VExUS Doppler Waveforms</h1>
+                        </div>
+                        
+                        <div class="waveform-section">
+                            <h2 style="text-align: center;">Introduction to VExUS and Venous Waveforms</h2>
+                            <p>Venous Excess Ultrasound (VExUS) is a point-of-care ultrasound assessment method that evaluates systemic venous congestion by examining the Doppler waveforms of key veins (hepatic, portal, and intrarenal) alongside the size and variation of the inferior vena cava (IVC)<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-2">2</a></sup>. By analyzing these venous patterns, clinicians can estimate how elevated right-sided heart pressures or excessive fluid loading affect organ blood flow<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-3">3</a></sup>.</p>
+                            
+                            <p>Recognizing normal waveforms versus mild or severe abnormalities provides an immediate snapshot of venous congestion:</p>
+                            <ul>
+                                <li><strong>Normal waveforms</strong> suggest no significant congestion.</li>
+                                <li><strong>Mild abnormalities</strong> indicate early or moderate venous hypertension.</li>
+                                <li><strong>Severe abnormalities</strong> reflect high venous pressure and substantial backward flow.</li>
+                            </ul>
+                            <p>This resource will describe how to recognize these pattern changes in each vein type.</p>
+                        </div>
 
-                    <div class="waveform-section">
-                        <h2 style="text-align: center;">EKG Tracing in VExUS Assessment</h2>
-                        <p>Hepatic vein waveforms are best interpreted with respect to the cardiac cycle, making simultaneous EKG tracing invaluable for accurate pattern recognition and phase identification. The cardiac electrical events help identify the timing of various waveform components:</p>
-                        
-                        <a href="images/EKGtracing.hepatic.png" data-fancybox="waveform-gallery" data-caption="EKG Tracing with Hepatic Vein Waveform showing temporal correlation between electrical events and flow patterns">
-                            <img src="images/EKGtracing.hepatic.png" alt="EKG Tracing with Hepatic Vein Waveform" class="waveform-image">
-                        </a>
-                        
-                        <p>With EKG tracing, clinicians can precisely identify:</p>
-                        <ul>
-                            <li>The <strong>S wave</strong> occurring during ventricular systole (between QRS complex and T wave)</li>
-                            <li>The <strong>D wave</strong> during early ventricular diastole (after T wave)</li>
-                            <li>The <strong>A wave</strong> during atrial contraction (shortly after P wave)</li>
-                            <li>The <strong>V wave</strong> at end-systole (during the T wave)</li>
-                        </ul>
-                        
-                        <p>This temporal correlation helps identify waveform abnormalities with confidence, particularly when distinguishing between S and D waves in cases of mild congestion or determining true flow reversals in severe congestion.</p>
-                    </div>
-
-                    <div class="waveform-section">
-                        <h2 style="text-align: center;">1. Hepatic Vein Waveforms</h2>
-                        
-                        <h3 style="text-align: center;">Normal Pattern</h3>
-                        <ul>
-                            <li><strong>"S > D":</strong> The systolic wave (S) is larger than the diastolic wave (D) when viewed on Doppler.</li>
-                            <li>Includes small retrograde deflections: the A wave (atrial contraction) and a tiny V wave (end-systole).</li>
-                            <li>Overall, flow is predominantly toward the heart during both systole and diastole, with only minor reversals in late diastole (A wave)<sup class="citation"><a href="#reference-4">4</a></sup>.</li>
-                        </ul>
-                        
-                        <div class="image-tile">
-                            <div class="title">Normal Hepatic Vein: Doppler ASVD Pattern</div>
-                            <a href="images/hepaticvein.normal.asvd.png" data-fancybox="hepatic-gallery" data-caption="Doppler display of normal hepatic vein ASVD pattern. The clear wave components show optimal Doppler alignment with characteristic wave timing and amplitude relationships.">
-                                <img src="images/hepaticvein.normal.asvd.png" alt="Doppler Normal Hepatic ASVD Pattern">
+                        <div class="waveform-section">
+                            <h2 style="text-align: center;">EKG Tracing in VExUS Assessment</h2>
+                            <p>Hepatic vein waveforms are best interpreted with respect to the cardiac cycle, making simultaneous EKG tracing invaluable for accurate pattern recognition and phase identification. The cardiac electrical events help identify the timing of various waveform components:</p>
+                            
+                            <a href="images/EKGtracing.hepatic.png" data-fancybox="waveform-gallery" data-caption="EKG Tracing with Hepatic Vein Waveform showing temporal correlation between electrical events and flow patterns" data-type="image">
+                                <img src="images/EKGtracing.hepatic.png" alt="EKG Tracing with Hepatic Vein Waveform" class="waveform-image">
                             </a>
-                            <div class="caption">
-                                Doppler display showing the characteristic ASVD pattern in optimal alignment. Each wave component is clearly defined: atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave amplitude relative to D wave demonstrates normal right atrial pressures and preserved venous return dynamics.
+                            
+                            <p>With EKG tracing, clinicians can precisely identify:</p>
+                            <ul>
+                                <li>The <strong>S wave</strong> occurring during ventricular systole (between QRS complex and T wave)</li>
+                                <li>The <strong>D wave</strong> during early ventricular diastole (after T wave)</li>
+                                <li>The <strong>A wave</strong> during atrial contraction (shortly after P wave)</li>
+                                <li>The <strong>V wave</strong> at end-systole (during the T wave)</li>
+                            </ul>
+                            
+                            <p>This temporal correlation helps identify waveform abnormalities with confidence, particularly when distinguishing between S and D waves in cases of mild congestion or determining true flow reversals in severe congestion.</p>
+                        </div>
+
+                        <div class="waveform-section">
+                            <h2 style="text-align: center;">Hepatic Vein Waveforms</h2>
+                            
+                            <h3 style="text-align: center;">Normal Pattern</h3>
+                            <ul>
+                                <li><strong>"S > D":</strong> The systolic wave (S) is larger than the diastolic wave (D) when viewed on Doppler.</li>
+                                <li>Includes small retrograde deflections: the A wave (atrial contraction) and a tiny V wave (end-systole).</li>
+                                <li>Overall, flow is predominantly toward the heart during both systole and diastole, with only minor reversals in late diastole (A wave)<sup class="citation"><a href="#reference-4">4</a></sup>.</li>
+                            </ul>
+                            
+                            <div class="image-tile">
+                                <div class="title">Normal Hepatic Vein: Doppler ASVD Pattern</div>
+                                <a href="images/hepaticvein.normal.asvd.png" data-fancybox="hepatic-gallery" data-caption="Doppler display of normal hepatic vein ASVD pattern. The clear wave components show optimal Doppler alignment with characteristic wave timing and amplitude relationships." data-type="image">
+                                    <img src="images/hepaticvein.normal.asvd.png" alt="Doppler Normal Hepatic ASVD Pattern">
+                                </a>
+                                <div class="caption">
+                                    Doppler display showing the characteristic ASVD pattern in optimal alignment. Each wave component is clearly defined: atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave amplitude relative to D wave demonstrates normal right atrial pressures and preserved venous return dynamics.
+                                </div>
+                            </div>
+
+                            <div class="image-tile">
+                                <div class="title">Normal Hepatic Vein: ASVD View</div>
+                                <a href="images/Hepatic.asvd.normal.2.png" data-fancybox="hepatic-gallery" data-caption="A view of normal hepatic vein ASVD pattern showing clear wave components. Note the prominent S wave and the characteristic A, V, and D waves in proper sequence." data-type="image">
+                                    <img src="images/Hepatic.asvd.normal.2.png" alt="Normal Hepatic ASVD Pattern">
+                                </a>
+                                <div class="caption">
+                                    A view of the normal hepatic vein waveform showing the classic ASVD pattern. This perspective highlights the wave components from a different angle, with clear visualization of the atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave confirms normal right heart pressures.
+                                </div>
+                            </div>
+                            
+                            <h3 style="text-align: center;">Mild Congestion</h3>
+                            <ul>
+                                <li><strong>"S < D":</strong> The systolic wave is still below the baseline (forward) but smaller in amplitude compared to the diastolic wave.</li>
+                                <li>The A wave (atrial reversal) becomes more pronounced; the V wave may also be noticeable.</li>
+                                <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet<sup class="citation"><a href="#reference-5">5</a></sup><sup class="citation"><a href="#reference-6">6</a></sup>.</li>
+                            </ul>
+                            
+                            <div class="image-tile">
+                                <div class="title">Mild Congestion: S < D Pattern with AVSD Visible</div>
+                                <a href="images/hepatic.mild.png" data-fancybox="hepatic-gallery" data-caption="Doppler display of mild hepatic congestion showing the S < D pattern. Note the pronounced A wave and visible V wave, with the systolic (S) wave amplitude smaller than the diastolic (D) wave.">
+                                    <img src="images/hepatic.mild.png" alt="Doppler Mild Hepatic Congestion Pattern">
+                                </a>
+                                <div class="caption">
+                                    This image demonstrates mild hepatic vein congestion with the classic "S < D" pattern. Note how the systolic (S) wave amplitude is smaller than the diastolic (D) wave, while both remain below the baseline (forward flow). The atrial (A) wave is more pronounced, and all components of the AVSD pattern are visible. This pattern indicates early venous congestion with rising right atrial pressures.
+                                </div>
+                            </div>
+                            
+                            <h3 style="text-align: center;">Severe Congestion</h3>
+                            <ul>
+                                <li><strong>Reversed S Wave:</strong> Now the S wave is above the baseline, indicating backward flow into the liver during systole.</li>
+                                <li>Only the D wave remains antegrade. The A (and sometimes V) waves become markedly elevated.</li>
+                                <li>Reflects significantly elevated right atrial pressures, often seen in severe tricuspid regurgitation or right-sided heart failure<sup class="citation"><a href="#reference-2">2</a></sup><sup class="citation"><a href="#reference-5">5</a></sup>.</li>
+                            </ul>
+                            
+                            <div class="image-tile">
+                                <div class="title">Hepatic Vein S-D Reversal</div>
+                                <a href="images/Hepatic.SR.SD.png" data-fancybox="waveform-gallery" data-caption="Severe systolic flow reversal in a hepatic vein, showing S wave above baseline (retrograde flow) and D wave below baseline (antegrade flow)">
+                                    <img src="images/Hepatic.SR.SD.png" alt="Hepatic Vein S-D Reversal Waveform">
+                                </a>
+                                <div class="caption">
+                                    This image demonstrates severe systolic flow reversal in a hepatic vein. Note how the S wave appears above the baseline (retrograde flow during systole) while the D wave remains below the baseline (antegrade flow during diastole). This pattern indicates significant right-sided venous congestion and is often associated with elevated right atrial pressures.
+                                </div>
                             </div>
                         </div>
 
-                        <div class="image-tile">
-                            <div class="title">Normal Hepatic Vein: ASVD View</div>
-                            <a href="images/Hepatic.asvd.normal.2.png" data-fancybox="hepatic-gallery" data-caption="A view of normal hepatic vein ASVD pattern showing clear wave components. Note the prominent S wave and the characteristic A, V, and D waves in proper sequence.">
-                                <img src="images/Hepatic.asvd.normal.2.png" alt="Normal Hepatic ASVD Pattern">
-                            </a>
-                            <div class="caption">
-                                A view of the normal hepatic vein waveform showing the classic ASVD pattern. This perspective highlights the wave components from a different angle, with clear visualization of the atrial contraction (A), systolic forward flow (S), venous (V), and diastolic (D) waves. The prominent S wave confirms normal right heart pressures.
-                            </div>
+                        <div class="waveform-section">
+                            <h2>Portal Vein Waveforms</h2>
+                            
+                            <h3>Normal Pattern</h3>
+                            <ul>
+                                <li><strong>Continuous Monophasic Flow:</strong> In healthy states, the portal vein shows essentially steady forward flow (hepatopetal), with minimal respiratory or cardiac pulsatility.</li>
+                                <li>Pulsatility fraction < 30% (little variation in velocity over the cardiac cycle)<a href="#reference-3" class="citation">3</a><a href="#reference-7" class="citation">7</a>.</li>
+                            </ul>
+                            
+                            <h3>Mild Congestion</h3>
+                            <ul>
+                                <li><strong>Mildly Pulsatile Flow:</strong> A noticeable undulation in velocity emerges, yielding a 30–50% pulsatility index.</li>
+                                <li>Forward flow is preserved (no reversal), but the waveform starts dipping and peaking in sync with cardiac activity<a href="#reference-2" class="citation">2</a><a href="#reference-3" class="citation">3</a>.</li>
+                            </ul>
+                            
+                            <h3>Severe Congestion</h3>
+                            <ul>
+                                <li><strong>High Pulsatility > 50%:</strong> Marked oscillation of the portal flow with deep troughs.</li>
+                                <li>Can approach or briefly cross the baseline (or show short-lived flow reversal), reflecting high venous pressures transmitted back from the right atrium and hepatic circulation<a href="#reference-3" class="citation">3</a><a href="#reference-6" class="citation">6</a>.</li>
+                            </ul>
                         </div>
-                        
-                        <h3 style="text-align: center;">Mild Congestion</h3>
-                        <ul>
-                            <li><strong>"S < D":</strong> The systolic wave is still below the baseline (forward) but smaller in amplitude compared to the diastolic wave.</li>
-                            <li>The A wave (atrial reversal) becomes more pronounced; the V wave may also be noticeable.</li>
-                            <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet<sup class="citation"><a href="#reference-5">5</a></sup><sup class="citation"><a href="#reference-6">6</a></sup>.</li>
-                        </ul>
-                        
-                        <h3 style="text-align: center;">Severe Congestion</h3>
-                        <ul>
-                            <li><strong>Reversed S Wave:</strong> Now the S wave is above the baseline, indicating backward flow into the liver during systole.</li>
-                            <li>Only the D wave remains antegrade. The A (and sometimes V) waves become markedly elevated.</li>
-                            <li>Reflects significantly elevated right atrial pressures, often seen in severe tricuspid regurgitation or right-sided heart failure<sup class="citation"><a href="#reference-2">2</a></sup><sup class="citation"><a href="#reference-5">5</a></sup>.</li>
-                        </ul>
-                        
-                        <div class="image-tile">
-                            <div class="title">Hepatic Vein S-D Reversal</div>
-                            <a href="images/Hepatic.SR.SD.png" data-fancybox="waveform-gallery" data-caption="Severe systolic flow reversal in a hepatic vein, showing S wave above baseline (retrograde flow) and D wave below baseline (antegrade flow)">
-                                <img src="images/Hepatic.SR.SD.png" alt="Hepatic Vein S-D Reversal Waveform">
-                            </a>
-                            <div class="caption">
-                                This image demonstrates severe systolic flow reversal in a hepatic vein. Note how the S wave appears above the baseline (retrograde flow during systole) while the D wave remains below the baseline (antegrade flow during diastole). This pattern indicates significant right-sided venous congestion and is often associated with elevated right atrial pressures.
-                            </div>
+
+                        <div class="waveform-section">
+                            <h2>Intrarenal (Renal Parenchymal) Vein Waveforms</h2>
+                            
+                            <h3>Normal Pattern</h3>
+                            <ul>
+                                <li><strong>Continuous Monophasic Flow:</strong> The tiny interlobar veins in the kidney typically exhibit a steady, non-pulsatile flow throughout the cardiac cycle<sup class="citation"><a href="#reference-7">7</a></sup>.</li>
+                                <li>No distinct systolic or diastolic components are recognizable; wave appears almost flat on Doppler.</li>
+                            </ul>
+                            
+                            <h3>Mild Congestion</h3>
+                            <ul>
+                                <li><strong>Biphasic (S & D) Pulsatile Flow:</strong> As venous pressure rises, a waveform emerges with two forward-flow peaks—one in systole and another in diastole—separated by a brief trough.</li>
+                                <li>Called a "discontinuous" pattern, it reflects moderate venous congestion within the renal parenchyma<a href="#reference-1" class="citation">1</a><a href="#reference-5" class="citation">5</a>.</li>
+                            </ul>
+                            
+                            <h3>Severe Congestion</h3>
+                            <ul>
+                                <li><strong>Monophasic D-Only Flow:</strong> The systolic component disappears entirely, and only diastolic flow remains visible per heartbeat.</li>
+                                <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury<a href="#reference-1" class="citation">1</a><a href="#reference-8" class="citation">8</a>.</li>
+                            </ul>
                         </div>
-                    </div>
 
-                    <div class="waveform-section">
-                        <h2>2. Portal Vein Waveforms</h2>
-                        
-                        <h3>Normal Pattern</h3>
-                        <ul>
-                            <li><strong>Continuous Monophasic Flow:</strong> In healthy states, the portal vein shows essentially steady forward flow (hepatopetal), with minimal respiratory or cardiac pulsatility.</li>
-                            <li>Pulsatility fraction < 30% (little variation in velocity over the cardiac cycle)<a href="#reference-3" class="citation">3</a><a href="#reference-7" class="citation">7</a>.</li>
-                        </ul>
-                        
-                        <h3>Mild Congestion</h3>
-                        <ul>
-                            <li><strong>Mildly Pulsatile Flow:</strong> A noticeable undulation in velocity emerges, yielding a 30–50% pulsatility index.</li>
-                            <li>Forward flow is preserved (no reversal), but the waveform starts dipping and peaking in sync with cardiac activity<a href="#reference-2" class="citation">2</a><a href="#reference-3" class="citation">3</a>.</li>
-                        </ul>
-                        
-                        <h3>Severe Congestion</h3>
-                        <ul>
-                            <li><strong>High Pulsatility > 50%:</strong> Marked oscillation of the portal flow with deep troughs.</li>
-                            <li>Can approach or briefly cross the baseline (or show short-lived flow reversal), reflecting high venous pressures transmitted back from the right atrium and hepatic circulation<a href="#reference-3" class="citation">3</a><a href="#reference-6" class="citation">6</a>.</li>
-                        </ul>
-                    </div>
+                        <div class="waveform-section">
+                            <h2>Putting It All Together: VExUS Grading</h2>
+                            
+                            <a href="images/VExUS.grading.png" data-fancybox="waveform-gallery" data-caption="VExUS Grading System showing progression from normal to severe congestion patterns">
+                                <img src="images/VExUS.grading.png" alt="VExUS Grading System" class="waveform-image">
+                            </a>
+                            
+                            <ul>
+                                <li><strong>Grade 0 (Normal):</strong> All hepatic, portal, and renal waveforms are normal, with a collapsible IVC.</li>
+                                <li><strong>Grade 1 (Mild):</strong> One or more veins show mild abnormalities (e.g., S < D in hepatic vein, mild pulsatility in portal vein, or biphasic renal flow) combined with a dilated or non-collapsing IVC.</li>
+                                <li><strong>Grade 2 (Moderate):</strong> At least one severe abnormality (e.g., reversed S wave in hepatic vein, marked pulsatility or brief reversal in portal vein, or D-only renal flow).</li>
+                                <li><strong>Grade 3 (Severe):</strong> Two or more severe waveform changes across hepatic, portal, or renal veins.</li>
+                            </ul>
+                            
+                            <p>Patients with advanced VExUS grades are at higher risk for congestive organ injury (hepatic congestion, kidney injury, etc.), and recognition of these patterns prompts intensified decongestive therapies<a href="#reference-1" class="citation">1</a><a href="#reference-2" class="citation">2</a><a href="#reference-8" class="citation">8</a>.</p>
+                        </div>
 
-                    <div class="waveform-section">
-                        <h2>3. Intrarenal (Renal Parenchymal) Vein Waveforms</h2>
-                        
-                        <h3>Normal Pattern</h3>
-                        <ul>
-                            <li><strong>Continuous Monophasic Flow:</strong> The tiny interlobar veins in the kidney typically exhibit a steady, non-pulsatile flow throughout the cardiac cycle<sup class="citation"><a href="#reference-7">7</a></sup>.</li>
-                            <li>No distinct systolic or diastolic components are recognizable; wave appears almost flat on Doppler.</li>
-                        </ul>
-                        
-                        <h3>Mild Congestion</h3>
-                        <ul>
-                            <li><strong>Biphasic (S & D) Pulsatile Flow:</strong> As venous pressure rises, a waveform emerges with two forward-flow peaks—one in systole and another in diastole—separated by a brief trough.</li>
-                            <li>Called a "discontinuous" pattern, it reflects moderate venous congestion within the renal parenchyma<a href="#reference-1" class="citation">1</a><a href="#reference-5" class="citation">5</a>.</li>
-                        </ul>
-                        
-                        <h3>Severe Congestion</h3>
-                        <ul>
-                            <li><strong>Monophasic D-Only Flow:</strong> The systolic component disappears entirely, and only diastolic flow remains visible per heartbeat.</li>
-                            <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury<a href="#reference-1" class="citation">1</a><a href="#reference-8" class="citation">8</a>.</li>
-                        </ul>
-                    </div>
+                        <div class="waveform-section">
+                            <h2>References</h2>
+                            <div class="reference-grid">
+                                <div class="reference-tile">
+                                    <div class="reference-number">1</div>
+                                    <div class="reference-title">The Venous Excess Ultrasound Grading System (VExUS) in Predicting AKI in Cardiac Surgery Patients</div>
+                                    <div class="reference-authors">Beaubien-Souligny W, et al.</div>
+                                    <div class="reference-journal">Crit Care Med. 2021;49(3):e263-e272</div>
+                                    <a href="https://journals.lww.com/ccmjournal/Fulltext/2021/03000/The_Venous_Excess_Ultrasound_Grading_System.6.aspx" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                    <div class="waveform-section">
-                        <h2>Putting It All Together: VExUS Grading</h2>
-                        
-                        <a href="images/VExUS.grading.png" data-fancybox="waveform-gallery" data-caption="VExUS Grading System showing progression from normal to severe congestion patterns">
-                            <img src="images/VExUS.grading.png" alt="VExUS Grading System" class="waveform-image">
-                        </a>
-                        
-                        <ul>
-                            <li><strong>Grade 0 (Normal):</strong> All hepatic, portal, and renal waveforms are normal, with a collapsible IVC.</li>
-                            <li><strong>Grade 1 (Mild):</strong> One or more veins show mild abnormalities (e.g., S < D in hepatic vein, mild pulsatility in portal vein, or biphasic renal flow) combined with a dilated or non-collapsing IVC.</li>
-                            <li><strong>Grade 2 (Moderate):</strong> At least one severe abnormality (e.g., reversed S wave in hepatic vein, marked pulsatility or brief reversal in portal vein, or D-only renal flow).</li>
-                            <li><strong>Grade 3 (Severe):</strong> Two or more severe waveform changes across hepatic, portal, or renal veins.</li>
-                        </ul>
-                        
-                        <p>Patients with advanced VExUS grades are at higher risk for congestive organ injury (hepatic congestion, kidney injury, etc.), and recognition of these patterns prompts intensified decongestive therapies<a href="#reference-1" class="citation">1</a><a href="#reference-2" class="citation">2</a><a href="#reference-8" class="citation">8</a>.</p>
-                    </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">2</div>
+                                    <div class="reference-title">Focused Ultrasound Evaluation in Acute Medicine</div>
+                                    <div class="reference-authors">Beaubien-Souligny W, et al.</div>
+                                    <div class="reference-journal">J Am Heart Assoc. 2020;9:e014974</div>
+                                    <a href="https://www.ahajournals.org/doi/10.1161/JAHA.119.014974" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                    <div class="waveform-section">
-                        <h2>References</h2>
-                        <div class="reference-grid">
-                            <div class="reference-tile">
-                                <div class="reference-number">1</div>
-                                <div class="reference-title">The Venous Excess Ultrasound Grading System (VExUS) in Predicting AKI in Cardiac Surgery Patients</div>
-                                <div class="reference-authors">Beaubien-Souligny W, et al.</div>
-                                <div class="reference-journal">Crit Care Med. 2021;49(3):e263-e272</div>
-                                <a href="https://journals.lww.com/ccmjournal/Fulltext/2021/03000/The_Venous_Excess_Ultrasound_Grading_System.6.aspx" class="reference-link" target="_blank">View Article</a>
-                            </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">3</div>
+                                    <div class="reference-title">Clinical Significance of Portal Flow Pulsatility</div>
+                                    <div class="reference-authors">Denault AY, et al.</div>
+                                    <div class="reference-journal">J Cardiothorac Vasc Anesth. 2022;36(3):874-883</div>
+                                    <a href="https://www.sciencedirect.com/science/article/pii/S1053077021005960" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                            <div class="reference-tile">
-                                <div class="reference-number">2</div>
-                                <div class="reference-title">Focused Ultrasound Evaluation in Acute Medicine</div>
-                                <div class="reference-authors">Beaubien-Souligny W, et al.</div>
-                                <div class="reference-journal">J Am Heart Assoc. 2020;9:e014974</div>
-                                <a href="https://www.ahajournals.org/doi/10.1161/JAHA.119.014974" class="reference-link" target="_blank">View Article</a>
-                            </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">4</div>
+                                    <div class="reference-title">Guidelines for Performing a Comprehensive Transthoracic Echocardiographic Examination in Adults</div>
+                                    <div class="reference-authors">Mitchell C, et al.</div>
+                                    <div class="reference-journal">J Am Soc Echocardiogr. 2019;32(1):1-64</div>
+                                    <a href="https://www.onlinejase.com/article/S0894-7317(18)30760-5/fulltext" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                            <div class="reference-tile">
-                                <div class="reference-number">3</div>
-                                <div class="reference-title">Clinical Significance of Portal Flow Pulsatility</div>
-                                <div class="reference-authors">Denault AY, et al.</div>
-                                <div class="reference-journal">J Cardiothorac Vasc Anesth. 2022;36(3):874-883</div>
-                                <a href="https://www.sciencedirect.com/science/article/pii/S1053077021005960" class="reference-link" target="_blank">View Article</a>
-                            </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">5</div>
+                                    <div class="reference-title">Evaluation of organ congestion in heart failure</div>
+                                    <div class="reference-authors">Mullens W, et al.</div>
+                                    <div class="reference-journal">J Am Coll Cardiol. 2023;81(8):821-836</div>
+                                    <a href="https://www.jacc.org/doi/10.1016/j.jacc.2022.11.078" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                            <div class="reference-tile">
-                                <div class="reference-number">4</div>
-                                <div class="reference-title">Guidelines for Performing a Comprehensive Transthoracic Echocardiographic Examination in Adults</div>
-                                <div class="reference-authors">Mitchell C, et al.</div>
-                                <div class="reference-journal">J Am Soc Echocardiogr. 2019;32(1):1-64</div>
-                                <a href="https://www.onlinejase.com/article/S0894-7317(18)30760-5/fulltext" class="reference-link" target="_blank">View Article</a>
-                            </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">6</div>
+                                    <div class="reference-title">Early Detection of Fluid Overload and Elevated Venous Pressure</div>
+                                    <div class="reference-authors">Ait-Oufella H, et al.</div>
+                                    <div class="reference-journal">Crit Care. 2019;23(1):176</div>
+                                    <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-019-2443-7" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                            <div class="reference-tile">
-                                <div class="reference-number">5</div>
-                                <div class="reference-title">Evaluation of organ congestion in heart failure</div>
-                                <div class="reference-authors">Mullens W, et al.</div>
-                                <div class="reference-journal">J Am Coll Cardiol. 2023;81(8):821-836</div>
-                                <a href="https://www.jacc.org/doi/10.1016/j.jacc.2022.11.078" class="reference-link" target="_blank">View Article</a>
-                            </div>
+                                <div class="reference-tile">
+                                    <div class="reference-number">7</div>
+                                    <div class="reference-title">Renal Doppler Ultrasonography in the Critical Care Setting</div>
+                                    <div class="reference-authors">Sobczyk D, Nycz K</div>
+                                    <div class="reference-journal">Crit Care Res Pract. 2020;2020:8858794</div>
+                                    <a href="https://www.hindawi.com/journals/ccrp/2020/8858794/" class="reference-link" target="_blank">View Article</a>
+                                </div>
 
-                            <div class="reference-tile">
-                                <div class="reference-number">6</div>
-                                <div class="reference-title">Early Detection of Fluid Overload and Elevated Venous Pressure</div>
-                                <div class="reference-authors">Ait-Oufella H, et al.</div>
-                                <div class="reference-journal">Crit Care. 2019;23(1):176</div>
-                                <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-019-2443-7" class="reference-link" target="_blank">View Article</a>
-                            </div>
-
-                            <div class="reference-tile">
-                                <div class="reference-number">7</div>
-                                <div class="reference-title">Renal Doppler Ultrasonography in the Critical Care Setting</div>
-                                <div class="reference-authors">Sobczyk D, Nycz K</div>
-                                <div class="reference-journal">Crit Care Res Pract. 2020;2020:8858794</div>
-                                <a href="https://www.hindawi.com/journals/ccrp/2020/8858794/" class="reference-link" target="_blank">View Article</a>
-                            </div>
-
-                            <div class="reference-tile">
-                                <div class="reference-number">8</div>
-                                <div class="reference-title">A Stepwise Demonstration of the VExUS Score</div>
-                                <div class="reference-authors">Sorouri K, et al.</div>
-                                <div class="reference-journal">J Cardiothorac Vasc Anesth. 2022;36(4):1163-1171</div>
-                                <a href="https://www.sciencedirect.com/science/article/pii/S1053077021008502" class="reference-link" target="_blank">View Article</a>
+                                <div class="reference-tile">
+                                    <div class="reference-number">8</div>
+                                    <div class="reference-title">A Stepwise Demonstration of the VExUS Score</div>
+                                    <div class="reference-authors">Sorouri K, et al.</div>
+                                    <div class="reference-journal">J Cardiothorac Vasc Anesth. 2022;36(4):1163-1171</div>
+                                    <a href="https://www.sciencedirect.com/science/article/pii/S1053077021008502" class="reference-link" target="_blank">View Article</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -991,6 +1205,107 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     
     <script>
+        // Simplified Fancybox initialization for version 5.0
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Initializing Fancybox...");
+            
+            // Define a simpler initialization function
+            function initFancybox() {
+                try {
+                    if (typeof Fancybox !== 'undefined') {
+                        Fancybox.bind('[data-fancybox]', {
+                            // Use the correct API: https://fancyapps.com/docs/ui/fancybox/options
+                            // Simplified config that should work with v5.0
+                            compact: false,
+                            idle: false,
+                            animated: false,
+                            showClass: false,
+                            hideClass: false,
+                            dragToClose: false,
+                            contentClick: "iterateZoom",
+                            Images: {
+                                zoom: true,
+                            },
+                            Toolbar: {
+                                display: {
+                                    left: ["infobar"],
+                                    middle: [],
+                                    right: ["iterateZoom", "close"],
+                                },
+                                items: {
+                                    iterateZoom: {
+                                        tpl: '<button class="f-button" title="Zoom in/out" data-fancybox-iterateZoom><svg><circle cx="10" cy="10" r="6"></circle></svg></button>'
+                                    }
+                                }
+                            },
+                            closeButton: "top",
+                            template: {
+                                // Plain template for better compatibility
+                                closeButton: '<button data-fancybox-close class="f-button" title="Close"><svg><path d="M10 8.586L5.879 4.464 4.464 5.88 8.586 10l-4.122 4.121 1.415 1.415L10 11.414l4.121 4.122 1.415-1.415L11.414 10l4.122-4.121-1.415-1.415L10 8.586z"></path></svg></button>',
+                            }
+                        });
+                        
+                        console.log("Fancybox initialized with simple config");
+                    } else {
+                        console.error("Fancybox not found");
+                    }
+                } catch (err) {
+                    console.error("Fancybox error:", err);
+                }
+            }
+            
+            // Try to initialize immediately
+            initFancybox();
+            
+            // Also try with a slight delay to ensure DOM is fully ready
+            setTimeout(initFancybox, 500);
+            
+            // Direct click handlers as fallback
+            document.querySelectorAll('a[data-fancybox]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var imgSrc = this.getAttribute('href');
+                    var caption = this.getAttribute('data-caption') || '';
+                    var galleryName = this.getAttribute('data-fancybox');
+                    
+                    console.log("Manual click on gallery item:", imgSrc, "Gallery:", galleryName);
+                    
+                    // Collect all images from the same gallery
+                    var galleryItems = [];
+                    if (galleryName) {
+                        document.querySelectorAll('a[data-fancybox="' + galleryName + '"]').forEach(function(item) {
+                            galleryItems.push({
+                                src: item.getAttribute('href'),
+                                caption: item.getAttribute('data-caption') || '',
+                                type: 'image'
+                            });
+                        });
+                    } else {
+                        galleryItems.push({
+                            src: imgSrc,
+                            caption: caption,
+                            type: 'image'
+                        });
+                    }
+                    
+                    // Try to open with Fancybox
+                    try {
+                        if (typeof Fancybox !== 'undefined') {
+                            Fancybox.show(galleryItems, {
+                                startIndex: galleryItems.findIndex(item => item.src === imgSrc)
+                            });
+                        } else {
+                            // Fallback: open image in new tab
+                            window.open(imgSrc, '_blank');
+                        }
+                    } catch (err) {
+                        console.error("Error showing image:", err);
+                        window.open(imgSrc, '_blank');
+                    }
+                });
+            });
+        });
+        
         // Function to initialize menu toggle
         function initializeMenuToggle() {
             console.log("Initializing menu toggle");
@@ -1122,6 +1437,26 @@
                 
                 lastScroll = currentScroll;
             });
+        });
+
+        // Add extra Fancybox preload
+        window.addEventListener('load', function() {
+            // Find all gallery images
+            const galleryImages = document.querySelectorAll('a[data-fancybox]');
+            
+            // Preload each image
+            galleryImages.forEach(function(link) {
+                const img = new Image();
+                img.src = link.getAttribute('href');
+                img.style.display = 'none';
+                document.body.appendChild(img);
+                
+                setTimeout(function() {
+                    document.body.removeChild(img);
+                }, 5000);
+            });
+            
+            console.log('Gallery images preloaded for Fancybox');
         });
     </script>
 </body>
