@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
 
     <style>
@@ -986,6 +987,198 @@
 
         #menu {
             transition: all 0.5s ease;
+        }
+    </style>
+
+    <style>
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile optimization enhancements */
+        @media screen and (max-width: 736px) {
+            /* Increase touch target sizes for mobile */
+            nav#menu ul li a {
+                padding: 12px 0;
+                font-size: 1em;
+            }
+            
+            a[href="#menu"] {
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Adjust spacing in sections */
+            .waveform-section, .content-section, .section {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+            
+            /* Make lists more readable on mobile */
+            ul, ol {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            
+            li {
+                margin-bottom: 8px;
+                line-height: 1.5;
+                font-size: 0.95em;
+            }
+            
+            /* Improve image tiles on mobile */
+            .image-tile, .gallery-tile, .article-tile, .team-tile {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .title, .tile-title {
+                font-size: 1.15em;
+                margin-bottom: 8px;
+            }
+            
+            .caption, .description {
+                font-size: 0.95em;
+                padding: 0 5px;
+            }
+            
+            /* Adjust citation display on mobile */
+            .citation {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.75em;
+                padding: 0 5px;
+            }
+            
+            /* Better reference grid on mobile */
+            .reference-grid, .grid, .gallery-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .reference-tile, .grid-item, .gallery-item {
+                padding: 15px;
+            }
+            
+            /* Main content adjustments */
+            #main > .inner {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            /* Improve Fancybox usability on mobile */
+            .fancybox__button {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .fancybox__caption {
+                font-size: 0.9em !important;
+                padding: 8px 12px !important;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* Further optimizations for very small screens */
+            .waveform-section, .content-section, .section {
+                padding: 15px 12px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            p, .image-tile .caption, .description {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            /* Make menu items even larger for small touch screens */
+            nav#menu ul li a {
+                padding: 14px 0;
+                font-size: 1.1em;
+            }
+            
+            /* Fix image display on very small screens */
+            .image-tile img, .gallery-tile img {
+                margin-bottom: 10px;
+            }
+            
+            .citation {
+                min-width: 16px;
+                height: 16px;
+                font-size: 0.7em;
+                padding: 0 4px;
+            }
+            
+            /* Stacked references on mobile */
+            .reference-tile, .grid-item {
+                padding: 12px;
+            }
+            
+            .reference-title, .item-title {
+                font-size: 0.95em;
+            }
+            
+            .reference-authors, .reference-journal, .item-subtitle {
+                font-size: 0.85em;
+            }
+            
+            /* Better Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Remove hover effects on mobile */
+            .section:hover,
+            .image-tile:hover,
+            .gallery-tile:hover,
+            .logo:hover,
+            .sidebar-logo:hover,
+            .reference-tile:hover,
+            .team-tile:hover,
+            .grid-item:hover {
+                transform: none;
+            }
+        }
+        
+        /* Fix for menu closing on small screens */
+        @media screen and (max-width: 736px) {
+            #menu a.close {
+                width: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 1.25em;
+            }
+            
+            #menu .inner {
+                padding-top: 4.5em;
+            }
         }
     </style>
 </head>

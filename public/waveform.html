@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     
     <!-- Critical menu styles -->
@@ -635,6 +636,57 @@
             .fancybox__slide {
                 padding: 12px !important;
             }
+            
+            /* Enhanced close button for mobile */
+            .fancybox__button--close {
+                width: 48px !important;
+                height: 48px !important;
+                top: 15px !important;
+                right: 15px !important;
+                background-color: rgba(255, 255, 255, 0.95) !important;
+                transform: scale(1.1) !important;
+            }
+            
+            /* Ensure touchable area extends beyond visible button */
+            .fancybox__button--close::after {
+                content: "" !important;
+                position: absolute !important;
+                top: -10px !important;
+                right: -10px !important;
+                bottom: -10px !important;
+                left: -10px !important;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            /* Improved Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Extra large close button for smallest screens */
+            .fancybox__button--close {
+                width: 54px !important;
+                height: 54px !important;
+                top: 10px !important;
+                right: 10px !important;
+                background-color: rgba(255, 255, 255, 0.98) !important;
+            }
+            
+            .fancybox__button--close svg {
+                width: 24px !important;
+                height: 24px !important;
+                stroke-width: 2.5px !important;
+            }
+            
+            /* Extended touchable area */
+            .fancybox__button--close::after {
+                top: -15px !important;
+                right: -15px !important;
+                bottom: -15px !important;
+                left: -15px !important;
+            }
         }
 
         /* Image hover effects */
@@ -677,10 +729,15 @@
             visibility: visible !important;
             z-index: 10003 !important;
             position: relative !important;
+            border-radius: 50% !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+            transform: scale(1.1) !important;
+            transition: transform 0.2s ease, background-color 0.2s ease !important;
         }
 
         .fancybox__button--close:hover {
             background-color: #fff !important;
+            transform: scale(1.2) !important;
         }
 
         /* Ensure buttons are properly sized */
@@ -689,18 +746,24 @@
             height: 46px !important;
         }
         
-        /* Ensure content is visible */
-        .fancybox__content {
-            z-index: 10002 !important;
-        }
-        
-        /* Ensure captions are visible */
-        .fancybox__caption {
+        /* Force close button to maintain visibility */
+        .fancybox__toolbar {
             visibility: visible !important;
             opacity: 1 !important;
-            color: white !important;
-            padding: 10px 15px !important;
-            background: rgba(0, 0, 0, 0.7) !important;
+        }
+
+        /* Enhanced close button positioning */
+        .fancybox__toolbar .fancybox__button--close {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+        }
+        
+        /* Ensure close icon is centered and properly sized */
+        .fancybox__button--close svg {
+            width: 22px !important;
+            height: 22px !important;
+            stroke-width: 2px !important;
         }
         
         /* Fix slide visibility */
@@ -1321,8 +1384,8 @@
                             
                             <div class="image-tile">
                                 <div class="title">Renal Vein Mild Congestion</div>
-                                <a href="images/Renal.mild.png" data-fancybox="renal-gallery" data-caption="Renal vein with mild congestion showing the characteristic biphasic (S & D) pulsatile flow pattern with two distinct forward-flow peaks separated by a trough. Note the renal artery waveform on top and discontinuous venous pattern below." data-type="image">
-                                    <img src="images/Renal.mild.png" alt="Renal Vein Mild Congestion">
+                                <a href="images/renal.mild.png" data-fancybox="renal-gallery" data-caption="Renal vein with mild congestion showing the characteristic biphasic (S & D) pulsatile flow pattern with two distinct forward-flow peaks separated by a trough. Note the renal artery waveform on top and discontinuous venous pattern below." data-type="image">
+                                    <img src="images/renal.mild.png" alt="Renal Vein Mild Congestion">
                                 </a>
                                 <div class="caption">
                                     This image demonstrates mild renal vein congestion with the characteristic biphasic pattern. Note the renal artery waveform visible at the top of the image, and below it, the discontinuous venous S and D waves. The two distinct forward-flow peaks (systolic and diastolic) are separated by a noticeable trough in the venous waveform. This "discontinuous" flow pattern indicates moderate venous congestion in the renal parenchyma with early transmission of central venous pressure variations to the kidney's venous circulation.
@@ -1477,17 +1540,31 @@
                                 items: {
                                     iterateZoom: {
                                         tpl: '<button class="f-button" title="Zoom in/out" data-fancybox-iterateZoom><svg><circle cx="10" cy="10" r="6"></circle></svg></button>'
+                                    },
+                                    close: {
+                                        // Enhanced close button template for better visibility and larger touch target
+                                        tpl: '<button data-fancybox-close class="f-button fancybox__button--close enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>'
                                     }
                                 }
                             },
                             closeButton: "top",
                             template: {
                                 // Plain template for better compatibility
-                                closeButton: '<button data-fancybox-close class="f-button" title="Close"><svg><path d="M10 8.586L5.879 4.464 4.464 5.88 8.586 10l-4.122 4.121 1.415 1.415L10 11.414l4.121 4.122 1.415-1.415L11.414 10l4.122-4.121-1.415-1.415L10 8.586z"></path></svg></button>',
+                                closeButton: '<button data-fancybox-close class="f-button enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>',
+                            },
+                            on: {
+                                // Force close button to stay visible by refreshing its visibility
+                                "reveal": function(fancybox, slide) {
+                                    const closeBtn = document.querySelector('.fancybox__button--close');
+                                    if (closeBtn) {
+                                        closeBtn.style.visibility = 'visible';
+                                        closeBtn.style.opacity = '1';
+                                    }
+                                }
                             }
                         });
                         
-                        console.log("Fancybox initialized with simple config");
+                        console.log("Fancybox initialized with enhanced close button");
                     } else {
                         console.error("Fancybox not found");
                     }
@@ -1502,7 +1579,7 @@
             // Also try with a slight delay to ensure DOM is fully ready
             setTimeout(initFancybox, 500);
             
-            // Direct click handlers as fallback
+            // Direct click handlers as fallback - include improved close button
             document.querySelectorAll('a[data-fancybox]').forEach(function(link) {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1530,11 +1607,23 @@
                         });
                     }
                     
-                    // Try to open with Fancybox
+                    // Try to open with Fancybox with improved close button
                     try {
                         if (typeof Fancybox !== 'undefined') {
                             Fancybox.show(galleryItems, {
-                                startIndex: galleryItems.findIndex(item => item.src === imgSrc)
+                                startIndex: galleryItems.findIndex(item => item.src === imgSrc),
+                                Toolbar: {
+                                    display: {
+                                        left: ["infobar"],
+                                        middle: [],
+                                        right: ["iterateZoom", "close"],
+                                    },
+                                    items: {
+                                        close: {
+                                            tpl: '<button data-fancybox-close class="f-button fancybox__button--close enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>'
+                                        }
+                                    }
+                                }
                             });
                         } else {
                             // Fallback: open image in new tab
