@@ -1458,9 +1458,9 @@ async function logDiagnostics(type, message, data, metadata) {
             metadata
         };
         
-        // Write to log file
+        // Write to log file using fs.promises instead of fs.appendFileSync
         try {
-            fs.appendFileSync(DEBUG_LOG_PATH, JSON.stringify(logEntry) + '\n', 'utf8');
+            await fs.appendFile(DEBUG_LOG_PATH, JSON.stringify(logEntry) + '\n', 'utf8');
         } catch (writeError) {
             console.error('Error writing to log file:', writeError);
         }
