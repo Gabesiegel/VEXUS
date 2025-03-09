@@ -495,30 +495,88 @@ app.post('/predict/:veinType', async (req, res) => {
         try {
             console.log(`Making prediction request for ${veinType} vein via on-demand service`);
             
+            // Check if endpoint is currently being warmed up
+            if (endpointStatus[veinType] && endpointStatus[veinType].warming) {
+                console.log(`${veinType} endpoint is currently being warmed up. Waiting briefly...`);
+                // Wait a moment for the endpoint to be ready
+                await new Promise(resolve => setTimeout(resolve, 3000));
+            }
+            
+            // If endpoint isn't ready yet, try to warm it explicitly
+            if (endpointStatus[veinType] && !endpointStatus[veinType].ready && !endpointStatus[veinType].warming) {
+                console.log(`${veinType} endpoint doesn't appear to be ready. Sending prewarm request...`);
+                endpointStatus[veinType].warming = true;
+                
+                // Send a prewarm request
+                try {
+                    const prewarmResponse = await fetch(`${CONFIG.onDemandServiceUrl}/predict/${veinType}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            instances: [{ content: 'test', mimeType: 'text/plain' }],
+                            parameters: { confidenceThreshold: 0, maxPredictions: 1 },
+                            metadata: { veinType, prewarm: true, timestamp: Date.now() }
+                        })
+                    });
+                    
+                    if (prewarmResponse.ok) {
+                        console.log(`Successfully prewarmed ${veinType} endpoint before prediction`);
+                        endpointStatus[veinType].ready = true;
+                        endpointStatus[veinType].lastWarmedAt = Date.now();
+                    }
+                } catch (prewarmError) {
+                    console.log(`Prewarm attempt before prediction failed: ${prewarmError.message}`);
+                } finally {
+                    endpointStatus[veinType].warming = false;
+                }
+            }
+            
             // Prepare payload for on-demand service
-            const onDemandPayload = {
-                instances,
+            let onDemandPayload = {
+                instances: req.body.instances,
                 parameters,
                 metadata: {
+                    ...req.body.metadata,
                     veinType,
-                    imageType: preparedImage.mimeType,
-                    timestamp: Date.now()
+                    imageType: req.body.imageType || 'image/jpeg',
+                    timestamp: Date.now(),
+                    onlyOnDemand: req.body.onlyOnDemand === true
                 }
             };
             
-            logDiagnostics('ONDEMAND_REQUEST', `On-demand request for ${veinType}`, onDemandPayload);
+            // Check if payload is very large and optimize it if needed
+            const payloadSize = JSON.stringify(onDemandPayload).length;
+            if (payloadSize > 1000000) { // If payload is larger than ~1MB
+                console.log(`Large payload detected (${payloadSize} bytes), optimizing...`);
+                
+                // Optimize instances by potentially reducing image quality or size
+                onDemandPayload.instances = onDemandPayload.instances.map(instance => {
+                    if (instance.content && typeof instance.content === 'string' && instance.content.length > 100000) {
+                        // For base64 images, we could reduce quality or dimensions here
+                        // but for now just keep the same content and log the size
+                        console.log(`Large content detected (${instance.content.length} chars)`);
+                        
+                        // Add a flag to indicate this is a large payload and might need special handling
+                        instance.isLarge = true;
+                    }
+                    return instance;
+                });
+                
+                // Add a flag to the metadata to indicate this is a large payload
+                onDemandPayload.metadata.isLargePayload = true;
+            }
             
-            // Call the on-demand service
-            const result = await makeApiCallWithRetry(
+            // Call the on-demand service with potentially optimized payload
+            const onDemandResult = await makeApiCallWithRetry(
                 `${CONFIG.onDemandServiceUrl}/predict/${veinType}`,
                 onDemandPayload
             );
             
             // Add diagnostic logging for on-demand response
-            logDiagnostics('ONDEMAND_RESPONSE', `On-demand response for ${veinType}`, result);
+            logDiagnostics('ONDEMAND_RESPONSE', `On-demand response for ${veinType}`, onDemandResult);
             
             // Return the prediction results
-            return res.json(result);
+            return res.json(onDemandResult);
         } catch (onDemandError) {
             console.error('On-demand service error:', onDemandError);
             
@@ -596,7 +654,30 @@ app.post('/api/preload-endpoint', async (req, res) => {
             });
         }
         
+        // Check if endpoint is already warming or warmed recently
+        if (endpointStatus[type].warming) {
+            console.log(`${type} endpoint is already being warmed`);
+            return res.json({
+                status: 'warming',
+                message: `${type} endpoint is already being warmed`,
+                timestamp: new Date().toISOString()
+            });
+        }
+        
+        // If the endpoint was warmed recently (within the last 2 minutes), return success
+        if (endpointStatus[type].lastWarmedAt && 
+            (Date.now() - endpointStatus[type].lastWarmedAt < 120000)) {
+            console.log(`${type} endpoint was already warmed recently at ${new Date(endpointStatus[type].lastWarmedAt).toISOString()}`);
+            return res.json({
+                status: 'ready',
+                message: `${type} endpoint is already warm`,
+                lastWarmedAt: new Date(endpointStatus[type].lastWarmedAt).toISOString(),
+                timestamp: new Date().toISOString()
+            });
+        }
+        
         console.log(`Prewarming ${type} endpoint...`);
+        endpointStatus[type].warming = true;
         
         // Get the endpoint ID for the specified vein type
         const endpointId = CONFIG.endpointIds[type];
@@ -640,6 +721,11 @@ app.post('/api/preload-endpoint', async (req, res) => {
             });
             
             if (response.ok) {
+                // Update the endpoint status
+                endpointStatus[type].lastWarmedAt = Date.now();
+                endpointStatus[type].ready = true;
+                endpointStatus[type].warming = false;
+                
                 return res.json({
                     status: 'warming',
                     message: `${type} endpoint warming initiated`,
@@ -648,10 +734,12 @@ app.post('/api/preload-endpoint', async (req, res) => {
                 });
             } else {
                 const errorText = await response.text();
+                endpointStatus[type].warming = false;
                 throw new Error(`Endpoint check failed with status ${response.status}: ${errorText}`);
             }
         } catch (error) {
             console.error(`Error prewarming ${type} endpoint:`, error);
+            endpointStatus[type].warming = false;
             return res.status(500).json({
                 status: 'error',
                 message: `Failed to prewarm ${type} endpoint: ${error.message}`,
@@ -660,6 +748,9 @@ app.post('/api/preload-endpoint', async (req, res) => {
         }
     } catch (error) {
         console.error('Endpoint prewarming error:', error);
+        if (type && endpointStatus[type]) {
+            endpointStatus[type].warming = false;
+        }
         res.status(500).json({ 
             status: 'error',
             message: `Endpoint prewarming failed: ${error.message}`,
@@ -789,7 +880,7 @@ app.post('/api/predict/direct/:vein_type', upload.single('image'), async (req, r
                 console.log('Direct call returned empty predictions, returning error');
                 
                 // Log the error
-                await logDiagnostics('EMPTY_PREDICTION_ERROR', `Empty prediction error for ${veinType}`, directResponse, { veinType });
+                await logDiagnostics('EMPTY_PREDICTION_ERROR', `Empty prediction error for ${veinType}`, directResponse);
                 
                 // Return an error response to the client
                 return res.status(404).json({
@@ -982,18 +1073,43 @@ app.post('/api/predict', async (req, res) => {
         try {
             console.log(`Making prediction request for ${veinType} vein via on-demand service`);
             
+            // Check if endpoint is currently being warmed up
             // Prepare payload for on-demand service
-            const onDemandPayload = {
+            let onDemandPayload = {
                 instances: req.body.instances,
                 parameters,
                 metadata: {
                     ...metadata,
                     veinType,
-                    timestamp: Date.now()
+                    imageType: req.body.imageType || 'image/jpeg',
+                    timestamp: Date.now(),
+                    onlyOnDemand: onlyUseOnDemand
                 }
             };
             
-            // Call the on-demand service
+            // Check if payload is very large and optimize it if needed
+            const payloadSize = JSON.stringify(onDemandPayload).length;
+            if (payloadSize > 1000000) { // If payload is larger than ~1MB
+                console.log(`Large payload detected (${payloadSize} bytes), optimizing...`);
+                
+                // Optimize instances by potentially reducing image quality or size
+                onDemandPayload.instances = onDemandPayload.instances.map(instance => {
+                    if (instance.content && typeof instance.content === 'string' && instance.content.length > 100000) {
+                        // For base64 images, we could reduce quality or dimensions here
+                        // but for now just keep the same content and log the size
+                        console.log(`Large content detected (${instance.content.length} chars)`);
+                        
+                        // Add a flag to indicate this is a large payload and might need special handling
+                        instance.isLarge = true;
+                    }
+                    return instance;
+                });
+                
+                // Add a flag to the metadata to indicate this is a large payload
+                onDemandPayload.metadata.isLargePayload = true;
+            }
+            
+            // Call the on-demand service with potentially optimized payload
             const onDemandResult = await makeApiCallWithRetry(
                 `${CONFIG.onDemandServiceUrl}/predict/${veinType}`,
                 onDemandPayload
@@ -1110,44 +1226,127 @@ process.on('uncaughtException', (error) => {
 (async function initializeServices() {
     console.log('Starting asynchronous service initialization...');
     
+    // Test connection to on-demand service
+    console.log(`Testing connection to on-demand service at ${CONFIG.onDemandServiceUrl}...`);
     try {
-        // Test connection to on-demand service
-        console.log(`Testing connection to on-demand service at ${CONFIG.onDemandServiceUrl}...`);
+        const response = await fetch(`${CONFIG.onDemandServiceUrl}/health`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
         
-        try {
-            const response = await fetch(`${CONFIG.onDemandServiceUrl}/health`, {
-                method: 'GET',
-                timeout: 5000 // 5 second timeout
-            });
-            
-            if (response.ok) {
-                console.log('✅ On-demand service is healthy');
-            } else {
-                console.warn(`⚠️ On-demand service returned status ${response.status}`);
-            }
-        } catch (serviceError) {
-            console.warn(`⚠️ Failed to connect to on-demand service: ${serviceError.message}`);
-            // Continue initialization despite this error
+        if (response.status === 200) {
+            console.log('✅ On-demand service is healthy');
+        } else {
+            console.warn(`⚠️ On-demand service returned status ${response.status}`);
         }
-        
-        // Initialize other services as needed
-        console.log('Initializing other services...');
-        
-        // Try to initialize Vertex AI client but don't block on failure
-        try {
-            await initializeVertexAI();
-            console.log('✅ Vertex AI client initialized successfully');
-        } catch (vertexError) {
-            console.warn(`⚠️ Vertex AI client initialization failed: ${vertexError.message}`);
-            // Continue despite this error
-        }
-        
-        console.log('✅ Asynchronous service initialization completed');
-    } catch (error) {
-        console.error('❌ Error during service initialization:', error);
-        // Don't crash the server - just log the error
+    } catch (serviceError) {
+        console.warn(`⚠️ Failed to connect to on-demand service: ${serviceError.message}`);
     }
+    
+    console.log('Initializing other services...');
+    
+    // Initialize Vertex AI services
+    try {
+        console.log('Initializing Vertex AI client...');
+        await initializeVertexAI();
+        console.log('✅ Vertex AI client initialized successfully');
+        
+        // Prewarm endpoints with systematic approach for each vein type
+        await prewarmAllEndpoints();
+    } catch (error) {
+        console.error('❌ Error initializing services:', error);
+    }
+    
+    console.log('✅ Asynchronous service initialization completed');
 })();
+
+// Track endpoint readiness status
+const endpointStatus = {
+    hepatic: { ready: false, lastWarmedAt: null, warming: false },
+    portal: { ready: false, lastWarmedAt: null, warming: false },
+    renal: { ready: false, lastWarmedAt: null, warming: false }
+};
+
+// Helper function to prewarm all endpoints
+async function prewarmAllEndpoints() {
+    console.log('Prewarming all endpoints systematically...');
+    
+    // Sequential prewarming with proper error handling
+    for (const veinType of VALID_VEIN_TYPES) {
+        try {
+            // Skip if already warming or warmed recently (within last 2 minutes)
+            if (endpointStatus[veinType].warming) {
+                console.log(`Skipping ${veinType} endpoint prewarming - already in progress`);
+                continue;
+            }
+            
+            if (endpointStatus[veinType].lastWarmedAt && 
+                (Date.now() - endpointStatus[veinType].lastWarmedAt < 120000)) {
+                console.log(`Skipping ${veinType} endpoint prewarming - warmed recently at ${new Date(endpointStatus[veinType].lastWarmedAt).toISOString()}`);
+                continue;
+            }
+            
+            // Mark endpoint as warming
+            endpointStatus[veinType].warming = true;
+            
+            console.log(`Prewarming ${veinType} endpoint with minimal test payload...`);
+            
+            // Create minimal test payload
+            const testPayload = {
+                instances: [{
+                    content: 'test',  // Minimal content for prewarming
+                    mimeType: 'text/plain'
+                }],
+                parameters: {
+                    confidenceThreshold: 0,
+                    maxPredictions: 1
+                },
+                metadata: {
+                    veinType,
+                    prewarm: true,
+                    timestamp: Date.now()
+                }
+            };
+            
+            // Send a test request to prewarm without waiting for response
+            try {
+                console.log(`Sending prewarm request to on-demand service for ${veinType}...`);
+                fetch(`${CONFIG.onDemandServiceUrl}/predict/${veinType}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testPayload)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`✅ ${veinType} endpoint prewarmed successfully`);
+                        endpointStatus[veinType].ready = true;
+                    } else {
+                        console.log(`⚠️ ${veinType} endpoint prewarming returned status ${response.status}`);
+                        endpointStatus[veinType].ready = false;
+                    }
+                    endpointStatus[veinType].lastWarmedAt = Date.now();
+                    endpointStatus[veinType].warming = false;
+                })
+                .catch(e => {
+                    console.log(`Prewarm request error for ${veinType}: ${e.message}`);
+                    endpointStatus[veinType].ready = false;
+                    endpointStatus[veinType].warming = false;
+                });
+            } catch (e) {
+                console.log(`Prewarm request error for ${veinType}: ${e.message}`);
+                endpointStatus[veinType].warming = false;
+            }
+            
+            // Allow a brief pause between endpoint warmups
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Longer pause between endpoint warmups
+        } catch (error) {
+            console.warn(`⚠️ Error prewarming ${veinType} endpoint: ${error.message}`);
+            endpointStatus[veinType].warming = false;
+        }
+    }
+    
+    console.log('Endpoint prewarming process completed');
+}
 
 // Function to prepare the image for prediction
 function prepareImageForPrediction(base64Image, mimeType = 'image/jpeg') {
@@ -1350,11 +1549,15 @@ async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
         
         console.log('Got credentials from Secret Manager');
         
-        // Initialize Vertex AI client
-        console.log('Initializing Vertex AI client with Secret Manager credentials');
-        if (!predictionClient) {
-            await initializeVertexAI();
-        }
+        // Initialize Google auth with credentials
+        const auth = new GoogleAuth({
+            credentials: credentials,
+            scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        
+        // Get access token
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
         
         console.log('Using Vertex AI API endpoint:', `${CONFIG.location}-aiplatform.googleapis.com`);
         console.log('Configured endpoints - Hepatic:', CONFIG.endpointIds.hepatic, 
@@ -1383,37 +1586,57 @@ async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
             return instance;
         });
 
-        // Format the API request
-        const directRequest = {
-            endpoint: `projects/${CONFIG.projectId}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointIds[veinType]}`,
+        // The parameters to use for the prediction
+        const predictionParams = parameters || {
+            confidenceThreshold: 0,
+            maxPredictions: 5
+        };
+
+        // Construct the endpoint URL directly
+        const endpointUrl = `https://${CONFIG.location}-aiplatform.googleapis.com/v1/projects/${CONFIG.projectNumber}/locations/${CONFIG.location}/endpoints/${CONFIG.endpointIds[veinType]}:predict`;
+        console.log('Endpoint URL:', endpointUrl);
+
+        // Format the API request payload
+        const payload = {
             instances: formattedInstances,
-            parameters: parameters || {
-                confidenceThreshold: 0,
-                maxPredictions: 5
-            }
+            parameters: predictionParams
         };
 
         // Log the request format for debugging
-        console.log('DEBUG - Vertex AI request format:', JSON.stringify({
-            endpoint: directRequest.endpoint,
-            instances: directRequest.instances.map(inst => ({
+        console.log('DEBUG - Vertex AI request payload:', JSON.stringify({
+            instances: payload.instances.map(inst => ({
                 content: inst.content ? `[BASE64 DATA - ${inst.content.length} chars]` : 'undefined',
                 mimeType: inst.mimeType || 'undefined'
             })),
-            parameters: directRequest.parameters
+            parameters: payload.parameters
         }, null, 2));
 
         // Log diagnostics for the request
-        await logDiagnostics('DIRECT_REQUEST', veinType, directRequest);
+        await logDiagnostics('DIRECT_REQUEST', veinType, payload);
         
-        // Make the API call
-        const response = await predictionClient.predict(directRequest);
+        // Make the API call using fetch instead of the client
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Vertex AI API responded with status ${response.status}:`, errorText);
+            throw new Error(`Vertex AI API error: ${response.status} - ${errorText}`);
+        }
+        
+        const predictionResult = await response.json();
         
         // Schedule endpoint shutdown
         console.log('Scheduling shutdown for', veinType, 'endpoint in', CONFIG.endpointShutdownDelayMinutes, 'minutes');
         scheduleEndpointShutdown(veinType);
         
-        return response;
+        return predictionResult;
     } catch (error) {
         // Log the error
         await logDiagnostics('DIRECT_ERROR', veinType, null, { error });
@@ -1435,7 +1658,7 @@ async function makeDirectVertexAIPrediction(veinType, instances, parameters) {
 }
 
 // Function to make API calls with retry logic
-async function makeApiCallWithRetry(url, payload, maxRetries = 3, initialDelay = 2000) {
+async function makeApiCallWithRetry(url, payload, maxRetries = 5, initialDelay = 5000) {
     let attempt = 1;
     let delay = initialDelay;
     
@@ -1450,13 +1673,24 @@ async function makeApiCallWithRetry(url, payload, maxRetries = 3, initialDelay =
         })}`);
         
         try {
+            // Create AbortController for timeout functionality
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 60000); // 60-second timeout
+            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Connection': 'keep-alive'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: controller.signal,
+                // Add keepalive option to help with connection maintenance
+                keepalive: true
             });
+            
+            // Clear the timeout to prevent memory leaks
+            clearTimeout(timeout);
             
             if (!response.ok) {
                 const errorText = await response.text();
@@ -1467,15 +1701,27 @@ async function makeApiCallWithRetry(url, payload, maxRetries = 3, initialDelay =
         } catch (error) {
             console.log(`API call attempt ${attempt} failed: ${error.message}`);
             
+            // Special handling for timeout errors
+            const isTimeoutError = error.name === 'AbortError' || 
+                                  error.message.includes('timeout') || 
+                                  error.message.includes('timed out') ||
+                                  error.message.includes('GOAWAY');
+                                  
+            if (isTimeoutError) {
+                console.log('Detected timeout error, adjusting retry strategy...');
+            }
+            
             if (attempt === maxRetries) {
                 throw error;
             }
             
-            console.log(`Waiting ${delay}ms before retry...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
+            // Calculate delay - longer for timeout errors
+            const retryDelay = isTimeoutError ? delay * 1.5 : delay;
+            console.log(`Waiting ${retryDelay}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
             
-            // Exponential backoff
-            delay *= 2;
+            // Exponential backoff with a cap
+            delay = Math.min(delay * 2, 30000); // Cap at 30 seconds
             attempt++;
         }
     }
