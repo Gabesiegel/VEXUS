@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="author" content="Gabesiegel" />
-    <meta name="last-modified" content="2024-03-07" />
+    <meta name="last-modified" content="2024-02-14T17:32:01Z" />
     
     <!-- Initial visibility control -->
     <style>
@@ -17,6 +17,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
         if (typeof initializeMenuToggle === 'function') {
             initializeMenuToggle();
         }
@@ -26,15 +27,14 @@
     <!-- CSS -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="html5up-phantom/assets/css/mobile.css" />
-    <!-- Add Fancybox CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-    <!-- Custom CSS - Load these last to override any previous styles -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidenav.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     
     <!-- Critical menu styles -->
     <style>
@@ -1154,7 +1154,72 @@
     </style>
 </head>
 <body class="is-preload">
-    <!-- Wrapper -->
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <ul>
+            <li class="side-nav-item">
+                <a href="#hepatic-vein-waveforms" class="side-nav-link section-trigger" data-text="Introduction">INTRODUCTION</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#ekg-tracing" class="side-nav-link section-trigger" data-text="EKG Tracing">EKG TRACING</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#hepatic-vein-patterns" class="side-nav-link hepatic-trigger" data-text="Hepatic Vein">HEPATIC VEIN</a>
+                <div class="sub-nav hepatic-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-normal" class="sub-nav-link" data-section="hepatic-normal">NORMAL</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-mild" class="sub-nav-link" data-section="hepatic-mild">MILD</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-severe" class="sub-nav-link" data-section="hepatic-severe">SEVERE</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#portal-vein-waveforms" class="side-nav-link portal-trigger" data-text="Portal Vein">PORTAL VEIN</a>
+                <div class="sub-nav portal-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#portal-normal" class="sub-nav-link" data-section="portal-normal">NORMAL</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#portal-mild" class="sub-nav-link" data-section="portal-mild">MILD</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#portal-severe" class="sub-nav-link" data-section="portal-severe">SEVERE</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#intrarenal-vein-waveforms" class="side-nav-link renal-trigger" data-text="Renal Vein">RENAL VEIN</a>
+                <div class="sub-nav renal-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#renal-normal" class="sub-nav-link" data-section="renal-normal">NORMAL</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#renal-mild" class="sub-nav-link" data-section="renal-mild">MILD</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#renal-severe" class="sub-nav-link" data-section="renal-severe">SEVERE</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#vexus-grading" class="side-nav-link section-trigger" data-text="VExUS Grading">VEXUS GRADING</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#references" class="side-nav-link section-trigger" data-text="References">REFERENCES</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Toggle Button - Moved outside -->
+    <div class="nav-toggle" id="sideNavToggle">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+
+    <!-- Navigation -->
     <div id="wrapper">
         <header id="header">
             <div class="inner">
@@ -1207,7 +1272,7 @@
                             <h1>Interpreting VExUS Doppler Waveforms</h1>
                         </div>
                         
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="hepatic-vein-waveforms">
                             <h2 style="text-align: center;">Introduction to VExUS and Venous Waveforms</h2>
                             <p>Venous Excess Ultrasound (VExUS) is a point-of-care ultrasound assessment method that evaluates systemic venous congestion by examining the Doppler waveforms of key veins (hepatic, portal, and intrarenal) alongside the size and variation of the inferior vena cava (IVC)<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-2">2</a></sup>. By analyzing these venous patterns, clinicians can estimate how elevated right-sided heart pressures or excessive fluid loading affect organ blood flow<sup class="citation"><a href="#reference-1">1</a></sup><sup class="citation"><a href="#reference-3">3</a></sup>.</p>
                             
@@ -1220,7 +1285,7 @@
                             <p>This resource will describe how to recognize these pattern changes in each vein type.</p>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="ekg-tracing">
                             <h2 style="text-align: center;">EKG Tracing in VExUS Assessment</h2>
                             <p>Hepatic vein waveforms are best interpreted with respect to the cardiac cycle, making simultaneous EKG tracing invaluable for accurate pattern recognition and phase identification. The cardiac electrical events help identify the timing of various waveform components:</p>
                             
@@ -1239,10 +1304,10 @@
                             <p>This temporal correlation helps identify waveform abnormalities with confidence, particularly when distinguishing between S and D waves in cases of mild congestion or determining true flow reversals in severe congestion.</p>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="hepatic-vein-patterns">
                             <h2 style="text-align: center;">Hepatic Vein Waveforms</h2>
                             
-                            <h3 style="text-align: center;">Normal Pattern</h3>
+                            <h3 style="text-align: center;" id="hepatic-normal">Normal Pattern</h3>
                             <ul>
                                 <li><strong>"S > D":</strong> The systolic wave (S) is larger than the diastolic wave (D) when viewed on Doppler.</li>
                                 <li>Includes small retrograde deflections: the A wave (atrial contraction) and a tiny V wave (end-systole).</li>
@@ -1269,11 +1334,11 @@
                                 </div>
                             </div>
                             
-                            <h3 style="text-align: center;">Mild Congestion</h3>
+                            <h3 style="text-align: center;" id="hepatic-mild">Mild Congestion</h3>
                             <ul>
-                                <li><strong>"S < D":</strong> The systolic wave is still below the baseline (forward) but smaller in amplitude compared to the diastolic wave.</li>
-                                <li>The A wave (atrial reversal) becomes more pronounced; the V wave may also be noticeable.</li>
-                                <li>Suggests rising right atrial pressure, but no full-flow reversal in systole yet<sup class="citation"><a href="#reference-5">5</a></sup><sup class="citation"><a href="#reference-6">6</a></sup>.</li>
+                                <li><strong>"S < D" Pattern:</strong> The systolic (S) wave diminishes, appearing with less amplitude than the diastolic (D) wave.</li>
+                                <li>The A wave usually becomes more prominent.</li>
+                                <li>This is often the first indicator of elevated right atrial pressure and mild venous congestion<sup class="citation"><a href="#reference-2">2</a></sup>.</li>
                             </ul>
                             
                             <div class="image-tile">
@@ -1286,10 +1351,9 @@
                                 </div>
                             </div>
                             
-                            <h3 style="text-align: center;">Severe Congestion</h3>
+                            <h3 style="text-align: center;" id="hepatic-severe">Severe Congestion</h3>
                             <ul>
-                                <li><strong>Reversed S Wave:</strong> Now the S wave is above the baseline, indicating backward flow into the liver during systole.</li>
-                                <li>Only the D wave remains antegrade. The A (and sometimes V) waves become markedly elevated.</li>
+                                <li><strong>Reversal of S Wave:</strong> The systolic (S) wave actually reverses direction, appearing above the baseline on Doppler (indicating flow away from the heart during systole).</li>
                                 <li>Reflects significantly elevated right atrial pressures, often seen in severe tricuspid regurgitation or right-sided heart failure<sup class="citation"><a href="#reference-2">2</a></sup><sup class="citation"><a href="#reference-5">5</a></sup>.</li>
                             </ul>
                             
@@ -1304,10 +1368,10 @@
                             </div>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="portal-vein-waveforms">
                             <h2>Portal Vein Waveforms</h2>
                             
-                            <h3>Normal Pattern</h3>
+                            <h3 id="portal-normal">Normal Pattern</h3>
                             <ul>
                                 <li><strong>Continuous Monophasic Flow:</strong> In healthy states, the portal vein shows essentially steady forward flow (hepatopetal), with minimal respiratory or cardiac pulsatility.</li>
                                 <li>Pulsatility fraction < 30% (little variation in velocity over the cardiac cycle)<a href="#reference-3" class="citation">3</a><a href="#reference-7" class="citation">7</a>.</li>
@@ -1323,7 +1387,7 @@
                                 </div>
                             </div>
                             
-                            <h3>Mild Congestion</h3>
+                            <h3 id="portal-mild">Mild Congestion</h3>
                             <ul>
                                 <li><strong>Mildly Pulsatile Flow:</strong> A noticeable undulation in velocity emerges, yielding a 30–50% pulsatility index.</li>
                                 <li>Forward flow is preserved (no reversal), but the waveform starts dipping and peaking in sync with cardiac activity<a href="#reference-2" class="citation">2</a><a href="#reference-3" class="citation">3</a>.</li>
@@ -1339,7 +1403,7 @@
                                 </div>
                             </div>
                             
-                            <h3>Severe Congestion</h3>
+                            <h3 id="portal-severe">Severe Congestion</h3>
                             <ul>
                                 <li><strong>High Pulsatility > 50%:</strong> Marked oscillation of the portal flow with deep troughs.</li>
                                 <li>Can approach or briefly cross the baseline (or show short-lived flow reversal), reflecting high venous pressures transmitted back from the right atrium and hepatic circulation<a href="#reference-3" class="citation">3</a><a href="#reference-6" class="citation">6</a>.</li>
@@ -1356,10 +1420,10 @@
                             </div>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="intrarenal-vein-waveforms">
                             <h2>Intrarenal (Renal Parenchymal) Vein Waveforms</h2>
                             
-                            <h3>Normal Pattern</h3>
+                            <h3 id="renal-normal">Normal Pattern</h3>
                             <ul>
                                 <li><strong>Continuous Monophasic Flow:</strong> The tiny interlobar veins in the kidney typically exhibit a steady, non-pulsatile flow throughout the cardiac cycle<sup class="citation"><a href="#reference-7">7</a></sup>.</li>
                                 <li>No distinct systolic or diastolic components are recognizable; wave appears almost flat on Doppler.</li>
@@ -1375,7 +1439,7 @@
                                 </div>
                             </div>
                             
-                            <h3>Mild Congestion</h3>
+                            <h3 id="renal-mild">Mild Congestion</h3>
                             <ul>
                                 <li><strong>Biphasic (S & D) Pulsatile Flow:</strong> As venous pressure rises, a waveform emerges with two forward-flow peaks—one in systole and another in diastole—separated by a brief trough.</li>
                                 <li>Called a "discontinuous" pattern, it reflects moderate venous congestion within the renal parenchyma<a href="#reference-1" class="citation">1</a><a href="#reference-5" class="citation">5</a>.</li>
@@ -1391,7 +1455,7 @@
                                 </div>
                             </div>
                             
-                            <h3>Severe Congestion</h3>
+                            <h3 id="renal-severe">Severe Congestion</h3>
                             <ul>
                                 <li><strong>Monophasic D-Only Flow:</strong> The systolic component disappears entirely, and only diastolic flow remains visible per heartbeat.</li>
                                 <li>Signifies significant back-pressure on the kidney's venous outflow. This pattern correlates with higher risk of acute kidney injury<a href="#reference-1" class="citation">1</a><a href="#reference-8" class="citation">8</a>.</li>
@@ -1408,7 +1472,7 @@
                             </div>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="vexus-grading">
                             <h2>Putting It All Together: VExUS Grading</h2>
                             
                             <a href="images/VExUS.grading.png" data-fancybox="waveform-gallery" data-caption="VExUS Grading System showing progression from normal to severe congestion patterns">
@@ -1425,7 +1489,7 @@
                             <p>Patients with advanced VExUS grades are at higher risk for congestive organ injury (hepatic congestion, kidney injury, etc.), and recognition of these patterns prompts intensified decongestive therapies<a href="#reference-1" class="citation">1</a><a href="#reference-2" class="citation">2</a><a href="#reference-8" class="citation">8</a>.</p>
                         </div>
 
-                        <div class="waveform-section">
+                        <div class="waveform-section" id="references">
                             <h2>References</h2>
                             <div class="reference-grid">
                                 <div class="reference-tile">
@@ -1505,8 +1569,9 @@
     <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="html5up-phantom/assets/js/sidenav.js"></script>
     <!-- Fancybox JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     
     <script>
         // Simplified Fancybox initialization with jQuery

@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidenav.css" />
     <!-- Fancybox CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
@@ -790,6 +791,78 @@
     </style>
 </head>
 <body class="is-preload">
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <ul>
+            <li class="side-nav-item">
+                <a href="#ivc-assessment" class="side-nav-link ivc-trigger" data-text="IVC Assessment">IVC</a>
+                <div class="sub-nav ivc-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#ivc-long-view" class="sub-nav-link" data-section="ivc-long">LONG</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#hepatic-vein-assessment" class="side-nav-link hepatic-trigger" data-text="Hepatic Vein Assessment">HEPATIC</a>
+                <div class="sub-nav hepatic-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-long-view" class="sub-nav-link" data-section="hepatic-long">LONG</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-short-view" class="sub-nav-link" data-section="hepatic-short">SHORT</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#hepatic-subxiphoid-view" class="sub-nav-link" data-section="hepatic-subxi">SUBXI</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#portal-vein-assessment" class="side-nav-link portal-trigger" data-text="Portal Vein Assessment">PORTAL</a>
+                <div class="sub-nav portal-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#portal-long-view" class="sub-nav-link" data-section="portal-long">LONG</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#portal-short-view" class="sub-nav-link" data-section="portal-short">SHORT</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#portal-subxiphoid-view" class="sub-nav-link" data-section="portal-subxi">SUBXI</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#renal-vein-assessment" class="side-nav-link renal-trigger" data-text="Renal Vein Assessment">RENAL</a>
+                <div class="sub-nav renal-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#renal-long-view" class="sub-nav-link" data-section="renal-long">LONG</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#renal-short-view" class="sub-nav-link" data-section="renal-short">SHORT</a>
+                    </div>
+                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="#general-acquisition-tips" class="side-nav-link tips-trigger" data-text="General Acquisition Tips">TIPS</a>
+                <div class="sub-nav tips-sub-nav">
+                    <div class="sub-nav-item">
+                        <a href="#positioning-tips" class="sub-nav-link" data-section="positioning-tips">POSITION</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#settings-tips" class="sub-nav-link" data-section="settings-tips">SETTINGS</a>
+                    </div>
+                    <div class="sub-nav-item">
+                        <a href="#documentation-tips" class="sub-nav-link" data-section="documentation-tips">DOCS</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Toggle Button - Moved outside -->
+    <div class="nav-toggle" id="sideNavToggle">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+
     <!-- Navigation -->
     <div id="wrapper">
         <header id="header">
@@ -847,9 +920,10 @@
                     
                     <div class="acquisition-content">
                         <!-- IVC Section -->
-                        <div class="acquisition-section">
+                        <div class="acquisition-section" id="ivc-assessment">
                             <h2>IVC Assessment</h2>
-                            <div class="view-section">
+                            <div class="view-section" id="ivc-long-view">
+                                <h3>Long Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
                                         <a href="images/IVC.png" data-fancybox="gallery" data-caption="IVC Assessment Technique">
@@ -898,10 +972,10 @@
                         </div>
 
                         <!-- Hepatic Vein Views -->
-                        <div class="acquisition-section">
+                        <div class="acquisition-section" id="hepatic-vein-assessment">
                             <h2>Hepatic Vein Assessment</h2>
                             
-                            <div class="view-section">
+                            <div class="view-section" id="hepatic-long-view">
                                 <h3>Long Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -939,7 +1013,8 @@
                                 </div>
                             </div>
 
-                            <div class="view-section">
+                            <!-- Add Hepatic Short Axis View -->
+                            <div class="view-section" id="hepatic-short-view">
                                 <h3>Short Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -961,7 +1036,7 @@
                                 </div>
                             </div>
 
-                            <div class="view-section">
+                            <div class="view-section" id="hepatic-subxiphoid-view">
                                 <h3>Subxiphoid View</h3>
                                 <div class="image-section">
                                     <a href="images/hepatic_sub.png" data-fancybox="gallery" data-caption="Hepatic Vein - Subxiphoid View">
@@ -985,10 +1060,10 @@
                         </div>
 
                         <!-- Portal Vein Views -->
-                        <div class="acquisition-section">
+                        <div class="acquisition-section" id="portal-vein-assessment">
                             <h2>Portal Vein Assessment</h2>
                             
-                            <div class="view-section">
+                            <div class="view-section" id="portal-long-view">
                                 <h3>Long Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -1026,7 +1101,8 @@
                                 </div>
                             </div>
 
-                            <div class="view-section">
+                            <!-- Portal Short View -->
+                            <div class="view-section" id="portal-short-view">
                                 <h3>Short Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -1044,7 +1120,7 @@
                                 </div>
                             </div>
 
-                            <div class="view-section">
+                            <div class="view-section" id="portal-subxiphoid-view">
                                 <h3>Subxiphoid View</h3>
                                 <div class="image-section">
                                     <a href="images/Portal_sub.png" data-fancybox="gallery" data-caption="Portal Vein - Subxiphoid View">
@@ -1065,8 +1141,8 @@
                                     <div class="vexus-atlas-tile">
                                         <h4>Portal Subxiphoid</h4>
                                         <div class="image-section atlas-gif">
-                                            <a href="images/@Portalvein.subxi.gif" data-fancybox="gallery" data-caption="Portal Vein Subxiphoid View Animation">
-                                                <img src="images/@Portalvein.subxi.gif" alt="Portal Vein Subxiphoid View Animation" class="acquisition-image">
+                                            <a href="images/Portalvein.subxi.gif" data-fancybox="gallery" data-caption="Portal Vein Subxiphoid View Animation">
+                                                <img src="images/Portalvein.subxi.gif" alt="Portal Vein Subxiphoid View Animation" class="acquisition-image">
                                             </a>
                                         </div>
                                     </div>
@@ -1075,10 +1151,10 @@
                         </div>
 
                         <!-- Renal Vein Views -->
-                        <div class="acquisition-section">
+                        <div class="acquisition-section" id="renal-vein-assessment">
                             <h2>Renal Vein Assessment</h2>
                             
-                            <div class="view-section">
+                            <div class="view-section" id="renal-long-view">
                                 <h3>Long Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -1117,7 +1193,7 @@
                                 </div>
                             </div>
 
-                            <div class="view-section">
+                            <div class="view-section" id="renal-short-view">
                                 <h3>Short Axis View</h3>
                                 <div class="content-wrapper">
                                     <div class="image-section">
@@ -1153,7 +1229,7 @@
                         </div>
 
                         <!-- General Tips Section -->
-                        <div class="acquisition-section">
+                        <div class="acquisition-section" id="general-acquisition-tips">
                             <h2>General Acquisition Tips</h2>
                             <ul>
                                 <li>Ensure proper patient positioning for optimal image quality</li>
@@ -1178,6 +1254,7 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
     <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+    <script src="html5up-phantom/assets/js/sidenav.js"></script>
     <!-- Fancybox JS -->
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     

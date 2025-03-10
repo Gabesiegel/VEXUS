@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidenav.css" />
     <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
     <!-- Fancybox CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
@@ -786,6 +787,47 @@
     </style>
 </head>
 <body class="is-preload">
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <ul>
+            <li class="side-nav-item">
+                <a href="#introduction" class="side-nav-link section-trigger" data-text="Introduction">INTRODUCTION</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#what-is-vexus" class="side-nav-link section-trigger" data-text="What Is VExUS">WHAT IS VEXUS</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#why-use-vexus" class="side-nav-link section-trigger" data-text="Why Use VExUS">WHY USE VEXUS</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#vexus-step-by-step" class="side-nav-link section-trigger" data-text="VExUS Step-by-Step">VEXUS STEP-BY-STEP</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#vexus-grading-system" class="side-nav-link section-trigger" data-text="VExUS Grading System">VEXUS GRADING</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#organ-perfusion-pressure" class="side-nav-link section-trigger" data-text="Organ Perfusion Pressure">ORGAN PERFUSION</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#venous-congestion-flow-patterns" class="side-nav-link section-trigger" data-text="Flow Patterns">FLOW PATTERNS</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#vexus-complete-picture" class="side-nav-link section-trigger" data-text="Complete Picture">COMPLETE PICTURE</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#conclusion" class="side-nav-link section-trigger" data-text="Conclusion">CONCLUSION</a>
+            </li>
+            <li class="side-nav-item">
+                <a href="#references" class="side-nav-link section-trigger" data-text="References">REFERENCES</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Toggle Button - Moved outside -->
+    <div class="nav-toggle" id="sideNavToggle">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+
     <!-- Navigation -->
     <div id="wrapper">
         <header id="header">
@@ -839,14 +881,14 @@
 
             <div class="education-content">
                 <!-- Introduction Section -->
-                <div class="education-section">
+                <div class="education-section" id="introduction">
                     <h2>Introduction</h2>
                     <p>Call it what you want—"Fluid Overload", "Venous Hypertension", "Fluid Up", "Venous Congestion" - they all mean the same thing: the venous circulation is too full, and it's causing problems.<a href="#ref1" class="citation">1</a> For a long time, the medical field has focused on arterial hypotension as the main cause of tissue hypoperfusion- and that's understandable! Sepsis, hypovolemia, and hemorrhage are all serious problems. However, we are increasingly realizing that the other side of the vasculature, venous return, can be equally important to our patients with cardiac or renal failure or the critically ill.<a href="#ref2" class="citation">2</a><a href="#ref3" class="citation">3</a><a href="#ref4" class="citation">4</a> Venous congestion leads to cardiorenal AKI, pulmonary edema, worsening cardiac function, poor wound healing, and a host of other conditions.<a href="#ref5" class="citation">5</a><a href="#ref6" class="citation">6</a> The problem is that finding venous pressures is much harder than finding arterial pressures! You can't just use a cuff. That's why we spend hours poking at legs, squinting at necks, and generally shrugging our shoulders. When we really want to know, we often perform a right heart catheterization, putting a pressure transducer into the heart itself. But that's expensive, time-consuming, and above all, risky to the patient! So wouldn't it be great if we had a cheap, noninvasive, low-risk alternative, that could tell us what we need to know without getting all up in the patient's pulmonary arteries?</p>
                     <p>That's where Venous Excess Ultrasound (VExUS) comes in.</p>
                 </div>
 
                 <!-- What is VExUS Section -->
-                <div class="education-section">
+                <div class="education-section" id="what-is-vexus">
                     <h2>What Is VExUS?</h2>
                     <p>VExUS is a 4-point Doppler ultrasound protocol that measures the direction and speed of venous blood flow, data that can be used to assess venous pressure. It was developed by a group of physicians based in Toronto, Canada, who showed that their VExUS technique could predict when cardiac surgery patients would develop acute kidney injury (AKI).<a href="#ref7" class="citation">7</a> Since that time VExUS has been shown to correlate strongly with right heart catheterization values,<a href="#ref8" class="citation">8</a> cardiorenal AKI,<a href="#ref9" class="citation">9</a> and mortality in patients with heart failure.<a href="#ref10" class="citation">10</a></p>
                     <p>The VExUS components are:</p>
@@ -857,14 +899,14 @@
                         <li><strong>Renal Vein Doppler</strong></li>
 
                 <!-- Why Use VExUS Section -->
-                <div class="education-section">
+                <div class="education-section" id="why-use-vexus">
                     <h2>Why Use VExUS?</h2>
                     <p>VExUS can help you understand your patient's level of venous congestion, which can inform decisions about whether to give fluids, administer diuretic medications, transfuse blood products, or start vasopressor medications. The technique is noninvasive, easily repeatable, and does not require advanced ultrasound or echocardiography techniques.</p>
                     <p><strong>Important Note:</strong> VExUS is a tool to enhance clinical judgment, not replace it. Always integrate your findings with the patient's history, physical exam, and other investigations.</p>
                 </div>
 
                 <!-- Step-by-Step Guide Section -->
-                <div class="education-section">
+                <div class="education-section" id="vexus-step-by-step">
                     <h2>VExUS Step-by-Step:</h2>
                     
                     <h3>1. Equipment and Preparation</h3>
@@ -1009,7 +1051,7 @@
                 </div>
 
                 <!-- VExUS Grading System Section -->
-                <div class="education-section">
+                <div class="education-section" id="vexus-grading-system">
                     <h2>VExUS Grading System</h2>
                      <div class="vexus-grading-container">
                         <table class="vexus-grading-table">
@@ -1057,7 +1099,7 @@
                 </div>
                 
                 <!-- Organ Perfusion Pressure Section -->
-                <div class="education-section">
+                <div class="education-section" id="organ-perfusion-pressure">
                     <h2>Understanding Organ Perfusion Pressure</h2>
                     <style>
                         .image-container {
@@ -1106,7 +1148,7 @@
                 </div>
                 
                 <!-- Venous Congestion POCUS Section -->
-                <div class="education-section">
+                <div class="education-section" id="venous-congestion-flow-patterns">
                     <h2>Venous Congestion on POCUS: Flow Patterns</h2>
                     
                     <div class="image-container">
@@ -1134,7 +1176,7 @@
                 </div>
                 
                 <!-- VEXUS Overview Section -->
-                <div class="education-section">
+                <div class="education-section" id="vexus-complete-picture">
                     <h2>VEXUS: The Complete Picture</h2>
                     
                     <div class="image-container">
@@ -1167,13 +1209,13 @@
                 </div>
 
                 <!-- Conclusion Section -->
-                <div class="education-section">
+                <div class="education-section" id="conclusion">
                     <h2>Conclusion</h2>
                     <p>VExUS is a powerful POCUS technique for assessing venous congestion. By mastering the steps outlined above and understanding the potential pitfalls, you can incorporate VExUS into your own practice.</p>
                 </div>
 
                 <!-- References Section -->
-                <div class="education-section">
+                <div class="education-section" id="references">
                     <h2>References</h2>
                     <style>
                         .reference-grid {
@@ -1335,6 +1377,7 @@
         <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
         <script src="html5up-phantom/assets/js/util.js"></script>
         <script src="html5up-phantom/assets/js/main.js"></script>
+        <script src="html5up-phantom/assets/js/sidenav.js"></script>
         <!-- Fancybox JS -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
         
