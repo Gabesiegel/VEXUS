@@ -69,6 +69,15 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
 }
 
+/* Mobile-specific display text - shown on small screens */
+.side-nav-link .mobile-text {
+    display: none; /* Hidden by default on desktop */
+}
+
+.side-nav-link .long-text {
+    display: block; /* Shown by default on desktop */
+}
+
 /* Remove all hover effects from links */
 .side-nav-link:hover, 
 .side-nav-link:focus {
@@ -212,10 +221,10 @@
         left: 0;
         bottom: auto !important; /* Prevent bottom positioning */
         transform: translateY(-50%);
-        padding: 12px 8px;
+        padding: 15px 10px; /* Increased padding */
         width: auto;
-        max-width: 75px; /* Narrower to avoid text overflow */
-        min-width: 65px; /* Set minimum width */
+        max-width: 85px; /* Increased from 75px for larger navigation */
+        min-width: 75px; /* Increased from 65px for larger navigation */
         border-radius: 0 12px 12px 0;
         background-color: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(8px);
@@ -224,7 +233,12 @@
     }
     
     .side-nav.collapsed {
-        left: -75px; /* Match max-width */
+        left: -85px; /* Match max-width */
+    }
+    
+    /* When sidenav is expanded on mobile, position it to the right of the toggle button */
+    .side-nav:not(.collapsed) {
+        left: 36px; /* Position to the right of the toggle button (match mobile toggle width) */
     }
     
     /* Toggle button - keep on left side */
@@ -254,7 +268,7 @@
     .side-nav:not(.collapsed) ~ .nav-toggle {
         top: 50% !important; /* Force vertical centering */
         bottom: auto !important; /* Prevent bottom positioning */
-        left: 0 !important; /* Position at left edge of screen when expanded */
+        left: 0 !important; /* Keep at left edge of screen when expanded */
     }
     
     /* Smaller toggle icon for mobile */
@@ -283,20 +297,32 @@
     .side-nav-link {
         min-width: unset;
         width: 100%; /* Fill available width */
-        max-width: 65px;
+        max-width: 75px; /* Increased from 65px */
         height: auto;
-        font-size: 10px; /* Smaller for better fit */
-        padding: 7px 4px; /* Reduced padding */
+        min-height: 38px; /* Increased from 32px for larger touch target */
+        font-size: 12px; /* Increased from 11px for better readability */
+        padding: 8px 5px; /* Increased from 7px 4px for larger touch target */
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         border-radius: 6px;
-        letter-spacing: -0.3px; /* Tighter letter spacing */
-        line-height: 1.1; /* Tighter line height */
+        letter-spacing: -0.2px;
+        line-height: 1.1;
         overflow: hidden;
-        text-overflow: ellipsis; /* Add ellipsis for long text */
-        white-space: nowrap; /* Keep on one line instead of wrapping */
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Show mobile text instead of full text on small screens */
+    .side-nav-link .long-text {
+        display: none; /* Hide the long text on mobile */
+    }
+    
+    .side-nav-link .mobile-text {
+        display: block; /* Show mobile text version */
+        font-weight: 600; /* Make slightly bolder for better readability */
+        font-size: 12px; /* Increased from 11px */
     }
     
     /* Long text handling for specific navigation items */
@@ -326,70 +352,86 @@
         font-weight: 600;
     }
     
-    /* Sub-navigation for horizontal display on mobile */
+    /* Sub-navigation container - fix visibility and positioning issues */
     .sub-nav {
         position: absolute;
-        left: 75px; /* Position to the right of the side nav */
+        left: 85px; /* Increased from 75px to align with wider navigation */
         top: 0;
         bottom: auto;
         transform: translateY(0) translateX(0);
-        margin-left: 0;
+        margin-left: 5px; /* Add a small margin for separation */
         margin-bottom: 0;
-        flex-direction: row; /* Horizontal layout */
+        flex-direction: row;
         justify-content: flex-start;
         width: auto;
-        z-index: 1400;
-        background-color: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        z-index: 10000; /* Increased z-index to ensure visibility */
+        background-color: rgba(255, 255, 255, 0.98); /* More opaque background */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for better visibility */
         border-radius: 8px;
         padding: 10px;
-        max-width: 200px; /* Limit width */
+        max-width: 230px; /* Increased from 200px for more space */
+        visibility: hidden; /* Start hidden */
+        opacity: 0;
+        transition: visibility 0.2s, opacity 0.2s; /* Smooth transition */
+        pointer-events: none; /* Start with no pointer events */
     }
     
+    /* When sub-nav is active, make it visible */
     .sub-nav.active {
         display: flex;
-        flex-direction: row; /* Force horizontal layout */
-        flex-wrap: wrap; /* Allow wrapping for very small screens */
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 8px;
         transform: translateX(0);
+        visibility: visible; /* Make visible when active */
+        opacity: 1;
+        pointer-events: all; /* Enable pointer events when active */
     }
     
     .sub-nav-item {
-        margin: 0 3px;
+        margin: 0 4px; /* Increased from 3px */
     }
     
+    /* Sub-navigation links optimized for mobile */
     .sub-nav-link {
-        padding: 6px 10px;
-        font-size: 9px;
-        letter-spacing: 0.1px;
+        padding: 8px 10px; /* Increased from 6px 8px for larger touch target */
+        font-size: 11px; /* Increased from 9px for better readability */
+        font-weight: 600;
+        letter-spacing: 0;
         white-space: nowrap;
+        min-width: 38px; /* Increased from 30px */
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.9); /* Added background for better visibility */
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.05); /* Added subtle border */
+        transition: all 0.2s ease;
     }
     
-    /* Scale text based on screen size */
+    .sub-nav-link:active {
+        background-color: #f8f8f8; /* Added active state styling */
+        transform: scale(0.97);
+    }
+    
+    /* Scale text based on screen size - less aggressive scaling for better readability */
     @media screen and (max-width: 375px) {
-        .side-nav-link {
-            font-size: 9px;
-            padding: 6px 3px;
+        .side-nav-link .mobile-text {
+            font-size: 11px; /* Increased from 10px */
         }
         
-        .side-nav-link[data-text*="Introduction"],
-        .side-nav-link[data-text*="Assessment"],
-        .side-nav-link[data-text*="Documentation"] {
-            font-size: 8px;
+        .sub-nav-link {
+            font-size: 10px; /* Increased from 8px */
+            padding: 7px 8px; /* Increased from 5px 6px */
         }
     }
     
     @media screen and (max-width: 320px) {
-        .side-nav-link {
-            font-size: 8px;
-            padding: 5px 2px;
+        .side-nav-link .mobile-text {
+            font-size: 10px; /* Increased from 9px */
         }
         
-        .side-nav-link[data-text*="Introduction"],
-        .side-nav-link[data-text*="Assessment"],
-        .side-nav-link[data-text*="Documentation"] {
-            font-size: 7px;
-            letter-spacing: -0.5px;
+        .sub-nav-link {
+            font-size: 9px; /* Increased from 7px */
+            padding: 6px 7px; /* Increased from 4px 5px */
         }
     }
 }
@@ -552,10 +594,15 @@ html {
     left: 0; /* Keep at edge when collapsed */
 }
 
-/* Expanded toggle button positioning - move to left side of navigation */
+/* Expanded toggle button positioning - keep on left and position sidenav to its right */
 .side-nav:not(.collapsed) ~ .nav-toggle {
     left: 0; /* Position at left edge of screen even when expanded */
     border-radius: 0 50% 50% 0; /* Keep rounded on right side */
+}
+
+/* When sidenav is expanded, position it to the right of the toggle button */
+.side-nav:not(.collapsed) {
+    left: 40px; /* Position to the right of the toggle button (match toggle width) */
 }
 
 /* Toggle icon */

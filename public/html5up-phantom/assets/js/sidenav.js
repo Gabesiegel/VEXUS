@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Track subnav state
     let isAnySubNavOpen = false;
+    let currentOpenSubNav = null;
     
     // Force navigation to always be visible on mobile - prevent any bottom positioning
     function ensureProperNavPosition() {
@@ -20,11 +21,23 @@ document.addEventListener('DOMContentLoaded', function() {
             sideNav.style.bottom = 'auto';
             sideNav.style.transform = 'translateY(-50%)';
             
+            // Position sidenav to the right of toggle when open
+            if (!sideNav.classList.contains('collapsed')) {
+                sideNav.style.left = '36px'; // Match mobile toggle button width
+            } else {
+                sideNav.style.left = '-85px'; // Hide when collapsed (increased from -75px)
+            }
+            
             // Force the toggle button to be on the left side
             navToggle.style.top = '50%';
             navToggle.style.bottom = 'auto';
-            navToggle.style.left = sideNav.classList.contains('collapsed') ? '0' : '0';
+            navToggle.style.left = '0';
             navToggle.style.transform = 'translateY(-50%)';
+        } else {
+            // Desktop positioning
+            if (!sideNav.classList.contains('collapsed')) {
+                sideNav.style.left = '40px'; // Position to the right of toggle button
+            }
         }
     }
     
@@ -132,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.values(triggerElements).forEach(item => {
             if (item.subNav) item.subNav.classList.remove('active');
         });
+        currentOpenSubNav = null;
         // Update subnav state after closing
         updateSubNavState();
     }
@@ -142,7 +156,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Position horizontally to the right of the side nav
             let triggerRect = trigger.getBoundingClientRect();
             subNav.style.top = (triggerRect.top - 5) + 'px'; // Align with the trigger
-            subNav.style.left = '75px'; // Position to the right of sidenav
+            subNav.style.left = '85px'; // Position to the right of sidenav (increased from 75px)
+            
+            // Ensure the submenu doesn't go off screen at the bottom
+            const subNavHeight = subNav.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            const triggerBottom = triggerRect.bottom;
+            
+            if (triggerBottom + subNavHeight > viewportHeight) {
+                // Position above if it would go off screen below
+                subNav.style.top = (triggerRect.top - subNavHeight + triggerRect.height) + 'px';
+            }
         }
     }
     
@@ -170,9 +194,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
             
-            // Add trigger click handler
+            // Add trigger click handler with improved mobile support
             item.trigger.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation(); // Prevent bubbling
                 
                 // First, navigate to the main section
                 const targetId = this.getAttribute('href').substring(1);
@@ -193,49 +218,60 @@ document.addEventListener('DOMContentLoaded', function() {
                     navLinks.forEach(link => link.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // For mobile or touch devices, toggle the sub-nav menu
+                    // For mobile - improve submenu toggle behavior
                     if (isMobile) {
-                        // Close any open sub-navs first
-                        closeAllSubNavs();
-                        
-                        // Then toggle this sub-nav with slight delay
-                        setTimeout(() => {
-                            item.subNav.classList.toggle('active');
-                            // Position the subnav correctly on small screens
-                            if (isSmallScreen) {
-                                positionSubNav(item.subNav, this);
-                            }
-                            // Update subnav state
-                            updateSubNavState();
-                        }, 300);
-                        
-                        // Handle clicks outside to close sub-nav
-                        function handleOutsideClick(event) {
-                            if (!item.subNav.contains(event.target) && !item.trigger.contains(event.target)) {
-                                item.subNav.classList.remove('active');
-                                // Update subnav state
-                                updateSubNavState();
-                                document.removeEventListener('click', handleOutsideClick);
-                            }
+                        // If a different submenu is open, close it first
+                        if (currentOpenSubNav && currentOpenSubNav !== item.subNav) {
+                            currentOpenSubNav.classList.remove('active');
                         }
                         
-                        // Add click listener if sub-nav is open
+                        // Toggle current submenu
+                        const isOpening = !item.subNav.classList.contains('active');
+                        
+                        // Toggle this submenu
+                        item.subNav.classList.toggle('active');
+                        
+                        // Position the submenu correctly when opening
+                        if (isOpening) {
+                            currentOpenSubNav = item.subNav;
+                            positionSubNav(item.subNav, this);
+                        } else {
+                            currentOpenSubNav = null;
+                        }
+                        
+                        // Update subnav state
+                        updateSubNavState();
+                        
+                        // Add click handler for outside clicks
                         setTimeout(() => {
                             if (item.subNav.classList.contains('active')) {
-                                document.addEventListener('click', handleOutsideClick);
-                            } else {
-                                document.removeEventListener('click', handleOutsideClick);
+                                // Create a one-time document click handler
+                                const handleOutsideClick = function(event) {
+                                    // Check if click was outside submenu and trigger
+                                    if (!item.subNav.contains(event.target) && !item.trigger.contains(event.target)) {
+                                        item.subNav.classList.remove('active');
+                                        currentOpenSubNav = null;
+                                        updateSubNavState();
+                                        document.removeEventListener('click', handleOutsideClick);
+                                    }
+                                };
+                                
+                                // Add the handler with a small delay
+                                setTimeout(() => {
+                                    document.addEventListener('click', handleOutsideClick);
+                                }, 10);
                             }
-                        }, 350);
+                        }, 50);
                     }
                 }
             });
             
-            // Add sub-link click handlers
+            // Add sub-link click handlers with improved mobile support
             if (item.links) {
                 item.links.forEach(link => {
                     link.addEventListener('click', function(e) {
                         e.preventDefault();
+                        e.stopPropagation(); // Prevent bubbling
                         
                         // Get the target view section ID
                         const targetId = this.getAttribute('href').substring(1);
@@ -256,13 +292,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             item.links.forEach(l => l.classList.remove('active'));
                             this.classList.add('active');
                             
-                            // Close the sub-navigation after a short delay (for mobile)
+                            // Close the sub-navigation after a delay (slightly longer on mobile)
                             if (isMobile) {
                                 setTimeout(() => {
                                     item.subNav.classList.remove('active');
+                                    currentOpenSubNav = null;
                                     // Update subnav state
                                     updateSubNavState();
-                                }, 500);
+                                }, 800); // Increased from 500ms for better UX
                             }
                         }
                     });
@@ -328,6 +365,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ensure proper positioning after resize
         ensureProperNavPosition();
     });
+    
+    // Add touch event listeners for better mobile support
+    if ('ontouchstart' in window) {
+        // Close any open submenu when touching elsewhere on the page
+        document.addEventListener('touchstart', function(e) {
+            if (currentOpenSubNav) {
+                // Find the associated trigger
+                let shouldClose = true;
+                
+                // Check if touch was on a trigger or its submenu
+                Object.values(triggerElements).forEach(item => {
+                    if (item.subNav === currentOpenSubNav) {
+                        if (item.trigger.contains(e.target) || item.subNav.contains(e.target)) {
+                            shouldClose = false;
+                        }
+                    }
+                });
+                
+                if (shouldClose) {
+                    currentOpenSubNav.classList.remove('active');
+                    currentOpenSubNav = null;
+                    updateSubNavState();
+                }
+            }
+        });
+    }
     
     // Initialize active state
     updateActiveNavItem();
