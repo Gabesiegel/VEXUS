@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('.acquisition-section');
     const navLinks = document.querySelectorAll('.side-nav-link');
     let isMobile = window.innerWidth <= 768;
+    let isSmallScreen = window.innerWidth <= 480;
     
     // Toggle side navigation
     const sideNav = document.querySelector('.side-nav');
@@ -40,9 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateSubNavState();
         }
     });
-    
-    // Remove the auto-expand behavior on hover to keep navbar collapsed unless explicitly toggled
-    // Only expand on explicit click of the toggle button
     
     // Collect all trigger links and their corresponding sub-navs
     const triggerElements = {
@@ -113,6 +111,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSubNavState();
     }
     
+    // Enhanced positioning for subnavs on small screens
+    function positionSubNav(subNav, trigger) {
+        if (isSmallScreen) {
+            // Position horizontally to the right of the side nav
+            let triggerRect = trigger.getBoundingClientRect();
+            subNav.style.top = (triggerRect.top - 5) + 'px'; // Align with the trigger
+        }
+    }
+    
     // Add click handlers for all trigger elements
     Object.values(triggerElements).forEach(item => {
         if (item.trigger && item.subNav) {
@@ -168,6 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Then toggle this sub-nav with slight delay
                         setTimeout(() => {
                             item.subNav.classList.toggle('active');
+                            // Position the subnav correctly on small screens
+                            if (isSmallScreen) {
+                                positionSubNav(item.subNav, this);
+                            }
                             // Update subnav state
                             updateSubNavState();
                         }, 300);
@@ -283,6 +294,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update mobile detection on window resize
     window.addEventListener('resize', function() {
         isMobile = window.innerWidth <= 768;
+        isSmallScreen = window.innerWidth <= 480;
+        
+        // If screen size changes, close all subnavs
+        closeAllSubNavs();
     });
     
     // Initialize active state

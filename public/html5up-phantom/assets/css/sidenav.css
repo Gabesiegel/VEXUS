@@ -206,7 +206,7 @@
 
 /* Mobile optimization for text fitting */
 @media screen and (max-width: 480px) {
-    /* Side navigation panel - narrower for better text fit */
+    /* Side navigation panel - positioned on left side of screen */
     .side-nav {
         top: 50%;
         left: 0;
@@ -219,6 +219,7 @@
         background-color: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
+        z-index: 1500; /* Ensure it appears above other elements */
     }
     
     .side-nav.collapsed {
@@ -229,8 +230,7 @@
     .nav-toggle {
         position: fixed;
         top: 50%;
-        left: 0 !important;
-        bottom: auto;
+        left: 0 !important; /* Force left positioning */
         transform: translateY(-50%);
         border-radius: 0 50% 50% 0;
         width: 36px;
@@ -245,14 +245,14 @@
     .side-nav.collapsed + .nav-toggle {
         left: 0 !important;
         top: 50%;
-        bottom: auto;
+        bottom: auto; /* Override any bottom positioning */
     }
     
     /* When sidebar is expanded */
     .side-nav:not(.collapsed) ~ .nav-toggle {
         left: 75px !important; /* Match max-width */
         top: 50%;
-        bottom: auto;
+        bottom: auto; /* Override any bottom positioning */
     }
     
     /* Smaller toggle icon for mobile */
@@ -263,8 +263,8 @@
     /* When submenu is open */
     .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
         left: 80px !important; /* Match adjusted width */
-        top: 20%;
-        bottom: auto;
+        top: 50%;
+        bottom: auto; /* Override any bottom positioning */
         border-radius: 0 50% 50% 0;
     }
     
@@ -324,37 +324,43 @@
         font-weight: 600;
     }
     
-    /* Submenu styling */
+    /* Sub-navigation for horizontal display on mobile */
     .sub-nav {
         position: absolute;
-        left: 100%;
+        left: 75px; /* Position to the right of the side nav */
         top: 0;
+        bottom: auto;
+        transform: translateY(0) translateX(0);
+        margin-left: 0;
+        margin-bottom: 0;
+        flex-direction: row; /* Horizontal layout */
+        justify-content: flex-start;
+        width: auto;
+        z-index: 1400;
         background-color: rgba(255, 255, 255, 0.95);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         padding: 10px;
-        width: auto;
-        min-width: 100px;
-        z-index: 998;
+        max-width: 200px; /* Limit width */
     }
     
     .sub-nav.active {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row; /* Force horizontal layout */
+        flex-wrap: wrap; /* Allow wrapping for very small screens */
+        gap: 8px;
+        transform: translateX(0);
     }
     
     .sub-nav-item {
-        margin: 0;
+        margin: 0 3px;
     }
     
     .sub-nav-link {
-        display: block;
-        padding: 8px 12px;
-        text-align: center;
-        font-size: 13px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
+        padding: 6px 10px;
+        font-size: 9px;
+        letter-spacing: 0.1px;
+        white-space: nowrap;
     }
     
     /* Scale text based on screen size */
@@ -577,24 +583,27 @@ html {
 /* Small screen toggle button */
 @media screen and (max-width: 480px) {
     .nav-toggle {
-        /* Bottom center for smallest screens */
-        top: auto;
-        bottom: 0;
-        left: 50% !important; /* Force center alignment */
-        transform: translateX(-50%);
-        border-radius: 50% 50% 0 0;
-        width: 40px;
-        height: 30px;
+        /* Position on left side instead of bottom */
+        top: 50%;
+        bottom: auto;
+        left: 0 !important; /* Force left alignment */
+        transform: translateY(-50%);
+        border-radius: 0 50% 50% 0; /* Round right side */
+        width: 36px;
+        height: 36px;
     }
     
     .side-nav.collapsed ~ .nav-toggle,
     .side-nav.collapsed + .nav-toggle {
-        bottom: 0; /* Always at bottom when collapsed on mobile */
+        top: 50%; /* Vertically center */
+        bottom: auto; /* Override bottom positioning */
+        left: 0 !important; /* Keep on left side when collapsed */
     }
     
     .side-nav:not(.collapsed) ~ .nav-toggle {
-        bottom: 0; /* Always at bottom when expanded on mobile */
-        left: 50% !important; /* Keep centered on mobile */
+        top: 50%; /* Vertically center */
+        bottom: auto; /* Override bottom positioning */
+        left: 75px !important; /* Position right of side nav */
     }
 }
 
@@ -622,11 +631,11 @@ html {
 /* Small screen toggle button when subnav is open */
 @media screen and (max-width: 480px) {
     .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
-        /* Move to the right corner */
-        right: 10px;
-        left: auto !important; /* Override any left positioning */
-        bottom: 10px;
-        top: auto;
-        border-radius: 50%; /* Full circle for corner placement */
+        /* Stay on left side */
+        left: 75px !important;
+        right: auto;
+        top: 50%;
+        bottom: auto;
+        border-radius: 0 50% 50% 0;
     }
 } 
