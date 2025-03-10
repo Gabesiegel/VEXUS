@@ -176,87 +176,83 @@
 /* Extra small screens */
 @media screen and (max-width: 480px) {
     .side-nav {
-        top: auto;
-        bottom: 0;
+        top: 50%;
         left: 0;
-        right: 0;
-        transform: none;
-        border-radius: 12px 12px 0 0;
-        padding: 8px 6px;
-        display: flex;
-        justify-content: center;
-        background-color: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.07);
+        transform: translateY(-50%);
+        padding: 12px 8px;
+        width: auto;
+        max-width: 80px;
+        border-radius: 0 12px 12px 0;
     }
     
     .side-nav.collapsed {
-        bottom: -200px; /* For bottom nav on small screens, hide below */
-        left: 0; /* Keep horizontal positioning */
+        left: -80px;
     }
     
     .nav-toggle {
-        /* Bottom center for smallest screens */
-        top: auto;
-        bottom: 0;
-        left: 50% !important; /* Force center alignment */
-        transform: translateX(-50%);
-        border-radius: 50% 50% 0 0;
-        width: 40px;
-        height: 30px;
+        /* Keep on left side for mobile, not bottom */
+        top: 50%;
+        bottom: auto;
+        left: 0 !important; /* Force left alignment when collapsed */
+        transform: translateY(-50%);
+        border-radius: 0 50% 50% 0;
+        width: 36px; /* Slightly smaller for mobile */
+        height: 36px;
     }
     
     .side-nav.collapsed ~ .nav-toggle,
-    .side-nav:not(.collapsed) .nav-toggle {
-        bottom: 0; /* Always at bottom when collapsed on mobile */
+    .side-nav.collapsed + .nav-toggle {
+        left: 0 !important; /* Keep at left edge when collapsed */
+        top: 50%; /* Center vertically */
+        bottom: auto;
     }
     
     .side-nav:not(.collapsed) ~ .nav-toggle {
-        bottom: 0; /* Always at bottom when expanded on mobile */
-        left: 50% !important; /* Keep centered on mobile */
+        left: 80px !important; /* Position at right edge of sidebar */
+        top: 50%;
+        bottom: auto;
     }
     
+    /* Smaller toggle icon for mobile */
     .nav-toggle i {
         font-size: 16px;
     }
     
+    /* Keep subnav toggle at side, not bottom when open */
+    .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
+        left: 85px !important; /* Slightly offset when subnav is open */
+        top: 30%; /* Move up slightly to avoid middle items */
+        bottom: auto;
+        right: auto;
+        border-radius: 0 50% 50% 0;
+    }
+    
+    /* Vertical navigation for mobile */
     .side-nav ul {
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
         width: 100%;
-        gap: 6px;
+        gap: 10px;
+        padding: 0;
     }
     
     .side-nav-link {
         min-width: unset;
-        width: auto;
+        width: 50px;
         height: 30px;
-        font-size: 9px;
+        font-size: 11px;
         padding: 0 6px;
         letter-spacing: 0.2px;
     }
     
     .side-nav-link::after {
-        left: 50%;
-        top: -35px;
-        transform: translateX(-50%);
-        font-size: 11px;
+        left: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
     }
     
-    /* Remove all hover effects for mobile too */
-    .side-nav-link:hover::after,
-    .side-nav-link:focus::after {
-        /* No hover effects */
-    }
-    
-    .side-nav-link:hover, 
-    .side-nav-link:focus {
-        /* No hover effects */
-    }
-    
+    /* Active state for mobile */
     .side-nav-link.active {
-        /* Keep active state but remove transform */
         background: linear-gradient(145deg, #fcfcfc, #f5f5f5);
         color: #2c3e50;
         font-weight: 600;
