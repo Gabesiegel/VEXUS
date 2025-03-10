@@ -18,8 +18,17 @@
 
 /* Collapsed state - ensure complete hiding */
 .side-nav.collapsed {
-    left: -200px; /* Increased offset to ensure it's completely hidden */
+    left: -200px !important; /* Use !important to override any inline styles */
     transform: translateY(-50%);
+    box-shadow: none;
+    opacity: 0.9;
+    pointer-events: none; /* Disable interaction while collapsed */
+}
+
+/* Make sure the sidebar is interactive when expanded */
+.side-nav:not(.collapsed) {
+    pointer-events: auto;
+    opacity: 1;
 }
 
 /* Remove hover effect from sidenav */
@@ -569,7 +578,7 @@ html {
     }
 }
 
-/* Toggle button - improved visibility */
+/* Toggle button - updated for better interaction */
 .nav-toggle {
     position: fixed;
     top: 50%;
@@ -590,6 +599,9 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important; /* Ensure it's always clickable */
 }
 
 .nav-toggle:hover {

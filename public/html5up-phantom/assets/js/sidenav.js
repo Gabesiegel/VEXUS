@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Force navigation to always be visible on mobile - prevent any bottom positioning
     function ensureProperNavPosition() {
+        console.log("Ensuring proper nav position, collapsed:", sideNav.classList.contains('collapsed'));
+        
         if (isSmallScreen) {
             // Force the sidenav to be on the left side
             sideNav.style.top = '50%';
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!sideNav.classList.contains('collapsed')) {
                 sideNav.style.left = '36px'; // Match mobile toggle button width
             } else {
-                sideNav.style.left = '-85px'; // Hide when collapsed (increased from -75px)
+                sideNav.style.left = '-200px'; // Force complete hiding when collapsed
             }
             
             // Force the toggle button to be on the left side
@@ -44,7 +46,19 @@ document.addEventListener('DOMContentLoaded', function() {
             // Desktop positioning
             if (!sideNav.classList.contains('collapsed')) {
                 sideNav.style.left = '40px'; // Position to the right of toggle button
+            } else {
+                sideNav.style.left = '-200px'; // Force complete hiding when collapsed
             }
+            
+            // Ensure toggle button is visible
+            navToggle.style.opacity = '1';
+            navToggle.style.visibility = 'visible';
+        }
+        
+        // Double-check collapsed class and positioning
+        if (sideNav.classList.contains('collapsed')) {
+            console.log("Sidenav is collapsed - ensuring it's hidden");
+            sideNav.style.left = '-200px';
         }
     }
     
@@ -65,6 +79,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const isCollapsing = !sideNav.classList.contains('collapsed');
         console.log("Is sidebar collapsing?", isCollapsing);
+        
+        // Clear any inline styles that might be interfering
+        if (isCollapsing) {
+            // Explicitly set left position when collapsing
+            sideNav.style.left = '-200px'; // Force collapsed position
+            console.log("Forcing sidebar to collapsed position");
+        } else {
+            // Explicitly set left position when expanding
+            if (isSmallScreen) {
+                sideNav.style.left = '36px'; // Mobile position
+            } else {
+                sideNav.style.left = '40px'; // Desktop position
+            }
+            console.log("Forcing sidebar to expanded position");
+        }
         
         // Toggle collapsed class
         sideNav.classList.toggle('collapsed');
