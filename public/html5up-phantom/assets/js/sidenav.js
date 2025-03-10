@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.getElementById('sideNavToggle');
     const toggleIcon = navToggle.querySelector('i');
     
+    // Add debugging to verify elements
+    console.log("Side Navigation Elements:", {
+        "sideNav": sideNav ? "Found" : "Not Found",
+        "navToggle": navToggle ? "Found" : "Not Found",
+        "toggleIcon": toggleIcon ? "Found" : "Not Found"
+    });
+    
     // Track subnav state
     let isAnySubNavOpen = false;
     let currentOpenSubNav = null;
@@ -50,15 +57,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Apply initial positioning
     ensureProperNavPosition();
     
-    // Toggle navigation on button click
+    // Toggle navigation on button click with enhanced functionality and debugging
     navToggle.addEventListener('click', function(e) {
+        console.log("Toggle button clicked");
         e.stopPropagation();
+        e.preventDefault(); // Prevent any default behavior
+        
         const isCollapsing = !sideNav.classList.contains('collapsed');
+        console.log("Is sidebar collapsing?", isCollapsing);
+        
+        // Toggle collapsed class
         sideNav.classList.toggle('collapsed');
         
         // Toggle arrow direction based on sidebar state
         if (isCollapsing) {
             // If now collapsing, point right
+            console.log("Collapsing sidebar - arrow pointing right");
             toggleIcon.classList.remove('fa-chevron-left');
             toggleIcon.classList.add('fa-chevron-right');
             // Remove subnav-open class when collapsing
@@ -67,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             closeAllSubNavs();
         } else {
             // If now expanding, pointing left
+            console.log("Expanding sidebar - arrow pointing left");
             toggleIcon.classList.remove('fa-chevron-right');
             toggleIcon.classList.add('fa-chevron-left');
             // Check if we need to update the toggle position
@@ -75,7 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Make sure toggle is properly positioned
         ensureProperNavPosition();
+        
+        // Force a repaint to ensure CSS transitions work properly
+        void sideNav.offsetWidth;
     });
+    
+    // Add a class to make the toggle button more visible
+    navToggle.classList.add('visible');
     
     // Collect all trigger links and their corresponding sub-navs
     const triggerElements = {
