@@ -12,11 +12,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Track subnav state
     let isAnySubNavOpen = false;
     
+    // Force navigation to always be visible on mobile - prevent any bottom positioning
+    function ensureProperNavPosition() {
+        if (isSmallScreen) {
+            // Force the sidenav to be on the left side
+            sideNav.style.top = '50%';
+            sideNav.style.bottom = 'auto';
+            sideNav.style.transform = 'translateY(-50%)';
+            
+            // Force the toggle button to be on the left side
+            navToggle.style.top = '50%';
+            navToggle.style.bottom = 'auto';
+            navToggle.style.left = sideNav.classList.contains('collapsed') ? '0' : '0';
+            navToggle.style.transform = 'translateY(-50%)';
+        }
+    }
+    
     // Always start with sidebar collapsed
     sideNav.classList.add('collapsed');
     // Set arrow to point right (outward) when collapsed
     toggleIcon.classList.remove('fa-chevron-left');
     toggleIcon.classList.add('fa-chevron-right');
+    
+    // Apply initial positioning
+    ensureProperNavPosition();
     
     // Toggle navigation on button click
     navToggle.addEventListener('click', function(e) {
@@ -34,12 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Close all subnavs when collapsing
             closeAllSubNavs();
         } else {
-            // If now expanding, still point right but from the other side
+            // If now expanding, pointing left
             toggleIcon.classList.remove('fa-chevron-right');
             toggleIcon.classList.add('fa-chevron-left');
             // Check if we need to update the toggle position
             updateSubNavState();
         }
+        
+        // Make sure toggle is properly positioned
+        ensureProperNavPosition();
     });
     
     // Collect all trigger links and their corresponding sub-navs
@@ -100,6 +122,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             navToggle.classList.remove('subnav-open');
         }
+        
+        // Ensure proper positioning
+        ensureProperNavPosition();
     }
     
     // Function to close all sub-navs
@@ -117,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Position horizontally to the right of the side nav
             let triggerRect = trigger.getBoundingClientRect();
             subNav.style.top = (triggerRect.top - 5) + 'px'; // Align with the trigger
+            subNav.style.left = '75px'; // Position to the right of sidenav
         }
     }
     
@@ -298,6 +324,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // If screen size changes, close all subnavs
         closeAllSubNavs();
+        
+        // Ensure proper positioning after resize
+        ensureProperNavPosition();
     });
     
     // Initialize active state

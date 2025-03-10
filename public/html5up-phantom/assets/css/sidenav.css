@@ -208,8 +208,9 @@
 @media screen and (max-width: 480px) {
     /* Side navigation panel - positioned on left side of screen */
     .side-nav {
-        top: 50%;
+        top: 50% !important; /* Force vertical centering */
         left: 0;
+        bottom: auto !important; /* Prevent bottom positioning */
         transform: translateY(-50%);
         padding: 12px 8px;
         width: auto;
@@ -229,8 +230,9 @@
     /* Toggle button - keep on left side */
     .nav-toggle {
         position: fixed;
-        top: 50%;
+        top: 50% !important; /* Force vertical centering */
         left: 0 !important; /* Force left positioning */
+        bottom: auto !important; /* Prevent bottom positioning */
         transform: translateY(-50%);
         border-radius: 0 50% 50% 0;
         width: 36px;
@@ -243,16 +245,16 @@
     /* When sidebar is collapsed */
     .side-nav.collapsed ~ .nav-toggle,
     .side-nav.collapsed + .nav-toggle {
-        left: 0 !important;
-        top: 50%;
-        bottom: auto; /* Override any bottom positioning */
+        top: 50% !important; /* Force vertical centering */
+        bottom: auto !important; /* Prevent bottom positioning */
+        left: 0 !important; /* Keep on left side when collapsed */
     }
     
     /* When sidebar is expanded */
     .side-nav:not(.collapsed) ~ .nav-toggle {
-        left: 75px !important; /* Match max-width */
-        top: 50%;
-        bottom: auto; /* Override any bottom positioning */
+        top: 50% !important; /* Force vertical centering */
+        bottom: auto !important; /* Prevent bottom positioning */
+        left: 0 !important; /* Position at left edge of screen when expanded */
     }
     
     /* Smaller toggle icon for mobile */
@@ -262,9 +264,9 @@
     
     /* When submenu is open */
     .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
-        left: 80px !important; /* Match adjusted width */
-        top: 50%;
-        bottom: auto; /* Override any bottom positioning */
+        left: 0 !important; /* Keep at left edge */
+        top: 50% !important; /* Force vertical centering */
+        bottom: auto !important; /* Prevent bottom positioning */
         border-radius: 0 50% 50% 0;
     }
     
@@ -550,10 +552,10 @@ html {
     left: 0; /* Keep at edge when collapsed */
 }
 
-/* Expanded toggle button positioning - move to right side of navigation */
+/* Expanded toggle button positioning - move to left side of navigation */
 .side-nav:not(.collapsed) ~ .nav-toggle {
-    left: 190px; /* Position at right edge of expanded sidebar */
-    border-radius: 50% 50% 50% 0; /* Round left side instead */
+    left: 0; /* Position at left edge of screen even when expanded */
+    border-radius: 0 50% 50% 0; /* Keep rounded on right side */
 }
 
 /* Toggle icon */
@@ -572,7 +574,7 @@ html {
     }
     
     .side-nav:not(.collapsed) ~ .nav-toggle {
-        left: 170px; /* Adjust for mobile - right edge of sidebar */
+        left: 0;
     }
     
     .side-nav.collapsed ~ .nav-toggle {
@@ -584,8 +586,8 @@ html {
 @media screen and (max-width: 480px) {
     .nav-toggle {
         /* Position on left side instead of bottom */
-        top: 50%;
-        bottom: auto;
+        top: 50% !important;
+        bottom: auto !important;
         left: 0 !important; /* Force left alignment */
         transform: translateY(-50%);
         border-radius: 0 50% 50% 0; /* Round right side */
@@ -595,15 +597,15 @@ html {
     
     .side-nav.collapsed ~ .nav-toggle,
     .side-nav.collapsed + .nav-toggle {
-        top: 50%; /* Vertically center */
-        bottom: auto; /* Override bottom positioning */
+        top: 50% !important; /* Vertically center */
+        bottom: auto !important; /* Override bottom positioning */
         left: 0 !important; /* Keep on left side when collapsed */
     }
     
     .side-nav:not(.collapsed) ~ .nav-toggle {
-        top: 50%; /* Vertically center */
-        bottom: auto; /* Override bottom positioning */
-        left: 75px !important; /* Position right of side nav */
+        top: 50% !important; /* Vertically center */
+        bottom: auto !important; /* Override bottom positioning */
+        left: 0 !important; /* Position at left edge when expanded */
     }
 }
 
@@ -632,10 +634,10 @@ html {
 @media screen and (max-width: 480px) {
     .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
         /* Stay on left side */
-        left: 75px !important;
+        left: 0 !important;
         right: auto;
-        top: 50%;
-        bottom: auto;
+        top: 50% !important;
+        bottom: auto !important;
         border-radius: 0 50% 50% 0;
     }
 } 
