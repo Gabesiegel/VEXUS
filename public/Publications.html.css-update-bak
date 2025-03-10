@@ -1,0 +1,918 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS ATLAS - Publications</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- Phantom Template CSS -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/sidebar.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            padding: 60px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .logo {
+            width: 500px;
+            height: 250px;
+            object-fit: contain;
+            max-width: 100%;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        nav#menu {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav#menu .logo-container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav#menu h2 {
+            color: #888888;
+            margin-bottom: 1em;
+            font-size: inherit;
+        }
+
+        nav#menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        nav#menu ul li a {
+            color: #888888 !important;
+            text-decoration: none;
+            border-bottom: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        nav#menu ul li a:hover {
+            color: #777777 !important;
+        }
+
+        .title-container {
+            text-align: center;
+            margin: 2em 0;
+        }
+
+        .title-container h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.2em;
+        }
+
+        .article-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+            justify-content: flex-start;
+        }
+
+        .article-card {
+            flex: 0 0 calc(33.333% - 14px);
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .article-title {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #333;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .article-authors {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 12px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .article-journal {
+            font-size: 0.95em;
+            color: #777777;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .article-summary {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin: 5px 0 15px 0;
+            color: #444;
+            flex-grow: 1;
+        }
+
+        .article-summary ul {
+            list-style: none;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .article-summary ul li {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .article-summary ul li:before {
+            content: "•";
+            position: absolute;
+            left: -15px;
+            color: #777777;
+        }
+
+        .article-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #999999;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: auto;
+            transition: background 0.2s;
+            font-size: 0.9em;
+        }
+
+        .article-link:hover {
+            background: #777777;
+        }
+
+        .user-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 1200px) {
+            .article-card {
+                flex: 0 0 calc(50% - 10px);
+            }
+        }
+
+        @media screen and (max-width: 980px) {
+            .container {
+                padding: 30px;
+                max-width: 95%;
+            }
+
+            .logo {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                margin: 0 auto;
+            }
+
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 2em;
+                padding: 0 10px;
+            }
+
+            .article-grid {
+                gap: 20px;
+                margin: 20px 0;
+                padding: 0;
+            }
+            
+            .article-card {
+                flex: 0 0 100%;
+                padding: 20px;
+                min-width: unset;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .logo-container {
+                padding: 0 5px;
+            }
+
+            .logo {
+                max-width: 300px;
+            }
+
+            .article-grid {
+                gap: 15px;
+                margin: 15px 0;
+            }
+            
+            .article-card {
+                padding: 15px;
+            }
+        }
+
+        .literature-content ul li:before {
+            content: "•";
+            color: #777777;
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        .keywords {
+            background: #777777;
+            color: white;
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+        }
+
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile optimization enhancements */
+        @media screen and (max-width: 736px) {
+            /* Increase touch target sizes for mobile */
+            nav#menu ul li a {
+                padding: 12px 0;
+                font-size: 1em;
+            }
+            
+            a[href="#menu"] {
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Adjust spacing in sections */
+            .waveform-section, .content-section, .section {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+            
+            /* Make lists more readable on mobile */
+            ul, ol {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            
+            li {
+                margin-bottom: 8px;
+                line-height: 1.5;
+                font-size: 0.95em;
+            }
+            
+            /* Improve image tiles on mobile */
+            .image-tile, .gallery-tile, .article-tile, .team-tile {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .title, .tile-title {
+                font-size: 1.15em;
+                margin-bottom: 8px;
+            }
+            
+            .caption, .description {
+                font-size: 0.95em;
+                padding: 0 5px;
+            }
+            
+            /* Adjust citation display on mobile */
+            .citation {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.75em;
+                padding: 0 5px;
+            }
+            
+            /* Better reference grid on mobile */
+            .reference-grid, .grid, .gallery-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .reference-tile, .grid-item, .gallery-item {
+                padding: 15px;
+            }
+            
+            /* Main content adjustments */
+            #main > .inner {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            /* Improve Fancybox usability on mobile */
+            .fancybox__button {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .fancybox__caption {
+                font-size: 0.9em !important;
+                padding: 8px 12px !important;
+            }
+            
+            /* Publications specific */
+            .publication-item {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .publication-title {
+                font-size: 1.15em;
+            }
+            
+            .publication-authors, .publication-journal, .publication-date {
+                font-size: 0.9em;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* Further optimizations for very small screens */
+            .waveform-section, .content-section, .section {
+                padding: 15px 12px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            p, .image-tile .caption, .description {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            /* Make menu items even larger for small touch screens */
+            nav#menu ul li a {
+                padding: 14px 0;
+                font-size: 1.1em;
+            }
+            
+            /* Fix image display on very small screens */
+            .image-tile img, .gallery-tile img {
+                margin-bottom: 10px;
+            }
+            
+            .citation {
+                min-width: 16px;
+                height: 16px;
+                font-size: 0.7em;
+                padding: 0 4px;
+            }
+            
+            /* Stacked references on mobile */
+            .reference-tile, .grid-item {
+                padding: 12px;
+            }
+            
+            .reference-title, .item-title {
+                font-size: 0.95em;
+            }
+            
+            .reference-authors, .reference-journal, .item-subtitle {
+                font-size: 0.85em;
+            }
+            
+            /* Better Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Remove hover effects on mobile */
+            .section:hover,
+            .image-tile:hover,
+            .gallery-tile:hover,
+            .logo:hover,
+            .sidebar-logo:hover,
+            .reference-tile:hover,
+            .team-tile:hover,
+            .grid-item:hover,
+            .publication-item:hover {
+                transform: none;
+            }
+            
+            /* Publications specific for tiny screens */
+            .publication-item {
+                padding: 12px;
+            }
+            
+            .publication-title {
+                font-size: 1.05em;
+            }
+            
+            .publication-authors, .publication-journal, .publication-date {
+                font-size: 0.85em;
+            }
+        }
+        
+        /* Fix for menu closing on small screens */
+        @media screen and (max-width: 736px) {
+            #menu a.close {
+                width: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 1.25em;
+            }
+            
+            #menu .inner {
+                padding-top: 4.5em;
+            }
+        }
+    </style>
+    <!-- Additional styles for menu functionality -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
+    <!-- Critical styles for menu visibility -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+            position: fixed !important;
+            top: 0 !important;
+            height: 100% !important;
+            width: 300px !important;
+            max-width: 80% !important;
+            right: -300px !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="./images/VEXUS.ATLAS.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                </nav>
+            </div>
+        </header>
+
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="education.html">VEXUS Overview</a></li>
+                    <li><a href="waveform.html">Waveforms</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="literature_review.html">Literature Review</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS ATLAS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="#menu" class="close">✕</a>
+            </div>
+        </nav>
+
+        <div id="main">
+            <div class="inner">
+                <div class="container">
+                    <div class="logo-container">
+                        <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
+                    </div>
+
+                    <div class="title-container">
+                        <h1>Publications</h1>
+                        <p>Our team's publications on the Venous Excess Ultrasound (VExUS) score</p>
+                    </div>
+
+                    <div class="article-grid">
+                        <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-023-04471-0" target="_blank" class="article-card">
+                            <div class="article-title">Correlation between the VExUS score and right atrial pressure: a pilot prospective observational study</div>
+                            <div class="article-authors">Longino, A., Martin, K., Leyba, K., Siegel, G., Gill, E., & Burke, J. (2023)</div>
+                            <div class="article-journal">Critical Care, 27(1), 205</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A pilot prospective observational study showing correlation between VExUS and right atrial pressure</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-024-04961-9" target="_blank" class="article-card">
+                            <div class="article-title">Reliability and reproducibility of the venous excess ultrasound (VExUS) score, a multi-site prospective study: validating a novel ultrasound technique for assessing venous congestion</div>
+                            <div class="article-authors">Longino, A. A., Martin, K. C., Leyba, K. R., McCormack, L., Siegel, G., & Gill, E. A. (2024)</div>
+                            <div class="article-journal">Critical Care, 28(1), 961</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A multi-site prospective study validating a novel ultrasound technique for assessing venous congestion</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://journal.chestnet.org/article/S0012-3692(23)05557-5/abstract" target="_blank" class="article-card">
+                            <div class="article-title">Prospective evaluation of venous excess ultrasound for estimation of venous congestion</div>
+                            <div class="article-authors">Longino, A., Martin, K., Leyba, K., Siegel, G., Thai, T. N., & Gill, E. (2024)</div>
+                            <div class="article-journal">Chest, 165(4), 1024-1032</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A prospective evaluation study of the VExUS technique for estimating venous congestion</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://theultrasoundjournal.springeropen.com/articles/10.1186/s13089-025-00411-x" target="_blank" class="article-card">
+                            <div class="article-title">Evaluation of a modified venous excess ultrasound (VExUS) protocol for estimation of venous congestion: a cohort study</div>
+                            <div class="article-authors">Martin, K. C., Gill, E. A., Douglas, I. J., & Longino, A. A. (2025)</div>
+                            <div class="article-journal">The Ultrasound Journal, 14(1), 15</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A cohort study evaluating a modified VExUS protocol for estimating venous congestion</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://www.researchsquare.com/article/rs-3993434/v1" target="_blank" class="article-card">
+                            <div class="article-title">Venous excess ultrasonography (VExUS) captures dynamic changes in volume status surrounding hemodialysis: A multicenter prospective observational study</div>
+                            <div class="article-authors">Leyba, K., Longino, A., Ormesher, R., Krienke, M., & Gill, E. (2024)</div>
+                            <div class="article-journal">Research Square</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A multicenter prospective observational study of VExUS in hemodialysis patients</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://www.researchsquare.com/article/rs-3993434/v1" target="_blank" class="article-card">
+                            <div class="article-title">Prospective validation of the venous excess ultrasound (VExUS) score</div>
+                            <div class="article-authors">Longino, A., Martin, K., Leyba, K., Siegel, G., Gill, E., & Burke, J. (2023)</div>
+                            <div class="article-journal">Research Square</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A prospective validation study of the VExUS score</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://journals.lww.com/ccmjournal/Fulltext/2024/01000/1377__VENOUS_EXCESS_ULTRASOUND_SCORE_CAPTURES.1377.aspx" target="_blank" class="article-card">
+                            <div class="article-title">Venous excess ultrasound score captures dynamic changes in volume status</div>
+                            <div class="article-authors">Ormesher, R., Longino, A., Leyba, K., & Gill, E. (2024)</div>
+                            <div class="article-journal">Critical Care Medicine, 52(1), 675</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A study demonstrating how VExUS captures dynamic changes in volume status</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+
+                        <a href="https://link.springer.com/article/10.1007/s10877-023-00857-9" target="_blank" class="article-card">
+                            <div class="article-title">Monitoring the venous circulation: novel techniques and applications</div>
+                            <div class="article-authors">Longino, A., Martin, K., Leyba, K., Siegel, G., & Gill, E. (2023)</div>
+                            <div class="article-journal">Journal of Clinical Monitoring and Computing, 37(2), 345-357</div>
+                            <div class="article-summary">
+                                <ul>
+                                    <li>A review of novel techniques and applications for monitoring venous circulation</li>
+                                </ul>
+                            </div>
+                            <span class="article-link">Access Full Article</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer with user info -->
+        <div class="user-info">
+            <p>User: Gabesiegel</p>
+            <p>Date: 2025-02-28 02:58:39 UTC</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/performance-utils.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+    
+    <!-- Override menu functionality to ensure it works properly -->
+    <script>
+        // Immediately override the menu functionality
+        (function() {
+            // Remove any existing click handlers by cloning and replacing the menu toggle element
+            const menuToggle = document.querySelector('a[href="#menu"]');
+            const newMenuToggle = menuToggle.cloneNode(true);
+            menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+            
+            // Add our own click handler
+            newMenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                document.getElementById('menu').style.display = 'block';
+            });
+            
+            // Add a globally scoped click handler to close the menu
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
+                    document.getElementById('menu').style.display = 'none';
+                }
+            }, true); // Using capture phase to ensure our handler runs first
+            
+            // Also override any class-based menu toggling that might be happening
+            const menu = document.getElementById('menu');
+            // Make sure the menu uses display property instead of classes
+            if (menu) {
+                menu.style.transition = 'none'; // Remove any transitions that might interfere
+                
+                // Override the menu style to ensure it's using display property
+                const originalStyles = menu.getAttribute('style') || '';
+                menu.setAttribute('style', originalStyles + '; display: none !important;');
+                
+                // Make sure any original "open" classes are removed
+                setTimeout(function() {
+                    menu.classList.remove('is-menu-visible');
+                    menu.classList.remove('visible');
+                    menu.classList.remove('active');
+                }, 0);
+            }
+        })();
+    </script>
+    <!-- Menu Toggle Script -->
+    <script>
+        // Function to initialize menu toggle
+        function initializeMenuToggle() {
+            console.log("Initializing menu toggle");
+            
+            try {
+                // Get menu elements
+                const menuToggle = document.querySelector("a[href=\"#menu\"]");
+                const menu = document.getElementById("menu");
+                
+                if (!menuToggle) {
+                    console.error("Menu toggle element not found!");
+                    return;
+                }
+                
+                if (!menu) {
+                    console.error("Menu element not found!");
+                    return;
+                }
+                
+                // First ensure menu is properly hidden to start
+                document.body.classList.remove("is-menu-visible");
+                menu.style.right = "-100%";
+                menu.style.display = "none";
+                menu.classList.remove("visible", "active");
+                
+                // Remove any existing click handlers by cloning and replacing
+                const newMenuToggle = menuToggle.cloneNode(true);
+                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+                
+                // Add our click handler with support for both CSS class and display property
+                newMenuToggle.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Menu toggle clicked");
+                    
+                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                    document.body.classList.add("is-menu-visible");
+                    menu.style.display = "block";
+                    menu.style.right = "0";
+                    menu.classList.add("visible", "active");
+                    
+                    // Force a repaint to ensure styles are applied
+                    void menu.offsetWidth;
+                });
+                
+                // Create close button handler (important for mobile)
+                const closeButton = menu.querySelector("a.close");
+                if (closeButton) {
+                    const newCloseButton = closeButton.cloneNode(true);
+                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                    
+                    newCloseButton.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Close button clicked");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    });
+                }
+                
+                // Handle clicks outside the menu (use capture phase to run before other handlers)
+                const bodyClickHandler = function(e) {
+                    // If clicking outside menu and not on menu toggle
+                    if (!e.target.closest("#menu") && !e.target.closest("a[href=\"#menu\"]")) {
+                        console.log("Clicked outside menu");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    }
+                };
+                
+                // Remove any existing body click handler and add our new one
+                document.body.removeEventListener("click", bodyClickHandler, true);
+                document.body.addEventListener("click", bodyClickHandler, true);
+                
+                // Handle escape key
+                const keyHandler = function(e) {
+                    if (e.key === "Escape" || e.keyCode === 27) {
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    }
+                };
+                
+                // Remove any existing key handler and add our new one
+                document.removeEventListener("keydown", keyHandler);
+                document.addEventListener("keydown", keyHandler);
+                
+                console.log("Menu toggle initialization complete");
+            } catch (error) {
+                console.error("Error initializing menu toggle:", error);
+            }
+        }
+        
+        // Initialize the menu toggle after DOM is loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM loaded, initializing menu toggle");
+            // Initial setup with delay to ensure DOM is fully processed
+            setTimeout(initializeMenuToggle, 100);
+        });
+        
+        // Fallback initialization in case DOMContentLoaded already fired
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            console.log("Document already loaded, running fallback initialization");
+            setTimeout(initializeMenuToggle, 200);
+        }
+    </script>
+</body>
+</html> 

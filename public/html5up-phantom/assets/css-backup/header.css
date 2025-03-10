@@ -1,0 +1,116 @@
+/* Header Logo Styles */
+#header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    height: 3.5em; /* Reduced height */
+}
+
+#header .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.1em 1.5em; /* Reduced top/bottom padding */
+    height: 100%;
+}
+
+/* Add margin to main content to prevent it from being hidden behind fixed header */
+#main {
+    padding-top: 5.5em; /* Increased padding from 4.5em */
+    margin-top: 0;
+}
+
+#main .inner {
+    padding-top: 3em; /* Increased padding from 2em */
+}
+
+/* Remove margin from logo container */
+.logo-container {
+    margin-top: 2em; /* Increased margin from 1em */
+}
+
+#header .logo {
+    text-decoration: none;
+    border: 0;
+    display: flex;
+    align-items: center;
+}
+
+#header .logo .symbol {
+    margin-right: 0.5em; /* Reduced margin */
+}
+
+#header .logo .symbol img {
+    width: 2.8em; /* Reduced size */
+    height: 2.8em;
+    object-fit: contain;
+}
+
+#header .logo .title {
+    color: #585858;
+    font-size: 1.1em; /* Reduced size */
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8); /* Help text readability */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 736px) {
+    #header {
+        height: 3em;
+    }
+
+    #header .inner {
+        padding: 0.2em 1em;
+    }
+    
+    #main {
+        padding-top: 4.5em; /* Adjusted for mobile */
+    }
+    
+    #main .inner {
+        padding-top: 2em;
+    }
+    
+    #header .logo .symbol img {
+        width: 2.5em;
+        height: 2.5em;
+    }
+    
+    #header .logo .title {
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #header {
+        height: 2.8em;
+        background: rgba(255, 255, 255, 0.98); /* Slightly more opaque on mobile */
+    }
+
+    #header .inner {
+        padding: 0.1em 0.8em; /* Reduced padding */
+    }
+    
+    #main {
+        padding-top: 4em; /* Adjusted for smaller screens */
+    }
+    
+    #main .inner {
+        padding-top: 1.5em;
+    }
+    
+    #header .logo .symbol img {
+        width: 2.2em;
+        height: 2.2em;
+    }
+    
+    #header .logo .title {
+        font-size: 0.9em;
+    }
+} 

@@ -1,0 +1,1602 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Education - VExUS ATLAS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Gabesiegel" />
+    <meta name="last-modified" content="2025-02-12T00:37:03Z" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- CSS -->
+    <!-- Reorganized CSS structure - single import -->
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <noscript><!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript></noscript>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    
+    <style>
+        /* Maintaining existing styles */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            padding: 0 15px;
+        }
+
+        /* Education Page Specific Styles */
+        .education-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 10px;
+        }
+
+        .education-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .education-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .education-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .education-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #fcfcfc;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .education-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .education-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .education-section h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* Table Styles */
+        .vexus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .vexus-table th,
+        .vexus-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .vexus-table th {
+            background-color: #fcfcfc;
+            color: #ffffff;
+        }
+
+        .vexus-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .vexus-table tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        /* List Styles */
+        .education-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .education-content ul li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+        }
+
+        .education-content ul li:before {
+            content: "•";
+            color: #fcfcfc;
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 980px) {
+            .education-container {
+                padding: 20px;
+            }
+
+            .education-section {
+                padding: 20px;
+            }
+
+            .education-header h1 {
+                font-size: 2em;
+            }
+
+            .vexus-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .vexus-grading-container {
+            background-color: #fcfcfc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        .vexus-grading-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 600px;
+        }
+
+        .vexus-grading-table th,
+        .vexus-grading-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #fcfcfc;
+            white-space: normal;
+            vertical-align: top;
+        }
+
+        .vexus-grading-table th {
+            background-color: #fcfcfc;
+            color: #333333;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .vexus-grading-table tbody tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .vexus-grading-table tbody tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        /* Update logo styles */
+        .logo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            object-fit: contain;
+            margin: 10px;
+        }
+
+        .education-tab.active {
+            background-color: #fcfcfc;
+            color: white;
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #fcfcfc;
+            margin: 10px 0 20px;
+        }
+
+        .callout {
+            border-left: 4px solid #fcfcfc;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .highlight {
+            background-color: #fcfcfc;
+            padding: 2px 5px;
+            color: white;
+            border-radius: 3px;
+        }
+
+        .reference-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .reference-link:hover {
+            color: #495057;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design Updates */
+        @media screen and (max-width: 1200px) {
+            .logo {
+                max-width: 350px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+            }
+        }
+
+        @media screen and (max-width: 980px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .logo {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .education-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .education-card {
+                padding: 20px 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 1em;
+            }
+            
+            .education-card h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Enhanced mobile scrolling experience */
+        .vexus-grading-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .vexus-grading-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Add new citation styles */
+        .citation {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            border-radius: 10px;
+            font-size: 0.8em;
+            padding: 0 6px;
+            margin: 0 2px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            vertical-align: super;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .citation:hover {
+            background-color: #6c757d;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .image-text {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .reference-tile {
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .reference-tile:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Vein Buttons Container */
+        .vein-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .vein-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            font-weight: 500;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .vein-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #eaeaea;
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Fancybox customization */
+        .fancybox__container {
+            --fancybox-scrollbar-width: 8px;
+            --fancybox-scrollbar-background: rgba(24, 24, 24, 0.1);
+            --fancybox-scrollbar-thumb: rgba(24, 24, 24, 0.3);
+        }
+
+        .fancybox__content {
+            padding: 0;
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--fancybox-scrollbar-thumb) var(--fancybox-scrollbar-background);
+        }
+
+        .fancybox__content::-webkit-scrollbar {
+            width: var(--fancybox-scrollbar-width);
+        }
+
+        .fancybox__content::-webkit-scrollbar-track {
+            background: var(--fancybox-scrollbar-background);
+            border-radius: 4px;
+        }
+
+        .fancybox__content::-webkit-scrollbar-thumb {
+            background: var(--fancybox-scrollbar-thumb);
+            border-radius: 4px;
+        }
+
+        .lightbox-content {
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Prevent body scroll when lightbox is open */
+        body.fancybox-active {
+            overflow: hidden !important;
+        }
+
+        /* Ensure images don't overflow */
+        .lightbox-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .fancybox__toolbar {
+                --f-button-width: 44px;
+                --f-button-height: 44px;
+            }
+
+            .fancybox__toolbar .is-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Image hover effects */
+        .image-container img {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Backdrop styling */
+        .fancybox__backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .vein-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+        .vein-button i {
+            font-size: 1.1em;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .vein-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #eaeaea;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .vein-button:hover i {
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu .inner {
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        #menu h2 {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            color: #888;
+        }
+
+        #menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #menu ul li {
+            border-top: solid 1px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 0;
+        }
+
+        #menu ul li a {
+            color: #888;
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.2s ease;
+        }
+
+        #menu ul li a:hover {
+            color: #444;
+        }
+
+        #menu .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            text-decoration: none;
+            color: #888;
+            cursor: pointer;
+        }
+
+        #menu .close:hover {
+            color: #444;
+        }
+
+        @media screen and (max-width: 480px) {
+            #menu {
+                max-width: 100%;
+            }
+        }
+
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile optimization enhancements */
+        @media screen and (max-width: 736px) {
+            /* Increase touch target sizes for mobile */
+            nav#menu ul li a {
+                padding: 12px 0;
+                font-size: 1em;
+            }
+            
+            a[href="#menu"] {
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Adjust spacing in sections */
+            .waveform-section, .content-section, .section {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+            
+            /* Make lists more readable on mobile */
+            ul, ol {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            
+            li {
+                margin-bottom: 8px;
+                line-height: 1.5;
+                font-size: 0.95em;
+            }
+            
+            /* Improve image tiles on mobile */
+            .image-tile, .gallery-tile, .article-tile, .team-tile {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .title, .tile-title {
+                font-size: 1.15em;
+                margin-bottom: 8px;
+            }
+            
+            .caption, .description {
+                font-size: 0.95em;
+                padding: 0 5px;
+            }
+            
+            /* Adjust citation display on mobile */
+            .citation {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.75em;
+                padding: 0 5px;
+            }
+            
+            /* Better reference grid on mobile */
+            .reference-grid, .grid, .gallery-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .reference-tile, .grid-item, .gallery-item {
+                padding: 15px;
+            }
+            
+            /* Main content adjustments */
+            #main > .inner {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            /* Improve Fancybox usability on mobile */
+            .fancybox__button {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .fancybox__caption {
+                font-size: 0.9em !important;
+                padding: 8px 12px !important;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* Further optimizations for very small screens */
+            .waveform-section, .content-section, .section {
+                padding: 15px 12px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            p, .image-tile .caption, .description {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            /* Make menu items even larger for small touch screens */
+            nav#menu ul li a {
+                padding: 14px 0;
+                font-size: 1.1em;
+            }
+            
+            /* Fix image display on very small screens */
+            .image-tile img, .gallery-tile img {
+                margin-bottom: 10px;
+            }
+            
+            .citation {
+                min-width: 16px;
+                height: 16px;
+                font-size: 0.7em;
+                padding: 0 4px;
+            }
+            
+            /* Stacked references on mobile */
+            .reference-tile, .grid-item {
+                padding: 12px;
+            }
+            
+            .reference-title, .item-title {
+                font-size: 0.95em;
+            }
+            
+            .reference-authors, .reference-journal, .item-subtitle {
+                font-size: 0.85em;
+            }
+            
+            /* Better Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Remove hover effects on mobile */
+            .section:hover,
+            .image-tile:hover,
+            .gallery-tile:hover,
+            .logo:hover,
+            .sidebar-logo:hover,
+            .reference-tile:hover,
+            .team-tile:hover,
+            .grid-item:hover {
+                transform: none;
+            }
+        }
+        
+        /* Fix for menu closing on small screens */
+        @media screen and (max-width: 736px) {
+            #menu a.close {
+                width: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 1.25em;
+            }
+            
+            #menu .inner {
+                padding-top: 4.5em;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- Navigation -->
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="./images/VEXUS.ATLAS.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Sidebar Menu -->
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="education.html">VEXUS Overview</a></li>
+                    <li><a href="waveform.html">Waveforms</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="literature_review.html">Literature Review</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS ATLAS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="#menu" class="close">✕</a>
+            </div>
+        </nav>
+
+        <!-- Menu Overlay -->
+        <div class="menu-overlay"></div>
+
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
+                </div>
+                <div class="education-container">
+                    <div class="education-header">
+                <h1>Your Practical Guide to Understanding VExUS</h1>
+            </div>
+
+            <div class="education-content">
+                <!-- Introduction Section -->
+                <div class="education-section">
+                    <h2>Introduction</h2>
+                    <p>Call it what you want—"Fluid Overload", "Venous Hypertension", "Fluid Up", "Venous Congestion" - they all mean the same thing: the venous circulation is too full, and it's causing problems.<a href="#ref1" class="citation">1</a> For a long time, the medical field has focused on arterial hypotension as the main cause of tissue hypoperfusion- and that's understandable! Sepsis, hypovolemia, and hemorrhage are all serious problems. However, we are increasingly realizing that the other side of the vasculature, venous return, can be equally important to our patients with cardiac or renal failure or the critically ill.<a href="#ref2" class="citation">2</a><a href="#ref3" class="citation">3</a><a href="#ref4" class="citation">4</a> Venous congestion leads to cardiorenal AKI, pulmonary edema, worsening cardiac function, poor wound healing, and a host of other conditions.<a href="#ref5" class="citation">5</a><a href="#ref6" class="citation">6</a> The problem is that finding venous pressures is much harder than finding arterial pressures! You can't just use a cuff. That's why we spend hours poking at legs, squinting at necks, and generally shrugging our shoulders. When we really want to know, we often perform a right heart catheterization, putting a pressure transducer into the heart itself. But that's expensive, time-consuming, and above all, risky to the patient! So wouldn't it be great if we had a cheap, noninvasive, low-risk alternative, that could tell us what we need to know without getting all up in the patient's pulmonary arteries?</p>
+                    <p>That's where Venous Excess Ultrasound (VExUS) comes in.</p>
+                </div>
+
+                <!-- What is VExUS Section -->
+                <div class="education-section">
+                    <h2>What Is VExUS?</h2>
+                    <p>VExUS is a 4-point Doppler ultrasound protocol that measures the direction and speed of venous blood flow, data that can be used to assess venous pressure. It was developed by a group of physicians based in Toronto, Canada, who showed that their VExUS technique could predict when cardiac surgery patients would develop acute kidney injury (AKI).<a href="#ref7" class="citation">7</a> Since that time VExUS has been shown to correlate strongly with right heart catheterization values,<a href="#ref8" class="citation">8</a> cardiorenal AKI,<a href="#ref9" class="citation">9</a> and mortality in patients with heart failure.<a href="#ref10" class="citation">10</a></p>
+                    <p>The VExUS components are:</p>
+                    <ul>
+                        <li><strong>Inferior Vena Cava (IVC) Diameter</strong></li>
+                        <li><strong>Hepatic Vein Doppler</strong></li>
+                        <li><strong>Portal Vein Doppler</strong></li>
+                        <li><strong>Renal Vein Doppler</strong></li>
+
+                <!-- Why Use VExUS Section -->
+                <div class="education-section">
+                    <h2>Why Use VExUS?</h2>
+                    <p>VExUS can help you understand your patient's level of venous congestion, which can inform decisions about whether to give fluids, administer diuretic medications, transfuse blood products, or start vasopressor medications. The technique is noninvasive, easily repeatable, and does not require advanced ultrasound or echocardiography techniques.</p>
+                    <p><strong>Important Note:</strong> VExUS is a tool to enhance clinical judgment, not replace it. Always integrate your findings with the patient's history, physical exam, and other investigations.</p>
+                </div>
+
+                <!-- Step-by-Step Guide Section -->
+                <div class="education-section">
+                    <h2>VExUS Step-by-Step:</h2>
+                    
+                    <h3>1. Equipment and Preparation</h3>
+                    <ul>
+                        <li><strong>Ultrasound Machine:</strong> Must have 2D imaging, color Doppler, and pulsed-wave Doppler capabilities. Electrocardiogram gating adds to the interpretability of the exam, but is not essential.</li>
+                        <li><strong>Supplies:</strong> Ultrasound gel, gloves.</li>
+                        <li><strong>Patient Positioning:</strong> Supine or slightly recumbent, table adjusted to the operator's waist level.</li>
+
+                    <h3>2. Inferior Vena Cava (IVC) Assessment</h3>
+                    <p>Measure the IVC using the curvilinear or phased-array probe in the subxiphoid view. Measure the diameter of the IVC just distal to the insertion of the hepatic vein into the IVC.</p>
+                    
+                    <a href="#ivc-content" data-fancybox="vein-guides" data-type="inline" class="vein-button ivc" data-gallery='["images/IVC.png", "images/image_gallery/IVC/Less/01.01.1.IVC.NL.png", "images/image_gallery/IVC/More/02.01.1.IVC.MD.png"]'>
+                        <i class="fas fa-image" style="margin-right: 8px;"></i>
+                        IVC Image Acquisition
+                    </a>
+
+                    <h3>3. Hepatic Vein</h3>
+                    <p>Place the doppler gate over any of the principal branches of the hepatic vein.</p>
+                    
+                    <a href="#hepatic-content" data-fancybox="vein-guides" data-type="inline" class="vein-button hepatic" data-gallery='["images/hepatic_long.png", "images/hepatic_short.png", "images/hepatic_sub.png"]'>
+                        <i class="fas fa-image" style="margin-right: 8px;"></i>
+                        Hepatic Vein Image Acquisition
+                    </a>
+
+                    <h3>4. Portal Vein</h3>
+                    <p>Place the doppler gate over any portion of the portal vein, distinguishable by its thick echogenic border.</p>
+                    
+                    <a href="#portal-content" data-fancybox="vein-guides" data-type="inline" class="vein-button portal" data-gallery='["images/Portal_long_axis.png", "images/Portal_short_axis.png", "images/portal_sub.png"]'>
+                        <i class="fas fa-image" style="margin-right: 8px;"></i>
+                        Portal Vein Image Acquisition
+                    </a>
+
+                    <h3>5. Renal Vein</h3>
+                    <p>Place the doppler gate over distal portion of the renal interlobularvein</p>
+                    
+                    <a href="#renal-content" data-fancybox="vein-guides" data-type="inline" class="vein-button renal" data-gallery='["images/Renal_vein_long.png", "images/Renal_short_axis.png"]'>
+                        <i class="fas fa-image" style="margin-right: 8px;"></i>
+                        Renal Vein Image Acquisition
+                    </a>
+                </div>
+
+                <!-- Hidden Fancybox Content -->
+                <div id="ivc-content" style="display:none">
+                    <div class="lightbox-content">
+                        <h2>IVC Image Acquisition</h2>
+                        <h3>Overview</h3>
+                        <p>The inferior vena cava (IVC) is the large vein that carries deoxygenated blood from the lower and middle body to the right atrium of the heart. Assessment of the IVC diameter and collapsibility provides valuable information about central venous pressure.</p>
+                        
+                        <h3>Acquisition Technique</h3>
+                        <p>Position the curvilinear or phased array probe in the subxiphoid position to visualize the IVC as it enters the right atrium. Measure the maximum diameter of the IVC just distal to the hepatic vein junction, approximately 2-3 cm from the right atrium.</p>
+                        
+                        <div class="image-gallery">
+                            <a href="images/IVC.png" data-fancybox="ivc-gallery" data-caption="IVC Standard View">
+                                <img src="images/IVC.png" alt="IVC Standard View" class="acquisition-image">
+                            </a>
+                        </div>
+                        
+                        <h3>Interpretation</h3>
+                        <p>A normal IVC diameter is typically 1.5-2.5 cm. An IVC diameter >2.5 cm suggests elevated central venous pressure, while a diameter <1.5 cm suggests reduced central venous pressure. The degree of respiratory variation (collapsibility) provides additional information about volume status.</p>
+                    </div>
+                </div>
+
+                <div id="hepatic-content" style="display:none">
+                    <div class="lightbox-content">
+                        <h2>Hepatic Vein Image Acquisition</h2>
+                        <h3>Overview</h3>
+                        <p>The hepatic veins drain blood from the liver into the inferior vena cava. Doppler assessment of hepatic vein flow provides information about right atrial pressure and function.</p>
+                        
+                        <h3>Long Axis View</h3>
+                        <p>Place the probe in the right intercostal space, angled towards the right shoulder.</p>
+                        <a href="images/hepatic_long.png" data-fancybox="hepatic-gallery" data-caption="Hepatic Vein - Long Axis View">
+                            <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
+                        </a>
+
+                        <h3>Short Axis View</h3>
+                        <p>Rotate the probe 90 degrees counterclockwise from the long-axis position to obtain a short-axis view.</p>
+                        <a href="images/hepatic_short.png" data-fancybox="hepatic-gallery" data-caption="Hepatic Vein - Short Axis View">
+                            <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
+                        </a>
+
+                        <h3>Subxiphoid View</h3>
+                        <p>Place the probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                        <a href="images/hepatic_sub.png" data-fancybox="hepatic-gallery" data-caption="Hepatic Vein - Subxiphoid View">
+                            <img src="images/hepatic_sub.png" alt="Hepatic Vein - Subxiphoid View" class="acquisition-image">
+                        </a>
+                        
+                        <h3>Interpretation</h3>
+                        <p>Normal hepatic vein flow shows a triphasic pattern with two antegrade waves (S and D waves) and one retrograde wave (A wave). In elevated central venous pressure, the S wave amplitude decreases and may become less than the D wave. In severe cases, flow can become monophasic or show systolic flow reversal.</p>
+                    </div>
+                </div>
+
+                <div id="portal-content" style="display:none">
+                    <div class="lightbox-content">
+                        <h2>Portal Vein Image Acquisition</h2>
+                        <h3>Overview</h3>
+                        <p>The portal vein carries blood from the digestive organs to the liver. Normal portal vein flow is continuous with minimal phasicity. Pulsatility in the portal vein is a sensitive indicator of venous congestion.</p>
+                        
+                        <h3>Long Axis View</h3>
+                        <p>Place probe in the right intercostal space, angled slightly cephalad.</p>
+                        <a href="images/Portal_long_axis.png" data-fancybox="portal-gallery" data-caption="Portal Vein - Long Axis View">
+                            <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
+                        </a>
+
+                        <h3>Short Axis View</h3>
+                        <p>Probe in mid-axillary line, below the xiphoid process, angled slightly toward patient's right shoulder.</p>
+                        <a href="images/Portal_short_axis.png" data-fancybox="portal-gallery" data-caption="Portal Vein - Short Axis View">
+                            <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
+                        </a>
+
+                        <h3>Subxiphoid View</h3>
+                        <p>Probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                        <a href="images/portal_sub.png" data-fancybox="portal-gallery" data-caption="Portal Vein - Subxiphoid View">
+                            <img src="images/portal_sub.png" alt="Portal Vein - Subxiphoid View" class="acquisition-image">
+                        </a>
+                        
+                        <h3>Interpretation</h3>
+                        <p>Normal portal vein flow is continuous with minimal phasicity. Increasing pulsatility suggests elevated right atrial pressure being transmitted through the liver. The pulsatility index can be calculated as (maximum velocity - minimum velocity) / mean velocity. A pulsatility index >0.5 indicates significant venous congestion.</p>
+                    </div>
+                </div>
+
+                <div id="renal-content" style="display:none">
+                    <div class="lightbox-content">
+                        <h2>Renal Vein Image Acquisition</h2>
+                        <h3>Overview</h3>
+                        <p>The renal veins drain blood from the kidneys into the inferior vena cava. Doppler assessment of intrarenal veins provides valuable information about venous congestion and its impact on kidney perfusion.</p>
+                        
+                        <h3>Long Axis View</h3>
+                        <p>Position the probe in the right flank, posterior to the mid-axillary line.</p>
+                        <a href="images/Renal_vein_long.png" data-fancybox="renal-gallery" data-caption="Renal Vein - Long Axis View">
+                            <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                        </a>
+
+                        <h3>Short Axis View</h3>
+                        <p>Position probe in transverse orientation at right flank, looking for the kidney in cross-section.</p>
+                        <a href="images/Renal_short_axis.png" data-fancybox="renal-gallery" data-caption="Renal Vein - Short Axis View">
+                            <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                        </a>
+                        
+                        <h3>Interpretation</h3>
+                        <p>Normal intrarenal venous flow is continuous with minimal phasicity. Increasing pulsatility suggests venous congestion. In severe congestion, flow can become discontinuous or even show reversal during cardiac cycles. These changes correlate with increased risk of acute kidney injury.</p>
+                    </div>
+                </div>
+
+                <!-- VExUS Grading System Section -->
+                <div class="education-section">
+                    <h2>VExUS Grading System</h2>
+                     <div class="vexus-grading-container">
+                        <table class="vexus-grading-table">
+                            <thead>
+                                <tr>
+                                    <th>Grade</th>
+                                    <th>IVC Diameter</th>
+                                    <th>Hepatic Vein Flow</th>
+                                    <th>Portal Vein Flow</th>
+                                    <th>Intrarenal Vein Flow</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0</td>
+                                    <td>≤ 2 cm</td>
+                                    <td>Normal S &gt; D</td>
+                                    <td>Normal Phasic</td>
+                                    <td>Continuous</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2–2.5 cm</td>
+                                    <td>Slight Reduction in S</td>
+                                    <td>Mild Pulsatility</td>
+                                    <td>Slight Interruption</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>&gt; 2.5 cm</td>
+                                    <td>S &lt; D / Reversal</td>
+                                    <td>Marked Pulsatility</td>
+                                    <td>Intermittent or Biphasic</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>&gt; 2.5 cm + Minimal Collapse</td>
+                                    <td>Severe Abnormal Flow</td>
+                                    <td>To-and-Fro or Reversal</td>
+                                    <td>Reversal</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Organ Perfusion Pressure Section -->
+                <div class="education-section">
+                    <h2>Understanding Organ Perfusion Pressure</h2>
+                    <style>
+                        .image-container {
+                            display: flex;
+                            justify-content: center;
+                            margin: 20px 0;
+                        }
+                        
+                        .image-container img {
+                            max-width: 100%;
+                            border-radius: 8px;
+                        }
+                        
+                        .image-text {
+                            margin-top: 20px;
+                            padding: 15px;
+                            background-color: #fcfcfc;
+                            border-radius: 8px;
+                            border-left: 4px solid #fcfcfc;
+                        }
+                    </style>
+                    
+                    <div class="image-container">
+                        <a href="images/organ perfusion.png" data-fancybox="gallery" data-caption="Organ Perfusion Diagram">
+                            <img src="images/organ perfusion.png" alt="Organ Perfusion Diagram" />
+                        </a>
+                    </div>
+                    
+                    <div class="image-text">
+                        <p>Organ perfusion pressure is a critical concept in understanding venous congestion and its impact on tissue health. It is defined as the difference between arterial inflow pressure and venous outflow pressure.</p>
+                        
+                        <p><strong>Perfusion Pressure = Arterial Pressure - Venous Pressure</strong></p>
+                        
+                        <p>While we often focus on arterial pressure as the main determinant of organ perfusion, increased venous pressure can have equally detrimental effects on tissue perfusion. When venous pressure rises (venous congestion), it reduces the pressure gradient across the organ, resulting in decreased blood flow despite normal arterial pressure.</p>
+                        
+                        <p>This mechanism explains why venous congestion can lead to organ dysfunction even with normal arterial pressure and cardiac output. Organs particularly sensitive to venous congestion include:</p>
+                        
+                        <ul>
+                            <li><strong>Kidneys:</strong> Venous congestion increases renal vein pressure, decreases glomerular filtration gradient, and can lead to acute kidney injury.</li>
+                            <li><strong>Liver:</strong> Elevated hepatic venous pressure increases portal pressure and can impair hepatic function.</li>
+                            <li><strong>Intestines:</strong> Venous congestion can lead to intestinal edema, malabsorption, and bacterial translocation.</li>
+                            <li><strong>Brain:</strong> Increased venous pressure can elevate intracranial pressure and impair cerebral perfusion.</li>
+                        
+                        <p>VExUS assessment helps identify and quantify venous congestion, allowing clinicians to intervene before significant organ dysfunction occurs.</p>
+                    </div>
+                </div>
+                
+                <!-- Venous Congestion POCUS Section -->
+                <div class="education-section">
+                    <h2>Venous Congestion on POCUS: Flow Patterns</h2>
+                    
+                    <div class="image-container">
+                        <a href="images/veuxus_congestion.png" data-fancybox="gallery" data-caption="Venous Congestion Patterns">
+                            <img src="images/veuxus_congestion.png" alt="Venous Congestion Patterns" />
+                        </a>
+                    </div>
+                    
+                    <div class="image-text">
+                        <p>Venous Doppler waveforms provide valuable information about central venous pressure and venous congestion. As venous congestion worsens, characteristic changes in flow patterns become evident on Doppler ultrasound:</p>
+                        
+                        <h3>Flow Pattern Progression in Venous Congestion:</h3>
+                        
+                        <ol>
+                            <li><strong>Normal Flow:</strong> Continuous, minimally phasic flow with subtle respiratory variation.</li>
+                            <li><strong>Mild Congestion:</strong> Increased pulsatility with partial flow reversal during cardiac cycles.</li>
+                            <li><strong>Moderate Congestion:</strong> Marked pulsatility with periods of flow cessation.</li>
+                            <li><strong>Severe Congestion:</strong> To-and-fro flow or frank flow reversal, indicating critical venous congestion.</li>
+                        </ol>
+                        
+                        <p>The progression of pulsatility in veins that normally show continuous flow (such as portal and intrarenal veins) is particularly significant. Pulsatility develops when pressure waves from the right atrium are transmitted through the venous system due to increased central venous pressure and reduced venous compliance.</p>
+                        
+                        <p>Flow reversal represents the most severe manifestation, indicating that pressure waves are strong enough to overcome forward flow, resulting in retrograde movement of blood. This has significant implications for organ function, as it compromises venous drainage and increases capillary pressure, leading to tissue edema and dysfunction.</p>
+                    </div>
+                </div>
+                
+                <!-- VEXUS Overview Section -->
+                <div class="education-section">
+                    <h2>VEXUS: The Complete Picture</h2>
+                    
+                    <div class="image-container">
+                        <a href="images/VEXUS_Overview.png" data-fancybox="gallery" data-caption="VEXUS Overview Diagram">
+                            <img src="images/VEXUS_Overview.png" alt="VEXUS Overview Diagram" />
+                        </a>
+                    </div>
+                    
+                    <div class="image-text">
+                        <p>The VEXUS protocol provides a comprehensive assessment of the cardiopulmonary-renal axis by examining how right atrial pressure and venous congestion affect multiple organ systems. This overview illustrates the interrelated nature of the hemodynamic parameters examined in VEXUS:</p>
+                        
+                        <h3>Key Components and Relationships:</h3>
+                        
+                        <ul>
+                            <li><strong>Right Atrial Pressure (RAP):</strong> The central measurement in venous congestion. Elevated RAP is transmitted backward through the venous system, affecting IVC, hepatic, portal, and renal veins.</li>
+                            <li><strong>Cardiac Output (CO):</strong> Represents the heart's pumping function. Venous congestion can reduce CO by impairing ventricular filling and function.</li>
+                            <li><strong>Left Atrial Pressure (LAP):</strong> Elevated LAP leads to pulmonary congestion, manifesting as B-lines on lung ultrasound. This is often associated with, but distinct from, systemic venous congestion.</li>
+                        
+                        <p>The VEXUS protocol integrates multiple ultrasound findings to create a comprehensive picture of a patient's congestion status:</p>
+                        
+                        <ul>
+                            <li><strong>IVC Assessment:</strong> Evaluates central venous pressure with diameter and collapsibility.</li>
+                            <li><strong>Hepatic Vein Doppler:</strong> Provides information about right atrial pressure and function.</li>
+                            <li><strong>Portal Vein Doppler:</strong> Reflects venous congestion's impact on splanchnic circulation.</li>
+                            <li><strong>Renal Vein Doppler:</strong> Shows how venous congestion affects kidney perfusion.</li>
+                            <li><strong>Lung Ultrasound:</strong> B-lines indicate pulmonary congestion from elevated left heart pressures.</li>
+                        
+                        <p>By examining this interconnected system, VEXUS allows clinicians to differentiate between right-sided (systemic venous) congestion, left-sided (pulmonary) congestion, or both, leading to more targeted therapeutic interventions.</p>
+                    </div>
+                </div>
+
+                <!-- Conclusion Section -->
+                <div class="education-section">
+                    <h2>Conclusion</h2>
+                    <p>VExUS is a powerful POCUS technique for assessing venous congestion. By mastering the steps outlined above and understanding the potential pitfalls, you can incorporate VExUS into your own practice.</p>
+                </div>
+
+                <!-- References Section -->
+                <div class="education-section">
+                    <h2>References</h2>
+                    <style>
+                        .reference-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                            gap: 20px;
+                            margin-top: 30px;
+                        }
+                        
+                        .reference-tile {
+                            background-color: #fcfcfc;
+                            border-radius: 8px;
+                            padding: 20px;
+                            transition: transform 0.3s ease;
+                        }
+                        
+                        .reference-tile:hover {
+                            transform: translateY(-1px);
+                        }
+                        
+                        .reference-number {
+                            display: inline-block;
+                            background-color: #6c757d;
+                            color: white;
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            text-align: center;
+                            line-height: 30px;
+                            margin-right: 10px;
+                            font-weight: bold;
+                        }
+                        
+                        .reference-title {
+                            font-weight: 600;
+                            margin-bottom: 10px;
+                            color: #2c3e50;
+                        }
+                        
+                        .reference-authors {
+                            font-style: italic;
+                            color: #555;
+                            margin-bottom: 8px;
+                        }
+                        
+                        .reference-journal {
+                            color: #666;
+                            margin-bottom: 8px;
+                        }
+                        
+                        .reference-link {
+                            display: inline-block;
+                            margin-top: 10px;
+                            color: #6c757d;
+                            text-decoration: none;
+                            font-weight: 500;
+                        }
+                        
+                        .reference-link:hover {
+                            color: #495057;
+                            text-decoration: underline;
+                        }
+                    </style>
+                    
+                    <div class="reference-grid">
+                        <div class="reference-tile">
+                            <div class="reference-number">1</div>
+                            <div class="reference-title">Systemic Venous Congestion Reviewed</div>
+                            <div class="reference-authors">Banjade P, Subedi A, Ghamande S, Surani S, Sharma M</div>
+                            <div class="reference-journal">Cureus. Aug 2023;15(8):e43716</div>
+                            <a href="https://doi.org/10.7759/cureus.43716" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">2</div>
+                            <div class="reference-title">Elevated central venous pressure is associated with increased mortality and acute kidney injury in critically ill patients</div>
+                            <div class="reference-authors">Chen CY, Zhou Y, Wang P, Qi EY, Gu WJ</div>
+                            <div class="reference-journal">Crit Care. Mar 5 2020;24(1):80</div>
+                            <a href="https://doi.org/10.1186/s13054-020-2770-5" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">3</div>
+                            <div class="reference-title">Peripheral Edema, Central Venous Pressure, and Risk of AKI in Critical Illness</div>
+                            <div class="reference-authors">Chen KP, Cavender S, Lee J, et al</div>
+                            <div class="reference-journal">Clin J Am Soc Nephrol. Apr 7 2016;11(4):602-8</div>
+                            <a href="https://doi.org/10.2215/CJN.08080715" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">4</div>
+                            <div class="reference-title">The emerging concept of fluid tolerance: A position paper</div>
+                            <div class="reference-authors">Kattan E, Castro R, Miralles-Aguiar F, Hernandez G, Rola P</div>
+                            <div class="reference-journal">J Crit Care. Oct 2022;71:154070</div>
+                            <a href="https://doi.org/10.1016/j.jcrc.2022.154070" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">5</div>
+                            <div class="reference-title">Fluid Overload and Mortality in Adult Critical Care Patients-A Systematic Review and Meta-Analysis of Observational Studies</div>
+                            <div class="reference-authors">Messmer AS, Zingg C, Muller M, Gerber JL, Schefold JC, Pfortmueller CA</div>
+                            <div class="reference-journal">Crit Care Med. Dec 2020;48(12):1862-1870</div>
+                            <a href="https://doi.org/10.1097/CCM.0000000000004617" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">6</div>
+                            <div class="reference-title">Fluid Volume Overload and Congestion in Heart Failure: Time to Reconsider Pathophysiology and How Volume Is Assessed</div>
+                            <div class="reference-authors">Miller WL</div>
+                            <div class="reference-journal">Circ Heart Fail. Aug 2016;9(8):e002922</div>
+                            <a href="https://doi.org/10.1161/CIRCHEARTFAILURE.115.002922" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">7</div>
+                            <div class="reference-title">Quantifying systemic congestion with Point-Of-Care ultrasound: development of the venous excess ultrasound grading system</div>
+                            <div class="reference-authors">Beaubien-Souligny W, Rola P, Haycock K, et al</div>
+                            <div class="reference-journal">Ultrasound J. Apr 9 2020;12(1):16</div>
+                            <a href="https://doi.org/10.1186/s13089-020-00163-w" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">8</div>
+                            <div class="reference-title">Prospective Evaluation of Venous Excess Ultrasound (VExUS) for Estimation of Venous Congestion</div>
+                            <div class="reference-authors">Longino A, Martin K, Leyba K, et al</div>
+                            <div class="reference-journal">Chest. Oct 7 2023</div>
+                            <a href="https://doi.org/10.1016/j.chest.2023.09.029" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">9</div>
+                            <div class="reference-title">Combination of Inferior Vena Cava Diameter, Hepatic Venous Flow, and Portal Vein Pulsatility Index: Venous Excess Ultrasound Score (VEXUS Score) in Predicting Acute Kidney Injury in Patients with Cardiorenal Syndrome</div>
+                            <div class="reference-authors">Bhardwaj V, Vikneswaran G, Rola P, et al</div>
+                            <div class="reference-journal">Indian J Crit Care Med. Sep 2020;24(9):783-789</div>
+                            <a href="https://doi.org/10.5005/jp-journals-10071-23570" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                        
+                        <div class="reference-tile">
+                            <div class="reference-number">10</div>
+                            <div class="reference-title">Assessment of venous congestion with venous excess ultrasound score in the prognosis of acute heart failure in the emergency department: a prospective study</div>
+                            <div class="reference-authors">Landi I, Guerritore L, Iannaccone A, Ricotti A, Rola P, Garrone M</div>
+                            <div class="reference-journal">Eur Heart J Open. Sep 2024;4(5):oeae050</div>
+                            <a href="https://doi.org/10.1093/ehjopen/oeae050" class="reference-link" target="_blank">View Article</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Modal -->
+        <div id="imageModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+
+        <!-- Scripts -->
+        <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+        <script src="html5up-phantom/assets/js/browser.min.js"></script>
+        <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+        <script src="html5up-phantom/assets/js/util.js"></script>
+        <script src="html5up-phantom/assets/js/main.js"></script>
+        <!-- Fancybox JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+        
+        <script>
+            // Menu functionality
+            const menuButton = document.querySelector('a[href="#menu"]');
+            const menu = document.getElementById('menu');
+            const overlay = document.querySelector('.menu-overlay');
+            const menuLinks = menu.querySelectorAll('a');
+            let isMenuTransitioning = false;
+
+            function toggleMenu() {
+                if (isMenuTransitioning) return;
+                
+                isMenuTransitioning = true;
+                
+                requestAnimationFrame(() => {
+                    menu.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+                    
+                    setTimeout(() => {
+                        isMenuTransitioning = false;
+                    }, 300);
+                });
+            }
+
+            menuButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMenu();
+            });
+
+            overlay.addEventListener('click', toggleMenu);
+
+            menu.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (link) {
+                    // Don't handle the close button click here
+                    if (link.classList.contains('close')) {
+                        e.preventDefault();
+                        toggleMenu();
+                        return;
+                    }
+
+                    // For regular menu links
+                    if (menu.classList.contains('active')) {
+                        e.preventDefault();
+                        const href = link.getAttribute('href');
+                        
+                        // Close menu first
+                        toggleMenu();
+                        
+                        // Then navigate after menu close animation
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 300);
+                    }
+                }
+            });
+
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    if (window.innerWidth > 980 && menu.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                }, 100);
+            });
+
+            // Initialize Fancybox with enhanced mobile support
+            Fancybox.bind("[data-fancybox]", {
+                // Common options for all Fancybox instances
+                Toolbar: {
+                    display: {
+                        left: [],
+                        middle: ["prev", "next"],
+                        right: ["close"],
+                    }
+                },
+                
+                // Improved scrolling behavior
+                ScrollLock: true,
+                
+                // Better touch handling
+                Panzoom: {
+                    touch: true,
+                    panOnlyZoomed: false,
+                },
+                
+                // Improved animation
+                showClass: "fancybox-fadeIn",
+                hideClass: "fancybox-fadeOut",
+                animated: true,
+                
+                // Template for content
+                template: {
+                    // Remove closeButton from template as it's in the toolbar
+                    closeButton: false,
+                    // Add class to main container
+                    main: '<div class="fancybox__container" role="dialog" aria-modal="true" aria-label="{{LABEL}}" aria-hidden="true" tabindex="-1">' +
+                          '<div class="fancybox__backdrop"></div>' +
+                          '<div class="fancybox__carousel"></div>' +
+                          '<div class="fancybox__footer"></div>' +
+                          '</div>'
+                },
+
+                // Improve mobile experience
+                touch: {
+                    vertical: true,
+                    momentum: true
+                },
+
+                // Custom class for styling
+                mainClass: "fancybox-custom-class",
+
+                // Prevent zooming on mobile
+                Image: {
+                    zoom: false,
+                },
+
+                on: {
+                    init: (fancybox) => {
+                        // Add class to body when Fancybox opens
+                        document.body.classList.add('fancybox-active');
+                    },
+                    destroy: (fancybox) => {
+                        // Remove class from body when Fancybox closes
+                        document.body.classList.remove('fancybox-active');
+                    },
+                    reveal: (fancybox, slide) => {
+                        // Ensure content is scrollable
+                        if (slide.el) {
+                            const content = slide.el.querySelector('.lightbox-content');
+                            if (content) {
+                                content.style.maxHeight = '80vh';
+                                content.style.overflowY = 'auto';
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Additional configuration for vein guides
+            Fancybox.bind("[data-fancybox='vein-guides']", {
+                ...Fancybox.defaults,
+                dragToClose: false,
+                mainClass: "vein-guide-modal",
+                
+                on: {
+                    reveal: (fancybox, slide) => {
+                        // Get gallery images from data-gallery attribute
+                        const galleryData = slide.triggerEl?.dataset?.gallery;
+                        if (galleryData) {
+                            const galleryImages = JSON.parse(galleryData);
+                            
+                            // Create a "View All Images" button
+                            const viewAllBtn = document.createElement('button');
+                            viewAllBtn.className = 'view-all-images-btn';
+                            viewAllBtn.textContent = 'View All Images';
+                            viewAllBtn.style.cssText = `
+                                position: absolute;
+                                bottom: 20px;
+                                right: 20px;
+                                padding: 10px 20px;
+                                background: rgba(0, 0, 0, 0.7);
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                z-index: 10;
+                            `;
+                            
+                            viewAllBtn.addEventListener('click', () => {
+                                // Close current Fancybox
+                                fancybox.close();
+                                
+                                // Open gallery view with improved scrolling
+                                Fancybox.show(
+                                    galleryImages.map(src => ({
+                                        src,
+                                        type: 'image'
+                                    })),
+                                    {
+                                        ...Fancybox.defaults,
+                                        ScrollLock: true,
+                                        mainClass: "gallery-view-modal",
+                                        Image: {
+                                            zoom: false,
+                                        },
+                                        Carousel: {
+                                            friction: 0.8,
+                                            transition: "fade"
+                                        }
+                                    }
+                                );
+                            });
+                            
+                            // Add button to the content
+                            const content = slide.el;
+                            if (content) {
+                                content.style.position = 'relative';
+                                content.appendChild(viewAllBtn);
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add iOS-specific fixes
+            document.addEventListener('DOMContentLoaded', () => {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                
+                if (isIOS) {
+                    document.documentElement.classList.add('is-ios');
+                    
+                    // Prevent background scrolling on iOS
+                    document.body.addEventListener('touchmove', (e) => {
+                        if (document.querySelector('.fancybox__backdrop')) {
+                            e.preventDefault();
+                        }
+                    }, { passive: false });
+                }
+            });
+
+            // Add close button handler
+            const closeButton = document.querySelector('#menu .close');
+            if (closeButton) {
+                closeButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMenu();
+                });
+            }
+
+            // Handle escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && menu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        </script>
+    </div>
+<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+</body>
+</html>

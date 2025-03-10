@@ -1,0 +1,215 @@
+/* Mobile-First Responsive Design */
+:root {
+    --primary-color: #777777;
+    --text-color: #2c3e50;
+    --background-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Base Mobile Optimizations */
+@media screen and (max-width: 1200px) {
+    .container {
+        width: 95%;
+        padding: 30px;
+        margin: 10px auto;
+    }
+
+    .logo {
+        max-width: 350px;
+        height: auto;
+    }
+
+    .logo-container {
+        gap: 20px;
+        margin-bottom: 2em;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .container {
+        padding: 20px;
+        max-width: 100%;
+        margin: 10px auto;
+    }
+
+    .logo-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .logo {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    h3 {
+        font-size: 1.6em;
+    }
+
+    p {
+        font-size: 1em;
+        line-height: 1.6;
+    }
+
+    /* Navigation Improvements */
+    nav#menu {
+        padding: 15px;
+    }
+
+    nav#menu ul li a {
+        padding: 12px 0;
+        font-size: 1.1em;
+    }
+
+    /* Touch Targets */
+    button,
+    .button,
+    input[type="submit"],
+    input[type="button"] {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+
+    /* Form Elements */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        padding: 12px;
+    }
+}
+
+@media screen and (max-width: 736px) {
+    .container {
+        padding: 15px;
+    }
+
+    .grid {
+        gap: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    /* Improved Table Handling */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Image Scaling */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .logo {
+        max-width: 250px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    h3 {
+        font-size: 1.2em;
+    }
+
+    p {
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+
+    /* Enhanced Touch Areas */
+    nav#menu ul li a {
+        padding: 15px 0;
+    }
+
+    /* Button Improvements */
+    button,
+    .button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Mobile-specific Features */
+@media (hover: none) {
+    /* Disable hover effects on mobile */
+    .card:hover,
+    .button:hover,
+    .link:hover {
+        transform: none !important;
+    }
+
+    /* Improve scrolling */
+    .scroll-container {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #e1e1e1;
+        --background-color: #1a1a1a;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Mobile Performance Optimizations */
+@media screen and (max-width: 980px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Reduce paint operations */
+    .scroll-container {
+        will-change: transform;
+    }
+} 

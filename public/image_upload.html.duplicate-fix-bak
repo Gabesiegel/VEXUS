@@ -1,0 +1,1646 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS ATLAS - Image Gallery Uploader</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- Phantom Template CSS -->
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <noscript><!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
+    
+    <style>
+        /* Base font styles */
+        body, input, select, textarea, button {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            color: #585858;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.035em;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .main-logo {
+            width: 400px;
+            height: 200px;
+            margin: 0 auto 2em auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        /* Menu Navigation Styles - REMOVED (now using sidebar.css) */
+
+        /* Modern Button Styles */
+        button {
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.5px !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
+            padding: 12px 24px !important;
+            border: none !important;
+            outline: none !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        button:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        button:hover::after {
+            opacity: 1;
+        }
+        
+        button.primary {
+            background: linear-gradient(135deg, #4E6EF1, #3b5de7) !important;
+            color: white !important;
+        }
+        
+        button.secondary {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+            color: #495057 !important;
+        }
+        
+        button:disabled {
+            background: #e0e0e0 !important;
+            color: #9e9e9e !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        
+        button:disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Modern Upload Area Styles */
+        .upload-area {
+            border: 2px dashed #c8d4e6 !important;
+            border-radius: 12px !important;
+            padding: 30px !important;
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            transition: all 0.3s ease !important;
+            background: #f8fafc !important;
+            cursor: pointer !important;
+        }
+        
+        .upload-area:hover {
+            border-color: #4E6EF1 !important;
+            background: #f0f5ff !important;
+        }
+        
+        .upload-area i.upload-icon, .upload-area .upload-icon {
+            font-size: 48px !important;
+            color: #4E6EF1 !important;
+            margin-bottom: 15px !important;
+            display: block !important;
+        }
+        
+        .upload-area .upload-text {
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            color: #2c3e50 !important;
+            margin-bottom: 5px !important;
+        }
+        
+        .upload-area .upload-subtext {
+            font-size: 14px !important;
+            color: #6c757d !important;
+        }
+        
+        .upload-area.dragover {
+            border-color: #4E6EF1 !important;
+            background-color: #f0f7ff !important;
+            box-shadow: 0 0 15px rgba(78, 110, 241, 0.2) !important;
+        }
+
+        /* Upload interface styles */
+        .upload-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1.05em;
+            color: #777;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+            position: relative;
+            margin: 0 8px;
+        }
+
+        .tab-button:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .tab-button:hover {
+            color: #3498db;
+        }
+
+        .tab-button:hover:after {
+            width: 40%;
+        }
+
+        .tab-button.active {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .tab-button.active:after {
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .form-section {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid #f0f0f0;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-section:hover {
+            box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+        }
+
+        .form-section h3 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.3em;
+            text-align: left;
+            color: #3498db;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media screen and (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .field {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            transition: color 0.2s ease;
+        }
+
+        .field:focus-within label {
+            color: #3498db;
+        }
+
+        .field input[type="text"],
+        .field input[type="email"],
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            color: #555;
+            font-size: 1em;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+        }
+
+        .field select[multiple] {
+            height: auto;
+            min-height: 130px;
+        }
+
+        .image-preview-container {
+            width: 100%;
+            margin-top: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: none;
+            max-height: 300px;
+            background: #f8f8f8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e9e9e9;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .image-preview-controls {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+
+        .image-preview-delete {
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .image-preview-delete:hover {
+            background: rgba(0,0,0,0.8);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 25px;
+            display: none;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            transform: translateY(10px);
+            opacity: 0;
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* CSV Upload Styles */
+        .csv-instructions {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+
+        .csv-instructions h3 {
+            margin-top: 0;
+            text-align: left;
+            font-size: 1.3em;
+            color: #3498db;
+        }
+
+        .csv-instructions code {
+            display: block;
+            padding: 16px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #e0e0e0;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 18px;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .download-link i {
+            margin-right: 8px;
+        }
+
+        .download-link:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            color: white;
+        }
+
+        #csvPreview {
+            margin-top: 20px;
+            font-style: italic;
+            color: #495057;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .csv-validation-results {
+            margin-top: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .validation-error {
+            padding: 18px;
+            background: #fff;
+            border-left: 4px solid #dc3545;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .validation-error h4 {
+            margin-top: 0;
+            color: #dc3545;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .validation-success {
+            padding: 18px;
+            background: #fff;
+            border-left: 4px solid #28a745;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .validation-success h4 {
+            margin-top: 0;
+            color: #28a745;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .processing-results {
+            padding: 18px;
+            background: #fff;
+            border-left: 4px solid #17a2b8;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .processing-results h4 {
+            margin-top: 0;
+            color: #17a2b8;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            .main-logo {
+                width: 300px;
+                height: 150px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .actions button {
+                width: 100%;
+            }
+        }
+
+        .tag-categories {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media screen and (min-width: 768px) {
+            .tag-categories {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        
+        .tag-category {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.25s ease;
+        }
+        
+        .tag-category:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #3498db;
+        }
+        
+        .tag-category h4 {
+            margin: 0 0 12px 0;
+            font-size: 1.05em;
+            color: #3498db;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        
+        .tag-dropdown {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            font-size: 0.95em;
+            color: #495057;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        
+        .tag-dropdown:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+        }
+        
+        .tag-dropdown:hover {
+            border-color: #3498db;
+        }
+
+        /* Image Zoom Modal Styles */
+        .image-zoom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-zoom-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .zoom-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .zoomed-image {
+            display: block;
+            max-width: 100%;
+            max-height: 90vh;
+            transform-origin: center;
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 15px;
+            border-radius: 50px;
+            z-index: 1;
+        }
+
+        .zoom-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            border: none;
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .zoom-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .zoom-button:active {
+            transform: translateY(0);
+        }
+
+        .zoom-level {
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        .zoom-close:hover {
+            background: rgba(220, 53, 69, 0.8);
+            transform: rotate(90deg);
+        }
+    </style>
+    <!-- Additional styles for menu functionality -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
+    <!-- Critical styles for menu visibility -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+            position: fixed !important;
+            top: 0 !important;
+            height: 100% !important;
+            width: 300px !important;
+            max-width: 80% !important;
+            right: -300px !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+
+                <!-- Nav -->
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html">VEXUS Overview</a></li>
+                    <li><a href="waveform.html">Waveforms</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="literature_review.html">Literature Review</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS ATLAS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="#menu" class="close">✕</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <!-- Logo and Title -->
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="main-logo">
+                <h1>VExUS ATLAS - Image Gallery Upload</h1>
+
+                <!-- Description about Upload Tool -->
+                <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto; text-align: center;">
+                    Upload your VExUS ultrasound images to contribute to our ever-growing collection. Your submissions help fellow clinicians learn and improve their VExUS interpretations.
+                    <strong>Please ensure that any images uploaded do not contain Protected Health Information (PHI) to comply with HIPAA regulations.</strong>
+                </p>
+
+                <!-- Upload Section -->
+                <div class="gallery-upload-section">
+                    <div class="container">
+                        <!-- Upload Tabs -->
+                        <div class="upload-tabs">
+                            <button class="tab-button active" data-tab="single-upload">Single Image Upload</button>
+                            <button class="tab-button" data-tab="csv-upload">CSV Batch Upload</button>
+                        </div>
+                        
+                        <!-- Single Upload Tab -->
+                        <div class="tab-content active" id="single-upload">
+                            <form id="gallerySubmissionForm" class="gallery-form">
+                                <!-- Image Upload -->
+                                <div class="form-section">
+                                    <h3>Upload Image</h3>
+                                    <div class="upload-area" id="galleryUploadArea">
+                                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                        <p class="upload-text">Click or drag and drop your VExUS image here</p>
+                                        <p class="upload-subtext">Acceptable formats: JPEG, PNG, GIF (max 10MB)</p>
+                                        <input type="file" id="galleryImageInput" class="file-input" accept="image/*" />
+                                    </div>
+                                    <div class="image-preview-container" id="imagePreviewContainer">
+                                        <img id="galleryImagePreview" class="image-preview" alt="Image preview" />
+                                        <div class="image-preview-controls">
+                                            <span class="image-preview-delete" id="resetImageButton">×</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Image Zoom Modal -->
+                                <div class="image-zoom-modal" id="imageZoomModal">
+                                    <div class="zoom-container">
+                                        <img id="zoomedImage" class="zoomed-image" alt="Zoomed image preview" />
+                                        <button class="zoom-close" id="closeZoomButton">×</button>
+                                        <div class="zoom-controls">
+                                            <button class="zoom-button" id="zoomOutButton">-</button>
+                                            <div class="zoom-level" id="zoomLevel">100%</div>
+                                            <button class="zoom-button" id="zoomInButton">+</button>
+                                            <button class="zoom-button" id="zoomResetButton"><i class="fas fa-sync-alt"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Image Details -->
+                                <div class="form-section">
+                                    <h3>Image Details</h3>
+                                    <div class="form-grid">
+                                        <div class="field full">
+                                            <label for="gallery_title">Image Title*</label>
+                                            <input type="text" id="gallery_title" name="title" required placeholder="E.g., Normal Hepatic Vein">
+                                        </div>
+                                        
+                                        <div class="field">
+                                            <label for="gallery_vein_type">Vein Type*</label>
+                                            <select id="gallery_vein_type" name="veinType" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="IVC">IVC</option>
+                                                <option value="Hepatic">Hepatic Vein</option>
+                                                <option value="Portal">Portal Vein</option>
+                                                <option value="Renal">Renal Vein</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="field">
+                                            <label for="gallery_waveform_type">Waveform Type*</label>
+                                            <select id="gallery_waveform_type" name="waveformType" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Normal">Normal</option>
+                                                <option value="Mild">Mild</option>
+                                                <option value="Severe">Severe</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="field full">
+                                            <label>Tags</label>
+                                            <div class="tag-categories">
+                                                <div class="tag-category">
+                                                    <h4>Quality</h4>
+                                                    <select id="quality_tag" name="quality" class="tag-dropdown">
+                                                        <option value="">-- Select Quality --</option>
+                                                        <option value="High">High</option>
+                                                        <option value="Medium">Medium</option>
+                                                        <option value="Low">Low</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="tag-category">
+                                                    <h4>Vein Type</h4>
+                                                    <select id="vein_tag" name="tagVeinType" class="tag-dropdown">
+                                                        <option value="">-- Select Vein Type --</option>
+                                                        <option value="Hepatic">Hepatic</option>
+                                                        <option value="Portal">Portal</option>
+                                                        <option value="Renal">Renal</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="tag-category">
+                                                    <h4>Waveform</h4>
+                                                    <select id="waveform_tag" name="tagWaveform" class="tag-dropdown">
+                                                        <option value="">-- Select Waveform --</option>
+                                                        <option value="Normal">Normal</option>
+                                                        <option value="Mild">Mild</option>
+                                                        <option value="Abnormal">Abnormal</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="custom-tag-field" style="margin-top: 20px;">
+                                                <label for="custom_tag">Custom Tag:</label>
+                                                <input type="text" id="custom_tag" name="custom_tag" placeholder="Add your own custom tag here">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="field full">
+                                            <label for="gallery_description">Description</label>
+                                            <textarea id="gallery_description" name="description" rows="4" placeholder="Please provide details about this image and any relevant clinical context"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contributor Details -->
+                                <div class="form-section">
+                                    <h3>Contributor Details</h3>
+                                    <div class="form-grid">
+                                        <div class="field full">
+                                            <label for="gallery_contributor">Your Name*</label>
+                                            <input type="text" id="gallery_contributor" name="contributor" required placeholder="Full name">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="actions">
+                                    <button type="button" id="resetFormButton" class="secondary">Clear Form</button>
+                                    <button type="submit" class="primary">Submit for Review</button>
+                                </div>
+                            </form>
+                            <div class="success-message">Thank you! Your image has been submitted for review.</div>
+                            <div class="error-message">Sorry, there was an error submitting your image. Please try again.</div>
+                        </div>
+                        
+                        <!-- CSV Upload Tab -->
+                        <div class="tab-content" id="csv-upload">
+                            <div class="csv-instructions">
+                                <h3>CSV Batch Upload Instructions</h3>
+                                <p>Upload multiple images using a CSV file with the following headers:</p>
+                                <code>filePath,title,veinType,waveformType,quality,tagVeinType,tagWaveform,description,contributor,institution,email</code>
+                                <p><strong>Required fields:</strong> filePath, title, veinType, waveformType</p>
+                                <p><strong>Optional fields:</strong> quality, tagVeinType, tagWaveform, description, contributor, institution, email</p>
+                                
+                                <div style="background-color: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #3498db;">
+                                    <h4 style="margin-top: 0; color: #3498db;">Tag Fields Format:</h4>
+                                    <p>The tag fields are split into three separate columns:</p>
+                                    <ul>
+                                        <li><strong>quality:</strong> High, Medium, or Low</li>
+                                        <li><strong>tagVeinType:</strong> Hepatic, Portal, Renal, or IVC</li>
+                                        <li><strong>tagWaveform:</strong> Normal, Mild, or Abnormal</li>
+                                    <p><strong>Example row:</strong> "/path/to/images/hepatic_example.png,Normal Hepatic Vein,Hepatic,Normal,High,Hepatic,Normal,This is a normal hepatic vein showing triphasic flow pattern,Dr. John Smith,University Hospital,john.smith@example.com"</p>
+                                    <p><em>Note: Tag fields are optional. You can leave them blank if not applicable.</em></p>
+                                </div>
+                                
+                                <p>The filePath should point to local images on your computer. All images referenced will be uploaded.</p>
+                                <a href="/templates/gallery-template.csv" download class="download-link">
+                                    <i class="fas fa-download"></i> Download Sample CSV Template
+                                </a>
+                                <a href="/templates/gallery-headers.csv" download class="download-link" style="margin-left: 15px;">
+                                    <i class="fas fa-download"></i> Download Headers Only
+                                </a>
+                            </div>
+                            
+                            <form id="csvUploadForm" class="gallery-form">
+                                <div class="form-section">
+                                    <h3>Upload CSV File</h3>
+                                    <div class="upload-area" id="csvUploadArea">
+                                        <i class="fas fa-file-csv upload-icon"></i>
+                                        <p class="upload-text">Click or drag and drop your CSV file here</p>
+                                        <p class="upload-subtext">CSV file should include paths to images and metadata</p>
+                                        <input type="file" id="csvFileInput" class="file-input" accept=".csv" />
+                                    </div>
+                                    <div id="csvPreview"></div>
+                                </div>
+                                
+                                <div class="csv-validation-results">
+                                    <h3>Validation Results</h3>
+                                    <div id="validationResults"></div>
+                                </div>
+                                
+                                <div class="actions">
+                                    <button type="button" id="validateCsvButton" class="secondary" disabled>Validate CSV</button>
+                                    <button type="submit" id="processCsvButton" class="primary" disabled>Process CSV & Upload Images</button>
+                                </div>
+                            </form>
+                            
+                            <div class="success-message">CSV processed successfully! Your images are being uploaded.</div>
+                            <div class="error-message">Sorry, there was an error processing your CSV. Please check the validation results.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <section>
+                    <h2>Get in touch</h2>
+                    <p>If you have questions about the VExUS ATLAS project or the image uploader, please reach out to our team.</p>
+                    <ul class="icons">
+                        <li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+                        <li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+                        <li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+                </section>
+                <ul class="copyright">
+                    <li>&copy; VExUS ATLAS. All rights reserved</li>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="scripts/gallery-uploader.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image preview functionality
+        const galleryImageInput = document.getElementById('galleryImageInput');
+        const galleryImagePreview = document.getElementById('galleryImagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const resetImageButton = document.getElementById('resetImageButton');
+        const galleryUploadArea = document.getElementById('galleryUploadArea');
+        
+        // Zoom modal elements
+        const imageZoomModal = document.getElementById('imageZoomModal');
+        const zoomedImage = document.getElementById('zoomedImage');
+        const closeZoomButton = document.getElementById('closeZoomButton');
+        const zoomInButton = document.getElementById('zoomInButton');
+        const zoomOutButton = document.getElementById('zoomOutButton');
+        const zoomResetButton = document.getElementById('zoomResetButton');
+        const zoomLevelDisplay = document.getElementById('zoomLevel');
+        
+        let currentZoom = 1.0;
+        const zoomStep = 0.1;
+        const maxZoom = 3.0;
+        const minZoom = 0.5;
+        
+        // Handle file selection
+        galleryImageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                
+                // Check file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size exceeds 10MB limit. Please select a smaller file.');
+                    this.value = '';
+                    return;
+                }
+                
+                // Create file reader to display preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    galleryImagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                    galleryUploadArea.style.border = '2px solid #3498db';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Reset image preview
+        resetImageButton.addEventListener('click', function() {
+            galleryImageInput.value = '';
+            imagePreviewContainer.style.display = 'none';
+            galleryUploadArea.style.border = '2px dashed #d0d0d0';
+        });
+        
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            galleryUploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            galleryUploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            galleryUploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            galleryUploadArea.style.border = '2px solid #3498db';
+            galleryUploadArea.style.background = 'linear-gradient(to bottom, #ffffff, #e6f7ff)';
+        }
+        
+        function unhighlight() {
+            galleryUploadArea.style.border = '2px dashed #d0d0d0';
+            galleryUploadArea.style.background = 'linear-gradient(to bottom, #ffffff, #f9f9f9)';
+        }
+        
+        galleryUploadArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files && files[0]) {
+                galleryImageInput.files = files;
+                
+                // Trigger change event manually
+                const event = new Event('change', { bubbles: true });
+                galleryImageInput.dispatchEvent(event);
+            }
+        }
+        
+        // Click on upload area to trigger file input
+        galleryUploadArea.addEventListener('click', function() {
+            galleryImageInput.click();
+        });
+        
+        // Image zoom functionality
+        galleryImagePreview.addEventListener('click', function() {
+            if (this.src) {
+                // Copy the image to the zoom modal
+                zoomedImage.src = this.src;
+                
+                // Reset zoom level
+                currentZoom = 1.0;
+                updateZoomLevel();
+                
+                // Show the modal
+                imageZoomModal.classList.add('active');
+                
+                // Prevent scrolling on body
+                document.body.style.overflow = 'hidden';
+            }
+        });
+        
+        // Close zoom modal
+        closeZoomButton.addEventListener('click', function() {
+            imageZoomModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // Close zoom modal when clicking outside the image
+        imageZoomModal.addEventListener('click', function(e) {
+            if (e.target === imageZoomModal) {
+                imageZoomModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Zoom in button
+        zoomInButton.addEventListener('click', function() {
+            if (currentZoom < maxZoom) {
+                currentZoom += zoomStep;
+                updateZoomLevel();
+            }
+        });
+        
+        // Zoom out button
+        zoomOutButton.addEventListener('click', function() {
+            if (currentZoom > minZoom) {
+                currentZoom -= zoomStep;
+                updateZoomLevel();
+            }
+        });
+        
+        // Reset zoom button
+        zoomResetButton.addEventListener('click', function() {
+            currentZoom = 1.0;
+            updateZoomLevel();
+        });
+        
+        // Update the zoom level display and apply transform
+        function updateZoomLevel() {
+            zoomedImage.style.transform = `scale(${currentZoom})`;
+            zoomLevelDisplay.textContent = `${Math.round(currentZoom * 100)}%`;
+            
+            // Change cursor based on zoom level
+            if (currentZoom >= maxZoom) {
+                zoomedImage.style.cursor = 'zoom-out';
+            } else if (currentZoom <= minZoom) {
+                zoomedImage.style.cursor = 'zoom-in';
+            } else {
+                zoomedImage.style.cursor = 'move';
+            }
+        }
+        
+        // Mouse wheel zoom
+        zoomedImage.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            
+            if (e.deltaY < 0 && currentZoom < maxZoom) {
+                // Zoom in
+                currentZoom += zoomStep;
+            } else if (e.deltaY > 0 && currentZoom > minZoom) {
+                // Zoom out
+                currentZoom -= zoomStep;
+            }
+            
+            updateZoomLevel();
+        });
+        
+        // Keyboard shortcuts for the zoom modal
+        document.addEventListener('keydown', function(e) {
+            if (imageZoomModal.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    imageZoomModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else if (e.key === '+' || e.key === '=') {
+                    if (currentZoom < maxZoom) {
+                        currentZoom += zoomStep;
+                        updateZoomLevel();
+                    }
+                } else if (e.key === '-') {
+                    if (currentZoom > minZoom) {
+                        currentZoom -= zoomStep;
+                        updateZoomLevel();
+                    }
+                } else if (e.key === '0') {
+                    currentZoom = 1.0;
+                    updateZoomLevel();
+                }
+            }
+        });
+        
+        // Update form submission to handle tag collection and save to appropriate folders
+        const gallerySubmissionForm = document.getElementById('gallerySubmissionForm');
+        if (gallerySubmissionForm) {
+            gallerySubmissionForm.onsubmit = function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                
+                // Get the file
+                const fileInput = document.getElementById('galleryImageInput');
+                if (fileInput.files[0]) {
+                    formData.append('image', fileInput.files[0]);
+                }
+                
+                // Get form field values
+                formData.append('title', document.getElementById('gallery_title').value);
+                formData.append('veinType', document.getElementById('gallery_vein_type').value);
+                formData.append('waveformType', document.getElementById('gallery_waveform_type').value);
+                formData.append('description', document.getElementById('gallery_description').value);
+                formData.append('contributor', document.getElementById('gallery_contributor').value);
+                
+                // Send separate tag fields
+                const quality = document.getElementById('quality_tag').value;
+                const tagVeinType = document.getElementById('vein_tag').value;
+                const tagWaveform = document.getElementById('waveform_tag').value;
+                
+                if (quality) formData.append('quality', quality);
+                if (tagVeinType) formData.append('tagVeinType', tagVeinType);
+                if (tagWaveform) formData.append('tagWaveform', tagWaveform);
+                
+                // Add custom tag if present
+                const customTag = document.getElementById('custom_tag').value.trim();
+                if (customTag) {
+                    formData.append('customTag', customTag);
+                }
+                
+                // Show loading state
+                const submitButton = gallerySubmissionForm.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.textContent;
+                submitButton.textContent = 'Uploading...';
+                submitButton.disabled = true;
+                
+                // Add timestamp to prevent cache issues
+                const timestamp = new Date().getTime();
+                
+                // AJAX request to submit the form
+                fetch(`/api/upload-gallery-image?t=${timestamp}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset form and button state
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                    
+                    if (data.success) {
+                        // Show success message
+                        gallerySubmissionForm.reset();
+                        document.getElementById('imagePreviewContainer').style.display = 'none';
+                        document.querySelector('.success-message').style.display = 'block';
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            document.querySelector('.success-message').style.display = 'none';
+                        }, 5000);
+                    } else {
+                        // Show error message
+                        document.querySelector('.error-message').textContent = data.message || 'Error uploading image. Please try again.';
+                        document.querySelector('.error-message').style.display = 'block';
+                        
+                        // Hide error message after 5 seconds
+                        setTimeout(() => {
+                            document.querySelector('.error-message').style.display = 'none';
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                    
+                    // Show error message
+                    document.querySelector('.error-message').textContent = 'Network error. Please try again.';
+                    document.querySelector('.error-message').style.display = 'block';
+                    
+                    // Hide error message after 5 seconds
+                    setTimeout(() => {
+                        document.querySelector('.error-message').style.display = 'none';
+                    }, 5000);
+                });
+            };
+        }
+    });
+
+    // CSV validation function
+    function validateCSV(csvData) {
+        const requiredHeaders = ['filePath', 'title', 'veinType', 'waveformType'];
+        const optionalHeaders = ['quality', 'tagVeinType', 'tagWaveform', 'description', 'contributor', 'institution', 'email'];
+        const validVeinTypes = ['IVC', 'Hepatic', 'Portal', 'Renal'];
+        const validWaveformTypes = ['Normal', 'Mild', 'Severe'];
+        const validQualityValues = ['High', 'Medium', 'Low'];
+        const validTagVeinTypes = ['Hepatic', 'Portal', 'Renal', 'IVC'];
+        const validTagWaveforms = ['Normal', 'Mild', 'Abnormal'];
+        
+        const errors = [];
+        
+        // Check headers
+        const headers = csvData[0];
+        requiredHeaders.forEach(header => {
+            if (!headers.includes(header)) {
+                errors.push(`Missing required header: ${header}`);
+            }
+        });
+        
+        // Validate each row
+        for (let i = 1; i < csvData.length; i++) {
+            const row = csvData[i];
+            const rowNum = i + 1;
+            
+            // Skip empty rows
+            if (row.every(cell => !cell)) continue;
+            
+            // Check required fields
+            if (!row[headers.indexOf('filePath')]) {
+                errors.push(`Row ${rowNum}: Missing filePath`);
+            }
+            if (!row[headers.indexOf('title')]) {
+                errors.push(`Row ${rowNum}: Missing title`);
+            }
+            
+            // Validate vein type
+            const veinType = row[headers.indexOf('veinType')];
+            if (!veinType) {
+                errors.push(`Row ${rowNum}: Missing veinType`);
+            } else if (!validVeinTypes.includes(veinType)) {
+                errors.push(`Row ${rowNum}: Invalid veinType "${veinType}". Must be one of: ${validVeinTypes.join(', ')}`);
+            }
+            
+            // Validate waveform type
+            const waveformType = row[headers.indexOf('waveformType')];
+            if (!waveformType) {
+                errors.push(`Row ${rowNum}: Missing waveformType`);
+            } else if (!validWaveformTypes.includes(waveformType)) {
+                errors.push(`Row ${rowNum}: Invalid waveformType "${waveformType}". Must be one of: ${validWaveformTypes.join(', ')}`);
+            }
+            
+            // Validate quality tag if present
+            const qualityIndex = headers.indexOf('quality');
+            if (qualityIndex !== -1 && row[qualityIndex]) {
+                if (!validQualityValues.includes(row[qualityIndex])) {
+                    errors.push(`Row ${rowNum}: Invalid quality "${row[qualityIndex]}". Must be one of: ${validQualityValues.join(', ')}`);
+                }
+            }
+            
+            // Validate tag vein type if present
+            const tagVeinTypeIndex = headers.indexOf('tagVeinType');
+            if (tagVeinTypeIndex !== -1 && row[tagVeinTypeIndex]) {
+                if (!validTagVeinTypes.includes(row[tagVeinTypeIndex])) {
+                    errors.push(`Row ${rowNum}: Invalid tagVeinType "${row[tagVeinTypeIndex]}". Must be one of: ${validTagVeinTypes.join(', ')}`);
+                }
+            }
+            
+            // Validate tag waveform if present
+            const tagWaveformIndex = headers.indexOf('tagWaveform');
+            if (tagWaveformIndex !== -1 && row[tagWaveformIndex]) {
+                if (!validTagWaveforms.includes(row[tagWaveformIndex])) {
+                    errors.push(`Row ${rowNum}: Invalid tagWaveform "${row[tagWaveformIndex]}". Must be one of: ${validTagWaveforms.join(', ')}`);
+                }
+            }
+        }
+        
+        return errors;
+    }
+
+    // CSV file handling
+    const csvFileInput = document.getElementById('csvFileInput');
+    const validateCsvButton = document.getElementById('validateCsvButton');
+    const processCsvButton = document.getElementById('processCsvButton');
+    const validationResults = document.getElementById('validationResults');
+    
+    csvFileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            validateCsvButton.disabled = false;
+            document.getElementById('csvPreview').textContent = `Selected file: ${file.name}`;
+        }
+    });
+    
+    validateCsvButton.addEventListener('click', function() {
+        const file = csvFileInput.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const csv = e.target.result;
+            const rows = csv.split('\n').map(row => row.split(',').map(cell => cell.trim()));
+            
+            const errors = validateCSV(rows);
+            
+            validationResults.innerHTML = '';
+            if (errors.length === 0) {
+                validationResults.innerHTML = `
+                    <div class="validation-success">
+                        <h4>✓ CSV Validation Passed</h4>
+                        <p>All entries are valid. You can now process the CSV file.</p>
+                    </div>
+                `;
+                processCsvButton.disabled = false;
+            } else {
+                const errorHtml = errors.map(error => `
+                    <div class="validation-error">
+                        <h4>⚠ Validation Error</h4>
+                        <p>${error}</p>
+                    </div>
+                `).join('');
+                validationResults.innerHTML = errorHtml;
+                processCsvButton.disabled = true;
+            }
+            
+            document.querySelector('.csv-validation-results').style.display = 'block';
+        };
+        reader.readAsText(file);
+    });
+    </script>
+    <!-- Menu Toggle Script -->
+    <script>
+        // Function to initialize menu toggle
+        function initializeMenuToggle() {
+            console.log("Initializing menu toggle");
+            
+            try {
+                // Get menu elements
+                const menuToggle = document.querySelector("a[href=\"#menu\"]");
+                const menu = document.getElementById("menu");
+                
+                if (!menuToggle) {
+                    console.error("Menu toggle element not found!");
+                    return;
+                }
+                
+                if (!menu) {
+                    console.error("Menu element not found!");
+                    return;
+                }
+                
+                // First ensure menu is properly hidden to start
+                document.body.classList.remove("is-menu-visible");
+                menu.style.right = "-100%";
+                menu.style.display = "none";
+                menu.classList.remove("visible", "active");
+                
+                // Remove any existing click handlers by cloning and replacing
+                const newMenuToggle = menuToggle.cloneNode(true);
+                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+                
+                // Add our click handler with support for both CSS class and display property
+                newMenuToggle.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Menu toggle clicked");
+                    
+                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                    document.body.classList.add("is-menu-visible");
+                    menu.style.display = "block";
+                    menu.style.right = "0";
+                    menu.classList.add("visible", "active");
+                    
+                    // Force a repaint to ensure styles are applied
+                    void menu.offsetWidth;
+                });
+                
+                // Create close button handler (important for mobile)
+                const closeButton = menu.querySelector("a.close");
+                if (closeButton) {
+                    const newCloseButton = closeButton.cloneNode(true);
+                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                    
+                    newCloseButton.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Close button clicked");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    });
+                }
+                
+                // Handle clicks outside the menu (use capture phase to run before other handlers)
+                const bodyClickHandler = function(e) {
+                    // If clicking outside menu and not on menu toggle
+                    if (!e.target.closest("#menu") && !e.target.closest("a[href=\"#menu\"]")) {
+                        console.log("Clicked outside menu");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    }
+                };
+                
+                // Remove any existing body click handler and add our new one
+                document.body.removeEventListener("click", bodyClickHandler, true);
+                document.body.addEventListener("click", bodyClickHandler, true);
+                
+                // Handle escape key
+                const keyHandler = function(e) {
+                    if (e.key === "Escape" || e.keyCode === 27) {
+                        document.body.classList.remove("is-menu-visible");
+                        menu.style.display = "none";
+                        menu.style.right = "-100%";
+                        menu.classList.remove("visible", "active");
+                    }
+                };
+                
+                // Remove any existing key handler and add our new one
+                document.removeEventListener("keydown", keyHandler);
+                document.addEventListener("keydown", keyHandler);
+                
+                console.log("Menu toggle initialization complete");
+            } catch (error) {
+                console.error("Error initializing menu toggle:", error);
+            }
+        }
+        
+        // Initialize the menu toggle after DOM is loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM loaded, initializing menu toggle");
+            // Initial setup with delay to ensure DOM is fully processed
+            setTimeout(initializeMenuToggle, 100);
+        });
+        
+        // Fallback initialization in case DOMContentLoaded already fired
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            console.log("Document already loaded, running fallback initialization");
+            setTimeout(initializeMenuToggle, 200);
+        }
+    </script>
+<script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+</body>
+</html> 

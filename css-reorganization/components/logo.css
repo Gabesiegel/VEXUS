@@ -1,0 +1,119 @@
+/* 
+ * Logo Styles
+ * Styles for various logo presentations throughout the site
+ */
+
+/* Main Logo Container */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 1em auto;
+}
+
+/* Standard Logo */
+.logo {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.02);
+}
+
+/* Main Feature Logo */
+.main-logo {
+    width: 400px;
+    height: 200px;
+    margin: 0 auto 2em auto;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.main-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Sidebar Logo */
+.sidebar-logo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 1200px) {
+    .logo {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        margin: 10px 0;
+    }
+    
+    .logo-container {
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .logo {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .main-logo {
+        width: 300px;
+        height: 150px;
+    }
+    
+    .logo-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+@media screen and (max-width: 736px) {
+    .logo {
+        max-width: 350px;
+    }
+    
+    .main-logo {
+        width: 250px;
+        height: 125px;
+    }
+    
+    .sidebar-logo {
+        width: 80px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo {
+        max-width: 300px;
+    }
+    
+    .main-logo {
+        width: 200px;
+        height: 100px;
+    }
+    
+    .sidebar-logo {
+        width: 70px;
+    }
+    
+    .logo-container {
+        padding: 0 10px;
+    }
+} 

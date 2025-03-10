@@ -823,12 +823,8 @@
                     <li><a href="our_team.html">Our Team</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="#menu" class="close">✕</a>
             </div>
         </nav>
-
-        <!-- Menu Overlay -->
-        <div class="menu-overlay"></div>
 
         <!-- Main Content -->
         <div id="main">
@@ -1343,73 +1339,122 @@
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
         
         <script>
-            // Menu functionality
-            const menuButton = document.querySelector('a[href="#menu"]');
-            const menu = document.getElementById('menu');
-            const overlay = document.querySelector('.menu-overlay');
-            const menuLinks = menu.querySelectorAll('a');
-            let isMenuTransitioning = false;
-
-            function toggleMenu() {
-                if (isMenuTransitioning) return;
+            // Function to initialize menu toggle
+            function initializeMenuToggle() {
+                console.log("Initializing menu toggle");
                 
-                isMenuTransitioning = true;
-                
-                requestAnimationFrame(() => {
-                    menu.classList.toggle('active');
-                    overlay.classList.toggle('active');
-                    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+                try {
+                    // Get menu elements
+                    const menuToggle = document.querySelector('a[href="#menu"]');
+                    const menu = document.getElementById('menu');
                     
-                    setTimeout(() => {
-                        isMenuTransitioning = false;
-                    }, 300);
-                });
-            }
-
-            menuButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleMenu();
-            });
-
-            overlay.addEventListener('click', toggleMenu);
-
-            menu.addEventListener('click', (e) => {
-                const link = e.target.closest('a');
-                if (link) {
-                    // Don't handle the close button click here
-                    if (link.classList.contains('close')) {
-                        e.preventDefault();
-                        toggleMenu();
+                    if (!menuToggle) {
+                        console.error("Menu toggle element not found!");
                         return;
                     }
-
-                    // For regular menu links
-                    if (menu.classList.contains('active')) {
+                    
+                    if (!menu) {
+                        console.error("Menu element not found!");
+                        return;
+                    }
+                    
+                    // Track transition state to prevent multiple simultaneous transitions
+                    let isMenuTransitioning = false;
+                    
+                    // First ensure menu is properly hidden to start
+                    document.body.classList.remove('is-menu-visible');
+                    menu.classList.remove('visible', 'active');
+                    
+                    // Remove any existing click handlers by cloning and replacing
+                    const newMenuToggle = menuToggle.cloneNode(true);
+                    menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+                    
+                    // Add our click handler with support for both CSS class and display property
+                    newMenuToggle.addEventListener('click', function(e) {
                         e.preventDefault();
-                        const href = link.getAttribute('href');
+                        e.stopPropagation();
                         
-                        // Close menu first
-                        toggleMenu();
+                        if (isMenuTransitioning) return;
+                        isMenuTransitioning = true;
                         
-                        // Then navigate after menu close animation
-                        setTimeout(() => {
-                            window.location.href = href;
-                        }, 300);
+                        requestAnimationFrame(() => {
+                            // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                            document.body.classList.add('is-menu-visible');
+                            menu.style.display = 'block';
+                            
+                            // Force a repaint to ensure styles are applied before transition
+                            void menu.offsetWidth;
+                            
+                            menu.classList.add('visible', 'active');
+                            
+                            // Reset transition flag after animation completes
+                            setTimeout(() => {
+                                isMenuTransitioning = false;
+                            }, 300); // Match with CSS transition duration
+                        });
+                    });
+                    
+                    // Function to hide menu with performance optimizations
+                    function hideMenu() {
+                        if (isMenuTransitioning) return;
+                        isMenuTransitioning = true;
+                        
+                        requestAnimationFrame(() => {
+                            // Hide menu using classes first (for transitions)
+                            document.body.classList.remove('is-menu-visible');
+                            menu.classList.remove('visible', 'active');
+                            
+                            // After transition completes, update display property and reset flag
+                            setTimeout(() => {
+                                menu.style.display = 'none';
+                                isMenuTransitioning = false;
+                            }, 300); // Match with CSS transition duration
+                        });
                     }
+                    
+                    // Handle clicks outside the menu (use event delegation instead of capture phase)
+                    const bodyClickHandler = function(e) {
+                        // If clicking outside menu and not on menu toggle
+                        if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
+                            hideMenu();
+                        }
+                    };
+                    
+                    // Remove any existing body click handler and add our new one
+                    document.body.removeEventListener('click', bodyClickHandler);
+                    document.body.addEventListener('click', bodyClickHandler);
+                    
+                    // Handle escape key
+                    const keyHandler = function(e) {
+                        if (e.key === 'Escape' || e.keyCode === 27) {
+                            hideMenu();
+                        }
+                    };
+                    
+                    // Remove any existing key handler and add our new one
+                    document.removeEventListener('keydown', keyHandler);
+                    document.addEventListener('keydown', keyHandler);
+                    
+                    console.log("Menu toggle initialization complete");
+                } catch (error) {
+                    console.error("Error initializing menu toggle:", error);
                 }
+            }
+            
+            // Initialize the menu toggle after DOM is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log("DOM loaded, initializing menu toggle");
+                // Initial setup with delay to ensure DOM is fully processed
+                setTimeout(initializeMenuToggle, 100);
             });
+            
+            // Fallback initialization in case DOMContentLoaded already fired
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                console.log("Document already loaded, running fallback initialization");
+                setTimeout(initializeMenuToggle, 200);
+            }
 
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    if (window.innerWidth > 980 && menu.classList.contains('active')) {
-                        toggleMenu();
-                    }
-                }, 100);
-            });
-
-            // Initialize Fancybox with enhanced mobile support
+            // Fancybox Configuration
             Fancybox.bind("[data-fancybox]", {
                 // Common options for all Fancybox instances
                 Toolbar: {
@@ -1561,23 +1606,6 @@
                             e.preventDefault();
                         }
                     }, { passive: false });
-                }
-            });
-
-            // Add close button handler
-            const closeButton = document.querySelector('#menu .close');
-            if (closeButton) {
-                closeButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleMenu();
-                });
-            }
-
-            // Handle escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && menu.classList.contains('active')) {
-                    toggleMenu();
                 }
             });
         </script>

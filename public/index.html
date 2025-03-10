@@ -579,7 +579,6 @@
                     <li><a href="our_team.html">Our Team</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="#menu" class="close">✕</a>
             </div>
         </nav>
 
@@ -720,19 +719,6 @@
                             menu.style.display = 'none';
                             isMenuTransitioning = false;
                         }, 300); // Match with CSS transition duration
-                    });
-                }
-                
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector('a.close');
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                    
-                    newCloseButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        hideMenu();
                     });
                 }
                 

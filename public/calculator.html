@@ -32,6 +32,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
     
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="html5up-phantom/assets/css/fancybox-improvements.css" />
+    
     <!-- Additional styles for menu functionality -->
     <style>
         /* Critical styles for menu visibility */
@@ -62,6 +66,41 @@
         nav#menu {
             z-index: 10000 !important;
         }
+        
+        /* Close button styles */
+        #menu .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            text-decoration: none;
+            color: #888;
+            cursor: pointer;
+        }
+
+        #menu .close:hover {
+            color: #444;
+        }
+
+        /* Modern button styles */
+        .modern-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #f1f3f5;
+            border-color: #ced4da;
+        }
+        
+        .modern-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+        }
+        
+        .modern-button i {
+            transition: transform 0.3s ease;
+        }
+        
+        .modern-button:hover i {
+            transform: scale(1.2);
+        }
     </style>
     
     <!-- Keep all existing CSS styles -->
@@ -80,172 +119,32 @@
             text-align: center;
         }
 
-        .step-section h2 {
-            font-weight: 700;
-            letter-spacing: -0.035em;
-            margin-bottom: 15px;
+        /* Modern button styles */
+        .modern-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #f1f3f5;
+            border-color: #ced4da;
+        }
+        
+        .modern-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+        }
+        
+        .modern-button i {
+            transition: transform 0.3s ease;
+        }
+        
+        .modern-button:hover i {
+            transform: scale(1.2);
+        }
+        
+        .modern-button:active i {
+            transform: scale(1.1);
         }
 
-        .step-instructions {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            font-size: 1.1em;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .upload-text {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            font-size: 1.1em;
-            color: #666666;
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .input-group select {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            font-size: 1em;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 15px;
-            background: #999999;
-            color: white !important;
-            border-radius: 5px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 0.9em;
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            text-align: center;
-            box-shadow: none;
-            outline: none;
-        }
-
-        .button:hover {
-            background: #777777;
-            border: none;
-            box-shadow: none;
-        }
-
-        .button.primary {
-            background: #999999;
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            border: none;
-            box-shadow: none;
-        }
-
-        .button.primary:hover {
-            background: #777777;
-            border: none;
-            box-shadow: none;
-        }
-
-        .upload-button {
-            background: #999999;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border: none;
-            box-shadow: none;
-        }
-
-        .upload-button:hover {
-            background: #777777;
-            border: none;
-            box-shadow: none;
-        }
-
-        .action-button {
-            background: #999999;
-            color: white !important;
-            padding: 8px 15px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            box-shadow: none;
-        }
-
-        .action-button:hover {
-            background: #777777;
-            border: none;
-            box-shadow: none;
-        }
-
-        .reset-button {
-            background: transparent;
-            color: #777777 !important;
-            font-size: 1.1em;
-            cursor: pointer;
-            padding: 8px 15px;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 5px;
-            border: none;
-            box-shadow: none;
-        }
-
-        .reset-button:hover {
-            background: rgba(119, 119, 119, 0.1);
-            color: #555555 !important;
-            border: none;
-            box-shadow: none;
-        }
-
-        .reset-button i {
-            font-size: 1.2em;
-            color: #777777;
-        }
-
-        .reset-button:hover i {
-            color: #555555;
-        }
-
-        .modal-content h2 {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .modal-content p, .modal-content ul {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
-            font-weight: 300;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-
-        /* All existing CSS styles remain unchanged */
+        /* Calculator Container */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -1321,8 +1220,17 @@
                     <li><a href="about.html">About VExUS ATLAS</a></li>
                     <li><a href="our_team.html">Our Team</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li class="external-divider" style="position: relative; margin-top: 35px;">
+                        <div style="position: absolute; top: -10px; left: 0; right: 0; margin: 0 auto; width: fit-content; text-align: center; background: #f8f9fa; padding: 0 10px; font-size: 0.8em; color: #999; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">THE POCUS ATLAS</div>
+                        <a href="https://www.thepocusatlas.com" target="_blank" rel="noopener" class="external-link" aria-label="Go to The POCUS Atlas Website">
+                            <div style="display: flex; align-items: center; gap: 12px; padding-top: 16px; padding-bottom: 16px;">
+                                <img src="./images/vexus-ai-logo.png" alt="The POCUS Atlas Logo" style="width: 32px; height: 32px; border-radius: 50%;">
+                                <span style="font-weight: 500; font-size: 1.1em;">TPA Home</span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
-                <a href="#menu" class="close">✕</a>
+                <a href="#" class="close" id="menuCloseButton" aria-label="Close menu">✕</a>
             </div>
         </nav>
 
@@ -1338,7 +1246,6 @@
                     This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment.</strong>
                 </p>
 
-                <!-- Steps 1-4 remain unchanged -->
                 <!-- STEP 1: IVC -->
                 <div class="step-section" id="step1">
                     <!-- IVC section content remains unchanged -->
@@ -2476,12 +2383,6 @@
 
         // Function to initialize menu toggle
         function initializeMenuToggle() {
-            // Prevent multiple initializations
-            if (menuInitialized) {
-                console.log("Menu already initialized, skipping.");
-                return;
-            }
-            
             console.log("Initializing menu toggle");
             
             try {
@@ -2499,21 +2400,12 @@
                     return;
                 }
                 
-                // Debug info
-                console.log("Menu element:", menu);
-                console.log("Menu toggle element:", menuToggle);
-                console.log("Current menu display:", window.getComputedStyle(menu).display);
-                console.log("Current menu right:", window.getComputedStyle(menu).right);
-                console.log("Current body classes:", document.body.className);
+                // Track transition state to prevent multiple simultaneous transitions
+                let isMenuTransitioning = false;
                 
-                // Ensure consistent initial state - always use -100% not -300px
+                // First ensure menu is properly hidden to start
                 document.body.classList.remove('is-menu-visible');
-                menu.style.right = "-100%"; // Consistent value
-                menu.style.display = "none";
                 menu.classList.remove('visible', 'active');
-                
-                // Force a repaint to ensure styles are applied immediately
-                void menu.offsetWidth;
                 
                 // Remove any existing click handlers by cloning and replacing
                 const newMenuToggle = menuToggle.cloneNode(true);
@@ -2523,71 +2415,71 @@
                 newMenuToggle.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log("Menu toggle clicked");
                     
-                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
-                    document.body.classList.add('is-menu-visible');
-                    menu.style.display = 'block';
-                    menu.style.right = '0';
-                    menu.classList.add('visible', 'active');
+                    if (isMenuTransitioning) return;
+                    isMenuTransitioning = true;
                     
-                    // Force a repaint to ensure styles are applied
-                    void menu.offsetWidth;
-                    
-                    // Debug after toggle
-                    console.log("After toggle - menu display:", window.getComputedStyle(menu).display);
-                    console.log("After toggle - menu right:", window.getComputedStyle(menu).right);
-                    console.log("After toggle - body classes:", document.body.className);
+                    requestAnimationFrame(() => {
+                        // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                        document.body.classList.add('is-menu-visible');
+                        menu.style.display = 'block';
+                        
+                        // Force a repaint to ensure styles are applied before transition
+                        void menu.offsetWidth;
+                        
+                        menu.classList.add('visible', 'active');
+                        
+                        // Reset transition flag after animation completes
+                        setTimeout(() => {
+                            isMenuTransitioning = false;
+                        }, 300); // Match with CSS transition duration
+                    });
                 });
                 
-                // Create close button handler (important for mobile)
-                const closeButton = menu.querySelector('a.close');
-                if (closeButton) {
-                    const newCloseButton = closeButton.cloneNode(true);
-                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                // Function to hide menu with performance optimizations
+                function hideMenu() {
+                    if (isMenuTransitioning) return;
+                    isMenuTransitioning = true;
                     
-                    newCloseButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log("Close button clicked");
-                        
-                        // Hide menu using both approaches
+                    requestAnimationFrame(() => {
+                        // Hide menu using classes first (for transitions)
                         document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%'; // Consistent value
                         menu.classList.remove('visible', 'active');
                         
-                        // Debug after close
-                        console.log("After close - menu display:", window.getComputedStyle(menu).display);
-                        console.log("After close - menu right:", window.getComputedStyle(menu).right);
+                        // After transition completes, update display property and reset flag
+                        setTimeout(() => {
+                            menu.style.display = 'none';
+                            isMenuTransitioning = false;
+                        }, 300); // Match with CSS transition duration
                     });
                 }
                 
-                // Handle clicks outside the menu (use capture phase to run before other handlers)
+                // Handle close button
+                const closeButton = document.querySelector('#menu .close');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        hideMenu();
+                    });
+                }
+                
+                // Handle clicks outside the menu (use event delegation instead of capture phase)
                 const bodyClickHandler = function(e) {
                     // If clicking outside menu and not on menu toggle
                     if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
-                        console.log("Clicked outside menu");
-                        
-                        // Hide menu using both approaches
-                        document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%'; // Consistent value
-                        menu.classList.remove('visible', 'active');
+                        hideMenu();
                     }
                 };
                 
                 // Remove any existing body click handler and add our new one
-                document.body.removeEventListener('click', bodyClickHandler, true);
-                document.body.addEventListener('click', bodyClickHandler, true);
+                document.body.removeEventListener('click', bodyClickHandler);
+                document.body.addEventListener('click', bodyClickHandler);
                 
                 // Handle escape key
                 const keyHandler = function(e) {
                     if (e.key === 'Escape' || e.keyCode === 27) {
-                        document.body.classList.remove('is-menu-visible');
-                        menu.style.display = 'none';
-                        menu.style.right = '-100%'; // Consistent value
-                        menu.classList.remove('visible', 'active');
+                        hideMenu();
                     }
                 };
                 
@@ -2595,13 +2487,23 @@
                 document.removeEventListener('keydown', keyHandler);
                 document.addEventListener('keydown', keyHandler);
                 
-                // Set the flag to indicate initialization is complete
-                menuInitialized = true;
-                
                 console.log("Menu toggle initialization complete");
             } catch (error) {
                 console.error("Error initializing menu toggle:", error);
             }
+        }
+        
+        // Initialize the menu toggle after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded, initializing menu toggle");
+            // Initial setup with delay to ensure DOM is fully processed
+            setTimeout(initializeMenuToggle, 100);
+        });
+        
+        // Fallback initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            console.log("Document already loaded, running fallback initialization");
+            setTimeout(initializeMenuToggle, 200);
         }
 
         // Function to calculate VExUS score
@@ -2758,5 +2660,6 @@
             console.log('===================================');
         }
     </script>
+    <!-- No longer needed since we added the links directly in HTML: <script src="html5up-phantom/assets/js/add-tpa-link.js"></script> -->
 </body>
 </html>

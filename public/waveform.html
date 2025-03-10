@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="html5up-phantom/assets/css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/mobile.css" />
     <!-- Add Fancybox CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <!-- Custom CSS - Load these last to override any previous styles -->
     <link rel="stylesheet" href="html5up-phantom/assets/css/header.css" />
     <link rel="stylesheet" href="html5up-phantom/assets/css/logo.css" />
@@ -1192,7 +1192,6 @@
                     <li><a href="our_team.html">Our Team</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="#menu" class="close">✕</a>
             </div>
         </nav>
 
@@ -1507,134 +1506,224 @@
     <script src="html5up-phantom/assets/js/util.js"></script>
     <script src="html5up-phantom/assets/js/main.js"></script>
     <!-- Fancybox JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     
     <script>
-        // Simplified Fancybox initialization for version 5.0
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("Initializing Fancybox...");
+        // Simplified Fancybox initialization with jQuery
+        $(document).ready(function() {
+            // Make sure jQuery is fully loaded
+            console.log("jQuery version:", $.fn.jquery);
+            console.log("Fancybox plugin:", $.fn.fancybox ? "Loaded" : "Not loaded");
             
-            // Define a simpler initialization function
-            function initFancybox() {
-                try {
-                    if (typeof Fancybox !== 'undefined') {
-                        Fancybox.bind('[data-fancybox]', {
-                            // Use the correct API: https://fancyapps.com/docs/ui/fancybox/options
-                            // Simplified config that should work with v5.0
-                            compact: false,
-                            idle: false,
-                            animated: false,
-                            showClass: false,
-                            hideClass: false,
-                            dragToClose: false,
-                            contentClick: "iterateZoom",
-                            Images: {
-                                zoom: true,
-                            },
-                            Toolbar: {
-                                display: {
-                                    left: ["infobar"],
-                                    middle: [],
-                                    right: ["iterateZoom", "close"],
-                                },
-                                items: {
-                                    iterateZoom: {
-                                        tpl: '<button class="f-button" title="Zoom in/out" data-fancybox-iterateZoom><svg><circle cx="10" cy="10" r="6"></circle></svg></button>'
-                                    },
-                                    close: {
-                                        // Enhanced close button template for better visibility and larger touch target
-                                        tpl: '<button data-fancybox-close class="f-button fancybox__button--close enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>'
-                                    }
-                                }
-                            },
-                            closeButton: "top",
-                            template: {
-                                // Plain template for better compatibility
-                                closeButton: '<button data-fancybox-close class="f-button enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>',
-                            },
-                            on: {
-                                // Force close button to stay visible by refreshing its visibility
-                                "reveal": function(fancybox, slide) {
-                                    const closeBtn = document.querySelector('.fancybox__button--close');
-                                    if (closeBtn) {
-                                        closeBtn.style.visibility = 'visible';
-                                        closeBtn.style.opacity = '1';
-                                    }
-                                }
-                            }
-                        });
-                        
-                        console.log("Fancybox initialized with enhanced close button");
-                    } else {
-                        console.error("Fancybox not found");
+            // Initialize with explicit options
+            $('[data-fancybox]').fancybox({
+                buttons: [
+                    "zoom",
+                    "slideShow",
+                    "fullScreen",
+                    "thumbs",
+                    "close"
+                ],
+                animationEffect: "fade",
+                transitionEffect: "slide",
+                margin: [44, 0],
+                gutter: 30,
+                loop: true,
+                arrows: true,
+                infobar: true,
+                smallBtn: false,
+                toolbar: true,
+                protect: true,
+                modal: false,
+                idleTime: 3,
+                touch: {
+                    vertical: true,
+                    momentum: true
+                },
+                hash: false,
+                thumbs: {
+                    autoStart: false,
+                    hideOnClose: true
+                },
+                beforeShow: function(instance, current) {
+                    // Add custom class to body when lightbox is active
+                    $('body').addClass('fancybox-active-custom');
+                },
+                afterShow: function(instance, current) {
+                    // Ensure caption is visible
+                    if (current.opts.$orig && current.opts.$orig.data('caption')) {
+                        $('.fancybox-caption').show();
                     }
-                } catch (err) {
-                    console.error("Fancybox error:", err);
+                    
+                    // Force toolbar and buttons to be visible
+                    setTimeout(function() {
+                        $('.fancybox-toolbar, .fancybox-navigation').css({
+                            'opacity': '1',
+                            'visibility': 'visible'
+                        });
+                        $('.fancybox-button').css({
+                            'opacity': '1',
+                            'visibility': 'visible',
+                            'display': 'inline-block'
+                        });
+                    }, 100);
+                },
+                beforeClose: function() {
+                    // Remove custom class
+                    $('body').removeClass('fancybox-active-custom');
                 }
-            }
-            
-            // Try to initialize immediately
-            initFancybox();
-            
-            // Also try with a slight delay to ensure DOM is fully ready
-            setTimeout(initFancybox, 500);
-            
-            // Direct click handlers as fallback - include improved close button
-            document.querySelectorAll('a[data-fancybox]').forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var imgSrc = this.getAttribute('href');
-                    var caption = this.getAttribute('data-caption') || '';
-                    var galleryName = this.getAttribute('data-fancybox');
-                    
-                    console.log("Manual click on gallery item:", imgSrc, "Gallery:", galleryName);
-                    
-                    // Collect all images from the same gallery
-                    var galleryItems = [];
-                    if (galleryName) {
-                        document.querySelectorAll('a[data-fancybox="' + galleryName + '"]').forEach(function(item) {
-                            galleryItems.push({
-                                src: item.getAttribute('href'),
-                                caption: item.getAttribute('data-caption') || '',
-                                type: 'image'
-                            });
-                        });
-                    } else {
-                        galleryItems.push({
-                            src: imgSrc,
-                            caption: caption,
-                            type: 'image'
-                        });
-                    }
-                    
-                    // Try to open with Fancybox with improved close button
-                    try {
-                        if (typeof Fancybox !== 'undefined') {
-                            Fancybox.show(galleryItems, {
-                                startIndex: galleryItems.findIndex(item => item.src === imgSrc),
-                                Toolbar: {
-                                    display: {
-                                        left: ["infobar"],
-                                        middle: [],
-                                        right: ["iterateZoom", "close"],
-                                    },
-                                    items: {
-                                        close: {
-                                            tpl: '<button data-fancybox-close class="f-button fancybox__button--close enhanced-close" title="Close"><svg viewBox="0 0 24 24"><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414 4.95 4.95z"></path></svg></button>'
-                                        }
-                                    }
-                                }
-                            });
-                        } else {
-                            // Fallback: open image in new tab
-                            window.open(imgSrc, '_blank');
-                        }
-                    } catch (err) {
-                        console.error("Error showing image:", err);
-                        window.open(imgSrc, '_blank');
-                    }
-                });
             });
+            
+            // Add click event for gallery items
+            $('a[data-fancybox]').on('click', function(e) {
+                e.preventDefault();
+                var galleryName = $(this).attr('data-fancybox');
+                $('[data-fancybox="' + galleryName + '"]').fancybox({
+                    buttons: [
+                        "zoom",
+                        "slideShow",
+                        "fullScreen",
+                        "thumbs",
+                        "close"
+                    ],
+                    animationEffect: "fade",
+                    transitionEffect: "slide",
+                    infobar: true,
+                    thumbs: {
+                        autoStart: false,
+                        hideOnClose: true
+                    }
+                }).eq($(this).index('[data-fancybox="' + galleryName + '"]')).trigger('click');
+            });
+            
+            // Preload images for better performance
+            $('a[data-fancybox]').each(function() {
+                var imgSrc = $(this).attr('href');
+                if (imgSrc && imgSrc.match(/\.(jpeg|jpg|gif|png)$/)) {
+                    var img = new Image();
+                    img.src = imgSrc;
+                }
+            });
+            
+            // Add additional CSS for improved lightbox appearance
+            $("<style>")
+                .prop("type", "text/css")
+                .html(`
+                    .fancybox-bg {
+                        background: rgba(30, 30, 30, 0.95);
+                    }
+                    .fancybox-is-open .fancybox-bg {
+                        opacity: 1;
+                    }
+                    .fancybox-caption {
+                        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%);
+                        padding: 30px 20px 20px 20px;
+                        color: #fff;
+                        font-size: 16px;
+                        font-family: 'Source Sans Pro', Arial, sans-serif;
+                    }
+                    .fancybox-button {
+                        background: rgba(30, 30, 30, 0.6);
+                        border-radius: 50%;
+                        width: 44px;
+                        height: 44px;
+                        margin: 5px;
+                        padding: 10px;
+                        transition: all 0.3s ease;
+                        display: inline-block !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                    }
+                    .fancybox-button:hover {
+                        background: rgba(30, 30, 30, 0.8);
+                        transform: scale(1.1);
+                    }
+                    .fancybox-content {
+                        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+                    }
+                    .fancybox-slide--image {
+                        padding: 44px 0;
+                    }
+                    .fancybox-infobar {
+                        color: #ccc;
+                        font-size: 14px;
+                        padding: 0 10px;
+                    }
+                    .fancybox-thumbs {
+                        background: rgba(30, 30, 30, 0.95);
+                    }
+                    .fancybox-thumbs__list a::before {
+                        border: 4px solid #4ea7f9;
+                    }
+                    .fancybox-active-custom {
+                        overflow: hidden !important;
+                    }
+                    /* Special handling for waveform images */
+                    .fancybox-slide--image .fancybox-content img {
+                        max-height: 85vh;
+                        object-fit: contain;
+                    }
+                    /* Gallery-specific styling */
+                    [data-fancybox="waveform-gallery"] .fancybox-content,
+                    [data-fancybox="hepatic-gallery"] .fancybox-content,
+                    [data-fancybox="portal-gallery"] .fancybox-content,
+                    [data-fancybox="renal-gallery"] .fancybox-content {
+                        background: #000;
+                    }
+                    /* Force buttons to be visible */
+                    .fancybox-toolbar {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        display: block !important;
+                    }
+                    .fancybox-navigation {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        display: block !important;
+                    }
+                    .fancybox-navigation .fancybox-button {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        display: inline-block !important;
+                    }
+                    @media screen and (max-width: 800px) {
+                        .fancybox-button {
+                            width: 38px;
+                            height: 38px;
+                            padding: 8px;
+                        }
+                        .fancybox-caption {
+                            padding: 25px 12px 12px 12px;
+                            font-size: 14px;
+                        }
+                        .fancybox-thumbs {
+                            width: 110px;
+                        }
+                        .fancybox-show-thumbs .fancybox-inner {
+                            right: 110px;
+                        }
+                    }
+                `)
+                .appendTo("head");
+            
+            // Add a test function to verify Fancybox functionality
+            setTimeout(function() {
+                // Test if Fancybox exists and is properly initialized
+                if ($.fn.fancybox) {
+                    console.log("Fancybox is properly loaded");
+                    // Override any conflicting styles that might hide buttons
+                    $('.fancybox-toolbar, .fancybox-navigation, .fancybox-button')
+                        .css({
+                            'opacity': '1 !important',
+                            'visibility': 'visible !important',
+                            'display': 'block !important'
+                        });
+                } else {
+                    console.error("Fancybox is not loaded properly");
+                }
+            }, 1000);
+            
+            console.log('jQuery Fancybox initialized successfully with enhanced image viewing');
         });
         
         // Function to initialize menu toggle

@@ -1,0 +1,1346 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VExUS ATLAS - Image Acquisition Guide</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Gabesiegel" />
+    <meta name="last-modified" content="2025-02-11T09:49:16Z" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- CSS -->
+    <!-- Reorganized CSS structure - single import -->
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <noscript><!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript></noscript>
+    
+    <style>
+        /* Maintaining existing styles */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            padding: 0 15px;
+        }
+
+        /* Acquisition Page Specific Styles - Matching Education Page */
+        .acquisition-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 10px;
+        }
+
+        #main .inner {
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .acquisition-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .acquisition-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .acquisition-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .acquisition-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #fcfcfc;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .acquisition-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .acquisition-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .acquisition-section h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* Image Styles - Updated for better size */
+        .image-section {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .image-section img, .acquisition-image {
+            max-width: 85%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .view-section {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+        }
+
+        .view-section > h3 {
+            margin-bottom: 20px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image-section {
+            width: 100%;
+            margin: 0;
+        }
+
+        .technique-description {
+            width: 100%;
+        }
+
+        .image-section img, .acquisition-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Fix IVC tile section */
+        .vexus-atlas-tile {
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .vexus-atlas-tile .image-section {
+            width: 100%;
+            margin: 0;
+        }
+
+        .atlas-gif {
+            width: 100%;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .atlas-gif img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Remove any conflicting styles */
+        .view-section .image-section {
+            text-align: center;
+        }
+
+        .technique-description {
+            text-align: left;
+        }
+
+        /* Override any floating styles */
+        .image-section, .technique-description {
+            float: none !important;
+        }
+
+        /* Table Styles */
+        .vexus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .vexus-table th,
+        .vexus-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .vexus-table th {
+            background-color: #fcfcfc;
+            color: #ffffff;
+        }
+
+        .vexus-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .vexus-table tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        /* List Styles */
+        .acquisition-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .acquisition-content ul li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+        }
+
+        .acquisition-content ul li:before {
+            content: "•";
+            color: #fcfcfc;
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 980px) {
+            .acquisition-container {
+                padding: 20px;
+            }
+
+            .acquisition-section {
+                padding: 20px;
+            }
+
+            .acquisition-header h1 {
+                font-size: 2em;
+            }
+
+            .vexus-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .image-section img, .acquisition-image {
+                max-width: 90%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .image-section img, .acquisition-image {
+                max-width: 95%;
+            }
+        }
+
+        /* Update logo styles */
+        .logo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            object-fit: contain;
+            margin: 10px;
+        }
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 1200px) {
+            .logo {
+                max-width: 350px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+            }
+        }
+
+        @media screen and (max-width: 980px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .logo {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+                margin-bottom: 1em;
+            }
+        }
+
+        /* Add styles for references, images, and other enhanced elements */
+        .reference-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .reference-link:hover {
+            color: #495057;
+            text-decoration: underline;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .callout {
+            border-left: 4px solid #fcfcfc;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .highlight {
+            background-color: #fcfcfc;
+            padding: 2px 5px;
+            color: white;
+            border-radius: 3px;
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #fcfcfc;
+            margin: 10px 0 20px;
+        }
+        
+        /* Fancybox custom styling */
+        .fancybox__container {
+            --fancybox-bg: rgba(0, 0, 0, 0.85);
+            --fancybox-border-radius: 8px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 99999;
+            -webkit-overflow-scrolling: touch;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        
+        .fancybox__backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 99998;
+        }
+
+        .fancybox__content {
+            padding: 0;
+            background: transparent;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 99999;
+            margin: auto;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Prevent body scroll when lightbox is open */
+        body.fancybox-active {
+            overflow: hidden !important;
+            touch-action: none;
+            -ms-touch-action: none;
+        }
+
+        /* Mobile optimizations */
+        @media screen and (max-width: 1024px) {
+            .fancybox__content {
+                max-height: 85vh;
+                margin: 20px;
+            }
+            
+            .fancybox__toolbar {
+                position: fixed;
+                top: env(safe-area-inset-top, 0px);
+                right: env(safe-area-inset-right, 0px);
+                left: env(safe-area-inset-left, 0px);
+            }
+        }
+
+        /* Fancybox customizations */
+        .fancybox__toolbar {
+            --f-button-width: 46px;
+            --f-button-height: 46px;
+            --f-button-border-radius: 23px;
+        }
+
+        .fancybox__toolbar__items {
+            --f-button-color: #fff;
+            --f-button-hover-color: #fff;
+            --f-button-bg: rgba(0, 0, 0, 0.5);
+            --f-button-hover-bg: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Enhanced close button */
+        .fancybox__toolbar__items.is-top {
+            top: 20px;
+            right: 20px;
+        }
+
+        .fancybox__toolbar__items .f-button.is-close {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .fancybox__toolbar__items .f-button.is-close:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .fancybox__toolbar__items .f-button.is-close::before {
+            content: "×";
+            font-size: 36px;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        /* Mobile optimization for close button */
+        @media screen and (max-width: 768px) {
+            .fancybox__toolbar__items .f-button.is-close {
+                width: 44px;
+                height: 44px;
+                top: 15px;
+                right: 15px;
+            }
+
+            .fancybox__toolbar__items .f-button.is-close::before {
+                font-size: 32px;
+            }
+        }
+
+        .fancybox__toolbar__items .f-button {
+            transition: all 0.2s ease;
+        }
+
+        .fancybox__toolbar__items .f-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Image hover effects */
+        .image-section img, .acquisition-image {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-section img:hover, .acquisition-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .vexus-atlas-tile {
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .vexus-atlas-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .vexus-atlas-tile h4 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .atlas-gif {
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+            padding: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .atlas-gif img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100% !important;
+            height: auto !important;
+            border-radius: 6px;
+        }
+
+        .vexus-atlas-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.8), rgba(255,255,255,0.95));
+            z-index: 1;
+        }
+
+        @media screen and (max-width: 768px) {
+            .vexus-atlas-tile {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            
+            .atlas-gif {
+                padding: 10px;
+            }
+            
+            .atlas-gif img {
+                max-width: 95% !important;
+            }
+        }
+
+        /* Override any conflicting styles */
+        .technique-description .vexus-atlas-tile {
+            width: 100% !important;
+            max-width: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .image-section.atlas-gif {
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        .acquisition-image {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile optimization enhancements */
+        @media screen and (max-width: 736px) {
+            /* Increase touch target sizes for mobile */
+            nav#menu ul li a {
+                padding: 12px 0;
+                font-size: 1em;
+            }
+            
+            a[href="#menu"] {
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Adjust spacing in sections */
+            .waveform-section, .content-section, .section {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+            
+            /* Make lists more readable on mobile */
+            ul, ol {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            
+            li {
+                margin-bottom: 8px;
+                line-height: 1.5;
+                font-size: 0.95em;
+            }
+            
+            /* Improve image tiles on mobile */
+            .image-tile, .gallery-tile, .article-tile, .team-tile {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .title, .tile-title {
+                font-size: 1.15em;
+                margin-bottom: 8px;
+            }
+            
+            .caption, .description {
+                font-size: 0.95em;
+                padding: 0 5px;
+            }
+            
+            /* Adjust citation display on mobile */
+            .citation {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.75em;
+                padding: 0 5px;
+            }
+            
+            /* Better reference grid on mobile */
+            .reference-grid, .grid, .gallery-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .reference-tile, .grid-item, .gallery-item {
+                padding: 15px;
+            }
+            
+            /* Main content adjustments */
+            #main > .inner {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            /* Improve Fancybox usability on mobile */
+            .fancybox__button {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .fancybox__caption {
+                font-size: 0.9em !important;
+                padding: 8px 12px !important;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* Further optimizations for very small screens */
+            .waveform-section, .content-section, .section {
+                padding: 15px 12px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            p, .image-tile .caption, .description {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            /* Make menu items even larger for small touch screens */
+            nav#menu ul li a {
+                padding: 14px 0;
+                font-size: 1.1em;
+            }
+            
+            /* Fix image display on very small screens */
+            .image-tile img, .gallery-tile img {
+                margin-bottom: 10px;
+            }
+            
+            .citation {
+                min-width: 16px;
+                height: 16px;
+                font-size: 0.7em;
+                padding: 0 4px;
+            }
+            
+            /* Stacked references on mobile */
+            .reference-tile, .grid-item {
+                padding: 12px;
+            }
+            
+            .reference-title, .item-title {
+                font-size: 0.95em;
+            }
+            
+            .reference-authors, .reference-journal, .item-subtitle {
+                font-size: 0.85em;
+            }
+            
+            /* Better Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Remove hover effects on mobile */
+            .section:hover,
+            .image-tile:hover,
+            .gallery-tile:hover,
+            .logo:hover,
+            .sidebar-logo:hover,
+            .reference-tile:hover,
+            .team-tile:hover,
+            .grid-item:hover {
+                transform: none;
+            }
+        }
+        
+        /* Fix for menu closing on small screens */
+        @media screen and (max-width: 736px) {
+            #menu a.close {
+                width: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 1.25em;
+            }
+            
+            #menu .inner {
+                padding-top: 4.5em;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- Navigation -->
+    <div id="wrapper">
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="./images/VEXUS.ATLAS.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Sidebar Menu -->
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="education.html">VEXUS Overview</a></li>
+                    <li><a href="waveform.html">Waveforms</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="literature_review.html">Literature Review</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS ATLAS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="#menu" class="close">✕</a>
+            </div>
+        </nav>
+
+        <!-- Menu Overlay -->
+        <div class="menu-overlay"></div>
+
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="logo">
+                </div>
+                
+                <div class="acquisition-container">
+                    <div class="acquisition-header">
+                        <h1>VExUS Image Acquisition Guide</h1>
+                    </div>
+                    
+                    <div class="acquisition-content">
+                        <!-- IVC Section -->
+                        <div class="acquisition-section">
+                            <h2>IVC Assessment</h2>
+                            <div class="view-section">
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/IVC.png" data-fancybox="gallery" data-caption="IVC Assessment Technique">
+                                            <img src="images/IVC.png" alt="IVC Assessment Technique" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place probe in subxiphoid or subcostal position to obtain a longitudinal view of the IVC.</p>
+
+                                        <h4>Key Points:</h4>
+                                        <ul>
+                                            <li>Place patient in supine position</li>
+                                            <li>Use a low frequency (curvilinear) probe</li>
+                                            <li>Measure IVC diameter 2-3 cm from right atrial junction</li>
+                                            <li>Assess for inspiratory collapse (if applicable)</li>
+                                            <li>Record maximum diameter for VExUS classification</li>
+                                        </ul>
+
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Inferior Vena Cava (IVC)</li>
+                                            <li>Right atrial junction</li>
+                                            <li>Hepatic vein confluence</li>
+                                            <li>Liver</li>
+                                        </ul>
+
+                                        <h4>Special Notes:</h4>
+                                        <ul>
+                                            <li>Ensure measurement is taken during normal respiration</li>
+                                            <li>Document both maximum and minimum diameters if significant respiratory variation</li>
+                                            <li>Consider patient's volume status and positioning when interpreting measurements</li>
+                                        </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>IVC</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/IVC.long.gif" data-fancybox="gallery" data-caption="IVC Assessment Animation">
+                                                    <img src="images/IVC.long.gif" alt="IVC Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hepatic Vein Views -->
+                        <div class="acquisition-section">
+                            <h2>Hepatic Vein Assessment</h2>
+                            
+                            <div class="view-section">
+                                <h3>Long Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/hepatic_long.png" data-fancybox="gallery" data-caption="Hepatic Vein - Long Axis View">
+                                            <img src="images/hepatic_long.png" alt="Hepatic Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place the probe in the right intercostal space, angled towards the right shoulder.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Hepatic vein</li>
+                                            <li>IVC junction</li>
+                                            <li>Liver parenchyma</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Triphasic: Normal venous return</li>
+                                            <li>Biphasic: Mild congestion</li>
+                                            <li>Monophasic: Severe congestion</li>
+                                        </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Hepatic Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Hepatic.long.gif" data-fancybox="gallery" data-caption="Hepatic Long Axis Assessment Animation">
+                                                    <img src="images/Hepatic.long.gif" alt="Hepatic Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-section">
+                                <h3>Short Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/hepatic_short.png" data-fancybox="gallery" data-caption="Hepatic Vein - Short Axis View">
+                                            <img src="images/hepatic_short.png" alt="Hepatic Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Curvilinear probe in the right mid-axillary line at the level of the xiphoid or slightly below, angled towards the patient's head. Probe rotated 90 degrees counterclockwise from long-axis position.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Hepatic veins</li>
+                                            <li>Portal vein</li>
+                                            <li>IVC</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-section">
+                                <h3>Subxiphoid View</h3>
+                                <div class="image-section">
+                                    <a href="images/hepatic_sub.png" data-fancybox="gallery" data-caption="Hepatic Vein - Subxiphoid View">
+                                        <img src="images/hepatic_sub.png" alt="Hepatic Vein - Subxiphoid View" class="acquisition-image">
+                                    </a>
+                                </div>
+                                <div class="technique-description">
+                                    <h4>Probe Position:</h4>
+                                    <p>Probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                                    
+                                    <h4>Key Structures:</h4>
+                                    <ul>
+                                        <li>Left hepatic vein</li>
+                                        <li>Middle hepatic vein</li>
+                                        <li>Liver</li>
+                                        <li>Right atrium</li>
+                                        <li>IVC</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Portal Vein Views -->
+                        <div class="acquisition-section">
+                            <h2>Portal Vein Assessment</h2>
+                            
+                            <div class="view-section">
+                                <h3>Long Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Portal_long_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Long Axis View">
+                                            <img src="images/Portal_long_axis.png" alt="Portal Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Place probe in the right intercostal space, angled slightly cephalad.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Portal vein main trunk</li>
+                                            <li>Hepatic artery</li>
+                                            <li>Liver parenchyma</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Normal: Continuous flow with minimal pulsatility</li>
+                                            <li>Pulsatile: Mild congestion</li>
+                                            <li>Highly pulsatile: Severe congestion</li>
+                                        </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Portal Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Portal.long.gif" data-fancybox="gallery" data-caption="Portal Long Axis Assessment Animation">
+                                                    <img src="images/Portal.long.gif" alt="Portal Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-section">
+                                <h3>Short Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Portal_short_axis.png" data-fancybox="gallery" data-caption="Portal Vein - Short Axis View">
+                                            <img src="images/Portal_short_axis.png" alt="Portal Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Probe in mid-axillary line, below the xiphoid process, angled slightly toward patient's right shoulder, rotated 90 degrees counterclockwise from long axis view.</p>
+                                        
+                                        <h4>Special Note:</h4>
+                                        <p>This view can be helpful for distinguishing portal vein pulsations from those originating from the nearby hepatic artery.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-section">
+                                <h3>Subxiphoid View</h3>
+                                <div class="image-section">
+                                    <a href="images/Portal_sub.png" data-fancybox="gallery" data-caption="Portal Vein - Subxiphoid View">
+                                        <img src="images/Portal_sub.png" alt="Portal Vein - Subxiphoid View" class="acquisition-image">
+                                    </a>
+                                </div>
+                                <div class="technique-description">
+                                    <h4>Probe Position:</h4>
+                                    <p>Probe in subxiphoid position, angling superiorly and slightly to the patient's right.</p>
+                                    
+                                    <h4>Key Structures:</h4>
+                                    <ul>
+                                        <li>Portal vein</li>
+                                        <li>Liver</li>
+                                        <li>IVC</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Renal Vein Views -->
+                        <div class="acquisition-section">
+                            <h2>Renal Vein Assessment</h2>
+                            
+                            <div class="view-section">
+                                <h3>Long Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Renal_vein_long.png" data-fancybox="gallery" data-caption="Renal Vein - Long Axis View">
+                                            <img src="images/Renal_vein_long.png" alt="Renal Vein - Long Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Position the probe in the right flank, posterior to the mid-axillary line.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Renal vein</li>
+                                            <li>IVC junction</li>
+                                            <li>Kidney</li>
+                                            <li>Right renal artery</li>
+                                        </ul>
+                                        
+                                        <h4>Doppler Waveforms:</h4>
+                                        <ul>
+                                            <li>Continuous: Normal venous return</li>
+                                            <li>Pulsatile: Mild congestion</li>
+                                            <li>Discontinuous/phasic reversal: Severe congestion</li>
+                                        </ul>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Renal Long Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Renal.long.still.png" data-fancybox="gallery" data-caption="Renal Long Axis Assessment Animation">
+                                                    <img src="images/Renal.long.still.png" alt="Renal Long Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-section">
+                                <h3>Short Axis View</h3>
+                                <div class="content-wrapper">
+                                    <div class="image-section">
+                                        <a href="images/Renal_short_axis.png" data-fancybox="gallery" data-caption="Renal Vein - Short Axis View">
+                                            <img src="images/Renal_short_axis.png" alt="Renal Vein - Short Axis View" class="acquisition-image">
+                                        </a>
+                                    </div>
+                                    <div class="technique-description">
+                                        <h4>Probe Position:</h4>
+                                        <p>Position probe in transverse orientation at right flank, looking for the kidney in cross-section.</p>
+                                        
+                                        <h4>Key Structures:</h4>
+                                        <ul>
+                                            <li>Renal vein</li>
+                                            <li>Renal artery</li>
+                                            <li>Kidney hilum</li>
+                                        </ul>
+                                        
+                                        <h4>Special Notes:</h4>
+                                        <p>This view is useful for assessing flow within the renal vein while avoiding angle-dependent errors in Doppler measurements.</p>
+
+                                        <div class="vexus-atlas-tile">
+                                            <h4>Renal Short Axis</h4>
+                                            <div class="image-section atlas-gif">
+                                                <a href="images/Renal.short.still.png" data-fancybox="gallery" data-caption="Renal Short Axis Assessment Animation">
+                                                    <img src="images/Renal.short.still.png" alt="Renal Short Axis Assessment Animation" class="acquisition-image">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- General Tips Section -->
+                        <div class="acquisition-section">
+                            <h2>General Acquisition Tips</h2>
+                            <ul>
+                                <li>Ensure proper patient positioning for optimal image quality</li>
+                                <li>Adjust Doppler settings appropriately for each vessel</li>
+                                <li>Use respiratory variation assessment when appropriate</li>
+                                <li>Document findings systematically</li>
+                                <li>Compare with baseline studies when available</li>
+                                <li>Consider patient's breathing cycle during image acquisition</li>
+                                <li>Optimize gain and depth settings for each view</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    <script src="html5up-phantom/assets/js/add-tpa-link.js"></script>
+    <!-- Fancybox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    
+    <script>
+        // Menu functionality
+        const menuButton = document.querySelector('a[href="#menu"]');
+        const menu = document.getElementById('menu');
+        const overlay = document.querySelector('.menu-overlay');
+        const menuLinks = menu.querySelectorAll('a');
+        let isMenuTransitioning = false;
+
+        function toggleMenu() {
+            if (isMenuTransitioning) return;
+            
+            isMenuTransitioning = true;
+            
+            requestAnimationFrame(() => {
+                menu.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+                
+                setTimeout(() => {
+                    isMenuTransitioning = false;
+                }, 300);
+            });
+        }
+
+        menuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleMenu();
+        });
+
+        overlay.addEventListener('click', toggleMenu);
+
+        menu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && menu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (window.innerWidth > 980 && menu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }, 100);
+        });
+
+        // Initialize Fancybox with enhanced mobile support
+        Fancybox.bind("[data-fancybox]", {
+            Carousel: {
+                friction: 0.8,
+                transition: "fade", 
+                preload: 1
+            },
+            
+            Toolbar: {
+                display: {
+                    left: [],
+                    middle: ["prev", "next"],
+                    right: [],
+                    top: ["close"]
+                },
+                enabled: true,
+                items: {
+                    close: {
+                        class: "is-close",
+                        label: "Close",
+                        tabindex: 1
+                    }
+                }
+            },
+            
+            Image: {
+                zoom: true,
+                fit: "contain",
+                Panzoom: {
+                    panOnlyZoomed: true,
+                    doubleClick: "toggleZoom",
+                    touch: true,
+                    mouseWheel: true
+                }
+            },
+            
+            ScrollLock: {
+                enabled: true,
+                type: "full"
+            },
+            
+            Hash: false,
+            
+            Thumbs: {
+                type: "classic",
+                showOnStart: false
+            },
+            
+            // Mobile-specific options
+            Mobile: {
+                touch: true,
+                clickSlide: "close",
+                dblclickContent: "toggleZoom",
+                toolbar: true,
+                baseClass: "fancybox-mobile"
+            },
+            
+            // Better animations
+            showClass: "fancybox-fadeIn",
+            hideClass: "fancybox-fadeOut",
+            animated: true,
+            
+            // Touch handling
+            dragToClose: false,
+            
+            // Keyboard navigation
+            keyboard: {
+                Escape: "close",
+                Delete: "close",
+                Backspace: "close",
+                PageUp: "next",
+                PageDown: "prev",
+                ArrowUp: "prev",
+                ArrowDown: "next",
+                ArrowRight: "next",
+                ArrowLeft: "prev"
+            }
+        });
+
+        // Ensure all images are wrapped in Fancybox links
+        document.querySelectorAll(".image-section img, .acquisition-image").forEach(img => {
+            if (!img.closest('[data-fancybox]')) {
+                const wrapper = document.createElement('a');
+                wrapper.href = img.src;
+                wrapper.setAttribute('data-fancybox', 'gallery');
+                wrapper.setAttribute('data-caption', img.alt);
+                img.parentNode.insertBefore(wrapper, img);
+                wrapper.appendChild(img);
+            }
+        });
+
+        // Add iOS-specific fixes
+        document.addEventListener('DOMContentLoaded', () => {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                document.documentElement.classList.add('is-ios');
+                
+                // Prevent background scrolling on iOS
+                document.body.addEventListener('touchmove', (e) => {
+                    if (document.querySelector('.fancybox__backdrop')) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
+        });
+    </script>
+</body>
+</html>

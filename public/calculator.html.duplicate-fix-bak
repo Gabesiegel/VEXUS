@@ -1,0 +1,2774 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>AI Image Recognition - VExUS ATLAS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Initial visibility control -->
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        // Initialize menu toggle after DOM is ready
+        if (typeof initializeMenuToggle === 'function') {
+            initializeMenuToggle();
+        }
+    });
+    </script>
+    
+    <!-- Phantom Template CSS -->
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript>
+    <noscript><!-- Reorganized CSS structure - single import -->
+    <link rel="stylesheet" href="html5up-phantom/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="html5up-phantom/assets/css/noscript.css" /></noscript></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900" rel="stylesheet">
+    
+    <!-- Additional styles for menu functionality -->
+    <style>
+        /* Critical styles for menu visibility */
+        body.is-menu-visible #menu {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+            z-index: 10000 !important;
+        }
+        
+        #menu {
+            transition: all 0.5s ease;
+        }
+        
+        #menu.visible {
+            display: block !important;
+            visibility: visible !important;
+            right: 0 !important;
+        }
+        
+        /* Increase z-index for menu toggle button */
+        a[href="#menu"] {
+            z-index: 9000 !important;
+            position: relative !important;
+        }
+        
+        /* Ensure menu appears above other elements */
+        nav#menu {
+            z-index: 10000 !important;
+        }
+    </style>
+    
+    <!-- Keep all existing CSS styles -->
+    <style>
+        /* Base font styles */
+        body, input, select, textarea, button {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            color: #585858;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.035em;
+            text-align: center;
+        }
+
+        .step-section h2 {
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            margin-bottom: 15px;
+        }
+
+        .step-instructions {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .upload-text {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .input-group select {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1em;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 15px;
+            background: #999999;
+            color: white !important;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9em;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+        }
+
+        .button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button.primary {
+            background: #999999;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button.primary:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .upload-button {
+            background: #999999;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+            box-shadow: none;
+        }
+
+        .upload-button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .action-button {
+            background: #999999;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: none;
+        }
+
+        .action-button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button {
+            background: transparent;
+            color: #777777 !important;
+            font-size: 1.1em;
+            cursor: pointer;
+            padding: 8px 15px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button:hover {
+            background: rgba(119, 119, 119, 0.1);
+            color: #555555 !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button i {
+            font-size: 1.2em;
+            color: #777777;
+        }
+
+        .reset-button:hover i {
+            color: #555555;
+        }
+
+        .modal-content h2 {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .modal-content p, .modal-content ul {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* All existing CSS styles remain unchanged */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .step-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: #ccc;
+            color: #333;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 80px;
+            font-weight: bold;
+            margin: 0 auto 10px auto;
+            font-size: 2em;
+        }
+
+        .step-section h2 {
+            margin-bottom: 15px;
+        }
+        
+        .step-instructions {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area {
+            width: 90%;
+            max-width: 600px;
+            margin: 15px auto;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px 20px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #999;
+        }
+
+        .upload-icon {
+            font-size: 2.5em;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Add styles for the reset button */
+        .reset-button {
+            background: #999999;
+            color: white !important;
+            font-size: 0.9em;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 5px;
+            margin-top: 5px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button:hover {
+            background: #777777;
+            color: white !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reset-button i {
+            font-size: 1em;
+            color: white;
+        }
+
+        .upload-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 15px auto;
+            display: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .model-status, .image-preview-container, .input-group, .reset-button {
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+
+        .model-status, .error-container {
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 36px;
+            height: 36px; /* Explicit height to ensure matching */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+            font-size: 1em;
+            flex-direction: row;
+        }
+
+        .model-status {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .error-container {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            display: none;
+        }
+
+        .error-container .error-title {
+            font-weight: bold;
+            margin: 0 5px 0 0;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .error-container .error-title i {
+            margin-right: 5px;
+        }
+
+        .error-container .error-actions {
+            margin: 0 0 0 5px;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+        .model-status .step-indicator {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #2c3e50;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        
+        .model-status.step-1 {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+        
+        .model-status.step-2 {
+            background-color: #e1f5fe;
+            color: #0277bd;
+        }
+        
+        .model-status.step-3 {
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+        
+        .model-status.step-4 {
+            background-color: #e0f2f1;
+            color: #004d40;
+        }
+        
+        .model-status.step-5 {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+        
+        .model-status.step-retry {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .model-ready {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .model-testing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .step-result {
+            margin: 10px auto;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .top-results {
+            margin: 5px auto 15px auto;
+            color: #555;
+        }
+
+        .input-group {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 0.9em;
+        }
+
+        .input-group .reset-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 15px;
+            background: transparent;
+            color: #777777 !important;
+            border-radius: 5px;
+            text-decoration: none;
+            border: 1px solid #777777;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            text-align: center;
+            box-shadow: none;
+            outline: none;
+            gap: 8px;
+        }
+
+        .input-group .reset-button:hover {
+            background: rgba(119, 119, 119, 0.1);
+            color: #555555 !important;
+            border: 1px solid #555555;
+            box-shadow: none;
+        }
+
+        .input-group .reset-button i {
+            font-size: 1em;
+            color: #777777;
+        }
+
+        .input-group .reset-button:hover i {
+            color: #555555;
+        }
+
+        .cannot-calc-note {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 35px auto;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            flex: 1;
+            max-width: 250px;
+            height: auto;
+            padding: 10px 20px;
+            line-height: 1.2;
+            white-space: normal;
+            font-size: 1em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #999999;
+            color: white !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .button-group button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+
+        .main-logo {
+            width: 400px;
+            height: 200px;
+            margin: 0 auto 2em auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0;
+            padding: 5px;
+        }
+
+        @media screen and (max-width: 980px) {
+            .main-logo {
+                width: 300px;
+                height: 150px;
+            }
+        }
+
+        /* New styles for error handling */
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        /* Enhanced loading states */
+        .loading-indicator {
+            display: none;
+            margin: 15px auto;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(245, 245, 245, 0.9);
+            border-radius: 10px;
+            max-width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+        
+        .loading-indicator p {
+            margin: 8px 0;
+            color: #333;
+            font-size: 1em;
+            font-weight: 400;
+        }
+        
+        .loading-indicator p strong {
+            color: #2c3e50;
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .loading-indicator .retry-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* Progress indicator */
+        .loading-indicator .step-progress {
+            margin: 15px auto 5px auto;
+            max-width: 85%;
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .loading-indicator .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Step 1 = 20%, Step 2 = 40%, etc. */
+        .loading-indicator.step-1 .progress-bar {
+            width: 20%;
+        }
+        
+        .loading-indicator.step-2 .progress-bar {
+            width: 40%;
+        }
+        
+        .loading-indicator.step-3 .progress-bar {
+            width: 60%;
+        }
+        
+        .loading-indicator.step-4 .progress-bar {
+            width: 80%;
+        }
+        
+        .loading-indicator.step-5 .progress-bar {
+            width: 100%;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error container styles */
+        .error-container {
+            /* Styles are now defined in the combined model-status, .error-container block above */
+            /* This duplicate definition has been removed to avoid conflicts */
+        }
+
+        .error-container .error-title {
+            /* Using styles from above */
+        }
+
+        .error-container .error-actions {
+            /* Using styles from above */
+        }
+        
+        /* PHI warning styles */
+        .phi-warning-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .beta-warning-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 80%;
+            position: relative;
+            z-index: 10001;
+        }
+        
+        .modal-content h2 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            color: #444;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .modal-content ul {
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 15px;
+            background: #999999;
+            color: white !important;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .modal-buttons button:hover {
+            background: #777777;
+            border: none;
+            box-shadow: none;
+        }
+        
+        /* Enhanced image preview */
+        .image-preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-controls:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .image-preview-delete {
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .image-preview-container {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 0 auto;
+            display: none;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        /* Enhanced error handling */
+        .reset-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Model status bar styles with progress bar support */
+        .model-status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px auto;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+            font-size: 1em;
+            flex-direction: row;
+            position: relative;
+            background-color: #f0f8ff;
+            color: #0066cc;
+            border-color: #b8daff;
+        }
+
+        .model-status .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .model-status .progress-bar {
+            height: 100%;
+            background-color: #007bff;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .model-status.step-1 .progress-bar { width: 20%; }
+        .model-status.step-2 .progress-bar { width: 40%; }
+        .model-status.step-3 .progress-bar { width: 60%; }
+        .model-status.step-4 .progress-bar { width: 80%; }
+        .model-status.step-5 .progress-bar { width: 100%; }
+
+        .model-status .progress-bar.indeterminate {
+            animation: progress-pulse 2s infinite;
+        }
+
+        @keyframes progress-pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Add this to your CSS */
+        .progress-note {
+            font-size: 0.85em;
+            font-style: italic;
+            color: #777;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        /* Add this class to make slow operations more noticeable */
+        .creating-endpoint .progress-container .progress-bar {
+            background: linear-gradient(90deg, #ff9800, #ffeb3b, #ff9800);
+            background-size: 200% 100%;
+            animation: progress-gradient 2s linear infinite;
+        }
+        
+        /* Style for warming up status */
+        .model-status.warming {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            transition: all 0.5s ease;
+        }
+        
+        .model-status.warming i {
+            color: #ff9800;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        @keyframes progress-gradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: -200% 0%; }
+        }
+
+        /* Model status states */
+        .model-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .model-status.processing {
+            background-color: #e6f7ff;
+            color: #0066cc;
+            border-color: #b8daff;
+        }
+
+        .model-status.model-ready {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            transition: all 0.5s ease;
+        }
+
+        .model-status.model-ready .check-symbol {
+            color: #155724;
+            margin-right: 4px;
+            font-weight: bold;
+        }
+
+        .model-status.warming {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            transition: all 0.5s ease;
+        }
+
+        .model-status.warming i {
+            color: #ff9800;
+            animation: pulse 1s infinite;
+        }
+
+        /* Add this to your existing model status styles */
+        .model-status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+
+        .model-status.warning i {
+            color: #856404;
+        }
+        
+        [data-fancybox-loaded="true"] {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile optimization enhancements */
+        @media screen and (max-width: 736px) {
+            /* Increase touch target sizes for mobile */
+            nav#menu ul li a {
+                padding: 12px 0;
+                font-size: 1em;
+            }
+            
+            a[href="#menu"] {
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Adjust spacing in sections */
+            .waveform-section, .content-section, .section {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+            
+            /* Make lists more readable on mobile */
+            ul, ol {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            
+            li {
+                margin-bottom: 8px;
+                line-height: 1.5;
+                font-size: 0.95em;
+            }
+            
+            /* Improve image tiles on mobile */
+            .image-tile, .gallery-tile, .article-tile, .team-tile {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .title, .tile-title {
+                font-size: 1.15em;
+                margin-bottom: 8px;
+            }
+            
+            .caption, .description {
+                font-size: 0.95em;
+                padding: 0 5px;
+            }
+            
+            /* Adjust citation display on mobile */
+            .citation {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.75em;
+                padding: 0 5px;
+            }
+            
+            /* Better reference grid on mobile */
+            .reference-grid, .grid, .gallery-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .reference-tile, .grid-item, .gallery-item {
+                padding: 15px;
+            }
+            
+            /* Main content adjustments */
+            #main > .inner {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            /* Calculator specific for mobile */
+            .calculator-container {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .file-drop {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .file-upload-btn {
+                padding: 10px 15px;
+                margin-bottom: 15px;
+                font-size: 1em;
+            }
+            
+            .prediction-results {
+                padding: 15px;
+            }
+            
+            .result-item {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            /* Improve Fancybox usability on mobile */
+            .fancybox__button {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .fancybox__caption {
+                font-size: 0.9em !important;
+                padding: 8px 12px !important;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* Further optimizations for very small screens */
+            .waveform-section, .content-section, .section {
+                padding: 15px 12px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            p, .image-tile .caption, .description {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            /* Make menu items even larger for small touch screens */
+            nav#menu ul li a {
+                padding: 14px 0;
+                font-size: 1.1em;
+            }
+            
+            /* Fix image display on very small screens */
+            .image-tile img, .gallery-tile img {
+                margin-bottom: 10px;
+            }
+            
+            .citation {
+                min-width: 16px;
+                height: 16px;
+                font-size: 0.7em;
+                padding: 0 4px;
+            }
+            
+            /* Stacked references on mobile */
+            .reference-tile, .grid-item {
+                padding: 12px;
+            }
+            
+            .reference-title, .item-title {
+                font-size: 0.95em;
+            }
+            
+            .reference-authors, .reference-journal, .item-subtitle {
+                font-size: 0.85em;
+            }
+            
+            /* Calculator specific for tiny screens */
+            .calculator-container {
+                padding: 12px;
+            }
+            
+            .file-drop {
+                padding: 12px;
+            }
+            
+            .file-upload-btn {
+                padding: 8px 12px;
+                font-size: 0.95em;
+            }
+            
+            .result-item {
+                padding: 10px;
+            }
+            
+            /* Better Fancybox controls for tiny screens */
+            .fancybox__button {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            
+            /* Remove hover effects on mobile */
+            .section:hover,
+            .image-tile:hover,
+            .gallery-tile:hover,
+            .logo:hover,
+            .sidebar-logo:hover,
+            .reference-tile:hover,
+            .team-tile:hover,
+            .grid-item:hover {
+                transform: none;
+            }
+        }
+        
+        /* Fix for menu closing on small screens */
+        @media screen and (max-width: 736px) {
+            #menu a.close {
+                width: 44px;
+                height: 44px;
+                line-height: 44px;
+                font-size: 1.25em;
+            }
+            
+            #menu .inner {
+                padding-top: 4.5em;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <!-- HIPAA Compliance Modal -->
+    <div id="hipaaWarningModal" class="phi-warning-modal">
+        <div class="modal-content">
+            <h2>HIPAA Compliance</h2>
+            <div style="margin-bottom: 20px; padding-bottom: 15px;">
+                <p>Please confirm that the image you are about to upload does <strong>NOT</strong> contain any Protected Health Information (PHI) such as:</p>
+                <ul>
+                    <li>Patient names or identifiers</li>
+                    <li>Medical record numbers</li>
+                    <li>Dates associated with a patient</li>
+                    <li>Any other identifying information</li>
+                </ul>
+                <p>Uploading images with PHI violates HIPAA regulations and patient privacy.</p>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="cancelHipaaBtn" class="button">Cancel</button>
+                <button id="confirmHipaaBtn" class="button primary">I Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Beta Software Modal -->
+    <div id="betaWarningModal" class="beta-warning-modal">
+        <div class="modal-content">
+            <h2>Beta Software Disclaimer</h2>
+            <div style="margin-bottom: 20px;">
+                <p>Please acknowledge that:</p>
+                <ul>
+                    <li>This system is currently in <strong>BETA</strong> testing</li>
+                    <li>Results may not be accurate or reliable</li>
+                    <li>Do <strong>NOT</strong> make clinical decisions based solely on this AI</li>
+                    <li>Always use your clinical judgment and consult other validated methods</li>
+                </ul>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="cancelBetaBtn" class="button">Cancel</button>
+                <button id="confirmBetaBtn" class="button primary">I Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Previous HTML structure remains unchanged -->
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="images/vexus-ai-logo.png" alt="" /></span>
+                    <span class="title">VExUS ATLAS</span>
+                </a>
+
+                <!-- Nav -->
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <div class="inner">
+                <div class="logo-container">
+                    <img src="./images/VEXUS.ATLAS.png" alt="VExUS ATLAS Logo" class="sidebar-logo">
+                </div>
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="education.html">VEXUS Overview</a></li>
+                    <li><a href="waveform.html">Waveforms</a></li>
+                    <li><a href="calculator.html">AI Image Recognition</a></li>
+                    <li><a href="acquisition.html">Image Acquisition Guide</a></li>
+                    <li><a href="Publications.html">Publications</a></li>
+                    <li><a href="literature_review.html">Literature Review</a></li>
+                    <li><a href="image_gallery.html">Image Gallery</a></li>
+                    <li><a href="about.html">About VExUS ATLAS</a></li>
+                    <li><a href="our_team.html">Our Team</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="#menu" class="close">✕</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div id="main">
+            <div class="inner">
+                <!-- Logo and Title -->
+                <img src="images/vexus-ai-logo.png" alt="VExUS ATLAS Logo" class="main-logo">
+                <h1>VExUS ATLAS - AI Image Recognition &amp; Scoring</h1>
+
+                <!-- Description about AI tool -->
+                <p style="font-size: 1.05em; color: #555; max-width: 800px; margin: 0 auto 2em auto;">
+                    This is an <strong>AI-based image recognition tool</strong> designed to assist in VExUS waveform interpretation. It is not a substitute for clinical judgment.</strong>
+                </p>
+
+                <!-- Steps 1-4 remain unchanged -->
+                <!-- STEP 1: IVC -->
+                <div class="step-section" id="step1">
+                    <!-- IVC section content remains unchanged -->
+                    <div class="step-number">1</div>
+                    <h2>IVC Measurement</h2>
+                    <p class="step-instructions">
+                        Select whether IVC is &lt; 2 cm or &gt; 2 cm.
+                    </p>
+                    
+                    <div class="input-group">
+                        <label for="ivcDropdown">IVC Diameter:</label>
+                        <select id="ivcDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="<2cm">IVC &lt; 2 cm</option>
+                            <option value=">2cm">IVC &gt; 2 cm</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Hepatic Vein -->
+                <div class="step-section" id="step2">
+                    <div class="step-number">2</div>
+                    <h2>Hepatic Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Hepatic Vein ultrasound image. 
+                    </p>
+
+                    <div id="hepaticModelStatus" class="model-status model-ready">
+                        AI MODEL READY
+                    </div>
+                    
+                    <div class="upload-area" onclick="initiateImageUpload('hepatic')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Hepatic Vein image</p>
+                        <input type="file" id="hepaticImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    
+                    <div id="hepaticLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
+                    </div>
+                    
+                    <div id="hepaticErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="hepaticPreview" class="image-preview" alt="Hepatic Vein Preview">
+                    </div>
+                    
+                    <div class="step-result" id="hepaticResult">Hepatic recognition result will appear here...</div>
+                    <div class="top-results" id="hepaticTopResults"></div>
+                    
+                    <div class="input-group">
+                        <label for="hepaticDropdown">Hepatic Vein Classification:</label>
+                        <select id="hepaticDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="HV Normal">HV Normal</option>
+                            <option value="HV Mild">HV Mild</option>
+                            <option value="HV Severe">HV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="hepaticErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('hepatic')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Portal Vein -->
+                <div class="step-section" id="step3">
+                    <div class="step-number">3</div>
+                    <h2>Portal Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Portal Vein ultrasound image. 
+                    </p>
+                    
+                    <div id="portalModelStatus" class="model-status model-ready">
+                        AI MODEL READY
+                    </div>
+
+                    <div class="upload-area" onclick="initiateImageUpload('portal')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Portal Vein image</p>
+                        <input type="file" id="portalImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    
+                    <div id="portalLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
+                    </div>
+                    
+                    <div id="portalErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="portalPreview" class="image-preview" alt="Portal Vein Preview">
+                    </div>
+                    
+                    <div class="step-result" id="portalResult">Portal vein recognition result will appear here...</div>
+                    <div class="top-results" id="portalTopResults"></div>
+                    
+                    <div class="input-group">
+                        <label for="portalDropdown">Portal Vein Classification:</label>
+                        <select id="portalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="PV Normal">PV Normal</option>
+                            <option value="PV Mild">PV Mild</option>
+                            <option value="PV Severe">PV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="portalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('portal')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Renal Vein -->
+                <div class="step-section" id="step4">
+                    <div class="step-number">4</div>
+                    <h2>Renal Vein Image Upload</h2>
+                    <p class="step-instructions">
+                        Upload your Renal Vein ultrasound image. 
+                    </p>
+                    
+                    <div id="renalModelStatus" class="model-status model-ready">
+                        AI MODEL READY
+                    </div>
+
+                    <div class="upload-area" onclick="initiateImageUpload('renal')">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Click to upload or drop a Renal Vein image</p>
+                        <input type="file" id="renalImageUpload" class="file-input" accept="image/*">
+                    </div>
+                    
+                    <div id="renalLoadingIndicator" class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p>Processing image...</p>
+                    </div>
+                    
+                    <div id="renalErrorContainer" class="error-container"></div>
+                    
+                    <div class="image-preview-container">
+                        <img id="renalPreview" class="image-preview" alt="Renal Vein Preview">
+                    </div>
+                    
+                    <div class="step-result" id="renalResult">Renal vein recognition result will appear here...</div>
+                    <div class="top-results" id="renalTopResults"></div>
+                    
+                    <div class="input-group">
+                        <label for="renalDropdown">Renal Vein Classification:</label>
+                        <select id="renalDropdown">
+                            <option value="">-- Select --</option>
+                            <option value="RV Normal">RV Normal</option>
+                            <option value="RV Mild">RV Mild</option>
+                            <option value="RV Severe">RV Severe</option>
+                            <option value="Confidence of waveform < 50%">Confidence of waveform < 50%</option>
+                        </select>
+                        <div id="renalErrorNote" class="cannot-calc-note" style="display:none;">
+                            Probability below 50%. Please upload a higher quality image.
+                        </div>
+                        <button class="reset-button" onclick="resetImageUpload('renal')">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calculate & Reset Buttons + Score Display -->
+                <div class="step-section">
+                    <div class="button-group">
+                        <button onclick="calculateVexusScore()" class="button primary">Calculate VExUS Score</button>
+                        <button onclick="resetAll()" class="button"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                    <h3 style="font-size: 1.1em; margin-top: 30px; font-weight: 700;">Total VExUS Score: <span id="total-score">--</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="html5up-phantom/assets/js/jquery.min.js"></script>
+    <script src="html5up-phantom/assets/js/browser.min.js"></script>
+    <script src="html5up-phantom/assets/js/breakpoints.min.js"></script>
+    <script src="html5up-phantom/assets/js/util.js"></script>
+    <script src="html5up-phantom/assets/js/main.js"></script>
+    
+    <!-- Endpoint pre-warming to improve prediction speed -->
+    <script>
+        // Configuration
+        const config = {
+            projectId: 'plucky-weaver-450819-k7',
+            location: 'us-central1',
+            endpointIds: {
+                hepatic: '8159951878260523008',
+                portal: '2970410926785691648',
+                renal: '1148704877514326016'
+            },
+            lastUpdated: new Date().toISOString(),
+            developer: 'Gabesiegel'
+        };
+
+        // Global variables for upload handling
+        let currentUploadType = null;
+        let currentUploadFile = null;
+
+        // Add a global flag to track menu initialization
+        let menuInitialized = false;
+
+        // Single initialization function to handle all setup
+        async function initializeApplication() {
+            // Initialize body visibility
+            document.body.style.opacity = '1';
+            
+            // Initialize menu toggle if available
+            if (typeof initializeMenuToggle === 'function') {
+                initializeMenuToggle();
+            }
+            
+            // Initialize modals
+            const hipaaModal = document.getElementById('hipaaWarningModal');
+            const betaModal = document.getElementById('betaWarningModal');
+            
+            // Show HIPAA modal on page load
+            if (hipaaModal) {
+                hipaaModal.style.display = 'block';
+            }
+            
+            // Initialize modal close on outside click
+            window.onclick = function(event) {
+                if (event.target.classList.contains('phi-warning-modal')) {
+                    event.target.style.display = 'none';
+                }
+                if (event.target.classList.contains('beta-warning-modal')) {
+                    event.target.style.display = 'none';
+                }
+            };
+            
+            // Initialize modal button handlers
+            const confirmHipaaBtn = document.getElementById('confirmHipaaBtn');
+            const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
+            const confirmBetaBtn = document.getElementById('confirmBetaBtn');
+            const cancelBetaBtn = document.getElementById('cancelBetaBtn');
+            
+            if (confirmHipaaBtn) {
+                confirmHipaaBtn.onclick = function() {
+                    hipaaModal.style.display = 'none';
+                    betaModal.style.display = 'block';
+                };
+            }
+            
+            if (cancelHipaaBtn) {
+                cancelHipaaBtn.onclick = function() {
+                    hipaaModal.style.display = 'none';
+                };
+            }
+            
+            if (confirmBetaBtn) {
+                confirmBetaBtn.onclick = function() {
+                    betaModal.style.display = 'none';
+                };
+            }
+            
+            if (cancelBetaBtn) {
+                cancelBetaBtn.onclick = function() {
+                    betaModal.style.display = 'none';
+                };
+            }
+
+            // Warm up endpoints
+            await warmUpEndpoints();
+        }
+
+        // Function to warm up endpoints with detailed status updates
+        async function warmUpEndpoints() {
+            const veinTypes = ['hepatic', 'portal', 'renal'];
+            
+            for (const type of veinTypes) {
+                const statusElement = document.getElementById(`${type}ModelStatus`);
+                if (!statusElement) continue;
+
+                try {
+                    // Step 1: Initializing
+                    updateModelStatus(type, 'warming', `<i class="fas fa-fire"></i> Initializing ${type} model...`, 1);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UI feedback
+                    
+                    // Step 2: Connecting to endpoint
+                    updateModelStatus(type, 'warming', `<i class="fas fa-plug"></i> Connecting to ${type} endpoint...`, 2);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UI feedback
+                    
+                    // Step 3: Warming up model
+                    updateModelStatus(type, 'warming', `<i class="fas fa-spinner fa-pulse"></i> Loading the model...`);
+
+                    const response = await fetch('/api/preload-endpoint', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type })
+                    });
+
+                    const data = await response.json();
+                    
+                    // Fix: Handle "Endpoint warming initiated" message as a success status
+                    if (data.status === 'warming' || data.status === 'ok' ||
+                        (data.message && data.message.includes('warming initiated'))) {
+                        // Step 5: Model ready
+                        updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
+                    } else {
+                        throw new Error(data.message || 'Failed to warm up endpoint');
+                    }
+                } catch (error) {
+                    // Don't treat "warming initiated" as an error
+                    if (error.message && error.message.includes('warming initiated')) {
+                        console.log(`${type} endpoint warming initiated.`);
+                        updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`, 5);
+                    } else {
+                        console.error(`Error warming up ${type} endpoint:`, error);
+                        updateModelStatus(type, 'error', `<i class="fas fa-exclamation-triangle"></i> Error: ${error.message}`);
+                    }
+                }
+            }
+        }
+
+        // Remove the step parameter
+        function updateModelStatus(type, status, message, step = null) {
+            const statusElement = document.getElementById(`${type}ModelStatus`);
+            if (!statusElement) return;
+
+            // Remove all existing status classes
+            statusElement.className = 'model-status';
+
+            // Add appropriate class based on status
+            switch (status) {
+                case 'warming':
+                    statusElement.classList.add('warming');
+                    break;
+                case 'ready':
+                    statusElement.classList.add('model-ready');
+                    break;
+                case 'error':
+                    statusElement.classList.add('error');
+                    break;
+                case 'warning':
+                    statusElement.classList.add('warning');
+                    break;
+                case 'processing':
+                    statusElement.classList.add('processing');
+                    break;
+            }
+
+            // Add step class if provided
+            if (step) {
+                statusElement.classList.add(`step-${step}`);
+            }
+
+            // Update content with progress bar and message
+            statusElement.innerHTML = `
+                ${message}
+                <div class="progress-container">
+                    <div class="progress-bar ${!step ? 'indeterminate' : ''}"></div>
+                </div>
+            `;
+        }
+
+        // Enhanced function to update model status with progress and icons
+        function updateModelStatus(type, status, message, step = null) {
+            const statusElement = document.getElementById(`${type}ModelStatus`);
+            if (!statusElement) return;
+
+            // Remove all existing status classes
+            statusElement.className = 'model-status';
+
+            // Add appropriate class based on status
+            switch (status) {
+                case 'warming':
+                    statusElement.classList.add('warming');
+                    break;
+                case 'ready':
+                    statusElement.classList.add('model-ready');
+                    break;
+                case 'error':
+                    statusElement.classList.add('error');
+                    break;
+                case 'warning':
+                    statusElement.classList.add('warning');
+                    break;
+                case 'processing':
+                    statusElement.classList.add('processing');
+                    break;
+            }
+
+            // Add step class if provided
+            if (step) {
+                statusElement.classList.add(`step-${step}`);
+            }
+
+            // Update content with progress bar and message
+            statusElement.innerHTML = `
+                ${message}
+                <div class="progress-container">
+                    <div class="progress-bar ${!step ? 'indeterminate' : ''}"></div>
+                </div>
+            `;
+        }
+
+        // Function to resize image to optimum size for AI processing
+        async function resizeImageForProcessing(base64Data, maxWidth = 800, maxHeight = 800, quality = 0.8) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    // Calculate new dimensions while maintaining aspect ratio
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = Math.round(height * (maxWidth / width));
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = Math.round(width * (maxHeight / height));
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    // Create canvas and resize image
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Get MIME type from original data
+                    const mimeTypeMatch = base64Data.match(/^data:(.*?);base64,/);
+                    const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
+                    
+                    // Convert back to base64
+                    const resizedBase64 = canvas.toDataURL(mimeType, quality);
+                    
+                    // Extract base64 content and return with MIME type
+                    const base64Content = resizedBase64.split(',')[1];
+                    resolve({
+                        base64Content,
+                        mimeType,
+                        width,
+                        height,
+                        originalWidth: img.width,
+                        originalHeight: img.height,
+                        compressionRatio: Math.round((base64Content.length / base64Data.split(',')[1].length) * 100) + '%'
+                    });
+                };
+                img.src = base64Data;
+            });
+        }
+
+        // Function to handle image upload and prediction with detailed status updates
+        async function handleImageUpload(type, file) {
+            if (!file) return;
+
+            try {
+                // Get all DOM elements at the beginning to avoid reference errors
+                const previewElement = document.getElementById(`${type}Preview`);
+                const resultElement = document.getElementById(`${type}Result`);
+                const topResultsElement = document.getElementById(`${type}TopResults`);
+                const dropdownElement = document.getElementById(`${type}Dropdown`);
+                const errorNoteElement = document.getElementById(`${type}ErrorNote`);
+                const errorContainer = document.getElementById(`${type}ErrorContainer`);
+                const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+                
+                // We're no longer showing the loading indicator per user request
+                // if (loadingIndicator) {
+                //     loadingIndicator.style.display = 'block';
+                // }
+                
+                // Step 1: Preparing image
+                updateModelStatus(type, 'processing', '<i class="fas fa-file-image"></i> Preparing image...', 1);
+
+                // Show image preview immediately
+                if (previewElement) {
+                    previewElement.src = URL.createObjectURL(file);
+                    previewElement.style.display = 'block';
+                }
+
+                // Convert to base64
+                const base64Data = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+
+                // Resize the image for more efficient processing
+                const resizedImage = await resizeImageForProcessing(base64Data);
+                const base64Content = resizedImage.base64Content;
+                const mimeType = resizedImage.mimeType;
+                
+                console.log(`Image resized from ${resizedImage.originalWidth}x${resizedImage.originalHeight} to ${resizedImage.width}x${resizedImage.height} (${resizedImage.compressionRatio} of original size)`);
+
+                // Step 2: Checking endpoint status
+                updateModelStatus(type, 'processing', '<i class="fas fa-server"></i> Checking endpoint status...', 2);
+
+                // Ping endpoint first
+                const pingResponse = await fetch(`/api/test-endpoint`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        metadata: { 
+                            veinType: type,
+                            timestamp: Date.now()
+                        }
+                    })
+                });
+
+                if (!pingResponse.ok) {
+                    throw new Error('Failed to verify endpoint status');
+                }
+
+                // Step 3: Making prediction
+                updateModelStatus(type, 'processing', '<i class="fas fa-brain"></i> Making AI prediction...', 3);
+
+                // Structure payload following the format that was previously working
+                const payload = {
+                    instances: [
+                        {
+                            content: base64Content
+                        }
+                    ],
+                    parameters: {
+                        confidenceThreshold: 0.0,
+                        maxPredictions: 5
+                    },
+                    metadata: {
+                        veinType: type,
+                        imageType: mimeType,
+                        timestamp: Date.now(),
+                        onlyOnDemand: true // Only use on-demand endpoint, no fallback to direct calls
+                    }
+                };
+
+                // Add timeout to prevent hanging requests
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+                
+                console.log(`Sending ${type} image for classification...`);
+
+                // Make prediction request with timeout
+                const predictionResponse = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                
+                // Clear timeout since request completed
+                clearTimeout(timeoutId);
+
+                if (!predictionResponse.ok) {
+                    let errorMessage = `Server error: ${predictionResponse.status}`;
+                    try {
+                        const errorData = await predictionResponse.json();
+                        errorMessage = errorData.message || errorMessage;
+                    } catch (e) {
+                        // If parsing fails, use status code
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                // Step 4: Processing results
+                updateModelStatus(type, 'processing', '<i class="fas fa-chart-bar"></i> Processing results...', 4);
+
+                const result = await predictionResponse.json();
+                
+                // Debug API response to help troubleshoot format issues
+                debugApiResponse(type, result);
+                
+                // Check if we have empty arrays
+                if (result.displayNames && result.displayNames.length === 0 && 
+                    result.confidences && result.confidences.length === 0) {
+                    console.warn(`Empty prediction arrays received for ${type} vein`);
+                    
+                    // Change the status to clearly indicate model didn't classify the image
+                    updateModelStatus(type, 'error', `<i class="fas fa-exclamation-circle"></i> Model failed to recognize image`, 5);
+                    
+                    // Show a clear message in the results area
+                    if (resultElement) {
+                        resultElement.innerHTML = `
+                            <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px;">
+                                <i class="fas fa-exclamation-circle"></i> <strong>Model could not analyze this image</strong>
+                                <div style="font-size: 0.9em; margin-top: 5px;">
+                                    The AI couldn't recognize patterns in this image. Please select classification manually.
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    // Clear any previous top results
+                    if (topResultsElement) {
+                        topResultsElement.innerHTML = '';
+                    }
+                    
+                    // Default dropdown to "Confidence of waveform < 50%"
+                    if (dropdownElement) {
+                        dropdownElement.value = "Confidence of waveform < 50%";
+                    }
+                    
+                    // Show the low confidence error note
+                    if (errorNoteElement) {
+                        errorNoteElement.style.display = 'block';
+                    }
+                    
+                    // We no longer need to hide loading indicator since we never show it
+                    // if (loadingIndicator) {
+                    //     loadingIndicator.style.display = 'none';
+                    // }
+                    
+                    return; // Stop further processing
+                }
+                
+                // Process and display results
+                displayResults(type, result, file);
+
+                // Update status based on whether we got predictions
+                if ((result.displayNames && result.displayNames.length > 0) || 
+                    (result.predictions && result.predictions.length > 0)) {
+                    updateModelStatus(type, 'ready', '<i class="fas fa-check-circle"></i> Analysis Complete', 5);
+                } else {
+                    updateModelStatus(type, 'warning', '<i class="fas fa-exclamation-triangle"></i> Please select manually', 5);
+                }
+
+            } catch (error) {
+                console.error(`Error in handleImageUpload for ${type}:`, error);
+                updateModelStatus(type, 'error', `<i class="fas fa-exclamation-triangle"></i> Error: ${error.message}`);
+                displayError(type, error.message);
+                
+                // We no longer need to hide loading indicator since we never show it
+                // const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+                // if (loadingIndicator) {
+                //     loadingIndicator.style.display = 'none';
+                // }
+            }
+        }
+
+        // Generate fallback predictions when the model returns empty results
+        function generateFallbackPredictions(type) {
+            switch(type) {
+                case 'hepatic':
+                    return ['Hepatic_Vein_Normal', 'Hepatic_Vein_Mild', 'Hepatic_Vein_Severe'];
+                case 'portal':
+                    return ['Portal_Vein_Normal', 'Portal_Vein_Mild', 'Portal_Vein_Severe'];
+                case 'renal':
+                    return ['Renal_Vein_Normal', 'Renal_Vein_Mild', 'Renal_Vein_Severe'];
+                default:
+                    return ['Normal', 'Mild', 'Severe'];
+            }
+        }
+
+        // Function to display prediction results
+        function displayResults(type, result, file) {
+            console.log(`Displaying results for ${type} vein:`, result);
+            
+            // Get DOM elements
+            const previewElement = document.getElementById(`${type}Preview`);
+            const resultElement = document.getElementById(`${type}Result`);
+            const topResultsElement = document.getElementById(`${type}TopResults`);
+            const dropdownElement = document.getElementById(`${type}Dropdown`);
+            const errorNoteElement = document.getElementById(`${type}ErrorNote`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            
+            // Hide loading indicator
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Display image preview if it isn't already shown
+            if (previewElement && previewElement.style.display !== 'block') {
+                previewElement.src = URL.createObjectURL(file);
+                previewElement.style.display = 'block';
+            }
+            
+            // Handle case when arrays are empty or undefined
+            if (!result.displayNames || !result.confidences || 
+                (result.displayNames && result.displayNames.length === 0) ||
+                (result.confidences && result.confidences.length === 0)) {
+                console.warn(`Empty or missing prediction arrays for ${type}, showing manual selection message`);
+                
+                if (resultElement) {
+                    resultElement.innerHTML = `
+                        <span style="color: #856404;"><i class="fas fa-exclamation-triangle"></i> Model couldn't classify the image</span>
+                        <div style="font-size: 0.9em; margin-top: 5px; color: #666;">Please select classification manually</div>
+                    `;
+                }
+                
+                if (topResultsElement) {
+                    topResultsElement.innerHTML = '';
+                }
+                
+                // Default dropdown to "Confidence of waveform < 50%"
+                if (dropdownElement) {
+                    dropdownElement.value = "Confidence of waveform < 50%";
+                }
+                
+                // Show the low confidence error note
+                if (errorNoteElement) {
+                    errorNoteElement.style.display = 'block';
+                }
+                
+                return;
+            }
+            
+            // Process predictions as requested
+            const confidences = result.confidences;
+            const displayNames = result.displayNames;
+            
+            // Create top 3 predictions
+            const top3List = confidences
+                .map((conf, idx) => ({
+                    label: displayNames[idx] || "Unknown",
+                    prob: (conf * 100).toFixed(1)
+                }))
+                .sort((a, b) => parseFloat(b.prob) - parseFloat(a.prob))
+                .slice(0, 3);
+            
+            // Map API response labels to dropdown values
+            const labelMapping = {
+                'hepatic': {
+                    'Hepatic_Vein_Normal': 'HV Normal',
+                    'Hepatic_Vein_Mild': 'HV Mild',
+                    'Hepatic_Vein_Severe': 'HV Severe'
+                },
+                'portal': {
+                    'Portal_Vein_Normal': 'PV Normal',
+                    'Portal_Vein_Mild': 'PV Mild',
+                    'Portal_Vein_Severe': 'PV Severe'
+                },
+                'renal': {
+                    'Renal_Vein_Normal': 'RV Normal',
+                    'Renal_Vein_Mild': 'RV Mild',
+                    'Renal_Vein_Severe': 'RV Severe'
+                }
+            };
+            
+            // Map the labels to user-friendly display values
+            const mappedTop3 = top3List.map(item => {
+                const apiLabel = item.label;
+                let dropdownLabel = apiLabel;
+                
+                // Check if the label belongs to the expected type
+                const isExpectedType = type === 'hepatic' ? apiLabel.includes('Hepatic') :
+                                      type === 'portal' ? apiLabel.includes('Portal') :
+                                      apiLabel.includes('Renal');
+                
+                if (isExpectedType && labelMapping[type][apiLabel]) {
+                    // Use the type-specific mapping
+                    dropdownLabel = labelMapping[type][apiLabel];
+                } else {
+                    // If model returned wrong type of prediction, try to find mapping in any category
+                    for (const veinType in labelMapping) {
+                        if (labelMapping[veinType][apiLabel]) {
+                            console.log(`Warning: Received ${apiLabel} for ${type} request`);
+                            // Still use the expected type prefix (HV/PV/RV)
+                            const severity = apiLabel.includes('Normal') ? 'Normal' : 
+                                            apiLabel.includes('Mild') ? 'Mild' : 'Severe';
+                            dropdownLabel = `${type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV'} ${severity}`;
+                            break;
+                        }
+                    }
+                }
+                
+                return {
+                    apiLabel: apiLabel,
+                    label: dropdownLabel,
+                    prob: item.prob
+                };
+            });
+            
+            // Update the UI with top prediction
+            if (mappedTop3.length > 0) {
+                const top1 = mappedTop3[0];
+                
+                // Update the result display
+                if (resultElement) {
+                    resultElement.innerHTML = `
+                        <strong>${top1.label}</strong> (${top1.prob}% confidence)
+                    `;
+                }
+                
+                // Show top 3 results
+                if (topResultsElement) {
+                    let topResultsHTML = '<div style="font-size: 0.9em; color: #666;">All predictions:</div>';
+                    
+                    mappedTop3.forEach(pred => {
+                        topResultsHTML += `<div>${pred.label}: ${pred.prob}%</div>`;
+                    });
+                    
+                    topResultsElement.innerHTML = topResultsHTML;
+                }
+                
+                // Set the dropdown based on top prediction
+                if (dropdownElement) {
+                    // If confidence is below 50%, select the "Confidence too low" option
+                    if (parseFloat(top1.prob) < 50) {
+                        dropdownElement.value = "Confidence of waveform < 50%";
+                        
+                        // Show error note
+                        if (errorNoteElement) {
+                            errorNoteElement.style.display = 'block';
+                        }
+                    } else {
+                        // Try to match the label to a dropdown option
+                        const matchingOption = Array.from(dropdownElement.options)
+                            .find(opt => opt.value === top1.label);
+                            
+                        if (matchingOption) {
+                            dropdownElement.value = matchingOption.value;
+                        } else {
+                            // If no exact match, try to infer the correct option
+                            const prefix = type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV';
+                            if (top1.apiLabel.includes('Normal') || top1.label.includes('Normal')) {
+                                dropdownElement.value = `${prefix} Normal`;
+                            } else if (top1.apiLabel.includes('Mild') || top1.label.includes('Mild')) {
+                                dropdownElement.value = `${prefix} Mild`;
+                            } else if (top1.apiLabel.includes('Severe') || top1.label.includes('Severe')) {
+                                dropdownElement.value = `${prefix} Severe`;
+                            } else {
+                                // If still no match, default to empty
+                                dropdownElement.value = "";
+                            }
+                        }
+                        
+                        // Hide error note
+                        if (errorNoteElement) {
+                            errorNoteElement.style.display = 'none';
+                        }
+                    }
+                }
+            } else {
+                // No predictions found - shouldn't happen with our validation above
+                showNoPredictionsUI(type, resultElement, topResultsElement, dropdownElement, errorNoteElement);
+            }
+        }
+
+        // Helper function to show "no predictions" UI
+        function showNoPredictionsUI(type, resultElement, topResultsElement, dropdownElement, errorNoteElement) {
+            if (resultElement) {
+                resultElement.innerHTML = `
+                    <span style="color: #dc3545;"><i class="fas fa-exclamation-circle"></i> No predictions found</span>
+                    <div style="font-size: 0.9em; margin-top: 5px; color: #666;">Please select classification manually</div>
+                `;
+            }
+            
+            if (topResultsElement) {
+                topResultsElement.innerHTML = '';
+            }
+            
+            // Default to the low confidence option
+            if (dropdownElement) {
+                dropdownElement.value = "Confidence of waveform < 50%";
+            }
+            
+            // Show the error note
+            if (errorNoteElement) {
+                errorNoteElement.style.display = 'block';
+            }
+        }
+
+        // Helper function to map prediction labels to dropdown values
+        function mapPredictionToDropdown(predictionLabel, type) {
+            // Map API response labels to dropdown values
+            const labelMapping = {
+                'hepatic': {
+                    'Hepatic_Vein_Normal': 'HV Normal',
+                    'Hepatic_Vein_Mild': 'HV Mild',
+                    'Hepatic_Vein_Severe': 'HV Severe'
+                },
+                'portal': {
+                    'Portal_Vein_Normal': 'PV Normal',
+                    'Portal_Vein_Mild': 'PV Mild',
+                    'Portal_Vein_Severe': 'PV Severe'
+                },
+                'renal': {
+                    'Renal_Vein_Normal': 'RV Normal',
+                    'Renal_Vein_Mild': 'RV Mild',
+                    'Renal_Vein_Severe': 'RV Severe'
+                }
+            };
+            
+            // Check if label is in the specific mapping
+            if (labelMapping[type] && labelMapping[type][predictionLabel]) {
+                return labelMapping[type][predictionLabel];
+            }
+            
+            // Check in all mappings
+            for (const veinType in labelMapping) {
+                if (labelMapping[veinType][predictionLabel]) {
+                    return labelMapping[veinType][predictionLabel];
+                }
+            }
+            
+            // If no mapping found, use generic approach
+            const prefix = type === 'hepatic' ? 'HV' : type === 'portal' ? 'PV' : 'RV';
+            if (predictionLabel.includes('Normal')) {
+                return `${prefix} Normal`;
+            } else if (predictionLabel.includes('Mild')) {
+                return `${prefix} Mild`;
+            } else if (predictionLabel.includes('Severe')) {
+                return `${prefix} Severe`;
+            }
+            
+            // Return original if no mapping found
+            return predictionLabel;
+        }
+
+        // Function to handle clicking on the upload area
+        function initiateImageUpload(type) {
+            console.log(`Initiating image upload for ${type} vein type`);
+            currentUploadType = type;
+            try {
+                const fileInput = document.getElementById(`${type}ImageUpload`);
+                if (fileInput) {
+                    fileInput.click();
+                } else {
+                    console.error(`File input element for ${type} not found!`);
+                    alert(`Error: File input element for ${type} not found. Please report this issue.`);
+                }
+            } catch (error) {
+                console.error(`Error initiating upload for ${type}:`, error);
+                alert(`Error starting ${type} upload: ${error.message}. Please try again.`);
+            }
+        }
+
+        // Function to setup image upload listeners
+        function setupImageUploadListeners() {
+            console.log("Setting up image upload listeners for all vein types");
+            
+            const veinTypes = ['hepatic', 'portal', 'renal'];
+            
+            veinTypes.forEach(type => {
+                const fileInput = document.getElementById(`${type}ImageUpload`);
+                
+                if (!fileInput) {
+                    console.error(`File input element for ${type} not found, cannot set up listener!`);
+                    return;
+                }
+                
+                fileInput.addEventListener('change', function(event) {
+                    console.log(`File selected for ${type} vein, calling handleImageUpload`);
+                    handleImageUpload(type, event.target.files[0]);
+                });
+                
+                console.log(`Successfully set up listener for ${type} vein upload`);
+            });
+        }
+
+        // Function to setup modal listeners
+        function setupModalListeners() {
+            // HIPAA Modal elements
+            const hipaaModal = document.getElementById('hipaaWarningModal');
+            const cancelHipaaBtn = document.getElementById('cancelHipaaBtn');
+            const confirmHipaaBtn = document.getElementById('confirmHipaaBtn');
+            
+            // Beta Software Modal elements
+            const betaModal = document.getElementById('betaWarningModal');
+            const cancelBetaBtn = document.getElementById('cancelBetaBtn');
+            const confirmBetaBtn = document.getElementById('confirmBetaBtn');
+            
+            // HIPAA Modal listeners
+            cancelHipaaBtn.addEventListener('click', function() {
+                hipaaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
+                
+                // Re-initialize menu toggle after modals are closed
+                initializeMenuToggle();
+            });
+            
+            confirmHipaaBtn.addEventListener('click', function() {
+                hipaaModal.style.display = 'none';
+                // After acknowledging HIPAA compliance, show Beta Software disclaimer
+                betaModal.style.display = 'block';
+            });
+            
+            // Beta Software Modal listeners
+            cancelBetaBtn.addEventListener('click', function() {
+                betaModal.style.display = 'none';
+                currentUploadType = null;
+                currentUploadFile = null;
+                
+                // Re-initialize menu toggle after modals are closed
+                initializeMenuToggle();
+            });
+            
+            confirmBetaBtn.addEventListener('click', function() {
+                betaModal.style.display = 'none';
+                // Only after confirming both modals, trigger the file input click
+                if (currentUploadType) {
+                    document.getElementById(`${currentUploadType}ImageUpload`).click();
+                }
+                
+                // Re-initialize menu toggle after modals are closed
+                initializeMenuToggle();
+            });
+        }
+
+        // Function to hide all modals
+        function hideModals() {
+            document.getElementById('hipaaWarningModal').style.display = 'none';
+            document.getElementById('betaWarningModal').style.display = 'none';
+        }
+
+        // Function to display error in the appropriate container
+        function displayError(type, message) {
+            console.log(`Displaying error for ${type}: ${message}`);
+            const errorContainer = document.getElementById(`${type}ErrorContainer`);
+            const loadingIndicator = document.getElementById(`${type}LoadingIndicator`);
+            const modelStatus = document.getElementById(`${type}ModelStatus`);
+            
+            // Hide loading indicator
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Update model status
+            if (modelStatus) {
+                modelStatus.textContent = "AI MODEL ERROR";
+                modelStatus.classList.remove('model-ready');
+            }
+            
+            // Display error message
+            if (errorContainer) {
+                errorContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> ${message}
+                        <p>Please try again or try a different image.</p>
+                    </div>
+                `;
+                errorContainer.style.display = 'block';
+                
+                // Scroll to error container
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Fallback to alert if container not found
+                alert(`Error with ${type} vein: ${message}`);
+            }
+        }
+
+        // Function to check API connection with detailed status
+        async function checkApiConnection() {
+            const veinTypes = ['hepatic', 'portal', 'renal'];
+            
+            for (const type of veinTypes) {
+                const statusElement = document.getElementById(`${type}ModelStatus`);
+                if (!statusElement) continue;
+
+                // Only check if not already in ready state
+                if (!statusElement.classList.contains('model-ready')) {
+                    try {
+                        updateModelStatus(type, 'warming', `<i class="fas fa-network-wired"></i> Checking API connection...`);
+                        
+                        const response = await fetch('/api/health');
+                        
+                        if (!response.ok) {
+                            throw new Error(`API health check failed: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (data.status === 'ok') {
+                            updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`);
+                        } else {
+                            throw new Error(data.message || 'API health check returned non-OK status');
+                        }
+                    } catch (error) {
+                        console.error(`Error checking API connection for ${type}:`, error);
+                        updateModelStatus(type, 'error', `<i class="fas fa-exclamation-triangle"></i> Error: Cannot connect to server`);
+                    }
+                }
+            }
+        }
+
+        // Initialize the page and model statuses
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Show HIPAA warning on page load
+            document.getElementById('hipaaWarningModal').style.display = 'block';
+            
+            // Initialize model status indicators with warming state
+            ['hepatic', 'portal', 'renal'].forEach(type => {
+                updateModelStatus(type, 'warming', `<i class="fas fa-spinner fa-pulse"></i> Initializing ${type} model...`);
+            });
+            
+            // Setup the warning modal functionality
+            setupModalListeners();
+            
+            // Setup image upload event handlers
+            setupImageUploadListeners();
+            
+            // Setup dropdown listeners
+            setupDropdownListeners();
+            
+            // Warm up endpoints with detailed status updates
+            await warmUpEndpoints();
+            
+            // Check API connection
+            await checkApiConnection();
+        });
+
+        // Function to reset all inputs
+        function resetAll() {
+            ['hepatic', 'portal', 'renal'].forEach(type => {
+                resetImageUpload(type);
+            });
+            
+            // Reset IVC dropdown
+            document.getElementById('ivcDropdown').value = "";
+            
+            // Reset total score
+            const totalScore = document.getElementById('total-score');
+            if (totalScore) totalScore.textContent = '--';
+        }
+
+        // Function to setup dropdown listeners
+        function setupDropdownListeners() {
+            // Add change event listeners to the dropdowns
+            document.getElementById('hepaticDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('portalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+
+            document.getElementById('renalDropdown').addEventListener('change', function() {
+                hideModals();
+            });
+        }
+
+        // Function to initialize menu toggle
+        function initializeMenuToggle() {
+            // Prevent multiple initializations
+            if (menuInitialized) {
+                console.log("Menu already initialized, skipping.");
+                return;
+            }
+            
+            console.log("Initializing menu toggle");
+            
+            try {
+                // Get menu elements
+                const menuToggle = document.querySelector('a[href="#menu"]');
+                const menu = document.getElementById('menu');
+                
+                if (!menuToggle) {
+                    console.error("Menu toggle element not found!");
+                    return;
+                }
+                
+                if (!menu) {
+                    console.error("Menu element not found!");
+                    return;
+                }
+                
+                // Debug info
+                console.log("Menu element:", menu);
+                console.log("Menu toggle element:", menuToggle);
+                console.log("Current menu display:", window.getComputedStyle(menu).display);
+                console.log("Current menu right:", window.getComputedStyle(menu).right);
+                console.log("Current body classes:", document.body.className);
+                
+                // Ensure consistent initial state - always use -100% not -300px
+                document.body.classList.remove('is-menu-visible');
+                menu.style.right = "-100%"; // Consistent value
+                menu.style.display = "none";
+                menu.classList.remove('visible', 'active');
+                
+                // Force a repaint to ensure styles are applied immediately
+                void menu.offsetWidth;
+                
+                // Remove any existing click handlers by cloning and replacing
+                const newMenuToggle = menuToggle.cloneNode(true);
+                menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+                
+                // Add our click handler with support for both CSS class and display property
+                newMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Menu toggle clicked");
+                    
+                    // Use both approaches: class toggle (for theme) and display property (for our custom code)
+                    document.body.classList.add('is-menu-visible');
+                    menu.style.display = 'block';
+                    menu.style.right = '0';
+                    menu.classList.add('visible', 'active');
+                    
+                    // Force a repaint to ensure styles are applied
+                    void menu.offsetWidth;
+                    
+                    // Debug after toggle
+                    console.log("After toggle - menu display:", window.getComputedStyle(menu).display);
+                    console.log("After toggle - menu right:", window.getComputedStyle(menu).right);
+                    console.log("After toggle - body classes:", document.body.className);
+                });
+                
+                // Create close button handler (important for mobile)
+                const closeButton = menu.querySelector('a.close');
+                if (closeButton) {
+                    const newCloseButton = closeButton.cloneNode(true);
+                    closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                    
+                    newCloseButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Close button clicked");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%'; // Consistent value
+                        menu.classList.remove('visible', 'active');
+                        
+                        // Debug after close
+                        console.log("After close - menu display:", window.getComputedStyle(menu).display);
+                        console.log("After close - menu right:", window.getComputedStyle(menu).right);
+                    });
+                }
+                
+                // Handle clicks outside the menu (use capture phase to run before other handlers)
+                const bodyClickHandler = function(e) {
+                    // If clicking outside menu and not on menu toggle
+                    if (!e.target.closest('#menu') && !e.target.closest('a[href="#menu"]')) {
+                        console.log("Clicked outside menu");
+                        
+                        // Hide menu using both approaches
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%'; // Consistent value
+                        menu.classList.remove('visible', 'active');
+                    }
+                };
+                
+                // Remove any existing body click handler and add our new one
+                document.body.removeEventListener('click', bodyClickHandler, true);
+                document.body.addEventListener('click', bodyClickHandler, true);
+                
+                // Handle escape key
+                const keyHandler = function(e) {
+                    if (e.key === 'Escape' || e.keyCode === 27) {
+                        document.body.classList.remove('is-menu-visible');
+                        menu.style.display = 'none';
+                        menu.style.right = '-100%'; // Consistent value
+                        menu.classList.remove('visible', 'active');
+                    }
+                };
+                
+                // Remove any existing key handler and add our new one
+                document.removeEventListener('keydown', keyHandler);
+                document.addEventListener('keydown', keyHandler);
+                
+                // Set the flag to indicate initialization is complete
+                menuInitialized = true;
+                
+                console.log("Menu toggle initialization complete");
+            } catch (error) {
+                console.error("Error initializing menu toggle:", error);
+            }
+        }
+
+        // Function to calculate VExUS score
+        function calculateVexusScore() {
+            // Step #1: IVC <2cm or >2cm
+            const ivcSelection = document.getElementById('ivcDropdown').value;
+            let ivcValue = null; 
+            if (ivcSelection === "<2cm") ivcValue = 1.9;
+            if (ivcSelection === ">2cm") ivcValue = 2.1;
+            
+            // Get classifications from dropdowns
+            const hvChoice = document.getElementById('hepaticDropdown').value;
+            const pvChoice = document.getElementById('portalDropdown').value;
+            const rvChoice = document.getElementById('renalDropdown').value;
+
+            // Check for incomplete data
+            if (!ivcValue) {
+                document.getElementById('total-score').textContent = "Incomplete Data (IVC Not Selected)";
+                return;
+            }
+            
+            // Check if all vein classifications are selected
+            if (!hvChoice || !pvChoice || !rvChoice) {
+                document.getElementById('total-score').textContent = "Incomplete Data (All Vein Classifications Required)";
+                return;
+            }
+
+            // Check for low confidence predictions
+            if (
+                hvChoice === "Confidence of waveform < 50%" ||
+                pvChoice === "Confidence of waveform < 50%" ||
+                rvChoice === "Confidence of waveform < 50%"
+            ) {
+                document.getElementById('total-score').textContent = "Cannot Calculate Score";
+                return;
+            }
+
+            // Convert choices to numerical scores based on actual dropdown values
+            let hvScore = 0;
+            if (hvChoice === "HV Mild") hvScore = 1; // HV Mild
+            if (hvChoice === "HV Severe") hvScore = 2; // HV Severe
+
+            let pvScore = 0;
+            if (pvChoice === "PV Mild") pvScore = 1; // PV Mild
+            if (pvChoice === "PV Severe") pvScore = 2; // PV Severe
+
+            let rvScore = 0;
+            if (rvChoice === "RV Mild") rvScore = 1; // RV Mild
+            if (rvChoice === "RV Severe") rvScore = 2; // RV Severe
+
+            // Count severe cases
+            let severityCount = 0;
+            if (hvScore === 2) severityCount++;
+            if (pvScore === 2) severityCount++;
+            if (rvScore === 2) severityCount++;
+
+            // Calculate VExUS grade
+            let vexusGrade;
+            if (ivcValue < 2) {
+                vexusGrade = "Grade 0: No Congestion";
+            } else if (severityCount === 0) {
+                vexusGrade = "Grade 1: Mild Congestion";
+            } else if (severityCount === 1) {
+                vexusGrade = "Grade 2: Moderate Congestion";
+            } else {
+                vexusGrade = "Grade 3: Severe Congestion";
+            }
+
+            document.getElementById('total-score').textContent = vexusGrade;
+        }
+
+        // Function to reset image upload for a specific vein type
+        function resetImageUpload(type) {
+            // Reset file input
+            const fileInput = document.getElementById(`${type}ImageUpload`);
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
+            // Clear preview
+            const preview = document.getElementById(`${type}Preview`);
+            if (preview) {
+                preview.src = '';
+                preview.style.display = 'none';
+            }
+            
+            // Reset result display
+            const resultElement = document.getElementById(`${type}Result`);
+            if (resultElement) {
+                resultElement.innerHTML = `${type.charAt(0).toUpperCase() + type.slice(1)} vein recognition result will appear here...`;
+            }
+            
+            // Clear top results
+            const topResultsElement = document.getElementById(`${type}TopResults`);
+            if (topResultsElement) {
+                topResultsElement.innerHTML = '';
+            }
+            
+            // Reset dropdown
+            const dropdown = document.getElementById(`${type}Dropdown`);
+            if (dropdown) {
+                dropdown.value = '';
+            }
+            
+            // Hide error note
+            const errorNote = document.getElementById(`${type}ErrorNote`);
+            if (errorNote) {
+                errorNote.style.display = 'none';
+            }
+            
+            // Reset model status
+            const statusElement = document.getElementById(`${type}ModelStatus`);
+            if (statusElement) {
+                updateModelStatus(type, 'ready', `<i class="fas fa-check-circle"></i> ${type.charAt(0).toUpperCase() + type.slice(1)} Model Ready`);
+            }
+            
+            // Hide error container
+            const errorContainer = document.getElementById(`${type}ErrorContainer`);
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+                errorContainer.innerHTML = '';
+            }
+            
+            console.log(`Reset ${type} image upload completed`);
+        }
+
+        // Debug helper function to log API response details
+        function debugApiResponse(type, response) {
+            console.log(`==== DEBUG: ${type.toUpperCase()} API RESPONSE ====`);
+            console.log('Response object:', response);
+            
+            // Check for expected properties
+            console.log('Has displayNames:', !!response.displayNames);
+            console.log('Has confidences:', !!response.confidences);
+            console.log('Has predictions:', !!response.predictions);
+            
+            // Log the format details
+            if (response.displayNames && response.confidences) {
+                console.log('Format: OLD API (displayNames + confidences arrays)');
+                console.log('displayNames length:', response.displayNames.length);
+                console.log('First few display names:', response.displayNames.slice(0, 3));
+                console.log('First few confidence values:', response.confidences.slice(0, 3));
+            } else if (response.predictions) {
+                console.log('Format: NEW API (predictions array)');
+                console.log('predictions length:', response.predictions.length);
+                if (response.predictions.length > 0) {
+                    console.log('First prediction sample:', response.predictions[0]);
+                }
+            } else {
+                console.log('Format: UNKNOWN - missing expected properties');
+                console.log('All response keys:', Object.keys(response));
+            }
+            
+            console.log('===================================');
+        }
+    </script>
+</body>
+</html>
