@@ -348,4 +348,15 @@ nav#menu {
         width: 20px;
         height: 20px;
     }
-} 
+}
+
+/* Update any font-family declarations */
+.sidebar {
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.sidebar a, .sidebar p, .sidebar h1, .sidebar h2, .sidebar h3, .sidebar h4, .sidebar h5, .sidebar h6 {
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Continue with other specific font-family declarations in the file */ 

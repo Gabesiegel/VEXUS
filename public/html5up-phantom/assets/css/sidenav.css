@@ -1,5 +1,14 @@
 /* Side Navigation Panel - VExUS ATLAS Acquisition Guide */
 
+/* Import Europa fonts */
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/821a05/00000000000000007735a082/30/l?subset_id=2&fvd=n3&v=3) format("woff2"),url(https://use.typekit.net/af/821a05/00000000000000007735a082/30/d?subset_id=2&fvd=n3&v=3) format("woff"),url(https://use.typekit.net/af/821a05/00000000000000007735a082/30/a?subset_id=2&fvd=n3&v=3) format("opentype");font-weight:300;font-style:normal;font-stretch:normal;font-display:auto;}
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/1db03a/00000000000000007735a08e/30/l?subset_id=2&fvd=n4&v=3) format("woff2"),url(https://use.typekit.net/af/1db03a/00000000000000007735a08e/30/d?subset_id=2&fvd=n4&v=3) format("woff"),url(https://use.typekit.net/af/1db03a/00000000000000007735a08e/30/a?subset_id=2&fvd=n4&v=3) format("opentype");font-weight:400;font-style:normal;font-stretch:normal;font-display:auto;}
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/ebcd51/00000000000000007735a081/30/l?subset_id=2&fvd=n7&v=3) format("woff2"),url(https://use.typekit.net/af/ebcd51/00000000000000007735a081/30/d?subset_id=2&fvd=n7&v=3) format("woff"),url(https://use.typekit.net/af/ebcd51/00000000000000007735a081/30/a?subset_id=2&fvd=n7&v=3) format("opentype");font-weight:700;font-style:normal;font-stretch:normal;font-display:auto;}
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/d08711/00000000000000007735a08a/30/l?subset_id=2&fvd=i3&v=3) format("woff2"),url(https://use.typekit.net/af/d08711/00000000000000007735a08a/30/d?subset_id=2&fvd=i3&v=3) format("woff"),url(https://use.typekit.net/af/d08711/00000000000000007735a08a/30/a?subset_id=2&fvd=i3&v=3) format("opentype");font-weight:300;font-style:italic;font-stretch:normal;font-display:auto;}
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/40cfbf/00000000000000007735a08f/30/l?subset_id=2&fvd=i4&v=3) format("woff2"),url(https://use.typekit.net/af/40cfbf/00000000000000007735a08f/30/d?subset_id=2&fvd=i4&v=3) format("woff"),url(https://use.typekit.net/af/40cfbf/00000000000000007735a08f/30/a?subset_id=2&fvd=i4&v=3) format("opentype");font-weight:400;font-style:italic;font-stretch:normal;font-display:auto;}
+@font-face{font-family:europa;src:url(https://use.typekit.net/af/2a1b80/00000000000000007735a09e/30/l?subset_id=2&fvd=i7&v=3) format("woff2"),url(https://use.typekit.net/af/2a1b80/00000000000000007735a09e/30/d?subset_id=2&fvd=i7&v=3) format("woff"),url(https://use.typekit.net/af/2a1b80/00000000000000007735a09e/30/a?subset_id=2&fvd=i7&v=3) format("opentype");font-weight:700;font-style:italic;font-stretch:normal;font-display:auto;}
+
+/* Core side navigation styling */
 .side-nav {
     position: fixed;
     top: 50%;
@@ -9,11 +18,14 @@
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 0 12px 12px 0;
-    padding: 14px 12px;
+    padding: 15px 13px; /* Slightly increased padding for better touch targets */
     z-index: 999;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     border-right: 1px solid rgba(0, 0, 0, 0.03);
+    width: auto;
+    min-width: 60px; /* Ensure minimum width for better visibility */
+    pointer-events: auto;
 }
 
 /* Collapsed state - ensure complete hiding */
@@ -23,12 +35,15 @@
     box-shadow: none;
     opacity: 0.9;
     pointer-events: none; /* Disable interaction while collapsed */
+    visibility: hidden; /* Ensure it's fully hidden */
 }
 
-/* Make sure the sidebar is interactive when expanded */
+/* When sidebar is expanded, position it beside the toggle button */
 .side-nav:not(.collapsed) {
     pointer-events: auto;
     opacity: 1;
+    visibility: visible;
+    left: 36px !important; /* Position to the right of the toggle button */
 }
 
 /* Remove hover effect from sidenav */
@@ -42,7 +57,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px; /* Increased spacing between items */
 }
 
 .side-nav-item {
@@ -51,46 +66,48 @@
     padding: 0;
 }
 
-/* Base navigation styling with better text handling */
+/* Navigation link styling */
 .side-nav-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    min-width: 65px;
-    height: 38px;
-    padding: 0 14px;
-    border-radius: 19px;
-    background: linear-gradient(145deg, #ffffff, #f8f8f8);
-    color: #444;
+    display: block;
+    text-align: center;
+    color: #333 !important;
     text-decoration: none;
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 11px;
     font-weight: 500;
-    font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    letter-spacing: 1px;
+    padding: 10px 4px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease !important; /* Only transition background, not position */
+    background-color: rgba(255, 255, 255, 0.5);
     position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis for long text */
-    white-space: nowrap; /* Keep on one line */
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    z-index: 2;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    width: auto; /* Don't force width */
+    transform: none !important; /* Never transform on hover */
+    margin: 5px 0;
 }
 
 /* Mobile-specific display text - shown on small screens */
 .side-nav-link .mobile-text {
     display: none; /* Hidden by default on desktop */
+    font-weight: 600; /* Make slightly bolder for better readability */
 }
 
 .side-nav-link .long-text {
     display: block; /* Shown by default on desktop */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
-/* Remove all hover effects from links */
+/* Hover state styling */
 .side-nav-link:hover, 
 .side-nav-link:focus {
-    /* No hover effects */
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+    color: #333 !important;
+    transform: none !important; /* Never transform on hover */
+    margin: 5px 0 !important; /* Maintain margin to prevent movement */
 }
 
 /* Tooltip for showing full text */
@@ -108,7 +125,7 @@
     border-radius: 8px;
     font-size: 13px;
     font-weight: 400;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
@@ -117,472 +134,31 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(0, 0, 0, 0.03);
     transform: translateY(-50%) translateX(10px);
+    z-index: 1000;
 }
 
-/* Remove hover effects for tooltips */
+/* Show tooltip on hover */
 .side-nav-link:hover::after,
 .side-nav-link:focus::after {
-    /* No hover effects for tooltips */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
 }
 
-/* Active state - keep this */
+/* Active state for navigation links */
 .side-nav-link.active {
-    background: linear-gradient(145deg, #fcfcfc, #f5f5f5);
-    color: #2c3e50;
-    transform: scale(1.05);
-    border: 1px solid rgba(44, 62, 80, 0.1);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Tablet optimization */
-@media screen and (max-width: 768px) {
-    .side-nav {
-        padding: 15px 12px;
-        background-color: rgba(255, 255, 255, 0.95);
-        max-width: 120px;
-    }
-    
-    .side-nav.collapsed {
-        left: -120px; /* Match the max-width */
-    }
-    
-    .nav-toggle {
-        position: fixed;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 38px;
-        height: 38px;
-        background-color: rgba(255, 255, 255, 0.95);
-        z-index: 2000;
-    }
-    
-    .side-nav:not(.collapsed) ~ .nav-toggle {
-        left: 120px; /* Match the max-width */
-    }
-    
-    .side-nav.collapsed ~ .nav-toggle {
-        left: 0;
-    }
-    
-    .nav-toggle i {
-        font-size: 18px;
-    }
-    
-    .side-nav-link {
-        padding: 8px 10px;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-    
-    .side-nav-link::after {
-        left: 100%;
-        transform: translateY(-50%);
-        font-size: 14px;
-        padding: 6px 12px;
-        white-space: nowrap;
-    }
-    
-    .side-nav-item:hover .sub-nav {
-        display: none; /* Disable hover effect on mobile/tablet */
-    }
-    
-    /* Submenu styling for tablet */
-    .sub-nav {
-        position: absolute;
-        left: 115px; /* Position right of sidebar */
-        top: 0;
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 12px;
-        width: auto;
-        min-width: 120px;
-        z-index: 990;
-    }
-    
-    .sub-nav.active {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .sub-nav-link {
-        display: block;
-        padding: 8px 12px;
-        text-align: center;
-        font-size: 14px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-    }
-}
-
-/* Mobile optimization for text fitting */
-@media screen and (max-width: 480px) {
-    /* Side navigation panel - positioned on left side of screen */
-    .side-nav {
-        top: 50% !important; /* Force vertical centering */
-        left: 0;
-        bottom: auto !important; /* Prevent bottom positioning */
-        transform: translateY(-50%);
-        padding: 15px 10px; /* Increased padding */
-        width: auto;
-        max-width: 85px; /* Increased from 75px for larger navigation */
-        min-width: 75px; /* Increased from 65px for larger navigation */
-        border-radius: 0 12px 12px 0;
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 1500; /* Ensure it appears above other elements */
-    }
-    
-    .side-nav.collapsed {
-        left: -85px; /* Match max-width */
-    }
-    
-    /* When sidenav is expanded on mobile, position it to the right of the toggle button */
-    .side-nav:not(.collapsed) {
-        left: 36px; /* Position to the right of the toggle button (match mobile toggle width) */
-    }
-    
-    /* Toggle button - keep on left side */
-    .nav-toggle {
-        position: fixed;
-        top: 50% !important; /* Force vertical centering */
-        left: 0 !important; /* Force left positioning */
-        bottom: auto !important; /* Prevent bottom positioning */
-        transform: translateY(-50%);
-        border-radius: 0 50% 50% 0;
-        width: 36px;
-        height: 36px;
-        background-color: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 2000;
-    }
-    
-    /* When sidebar is collapsed */
-    .side-nav.collapsed ~ .nav-toggle,
-    .side-nav.collapsed + .nav-toggle {
-        top: 50% !important; /* Force vertical centering */
-        bottom: auto !important; /* Prevent bottom positioning */
-        left: 0 !important; /* Keep on left side when collapsed */
-    }
-    
-    /* When sidebar is expanded */
-    .side-nav:not(.collapsed) ~ .nav-toggle {
-        top: 50% !important; /* Force vertical centering */
-        bottom: auto !important; /* Prevent bottom positioning */
-        left: 0 !important; /* Keep at left edge of screen when expanded */
-    }
-    
-    /* Smaller toggle icon for mobile */
-    .nav-toggle i {
-        font-size: 16px;
-    }
-    
-    /* When submenu is open */
-    .side-nav:not(.collapsed) ~ .nav-toggle.subnav-open {
-        left: 0 !important; /* Keep at left edge */
-        top: 50% !important; /* Force vertical centering */
-        bottom: auto !important; /* Prevent bottom positioning */
-        border-radius: 0 50% 50% 0;
-    }
-    
-    /* Clean navigation layout */
-    .side-nav ul {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 0;
-        margin: 0;
-    }
-    
-    /* Navigation buttons with optimized text fitting */
-    .side-nav-link {
-        min-width: unset;
-        width: 100%; /* Fill available width */
-        max-width: 75px; /* Increased from 65px */
-        height: auto;
-        min-height: 38px; /* Increased from 32px for larger touch target */
-        font-size: 12px; /* Increased from 11px for better readability */
-        padding: 8px 5px; /* Increased from 7px 4px for larger touch target */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        border-radius: 6px;
-        letter-spacing: -0.2px;
-        line-height: 1.1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    /* Show mobile text instead of full text on small screens */
-    .side-nav-link .long-text {
-        display: none; /* Hide the long text on mobile */
-    }
-    
-    .side-nav-link .mobile-text {
-        display: block; /* Show mobile text version */
-        font-weight: 600; /* Make slightly bolder for better readability */
-        font-size: 12px; /* Increased from 11px */
-    }
-    
-    /* Long text handling for specific navigation items */
-    .side-nav-link[data-text*="Introduction"],
-    .side-nav-link[data-text*="Assessment"],
-    .side-nav-link[data-text*="Documentation"] {
-        font-size: 9px; /* Even smaller for long words */
-        letter-spacing: -0.4px;
-        font-weight: 500; /* Slightly bolder to maintain readability */
-    }
-    
-    /* Tooltip positioning */
-    .side-nav-link::after {
-        left: 100%;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 12px;
-        padding: 5px 10px;
-        white-space: nowrap;
-        width: auto;
-    }
-    
-    /* Active state */
-    .side-nav-link.active {
-        background: linear-gradient(145deg, #fcfcfc, #f5f5f5);
-        color: #2c3e50;
-        font-weight: 600;
-    }
-    
-    /* Sub-navigation container - fix visibility and positioning issues */
-    .sub-nav {
-        position: absolute;
-        left: 85px; /* Increased from 75px to align with wider navigation */
-        top: 0;
-        bottom: auto;
-        transform: translateY(0) translateX(0);
-        margin-left: 5px; /* Add a small margin for separation */
-        margin-bottom: 0;
-        flex-direction: row;
-        justify-content: flex-start;
-        width: auto;
-        z-index: 10000; /* Increased z-index to ensure visibility */
-        background-color: rgba(255, 255, 255, 0.98); /* More opaque background */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for better visibility */
-        border-radius: 8px;
-        padding: 10px;
-        max-width: 230px; /* Increased from 200px for more space */
-        visibility: hidden; /* Start hidden */
-        opacity: 0;
-        transition: visibility 0.2s, opacity 0.2s; /* Smooth transition */
-        pointer-events: none; /* Start with no pointer events */
-    }
-    
-    /* When sub-nav is active, make it visible */
-    .sub-nav.active {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 8px;
-        transform: translateX(0);
-        visibility: visible; /* Make visible when active */
-        opacity: 1;
-        pointer-events: all; /* Enable pointer events when active */
-    }
-    
-    .sub-nav-item {
-        margin: 0 4px; /* Increased from 3px */
-    }
-    
-    /* Sub-navigation links optimized for mobile */
-    .sub-nav-link {
-        padding: 8px 10px; /* Increased from 6px 8px for larger touch target */
-        font-size: 11px; /* Increased from 9px for better readability */
-        font-weight: 600;
-        letter-spacing: 0;
-        white-space: nowrap;
-        min-width: 38px; /* Increased from 30px */
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.9); /* Added background for better visibility */
-        border-radius: 6px;
-        border: 1px solid rgba(0, 0, 0, 0.05); /* Added subtle border */
-        transition: all 0.2s ease;
-    }
-    
-    .sub-nav-link:active {
-        background-color: #f8f8f8; /* Added active state styling */
-        transform: scale(0.97);
-    }
-    
-    /* Scale text based on screen size - less aggressive scaling for better readability */
-    @media screen and (max-width: 375px) {
-        .side-nav-link .mobile-text {
-            font-size: 11px; /* Increased from 10px */
-        }
-        
-        .sub-nav-link {
-            font-size: 10px; /* Increased from 8px */
-            padding: 7px 8px; /* Increased from 5px 6px */
-        }
-    }
-    
-    @media screen and (max-width: 320px) {
-        .side-nav-link .mobile-text {
-            font-size: 10px; /* Increased from 9px */
-        }
-        
-        .sub-nav-link {
-            font-size: 9px; /* Increased from 7px */
-            padding: 6px 7px; /* Increased from 4px 5px */
-        }
-    }
-}
-
-/* Hide text when JavaScript is disabled */
-.no-js .side-nav-link::after {
-    display: none;
-}
-
-/* Smooth scrolling behavior */
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 70px;
-}
-
-/* Sub-navigation for state views */
-.sub-nav {
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 10px;
-    padding: 8px;
-    margin-left: 15px;
-    display: flex;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-20px);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    z-index: 1000;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-}
-
-/* KEEP this functionality - only show sub-nav on hover */
-.side-nav-item:hover .sub-nav {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-}
-
-.sub-nav.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-}
-
-.sub-nav-item {
-    margin: 0 5px;
-}
-
-.sub-nav-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(145deg, #ffffff, #f8f8f8);
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 10px;
-    font-weight: 500;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #444;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    white-space: nowrap;
-}
-
-.sub-nav-link.normal {
-    color: #27ae60;
-}
-
-.sub-nav-link.mild {
-    color: #f39c12;
-}
-
-.sub-nav-link.severe {
-    color: #e74c3c;
-}
-
-/* Remove hover effects from sub-nav links too */
-.sub-nav-link:hover {
-    /* No hover effects */
-}
-
-.sub-nav-link.active {
-    background: linear-gradient(145deg, #f8f8f8, #f0f0f0);
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Mobile adjustments for sub-navigation */
-@media screen and (max-width: 768px) {
-    .sub-nav {
-        padding: 6px;
-        margin-left: 12px;
-    }
-    
-    .sub-nav-link {
-        padding: 5px 10px;
-        font-size: 9px;
-        letter-spacing: 0.2px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .sub-nav {
-        left: 50%;
-        top: auto;
-        bottom: 100%;
-        transform: translateX(-50%) translateY(10px);
-        margin-left: 0;
-        margin-bottom: 10px;
-        flex-direction: row;
-        justify-content: center;
-        width: auto;
-    }
-    
-    .sub-nav.active {
-        transform: translateX(-50%) translateY(0);
-    }
-    
-    .sub-nav-item {
-        margin: 0 3px;
-    }
-    
-    .sub-nav-link {
-        padding: 4px 8px;
-        font-size: 8px;
-        letter-spacing: 0.1px;
-    }
-}
-
-/* Toggle button - updated for better interaction */
+/* Toggle button styling - always on the left */
 .nav-toggle {
     position: fixed;
     top: 50%;
-    left: 0;
+    left: 0 !important; /* Always keep at left edge of screen */
     z-index: 1000;
     transform: translateY(-50%);
     background-color: rgba(255, 255, 255, 0.95);
@@ -620,63 +196,295 @@ html {
     transition: transform 0.3s ease;
 }
 
-/* Collapsed toggle button positioning - this is when button is outside the nav */
+/* Toggle button positioning - always on the left edge */
 .side-nav.collapsed ~ .nav-toggle {
-    left: 0; /* Keep at edge when collapsed */
+    left: 0 !important;
 }
 
-/* Expanded toggle button positioning - keep on left and position sidenav to its right */
 .side-nav:not(.collapsed) ~ .nav-toggle {
-    left: 0; /* Position at left edge of screen even when expanded */
-    border-radius: 0 50% 50% 0; /* Keep rounded on right side */
+    left: 0 !important; /* Keep on left edge when nav is expanded */
 }
 
-/* When sidenav is expanded, position it to the right of the toggle button */
-.side-nav:not(.collapsed) {
-    left: 40px; /* Position to the right of the toggle button (match toggle width) */
-}
-
-/* Mobile toggle button */
+/* Media query adjustments for tablet */
 @media screen and (max-width: 768px) {
+    .side-nav {
+        padding: 12px 10px;
+        min-width: 50px;
+    }
+    
+    .sub-nav {
+        padding: 6px;
+        margin-left: 12px;
+    }
+    
+    .sub-nav-link {
+        padding: 5px 10px;
+        font-size: 9px;
+        letter-spacing: 0.2px;
+    }
+    
+    .side-nav-link {
+        min-width: 50px;
+        padding: 8px 4px;
+        font-size: 10px;
+    }
+    
+    .side-nav-link::after {
+        left: 60px;
+    }
+    
     .nav-toggle {
         width: 36px;
         height: 36px;
-        z-index: 2000;
     }
     
-    .side-nav:not(.collapsed) ~ .nav-toggle {
-        left: 0;
-    }
-    
-    .side-nav.collapsed ~ .nav-toggle {
-        left: 0;
+    .side-nav:not(.collapsed) {
+        left: 36px !important; /* Keep consistent with the toggle button width */
     }
 }
 
-/* Small screen toggle button */
+/* Media query adjustments for mobile */
 @media screen and (max-width: 480px) {
+    .side-nav {
+        width: auto;
+        min-width: 44px;
+        padding: 10px 8px;
+    }
+    
+    .side-nav:not(.collapsed) {
+        left: 36px !important; /* Position to the right of the toggle button */
+    }
+    
+    .side-nav.collapsed {
+        left: -200px !important; /* Force complete hiding when collapsed */
+    }
+    
     .nav-toggle {
-        /* Position on left side instead of bottom */
-        top: 50% !important;
-        bottom: auto !important;
-        left: 0 !important; /* Force left alignment */
-        transform: translateY(-50%);
-        border-radius: 0 50% 50% 0; /* Round right side */
         width: 36px;
         height: 36px;
     }
     
-    .side-nav.collapsed ~ .nav-toggle,
-    .side-nav.collapsed + .nav-toggle {
-        top: 50% !important; /* Vertically center */
-        bottom: auto !important; /* Override bottom positioning */
-        left: 0 !important; /* Keep on left side when collapsed */
+    .side-nav ul {
+        gap: 10px;
     }
     
-    .side-nav:not(.collapsed) ~ .nav-toggle {
-        top: 50% !important; /* Vertically center */
-        bottom: auto !important; /* Override bottom positioning */
-        left: 0 !important; /* Position at left edge when expanded */
+    .side-nav-link {
+        min-width: 40px;
+        padding: 8px 2px;
+        font-size: 9px;
+        letter-spacing: 0.5px;
+        line-height: 1.1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Show mobile text instead of full text on small screens */
+    .side-nav-link .long-text {
+        display: none; /* Hide the long text on mobile */
+    }
+    
+    .side-nav-link .mobile-text {
+        display: block; /* Show mobile text version */
+        font-weight: 600; /* Make slightly bolder for better readability */
+        font-size: 12px; /* Increased from 11px */
+    }
+    
+    .side-nav-link::after {
+        font-size: 11px;
+        left: 48px;
+        padding: 6px 10px;
+    }
+    
+    .side-nav-link.active {
+        font-weight: 700;
+    }
+    
+    .sub-nav {
+        left: 50%;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        margin-left: 0;
+        padding: 5px;
+        background-color: rgba(255, 255, 255, 0.9);
+        width: auto;
+        min-width: 120px;
+        border-radius: 6px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    
+    .sub-nav.active {
+        display: block;
+        position: fixed;
+        z-index: 1200;
+    }
+    
+    .sub-nav-item {
+        display: block;
+    }
+    
+    .sub-nav-link {
+        display: block;
+        padding: 8px 12px;
+        font-size: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        margin: 4px 0;
+        text-align: center;
+    }
+    
+    /* Additional mobile optimizations for very small screens */
+    @media screen and (max-width: 375px) {
+        .side-nav-link .mobile-text {
+            font-size: 11px;
+        }
+        
+        .sub-nav-link {
+            font-size: 9px;
+            padding: 7px 10px;
+        }
+    }
+    
+    @media screen and (max-width: 320px) {
+        .side-nav-link .mobile-text {
+            font-size: 10px;
+        }
+        
+        .sub-nav-link {
+            font-size: 8px;
+            padding: 6px 8px;
+        }
+    }
+}
+
+/* Hide text when JavaScript is disabled */
+.no-js .side-nav-link::after {
+    display: none;
+}
+
+/* Smooth scrolling behavior */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 70px;
+}
+
+/* Sub-navigation for state views */
+.sub-nav {
+    position: absolute;
+    left: 70px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    width: auto;
+    min-width: 120px;
+    pointer-events: none;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.sub-nav.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.sub-nav-link {
+    display: block;
+    padding: 8px 15px;
+    color: #636363;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 0.9em;
+    white-space: nowrap;
+    line-height: 1.4;
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Special styling for the different severity levels */
+.sub-nav-link.normal {
+    color: #2c9c69;
+}
+
+.sub-nav-link.mild {
+    color: #f2a93c;
+}
+
+.sub-nav-link.severe {
+    color: #e74c3c;
+}
+
+.sub-nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #000;
+}
+
+.sub-nav-link.active {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000;
+    font-weight: 600;
+}
+
+/* Explicitly remove any items that match parent in specific sub-navs */
+.hepatic-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="hepatic"]),
+.portal-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="portal"]),
+.renal-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="renal"]),
+.ivc-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="ivc"]) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+}
+
+/* Remove any margin/padding issues that could cause layout problems */
+.sub-nav-item {
+    margin: 2px 0;
+}
+
+.sub-nav-item a.sub-nav-link {
+    display: block;
+    width: 100%;
+}
+
+/* Make sure that standard grading options are always visible */
+.sub-nav-item:has(a.sub-nav-link:contains("NORMAL")),
+.sub-nav-item:has(a.sub-nav-link:contains("MILD")),
+.sub-nav-item:has(a.sub-nav-link:contains("SEVERE")),
+.sub-nav-item:has(a.sub-nav-link:contains("MODERATE")) {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+}
+
+/* Fix for mobile display */
+@media screen and (max-width: 768px) {
+    .sub-nav {
+        left: 70px;
+        top: 0;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .sub-nav {
+        top: 0;
+        left: 70px;
+        max-width: calc(100vw - 90px);
+        max-height: calc(100vh - 40px);
     }
 }
 
@@ -711,4 +519,45 @@ html {
         bottom: auto !important;
         border-radius: 0 50% 50% 0;
     }
+}
+
+/* Remove the previous approach that's hiding everything */
+.hepatic-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="hepatic"]),
+.portal-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="portal"]),
+.renal-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="renal"]),
+.ivc-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="ivc"]),
+.tips-sub-nav .sub-nav-item:has(a.sub-nav-link[data-section="tips"]) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+}
+
+/* Make sub-nav styling more specific */
+.sub-nav-item a.sub-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #444;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Global font-family override */
+* {
+    font-family: europa, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
 } 

@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Prevent multiple initialization
+    if (window.sideNavInitialized) {
+        console.log("Side navigation already initialized, skipping...");
+        return;
+    }
+    
+    // Mark as initialized
+    window.sideNavInitialized = true;
+    
     const sections = document.querySelectorAll('.acquisition-section');
     const navLinks = document.querySelectorAll('.side-nav-link');
     let isMobile = window.innerWidth <= 768;
@@ -7,6 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Toggle side navigation
     const sideNav = document.querySelector('.side-nav');
     const navToggle = document.getElementById('sideNavToggle');
+    
+    // If elements don't exist, exit early
+    if (!sideNav || !navToggle) {
+        console.error("Required navigation elements not found!");
+        return;
+    }
+    
     const toggleIcon = navToggle.querySelector('i');
     
     // Add debugging to verify elements
@@ -16,9 +32,55 @@ document.addEventListener('DOMContentLoaded', function() {
         "toggleIcon": toggleIcon ? "Found" : "Not Found"
     });
     
-    // Track subnav state
-    let isAnySubNavOpen = false;
+    // Collect trigger links and their subnav dynamically
+    const triggerElements = {};
+    
+    // Find all triggers with specific classes
+    const ivcTrigger = document.querySelector('.ivc-trigger');
+    const hepaticTrigger = document.querySelector('.hepatic-trigger');
+    const portalTrigger = document.querySelector('.portal-trigger');
+    const renalTrigger = document.querySelector('.renal-trigger');
+    const tipsTrigger = document.querySelector('.tips-trigger');
+    
+    // Add any found triggers to our collection
+    if (ivcTrigger) {
+        triggerElements.ivc = {
+            trigger: ivcTrigger,
+            subNav: document.querySelector('.ivc-sub-nav')
+        };
+    }
+    
+    if (hepaticTrigger) {
+        triggerElements.hepatic = {
+            trigger: hepaticTrigger,
+            subNav: document.querySelector('.hepatic-sub-nav')
+        };
+    }
+    
+    if (portalTrigger) {
+        triggerElements.portal = {
+            trigger: portalTrigger,
+            subNav: document.querySelector('.portal-sub-nav')
+        };
+    }
+    
+    if (renalTrigger) {
+        triggerElements.renal = {
+            trigger: renalTrigger,
+            subNav: document.querySelector('.renal-sub-nav')
+        };
+    }
+    
+    if (tipsTrigger) {
+        triggerElements.tips = {
+            trigger: tipsTrigger,
+            subNav: document.querySelector('.tips-sub-nav')
+        };
+    }
+    
+    // Track current sub-nav open state
     let currentOpenSubNav = null;
+    let isAnySubNavOpen = false;
     
     // Force navigation to always be visible on mobile - prevent any bottom positioning
     function ensureProperNavPosition() {
@@ -45,12 +107,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Desktop positioning
             if (!sideNav.classList.contains('collapsed')) {
-                sideNav.style.left = '40px'; // Position to the right of toggle button
+                sideNav.style.left = '36px'; // Position to the right of toggle button
             } else {
                 sideNav.style.left = '-200px'; // Force complete hiding when collapsed
             }
             
-            // Ensure toggle button is visible
+            // Ensure toggle button is always on the left edge
+            navToggle.style.left = '0';
             navToggle.style.opacity = '1';
             navToggle.style.visibility = 'visible';
         }
@@ -65,14 +128,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Always start with sidebar collapsed
     sideNav.classList.add('collapsed');
     // Set arrow to point right (outward) when collapsed
-    toggleIcon.classList.remove('fa-chevron-left');
-    toggleIcon.classList.add('fa-chevron-right');
+    if (toggleIcon) {
+        toggleIcon.classList.remove('fa-chevron-left');
+        toggleIcon.classList.add('fa-chevron-right');
+    }
     
     // Apply initial positioning
     ensureProperNavPosition();
     
+    // Remove any existing click listeners before adding new ones
+    const newNavToggle = navToggle.cloneNode(true);
+    navToggle.parentNode.replaceChild(newNavToggle, navToggle);
+    
+    // Get the new element reference
+    const navToggleRefreshed = document.getElementById('sideNavToggle');
+    const toggleIconRefreshed = navToggleRefreshed.querySelector('i');
+    
     // Toggle navigation on button click with enhanced functionality and debugging
-    navToggle.addEventListener('click', function(e) {
+    navToggleRefreshed.addEventListener('click', function(e) {
         console.log("Toggle button clicked");
         e.stopPropagation();
         e.preventDefault(); // Prevent any default behavior
@@ -87,11 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Forcing sidebar to collapsed position");
         } else {
             // Explicitly set left position when expanding
-            if (isSmallScreen) {
-                sideNav.style.left = '36px'; // Mobile position
-            } else {
-                sideNav.style.left = '40px'; // Desktop position
-            }
+            sideNav.style.left = '36px'; // Position to the right of toggle
             console.log("Forcing sidebar to expanded position");
         }
         
@@ -102,17 +171,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isCollapsing) {
             // If now collapsing, point right
             console.log("Collapsing sidebar - arrow pointing right");
-            toggleIcon.classList.remove('fa-chevron-left');
-            toggleIcon.classList.add('fa-chevron-right');
+            toggleIconRefreshed.classList.remove('fa-chevron-left');
+            toggleIconRefreshed.classList.add('fa-chevron-right');
             // Remove subnav-open class when collapsing
-            navToggle.classList.remove('subnav-open');
+            navToggleRefreshed.classList.remove('subnav-open');
             // Close all subnavs when collapsing
             closeAllSubNavs();
         } else {
             // If now expanding, pointing left
             console.log("Expanding sidebar - arrow pointing left");
-            toggleIcon.classList.remove('fa-chevron-right');
-            toggleIcon.classList.add('fa-chevron-left');
+            toggleIconRefreshed.classList.remove('fa-chevron-right');
+            toggleIconRefreshed.classList.add('fa-chevron-left');
             // Check if we need to update the toggle position
             updateSubNavState();
         }
@@ -125,45 +194,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Add a class to make the toggle button more visible
-    navToggle.classList.add('visible');
-    
-    // Collect all trigger links and their corresponding sub-navs
-    const triggerElements = {
-        ivc: {
-            trigger: document.querySelector('.ivc-trigger'),
-            subNav: document.querySelector('.ivc-sub-nav'),
-            links: document.querySelectorAll('.ivc-sub-nav .sub-nav-link')
-        },
-        hepatic: {
-            trigger: document.querySelector('.hepatic-trigger'),
-            subNav: document.querySelector('.hepatic-sub-nav'),
-            links: document.querySelectorAll('.hepatic-sub-nav .sub-nav-link')
-        },
-        portal: {
-            trigger: document.querySelector('.portal-trigger'),
-            subNav: document.querySelector('.portal-sub-nav'),
-            links: document.querySelectorAll('.portal-sub-nav .sub-nav-link')
-        },
-        renal: {
-            trigger: document.querySelector('.renal-trigger'),
-            subNav: document.querySelector('.renal-sub-nav'),
-            links: document.querySelectorAll('.renal-sub-nav .sub-nav-link')
-        },
-        tips: {
-            trigger: document.querySelector('.tips-trigger'),
-            subNav: document.querySelector('.tips-sub-nav'),
-            links: document.querySelectorAll('.tips-sub-nav .sub-nav-link')
-        }
-    };
+    navToggleRefreshed.classList.add('visible');
     
     // Add ID attributes to sections if they don't have them
     sections.forEach((section, index) => {
         if (!section.id) {
-            // Extract section name from the h2 within this section
-            const heading = section.querySelector('h2');
-            if (heading) {
-                const idText = heading.textContent.trim().toLowerCase().replace(/\s+/g, '-');
-                section.id = idText;
+            // Generate an ID if not present
+            if (section.dataset.section) {
+                section.id = section.dataset.section;
             } else {
                 section.id = `section-${index + 1}`;
             }
@@ -173,7 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to check if any subnav is open
     function updateSubNavState() {
         isAnySubNavOpen = false;
-        Object.values(triggerElements).forEach(item => {
+        
+        // Check each subNav element
+        Object.keys(triggerElements).forEach(key => {
+            const item = triggerElements[key];
             if (item.subNav && item.subNav.classList.contains('active')) {
                 isAnySubNavOpen = true;
             }
@@ -181,9 +222,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update toggle button position based on subnav state
         if (isAnySubNavOpen && !sideNav.classList.contains('collapsed')) {
-            navToggle.classList.add('subnav-open');
+            navToggleRefreshed.classList.add('subnav-open');
         } else {
-            navToggle.classList.remove('subnav-open');
+            navToggleRefreshed.classList.remove('subnav-open');
         }
         
         // Ensure proper positioning
@@ -192,169 +233,302 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to close all sub-navs
     function closeAllSubNavs() {
-        Object.values(triggerElements).forEach(item => {
-            if (item.subNav) item.subNav.classList.remove('active');
+        // Close each subNav element
+        Object.keys(triggerElements).forEach(key => {
+            const item = triggerElements[key];
+            if (item.subNav) {
+                item.subNav.classList.remove('active');
+                // Also remove hover state from parent
+                if (item.trigger && item.trigger.parentElement) {
+                    item.trigger.parentElement.classList.remove('hover');
+                }
+            }
         });
+        
         currentOpenSubNav = null;
         // Update subnav state after closing
         updateSubNavState();
     }
     
-    // Enhanced positioning for subnavs on small screens
+    // Function to position sub-nav properly
     function positionSubNav(subNav, trigger) {
+        if (!subNav || !trigger) return;
+        
+        // Get the parent text in consistent format for comparison
+        const parentText = trigger.querySelector('.long-text')?.textContent.trim().toUpperCase() || '';
+        const parentMobileText = trigger.querySelector('.mobile-text')?.textContent.trim().toUpperCase() || '';
+        
+        console.log("Parent texts for comparison:", parentText, parentMobileText);
+        
+        // Process all sub-nav items to find and hide duplicates
+        const subNavItems = subNav.querySelectorAll('.sub-nav-item');
+        
+        // Show all items by default
+        subNavItems.forEach(item => {
+            item.style.display = 'block';
+            item.style.visibility = 'visible';
+            item.style.opacity = '1';
+            item.style.height = 'auto';
+            item.style.overflow = 'visible';
+        });
+        
+        // Get data-section attributes from the parent
+        const parentSection = trigger.getAttribute('data-section') || '';
+        
+        // Define the typical sub-nav items we always want to keep visible
+        const keepVisible = ['NORMAL', 'MILD', 'SEVERE', 'MODERATE'];
+        
+        // Then, hide any items that match the parent text or section
+        subNavItems.forEach(item => {
+            const link = item.querySelector('.sub-nav-link');
+            if (!link) return;
+            
+            // Get link text and data-section for comparison
+            const linkText = link.textContent.trim().toUpperCase();
+            const linkSection = link.getAttribute('data-section') || '';
+            
+            console.log("Checking sub-nav link:", linkText, linkSection);
+            
+            // If this is one of our standard gradations (NORMAL, MILD, SEVERE), always keep it visible
+            if (keepVisible.includes(linkText)) {
+                console.log("Keeping standard item visible:", linkText);
+                return;
+            }
+            
+            // More precise duplicate detection
+            let isDuplicate = false;
+            
+            // Check if the subNav item is an exact duplicate of the parent nav item
+            if (linkText === parentText || linkText === parentMobileText) {
+                isDuplicate = true;
+            }
+            
+            // Check for partial matches with known problematic sections
+            if (!isDuplicate) {
+                // Special check for "HEPATIC VEIN" vs "HEPATIC"
+                if (parentText.includes('HEPATIC') && linkText === 'HEPATIC') {
+                    isDuplicate = true;
+                }
+                // Special check for "PORTAL VEIN" vs "PORTAL" 
+                else if (parentText.includes('PORTAL') && linkText === 'PORTAL') {
+                    isDuplicate = true;
+                }
+                // Special check for "RENAL VEIN" vs "RENAL"
+                else if (parentText.includes('RENAL') && linkText === 'RENAL') {
+                    isDuplicate = true;
+                }
+                // Special check for "IVC ASSESSMENT" vs "IVC"
+                else if (parentText.includes('IVC') && linkText === 'IVC') {
+                    isDuplicate = true;
+                }
+            }
+            
+            if (isDuplicate) {
+                console.log("Hiding duplicate:", linkText);
+                
+                // Hide the matching item
+                item.style.display = 'none';
+                item.style.visibility = 'hidden';
+                item.style.opacity = '0';
+                item.style.height = '0';
+                item.style.overflow = 'hidden';
+            }
+        });
+        
         if (isSmallScreen) {
             // Position horizontally to the right of the side nav
             let triggerRect = trigger.getBoundingClientRect();
-            subNav.style.top = (triggerRect.top - 5) + 'px'; // Align with the trigger
-            subNav.style.left = '85px'; // Position to the right of sidenav (increased from 75px)
+            subNav.style.top = triggerRect.top + 'px'; // Align with the trigger
+            subNav.style.left = '80px'; // Position to the right of sidenav
             
             // Ensure the submenu doesn't go off screen at the bottom
             const subNavHeight = subNav.offsetHeight;
             const viewportHeight = window.innerHeight;
-            const triggerBottom = triggerRect.bottom;
             
-            if (triggerBottom + subNavHeight > viewportHeight) {
-                // Position above if it would go off screen below
-                subNav.style.top = (triggerRect.top - subNavHeight + triggerRect.height) + 'px';
+            if (triggerRect.top + subNavHeight > viewportHeight) {
+                // Reposition to ensure it's visible
+                const newTop = Math.max(10, viewportHeight - subNavHeight - 10);
+                subNav.style.top = newTop + 'px';
             }
+        } else {
+            // Reset inline styles on desktop
+            subNav.style.top = '';
+            subNav.style.left = '';
         }
     }
     
-    // Add click handlers for all trigger elements
-    Object.values(triggerElements).forEach(item => {
-        if (item.trigger && item.subNav) {
-            // Desktop hover behavior for showing subnavs
-            if (!isMobile) {
-                // Mouse enter - show submenu
-                item.trigger.parentElement.addEventListener('mouseenter', function() {
-                    if (!sideNav.classList.contains('collapsed')) {
-                        // Show this submenu
-                        item.subNav.classList.add('active');
-                        // Update toggle position
-                        updateSubNavState();
-                    }
-                });
-                
-                // Mouse leave - hide submenu
-                item.trigger.parentElement.addEventListener('mouseleave', function() {
-                    // Hide this submenu
-                    item.subNav.classList.remove('active');
-                    // Update toggle position
+    // Setup event listeners for each trigger element
+    Object.keys(triggerElements).forEach(key => {
+        const item = triggerElements[key];
+        
+        if (!item.trigger || !item.subNav) return;
+        
+        // Clean up existing event listeners by cloning
+        const newTrigger = item.trigger.cloneNode(true);
+        item.trigger.parentNode.replaceChild(newTrigger, item.trigger);
+        item.trigger = newTrigger;
+        
+        // Get subNav links
+        item.links = item.subNav.querySelectorAll('.sub-nav-link');
+        
+        // Desktop hover behavior
+        if (!isMobile) {
+            // Mouse enter - show submenu
+            item.trigger.parentElement.addEventListener('mouseenter', function() {
+                if (!sideNav.classList.contains('collapsed')) {
+                    // First close any open submenus
+                    closeAllSubNavs();
+                    
+                    // Open this submenu
+                    item.subNav.classList.add('active');
+                    this.classList.add('hover');
+                    
+                    // Set as current open
+                    currentOpenSubNav = item.subNav;
+                    
+                    // Position and clean up submenu
+                    positionSubNav(item.subNav, item.trigger);
+                    
+                    // Update state
                     updateSubNavState();
-                });
-            }
-            
-            // Add trigger click handler with improved mobile support
-            item.trigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation(); // Prevent bubbling
-                
-                // First, navigate to the main section
-                const targetId = this.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                
-                if (targetSection) {
-                    // Calculate scroll position with offset for header
-                    const headerOffset = 70;
-                    const targetPosition = targetSection.offsetTop - headerOffset;
-                    
-                    // Scroll to the section
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Update active state for navigation
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // For mobile - improve submenu toggle behavior
-                    if (isMobile) {
-                        // If a different submenu is open, close it first
-                        if (currentOpenSubNav && currentOpenSubNav !== item.subNav) {
-                            currentOpenSubNav.classList.remove('active');
-                        }
-                        
-                        // Toggle current submenu
-                        const isOpening = !item.subNav.classList.contains('active');
-                        
-                        // Toggle this submenu
-                        item.subNav.classList.toggle('active');
-                        
-                        // Position the submenu correctly when opening
-                        if (isOpening) {
-                            currentOpenSubNav = item.subNav;
-                            positionSubNav(item.subNav, this);
-                        } else {
-                            currentOpenSubNav = null;
-                        }
-                        
-                        // Update subnav state
-                        updateSubNavState();
-                        
-                        // Add click handler for outside clicks
-                        setTimeout(() => {
-                            if (item.subNav.classList.contains('active')) {
-                                // Create a one-time document click handler
-                                const handleOutsideClick = function(event) {
-                                    // Check if click was outside submenu and trigger
-                                    if (!item.subNav.contains(event.target) && !item.trigger.contains(event.target)) {
-                                        item.subNav.classList.remove('active');
-                                        currentOpenSubNav = null;
-                                        updateSubNavState();
-                                        document.removeEventListener('click', handleOutsideClick);
-                                    }
-                                };
-                                
-                                // Add the handler with a small delay
-                                setTimeout(() => {
-                                    document.addEventListener('click', handleOutsideClick);
-                                }, 10);
-                            }
-                        }, 50);
-                    }
                 }
             });
             
-            // Add sub-link click handlers with improved mobile support
-            if (item.links) {
-                item.links.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation(); // Prevent bubbling
+            // Mouse leave - hide submenu
+            item.trigger.parentElement.addEventListener('mouseleave', function() {
+                // Close this submenu
+                item.subNav.classList.remove('active');
+                this.classList.remove('hover');
+                
+                // Clear current open
+                if (currentOpenSubNav === item.subNav) {
+                    currentOpenSubNav = null;
+                }
+                
+                // Update state
+                updateSubNavState();
+            });
+        }
+        
+        // Click behavior for both mobile and desktop
+        item.trigger.addEventListener('click', function(e) {
+            // Prevent default link behavior
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // First, navigate to the main section
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                // Calculate scroll position with offset for header
+                const headerOffset = 70;
+                const targetPosition = targetSection.offsetTop - headerOffset;
+                
+                // Scroll to the section
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update active state for navigation
+                navLinks.forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                
+                // For mobile - improved submenu toggle behavior
+                if (isMobile) {
+                    // If the sidebar is collapsed, skip submenu toggling
+                    if (sideNav.classList.contains('collapsed')) {
+                        return;
+                    }
+                    
+                    // Toggle current submenu
+                    const isOpening = !item.subNav.classList.contains('active');
+                    
+                    if (isOpening) {
+                        // Close any open submenus first
+                        closeAllSubNavs();
                         
-                        // Get the target view section ID
-                        const targetId = this.getAttribute('href').substring(1);
-                        const targetSection = document.getElementById(targetId);
-                        
-                        if (targetSection) {
-                            // Calculate scroll position with offset for header
-                            const headerOffset = 70;
-                            const targetPosition = targetSection.offsetTop - headerOffset;
-                            
-                            // Scroll to the view section
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            // Update active states
-                            item.links.forEach(l => l.classList.remove('active'));
-                            this.classList.add('active');
-                            
-                            // Close the sub-navigation after a delay (slightly longer on mobile)
-                            if (isMobile) {
-                                setTimeout(() => {
+                        // Then open this one
+                        item.subNav.classList.add('active');
+                        currentOpenSubNav = item.subNav;
+                        positionSubNav(item.subNav, this);
+                    } else {
+                        // Close this submenu
+                        item.subNav.classList.remove('active');
+                        currentOpenSubNav = null;
+                    }
+                    
+                    // Update subnav state
+                    updateSubNavState();
+                    
+                    // Handle outside clicks to close submenu
+                    if (isOpening) {
+                        setTimeout(() => {
+                            const handleOutsideClick = function(event) {
+                                // Check if click was outside submenu and trigger
+                                if (!item.subNav.contains(event.target) && 
+                                    !item.trigger.contains(event.target)) {
                                     item.subNav.classList.remove('active');
                                     currentOpenSubNav = null;
-                                    // Update subnav state
                                     updateSubNavState();
-                                }, 800); // Increased from 500ms for better UX
-                            }
-                        }
-                    });
-                });
+                                    document.removeEventListener('click', handleOutsideClick);
+                                }
+                            };
+                            
+                            // Remove any existing handlers first
+                            document.removeEventListener('click', handleOutsideClick);
+                            
+                            // Add new handler
+                            document.addEventListener('click', handleOutsideClick);
+                        }, 10);
+                    }
+                }
             }
+        });
+        
+        // Add click handlers for sub-navigation links
+        if (item.links && item.links.length > 0) {
+            item.links.forEach(link => {
+                // Clean up existing event listeners
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
+                
+                newLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Prevent bubbling
+                    
+                    // Get the target section ID
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        // Calculate scroll position with offset for header
+                        const headerOffset = 70;
+                        const targetPosition = targetSection.offsetTop - headerOffset;
+                        
+                        // Scroll to the section
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Update active states
+                        item.links.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Close the sub-navigation after a delay (slightly longer on mobile)
+                        if (isMobile) {
+                            setTimeout(() => {
+                                item.subNav.classList.remove('active');
+                                currentOpenSubNav = null;
+                                // Update subnav state
+                                updateSubNavState();
+                            }, 800); // Longer delay for better UX
+                        }
+                    }
+                });
+            });
         }
     });
     
